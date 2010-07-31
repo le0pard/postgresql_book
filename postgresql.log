@@ -1,0 +1,1116 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  1 AUG 2010 01:15
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**postgresql.tex
+(./postgresql.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, bulgarian, ukrainian, russian, loaded.
+(/usr/share/texmf-texlive/tex/latex/memoir/memoir.cls
+Document Class: memoir 2009/09/21 v1.61803398b configurable book, report, artic
+le document class
+\onelineskip=\skip41
+\lxvchars=\skip42
+\xlvchars=\skip43
+\@memcnta=\count79
+\c@@memmarkcntra=\count80
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2009/04/10 v2.0 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in pdf mode detected.
+)
+Class memoir Info: An `ifetex' package is being emulated on input line 251.
+
+(/usr/share/texmf-texlive/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2009/01/23 v0.5 Provides ifxetex conditional
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2009/04/17 v1.2 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+\stockheight=\skip44
+\stockwidth=\skip45
+\trimtop=\skip46
+\trimedge=\skip47
+
+(/usr/share/texmf-texlive/tex/latex/etex-pkg/etex.sty
+Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
+\et@xins=\count81
+)
+(/usr/share/texmf-texlive/tex/latex/memoir/mem12.clo
+File: mem12.clo 2008/01/30 v0.4 memoir class 12pt size option
+)
+\binding=\skip48
+\spinemargin=\skip49
+\foremargin=\skip50
+\uppermargin=\skip51
+\lowermargin=\skip52
+\headdrop=\skip53
+\normalrulethickness=\skip54
+\headwidth=\skip55
+\c@storedpagenumber=\count82
+\memPD=\dimen102
+\m@mabparskip=\skip56
+\thanksmarkwidth=\skip57
+\thanksmarksep=\skip58
+\droptitle=\skip59
+\c@book=\count83
+\c@part=\count84
+\c@chapter=\count85
+\c@section=\count86
+\c@subsection=\count87
+\c@subsubsection=\count88
+\c@paragraph=\count89
+\c@subparagraph=\count90
+\beforechapskip=\skip60
+\midchapskip=\skip61
+\afterchapskip=\skip62
+\chapindent=\skip63
+\bottomsectionskip=\skip64
+\secindent=\skip65
+\beforesecskip=\skip66
+\aftersecskip=\skip67
+\subsecindent=\skip68
+\beforesubsecskip=\skip69
+\aftersubsecskip=\skip70
+\subsubsecindent=\skip71
+\beforesubsubsecskip=\skip72
+\aftersubsubsecskip=\skip73
+\paraindent=\skip74
+\beforeparaskip=\skip75
+\afterparaskip=\skip76
+\subparaindent=\skip77
+\beforesubparaskip=\skip78
+\aftersubparaskip=\skip79
+\pfbreakskip=\skip80
+\c@@ppsavesec=\count91
+\c@@ppsaveapp=\count92
+\ragrparindent=\dimen103
+\everylistparindent=\dimen104
+\parsepi=\skip81
+\topsepi=\skip82
+\itemsepi=\skip83
+\parsepii=\skip84
+\topsepii=\skip85
+\topsepiii=\skip86
+\itemsepii=\skip87
+\itemsepiii=\skip88
+\partopsepii=\skip89
+\partopsepiii=\skip90
+\m@msavetopsep=\skip91
+\m@msavepartopsep=\skip92
+\@enLab=\toks14
+\abstitleskip=\skip93
+\absleftindent=\skip94
+\abs@leftindent=\dimen105
+\absrightindent=\skip95
+\absparindent=\skip96
+\absparsep=\skip97
+\c@vslineno=\count93
+\c@poemline=\count94
+\c@modulo@vs=\count95
+\c@memfvsline=\count96
+\vleftskip=\skip98
+\vrightskip=\skip99
+\stanzaskip=\skip100
+\versewidth=\skip101
+\vgap=\skip102
+\vindent=\skip103
+\vleftmargin=\dimen106
+\c@verse=\count97
+\c@chrsinstr=\count98
+\beforepoemtitleskip=\skip104
+\afterpoemtitleskip=\skip105
+\c@poem=\count99
+\beforePoemTitleskip=\skip106
+\midPoemTitleskip=\skip107
+\afterPoemTitleskip=\skip108
+\col@sep=\dimen107
+\extrarowheight=\dimen108
+\NC@list=\toks15
+\extratabsurround=\skip109
+\backup@length=\skip110
+\TX@col@width=\dimen109
+\TX@old@table=\dimen110
+\TX@old@col=\dimen111
+\TX@target=\dimen112
+\TX@delta=\dimen113
+\TX@cols=\count100
+\TX@ftn=\toks16
+\heavyrulewidth=\dimen114
+\lightrulewidth=\dimen115
+\cmidrulewidth=\dimen116
+\belowrulesep=\dimen117
+\belowbottomsep=\dimen118
+\aboverulesep=\dimen119
+\abovetopsep=\dimen120
+\cmidrulesep=\dimen121
+\cmidrulekern=\dimen122
+\defaultaddspace=\dimen123
+\@cmidla=\count101
+\@cmidlb=\count102
+\@aboverulesep=\dimen124
+\@belowrulesep=\dimen125
+\@thisruleclass=\count103
+\@lastruleclass=\count104
+\@thisrulewidth=\dimen126
+\ctableftskip=\skip111
+\ctabrightskip=\skip112
+\abovecolumnspenalty=\count105
+\@linestogo=\count106
+\@cellstogo=\count107
+\@cellsincolumn=\count108
+\crtok=\toks17
+\@mincolumnwidth=\dimen127
+\c@newflo@tctr=\count109
+\@contcwidth=\skip113
+\@contindw=\skip114
+\abovecaptionskip=\skip115
+\belowcaptionskip=\skip116
+\subfloattopskip=\skip117
+\subfloatcapskip=\skip118
+\subfloatcaptopadj=\skip119
+\subfloatbottomskip=\skip120
+\subfloatlabelskip=\skip121
+\subfloatcapmargin=\dimen128
+\c@@contsubnum=\count110
+\m@mscap@capbox=\box26
+\m@mscap@fbox=\box27
+\sidecapsep=\dimen129
+\sidecapwidth=\dimen130
+\m@m@tempdima=\dimen131
+\m@mscapraise=\dimen132
+\sidecapraise=\dimen133
+\m@mscapmainwidth=\dimen134
+\m@mscaplkern=\dimen135
+\beforeepigraphskip=\skip122
+\afterepigraphskip=\skip123
+\epigraphwidth=\skip124
+\epigraphrule=\skip125
+LaTeX Info: Redefining \em on input line 7000.
+LaTeX Info: Redefining \emph on input line 7008.
+\tocentryskip=\skip126
+\tocbaseline=\skip127
+\cftparskip=\skip128
+\cftbeforebookskip=\skip129
+\cftbookindent=\dimen136
+\cftbooknumwidth=\dimen137
+\cftbeforepartskip=\skip130
+\cftpartindent=\skip131
+\cftpartnumwidth=\skip132
+\cftbeforechapterskip=\skip133
+\cftchapterindent=\skip134
+\cftchapternumwidth=\skip135
+\cftbeforesectionskip=\skip136
+\cftsectionindent=\skip137
+\cftsectionnumwidth=\skip138
+\cftbeforesubsectionskip=\skip139
+\cftsubsectionindent=\skip140
+\cftsubsectionnumwidth=\skip141
+\cftbeforesubsubsectionskip=\skip142
+\cftsubsubsectionindent=\skip143
+\cftsubsubsectionnumwidth=\skip144
+\cftbeforeparagraphskip=\skip145
+\cftparagraphindent=\skip146
+\cftparagraphnumwidth=\skip147
+\cftbeforesubparagraphskip=\skip148
+\cftsubparagraphindent=\skip149
+\cftsubparagraphnumwidth=\skip150
+\prechapterprecisshift=\dimen138
+\c@maxsecnumdepth=\count111
+\bibindent=\dimen139
+\bibitemsep=\skip151
+\indexcolsep=\skip152
+\indexrule=\skip153
+\indexmarkstyle=\toks18
+\@indexbox=\insert233
+\glossarycolsep=\dimen140
+\glossaryrule=\dimen141
+\sideparvshift=\skip154
+\sideins=\insert232
+\sidebartopsep=\skip155
+\sidebarhsep=\skip156
+\sidebarvsep=\skip157
+\sidebarwidth=\skip158
+\footmarkwidth=\skip159
+\footmarksep=\skip160
+\footparindent=\skip161
+\footinsdim=\skip162
+\footinsv@r=\insert231
+\@mpfootinsv@r=\insert230
+\m@m@k=\count112
+\m@m@h=\dimen142
+\m@mipn@skip=\skip163
+\c@pagenote=\count113
+\every@verbatim=\toks19
+\afterevery@verbatim=\toks20
+\verbatim@line=\toks21
+\tab@position=\count114
+\verbatim@in@stream=\read1
+\verbatimindent=\skip164
+\verbatim@out=\write3
+\bvboxsep=\skip165
+\c@memfbvline=\count115
+\c@bvlinectr=\count116
+\bvnumlength=\skip166
+\fb@frw=\dimen143
+\fb@frh=\dimen144
+\FrameRule=\dimen145
+\FrameSep=\dimen146
+\c@cp@cntr=\count117
+LaTeX Info: Redefining \: on input line 10864.
+LaTeX Info: Redefining \! on input line 10866.
+\c@ism@mctr=\count118
+\c@xsm@mctr=\count119
+\c@csm@mctr=\count120
+\c@ksm@mctr=\count121
+\c@xksm@mctr=\count122
+\c@cksm@mctr=\count123
+\c@msm@mctr=\count124
+\c@xmsm@mctr=\count125
+\c@cmsm@mctr=\count126
+\c@bsm@mctr=\count127
+\c@workm@mctr=\count128
+\c@sheetsequence=\count129
+\c@lastsheet=\count130
+\c@lastpage=\count131
+\c@figure=\count132
+\c@lofdepth=\count133
+\cftbeforefigureskip=\skip167
+\cftfigureindent=\skip168
+\cftfigurenumwidth=\skip169
+\c@table=\count134
+\c@lotdepth=\count135
+\cftbeforetableskip=\skip170
+\cfttableindent=\skip171
+\cfttablenumwidth=\skip172
+Package abstract [2008/07/23] emulated by memoir.
+Package appendix [2008/07/23] emulated by memoir.
+Package array [2008/07/23] emulated by memoir.
+Package booktabs [2008/07/23] emulated by memoir.
+Package ccaption [2008/07/23] emulated by memoir.
+Package changepage [2008/07/23] emulated by memoir.
+Package chngcntr [2008/07/23] emulated by memoir.
+Package chngpage [2008/07/23] emulated by memoir.
+Package crop emulated by memoir.
+Package dcolumn [2008/07/23] emulated by memoir.
+Package delarray [2008/07/23] emulated by memoir.
+Package enumerate [2008/07/23] emulated by memoir.
+Package epigraph [2008/07/23] emulated by memoir.
+Package ifmtarg [2008/07/23] emulated by memoir.
+Package ifetex [2008/07/23] emulated by memoir.
+Package index [2008/07/23] emulated by memoir.
+Package makeidx [2008/07/23] emulated by memoir.
+Package moreverb [2008/07/23] emulated by memoir.
+Package mparhack [2008/07/23] emulated by memoir.
+Package needspace [2008/07/23] emulated by memoir.
+Package newfile [2008/07/23] emulated by memoir.
+Package nextpage [2008/07/23] emulated by memoir.
+Package pagenote [2008/07/23] emulated by memoir.
+Package parskip [2008/07/23] emulated by memoir.
+Package patchcmd [2008/07/23] emulated by memoir.
+Package setspace [2008/07/23] emulated by memoir.
+Package shortvrb [2008/07/23] emulated by memoir.
+Package showidx [2008/07/23] emulated by memoir.
+Package tabularx [2008/07/23] emulated by memoir.
+Package titleref [2008/07/23] emulated by memoir.
+Package titling [2008/07/23] emulated by memoir.
+Package tocbibind [2008/07/23] emulated by memoir.
+Package tocloft [2008/07/23] emulated by memoir.
+Package verbatim [2008/07/23] emulated by memoir.
+Package verse [2008/07/23] emulated by memoir.
+
+(/usr/share/texmf-texlive/tex/latex/memoir/mempatch.sty
+Package: mempatch 2009/07/24 v6.0f Patches for memoir class v1.6180339
+)) (./postgresql.sty
+Package: postgresql 
+
+(/usr/share/texmf-texlive/tex/latex/cmap/cmap.sty
+Package: cmap 2008/03/06 v1.0h CMap support: searchable PDF
+)
+(/usr/share/texmf-texlive/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 285.
+LaTeX Info: Redefining \nocite on input line 356.
+Package: cite 2009/08/29  v 5.2
+)
+(/usr/share/texmf-texlive/tex/latex/base/textcomp.sty
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 71.
+
+(/usr/share/texmf-texlive/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 266.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 281.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 282.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 283.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 284.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 285.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 286.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 287.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 288.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 289.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 290.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 291.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 292.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 293.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 294.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 295.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 296.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 297.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 298.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 299.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 300.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 301.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 302.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 303.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 304.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 305.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 306.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 307.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 308.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 309.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 310.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 311.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 312.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 313.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 314.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 315.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 316.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 317.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 318.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 319.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 320.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 321.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 322.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 323.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 324.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 325.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 326.
+)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2009/06/22 v3.00
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\@emptytoks=\toks22
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip173
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks23
+\ex@=\dimen147
+))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen148
+)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count136
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count137
+\leftroot@=\count138
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count139
+\DOTSCASE@=\count140
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box28
+\strutbox@=\box29
+\big@size=\dimen149
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count141
+\c@MaxMatrixCols=\count142
+\dotsspace@=\muskip10
+\c@parentequation=\count143
+\dspbrk@lvl=\count144
+\tag@help=\toks24
+\row@=\count145
+\column@=\count146
+\maxfields@=\count147
+\andhelp@=\toks25
+\eqnshift@=\dimen150
+\alignsep@=\dimen151
+\tagshift@=\dimen152
+\tagwidth@=\dimen153
+\totwidth@=\dimen154
+\lineht@=\dimen155
+\@envbody=\toks26
+\multlinegap=\skip174
+\multlinetaggap=\skip175
+\mathdisplay@stack=\toks27
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/usr/share/texmf-texlive/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks28
+)
+
+Class memoir Warning: You are using the caption package with the memoir 
+(memoir)              class. This may cause unexpected or inconsistent 
+(memoir)              results if you use any of memoir's captioning facilities.
+
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption.sty
+Package: caption 2009/10/09 v3.1k Customizing captions (AR)
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption3.sty
+Package: caption3 2009/10/09 v3.1k caption3 kernel (AR)
+\captionmargin=\dimen156
+\captionmargin@=\dimen157
+\captionwidth=\dimen158
+\caption@indent=\dimen159
+\caption@parindent=\dimen160
+\caption@hangindent=\dimen161
+)
+\c@ContinuedFloat=\count148
+)
+\c@KVtest=\count149
+\sf@farskip=\skip176
+\sf@captopadj=\dimen162
+\sf@capskip=\skip177
+\sf@nearskip=\skip178
+\c@subfigure=\count150
+\c@subfigure@save=\count151
+\c@subtable=\count152
+\c@subtable@save=\count153
+\sf@top=\skip179
+\sf@bottom=\skip180
+)
+(/usr/share/texmf-texlive/tex/latex/listings/listings.sty
+\lst@mode=\count154
+\lst@gtempboxa=\box30
+\lst@token=\toks29
+\lst@length=\count155
+\lst@currlwidth=\dimen163
+\lst@column=\count156
+\lst@pos=\count157
+\lst@lostspace=\dimen164
+\lst@width=\dimen165
+\lst@newlines=\count158
+\lst@lineno=\count159
+\lst@maxwidth=\dimen166
+
+(/usr/share/texmf-texlive/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+\c@lstnumber=\count160
+\lst@skipnumbers=\count161
+\lst@framebox=\box31
+)
+(/usr/share/texmf-texlive/tex/latex/listings/listings.cfg
+File: listings.cfg 2007/02/22 1.4 listings configuration
+))
+Package: listings 2007/02/22 1.4 (Carsten Heinz)
+
+(/usr/share/texmf-texlive/tex/latex/tools/longtable.sty
+Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip181
+\LTright=\skip182
+\LTpre=\skip183
+\LTpost=\skip184
+\LTchunksize=\count162
+\LTcapwidth=\dimen167
+\LT@head=\box32
+\LT@firsthead=\box33
+\LT@foot=\box34
+\LT@lastfoot=\box35
+\LT@cols=\count163
+\LT@rows=\count164
+\c@LT@tables=\count165
+\c@LT@chunks=\count166
+\LT@p@ftn=\toks30
+)
+(/usr/share/texmf-texlive/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen168
+)
+(/usr/share/texmf-texlive/tex/latex/comment/comment.sty
+\CommentStream=\write4
+
+Excluding comment 'comment')
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
+\Gread@gobject=\count167
+))
+\Gin@req@height=\dimen169
+\Gin@req@width=\dimen170
+)
+(/usr/share/texmf-texlive/tex/latex/tools/indentfirst.sty
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
+)
+(/usr/share/texmf-texlive/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/share/texmf-texlive/tex/latex/cyrillic/t2aenc.def
+File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
+)
+LaTeX Font Info:    Try loading font information for T2A+cmr on input line 100.
+
+
+(/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmr.fd
+File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)<<t2a.cmap>>)
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks31
+\inpenc@posthook=\toks32
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(/usr/share/texmf-texlive/tex/latex/ucs/ucs.sty
+Package: ucs 2004/10/17 UCS: Unicode input support
+
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-global.def
+File: uni-global.def 2004/10/17 UCS: Unicode global data
+)
+\uc@secondtry=\count168
+\uc@combtoks=\toks33
+\uc@combtoksb=\toks34
+\uc@temptokena=\toks35
+)
+(/usr/share/texmf-texlive/tex/generic/babel/babel.sty
+Package: babel 2008/07/06 v3.8l The Babel package
+
+(/usr/share/texmf-texlive/tex/generic/babel/english.ldf
+Language: english 2005/03/30 v3.3o English support from the babel system
+
+(/usr/share/texmf-texlive/tex/generic/babel/babel.def
+File: babel.def 2008/07/06 v3.8l Babel common definitions
+\babel@savecnt=\count169
+\U@D=\dimen171
+)
+\l@british = a dialect from \language\l@english 
+\l@UKenglish = a dialect from \language\l@english 
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
+)
+(/usr/share/texmf-texlive/tex/generic/babel/russianb.ldf
+Language: russianb 2008/03/21 v1.1r Russian support from the babel system
+Package babel Info: Making " an active character on input line 199.
+))
+(/usr/share/texmf-texlive/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2009/10/09 v6.79a Hypertext links for LaTeX
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2008/11/04 v1.4 Switches for detecting VTeX and its modes (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/share/texmf-texlive/tex/latex/oberdiek/hycolor.sty
+Package: hycolor 2009/10/02 v1.5 Code for color options of hyperref/bookmark (H
+O)
+
+(/usr/share/texmf-texlive/tex/latex/oberdiek/xcolor-patch.sty
+Package: xcolor-patch 2009/10/02 xcolor patch
+))
+\@linkdim=\dimen172
+\Hy@linkcounter=\count170
+\Hy@pagecounter=\count171
+
+(/usr/share/texmf-texlive/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2009/10/09 v6.79a Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2007/12/12 v1.2 Prefix for e-TeX command names (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2007/09/09 v1.2 Providing info/warning/message (HO)
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)
+(/etc/texmf/tex/latex/config/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+(/usr/share/texmf-texlive/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2009/08/13 v3.4 Keyval support for LaTeX options (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2009/07/30 v1.5 Key value parser with default handler suppor
+t (HO)
+))
+Package hyperref Info: Option `unicode' set `true' on input line 2864.
+
+(/usr/share/texmf-texlive/tex/latex/hyperref/puenc.def
+File: puenc.def 2009/10/09 v6.79a Hyperref: PDF Unicode definition (HO)
+)
+Package hyperref Info: Option `hypertexnames' set `false' on input line 2864.
+Package hyperref Info: Hyper figures OFF on input line 2975.
+Package hyperref Info: Link nesting OFF on input line 2980.
+Package hyperref Info: Hyper index ON on input line 2983.
+Package hyperref Info: Plain pages OFF on input line 2990.
+Package hyperref Info: Backreferencing OFF on input line 2995.
+
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 3191.
+(/usr/share/texmf-texlive/tex/latex/ltxmisc/url.sty
+\Urlmuskip=\muskip11
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 3428.
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/bitset.sty
+Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/intcalc.sty
+Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/bigintcalc.sty
+Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2009/09/23 v0.6 LuaTeX support for pdfTeX utility functions
+ (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2009/08/05 v1.0 Some LaTeX kernel commands for general use (HO
+)
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+)))
+\Fld@menulength=\count172
+\Field@Width=\dimen173
+\Fld@charsize=\dimen174
+\Field@toks=\toks36
+Package hyperref Info: Hyper figures OFF on input line 4377.
+Package hyperref Info: Link nesting OFF on input line 4382.
+Package hyperref Info: Hyper index ON on input line 4385.
+Package hyperref Info: backreferencing OFF on input line 4392.
+Package hyperref Info: Link coloring OFF on input line 4397.
+Package hyperref Info: Link coloring with OCG OFF on input line 4402.
+Package hyperref Info: PDF/A mode OFF on input line 4407.
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/atbegshi.sty
+Package: atbegshi 2008/07/31 v1.9 At begin shipout hook (HO)
+)
+\Hy@abspage=\count173
+\c@Item=\count174
+)
+(/usr/share/texmf-texlive/tex/latex/memoir/memhfixc.sty
+Package: memhfixc 2009/02/06 v1.12 nameref/hyperref package fixes for memoir cl
+ass
+\c@memhycontfloat=\count175
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf-texlive/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
+\Fld@listcount=\count176
+)) (./titlepages.tex
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
+(/etc/texmf/tex/latex/config/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+
+(/usr/share/texmf/tex/latex/xcolor/svgnam.def
+File: svgnam.def 2007/01/21 v2.11 Predefined colors according to SVG 1.1 (UK)
+))
+(/usr/share/texmf-texlive/tex/latex/oberdiek/pdfcolmk.sty
+Package: pdfcolmk 2008/08/11 v1.2 PDFtex COLor MarK (HO)
+Package pdfcolmk Info: The color stack of pdfTeX >= 1.40 is used. Therefore
+(pdfcolmk)             this package is not necessary and not loaded.
+)
+LaTeX Info: Redefining \cs on input line 9.
+\tpheight=\skip185
+\txtheight=\skip186
+\tpwidth=\skip187
+\txtwidth=\skip188
+\drop=\skip189
+) (./variables.tex)
+(./postgresql.aux)
+\openout1 = `postgresql.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 9.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 9.
+ (/usr/share/texmf-texlive/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
+LaTeX Info: Redefining \subref on input line 9.
+Package caption Info: Incompatible package detected (regarding \caption).
+(caption)             \caption = \long macro:->\donemaincaptiontrue \m@moldhypc
+aption .
+
+
+Package caption Warning: \caption will not be redefined since it's already
+(caption)                redefined by a document class or package which is
+(caption)                unknown to the caption package.
+See the caption package documentation for explanation.
+
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: longtable package is loaded.
+(/usr/share/texmf-texlive/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2008/03/28 v1.2 longtable captions (AR)
+)
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count177
+
+(/usr/share/texmf/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count178
+\scratchdimen=\dimen175
+\scratchbox=\box36
+\nofMPsegments=\count179
+\nofMParguments=\count180
+\everyMPshowfont=\toks37
+\MPscratchCnt=\count181
+\MPscratchDim=\dimen176
+\MPnumerator=\count182
+\everyMPtoPDFconversion=\toks38
+) (/usr/share/texmf-texlive/tex/latex/ucs/ucsencs.def
+File: ucsencs.def 2003/11/29 Fixes to fontencodings LGR, T3
+)
+Package hyperref Info: Link coloring OFF on input line 9.
+
+(/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
+Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
+
+(/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
+Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
+)
+\c@section@level=\count183
+)
+LaTeX Info: Redefining \ref on input line 9.
+LaTeX Info: Redefining \pageref on input line 9.
+ (./postgresql.out)
+(./postgresql.out)
+\@outlinefile=\write5
+\openout5 = `postgresql.out'.
+
+\AtBeginShipoutBox=\box37
+
+Redoing nameref's sectioning
+Redoing nameref's label
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-4.def
+File: uni-4.def 2004/10/17 UCS: Unicode data U+0400..U+04FF
+)
+Underfull \hbox (badness 10000) in paragraph at lines 12--12
+
+ []
+
+[1
+
+{/home/leo/.texmf-var/fonts/map/pdftex/updmap/pdftex.map
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `fcrb8r' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `fcrr8r' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmb8r' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmbi8r' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmbo8r' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmr8r' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmri8r' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
+pdmap/pdftex.map): fontmap entry for `ftmro8r' already exists, duplicates ignor
+ed
+}] (./postgresql_title.tex [2
+
+])
+LaTeX Font Info:    Try loading font information for T2A+cmss on input line 20.
+
+
+(/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmss.fd
+File: t2acmss.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+) (./postgresql.toc<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
+LaTeX Font Info:    Try loading font information for U+msa on input line 2.
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 2.
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+))
+(./postgresql_performance_begin.tex [3
+
+]
+Overfull \hbox (12.32004pt too wide) in paragraph at lines 7--8
+[]\T2A/cmr/m/n/12 возможностью воз-ло-жить под-держ-ку це-лост-но-сти дан-ных н
+а СУБД; 
+ []
+
+
+Overfull \hbox (16.85295pt too wide) in paragraph at lines 18--25
+\T2A/cmr/m/n/12 аль-ный FAQ. Так-же су-ще-ству-ет ан-гло-языч-ный спи-сок рас-с
+ыл-ки postgresql-
+ []
+
+[4
+
+]
+Overfull \hbox (8.41139pt too wide) in paragraph at lines 56--57
+[]\T2A/cmr/m/n/12 В вер-сии 7.4 бы-ла уско-ре-на ра-бо-та мно-гих слож-ных за-п
+ро-сов (вклю-
+ []
+
+
+Overfull \hbox (7.27072pt too wide) in paragraph at lines 57--58
+[]\T2A/cmr/m/n/12 В вер-сии 8.0 бы-ло внед-ре-но мет-ки во-ста-нов-ле-ния, улуч
+-ше-ние управ-
+ []
+
+[5]
+Overfull \hbox (0.89517pt too wide) in paragraph at lines 61--63
+[]\T2A/cmr/m/n/12 В вер-сии 8.3 внед-рен пол-но-тек-сто-вый по-иск, под-держ-ка
+ SQL/XML
+ []
+
+[6]
+Overfull \hbox (6.95pt too wide) in paragraph at lines 84--85
+[]\T2A/cmr/m/n/12 Использование за-ве-до-мо мед-лен-но ра-бо-та-ю-щих за-про-со
+в (см. пункт
+ []
+
+) (./postgresql_performance_settings.tex [7]
+Overfull \hbox (6.09239pt too wide) in paragraph at lines 26--29
+[]\T2A/cmr/m/n/12 К со-жа-ле-нию, что-бы знать точ-ное чис-ло shared_buffers, н
+уж-но учесть
+ []
+
+[8]
+Overfull \hbox (14.25293pt too wide) in paragraph at lines 68--75
+[]\T2A/cmr/m/n/12 Объјм па-мя-ти за-да-јт-ся па-ра-мет-ром work_mem в фай-ле po
+stgresql.conf.
+ []
+
+
+Overfull \hbox (20.44102pt too wide) in paragraph at lines 77--83
+\T2A/cmr/m/n/12 метр за-да-јт объ-јм па-мя-ти, ис-поль-зу-е-мый ко-ман-да-ми VA
+CUUM, ANALYZE,
+ []
+
+[9]
+Overfull \hbox (19.9684pt too wide) in paragraph at lines 88--90
+[]\T2A/cmr/m/n/12 При из-ме-не-нии дан-ных в таб-ли-це (ко-ман-да-ми UPDATE или
+ DELETE)
+ []
+
+
+Overfull \hbox (15.79718pt too wide) in paragraph at lines 91--92
+\T2A/cmr/m/n/12 В каж-дой СУБД сбор-ка му-со-ра ре-а-ли-зо-ва-на осо-бым об-ра-
+зом, в PostgreSQL
+ []
+
+[10]
+Overfull \hbox (16.71483pt too wide) in paragraph at lines 129--131
+[]\T2A/cmr/m/n/12 Количество од-но-вре-мен-но под-го-тав-ли-ва-е-мых тран-зак-ц
+ий (PREPARE
+ []
+
+[11]
+Overfull \hbox (29.259pt too wide) in paragraph at lines 173--181
+\T2A/cmr/m/n/12 уве-ли-чить ко-ли-че-ство сег-мен-тов жур-на-ла тран-зак-ций (c
+heckpoint_segments).
+ []
+
+
+Overfull \hbox (0.74103pt too wide) in paragraph at lines 173--181
+\T2A/cmr/m/n/12 ет осо-бо-го зна-че-ния для ба-зы дан-ных, пред-на-зна-чен-ной 
+пре-иму-ще-ствен-
+ []
+
+[12]
+Overfull \hbox (11.43828pt too wide) in paragraph at lines 196--197
+[]\T2A/cmr/bx/n/12 commit_delay \T2A/cmr/m/n/12 (в мик-ро-се-кун-дах, 0 по умол
+-ча-нию) и \T2A/cmr/bx/n/12 commit_sib-
+ []
+
+[13] [14]
+Overfull \hbox (3.31612pt too wide) in paragraph at lines 249--253
+[]\T2A/cmr/m/n/12 Пусть в ва-шем ком-пью-те-ре 1,5 ГБ па-мя-ти, па-ра-метр shar
+ed_buffers
+ []
+
+
+Overfull \hbox (12.71793pt too wide) in paragraph at lines 254--257
+[]\T2A/cmr/m/n/12 На вы-де-лен-ном сер-ве-ре име-ет смысл вы-став-лять effectiv
+e_cache_size
+ []
+
+
+Overfull \hbox (42.48538pt too wide) in paragraph at lines 260--268
+\T2A/cmr/m/n/12 ние random_page_cost ни-же 2.0; ес-ли вам ка-жет-ся, что random
+_page_cost
+ []
+
+[15]
+Overfull \hbox (0.52713pt too wide) in paragraph at lines 281--284
+[]\T2A/cmr/bx/n/12 stats_command_string \T2A/cmr/m/n/12 пе-ре-да-вать ли сбор-щ
+и-ку ста-ти-сти-ки ин-
+ []
+
+) (./postgresql_performance_hard_disk.tex [16])
+(./postgresql_performance_settings_sample.tex [17] [18] [19]
+LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 72.
+
+
+(/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmtt.fd
+File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+))
+(./postgresql_performance_db_end.tex [20] [21] [22]
+Overfull \hbox (8.41634pt too wide) in paragraph at lines 68--72
+\T2A/cmr/m/n/12 мед-лен-нее про-смот-ра по ин-дек-су. Ес-ли, на-при-мер, в табл
+ице--справочнике
+ []
+
+[23] [24]
+Overfull \hbox (2.59839pt too wide) in paragraph at lines 140--142
+[]\T2A/cmr/m/n/12 Этот пункт оче-ви-ден для опыт-ных поль-зо-ва-те-лей PostrgeS
+QL и пред-
+ []
+
+[25] [26]
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 213--213
+[]\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
+ a;[] 
+ []
+
+[27]
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 222--222
+[]\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
+ a;[] 
+ []
+
+) (./postgresql_replication_begin.tex [28] [29
+
+]) [30]
+\tf@toc=\write6
+\openout6 = `postgresql.toc'.
+
+ (./postgresql.aux) ) 
+Here is how much of TeX's memory you used:
+ 14910 strings out of 494818
+ 204468 string characters out of 1178667
+ 332203 words of memory out of 3000000
+ 17725 multiletter control sequences out of 15000+50000
+ 22740 words of font info for 58 fonts, out of 3000000 for 9000
+ 212 hyphenation exceptions out of 8191
+ 55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.en
+c}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf
+/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/
+cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pf
+b></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/
+fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/c
+m-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb
+></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/f
+onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
+-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
+nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
+super/sftt1200.pfb>
+Output written on postgresql.pdf (30 pages, 386689 bytes).
+PDF statistics:
+ 310 PDF objects out of 1000 (max. 8388607)
+ 82 named destinations out of 1000 (max. 500000)
+ 109 words of extra memory for PDF output out of 10000 (max. 10000000)
+

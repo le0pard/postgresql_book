@@ -1,0 +1,47 @@
+\usepackage[svgnames]{xcolor}
+\ifpdf
+  \usepackage{pdfcolmk}
+\fi
+\ifxetex
+  \usepackage{fontspec}
+\fi
+
+\DeclareRobustCommand{\cs}[1]{\texttt{\char`\\#1}}
+\newlength{\tpheight}\setlength{\tpheight}{0.9\textheight}
+\newlength{\txtheight}\setlength{\txtheight}{0.9\tpheight}
+\newlength{\tpwidth}\setlength{\tpwidth}{0.9\textwidth}
+\newlength{\txtwidth}\setlength{\txtwidth}{0.9\tpwidth}
+\newlength{\drop}
+
+\newenvironment{showtitle}{%
+  \begin{boxminipage}[c][\tpheight]{\tpwidth}
+  \centering\begin{vplace}\begin{minipage}[c][\txtheight]{\txtwidth}}%
+{\end{minipage}\end{vplace}\end{boxminipage}}
+
+\definecolor{Dark}{gray}{.2}
+\definecolor{MedDark}{gray}{.4}
+\definecolor{Medium}{gray}{.6}
+\definecolor{Light}{gray}{.8}
+
+\newcommand*{\titleGM}{\begingroup% Gentle Madness
+\drop = 0.1\txtheight
+\vfill
+  \hbox{%
+  \hspace*{0.2\txtwidth}%
+  \rule{1pt}{\txtheight}
+  \hspace*{0.05\txtwidth}%
+%\fbox{%
+\parbox[b]{0.75\txtwidth}{
+  \vbox{%
+    \vspace{\drop}
+    {\noindent\HUGE\bfseries Работа с Postgresql}\\[2\baselineskip]
+    {\Large\itshape настройка, масштабирование}\\[4\baselineskip]
+    {\Large Алексей Васильев}\par
+    \vspace{0.5\txtheight}
+    {\noindent The Publisher}\\[\baselineskip]
+    }% end of vbox
+}% end of parbox
+%}% end of fbox
+  }% end of hbox
+\vfill
+\endgroup}

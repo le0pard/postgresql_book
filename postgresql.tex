@@ -1,0 +1,38 @@
+\documentclass[a4paper,12pt,oneside]{memoir}
+
+\usepackage{postgresql}
+\graphicspath{{images/}{schemes/}{software/}}
+
+\input{titlepages}
+\input{variables}
+
+\begin{document}
+
+\pagestyle{empty}
+\titleGM
+\clearpage
+
+\input{postgresql_title}
+
+\setcounter{page}{3}
+\pagestyle{myindex}
+%\chapterstyle{bianchi}
+\chapterstyle{ell}
+%\chapterstyle{ger}
+%\chapterstyle{madsen}
+%\chapterstyle{veelo}
+\setcounter{tocdepth}{1}% subsections and above
+\tableofcontents
+
+%performance begin
+\input{postgresql_performance_begin}
+\input{postgresql_performance_settings}
+\input{postgresql_performance_hard_disk}
+\input{postgresql_performance_settings_sample}
+\input{postgresql_performance_db_end}
+%performance end
+%replication begin
+\input{postgresql_replication_begin}
+%replication end
+
+\end{document}          
