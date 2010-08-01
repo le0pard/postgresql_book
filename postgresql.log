@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  1 AUG 2010 19:39
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  1 AUG 2010 22:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1094,16 +1094,46 @@ Overfull \hbox (10.52614pt too wide) in paragraph at lines 72--74
 о-то-рая под-дер-жи-ва-ет Multi-
  []
 
-[31]) (./postgresql_replication_londiste.tex [32] [33]) [34]
+[31]) (./postgresql_replication_londiste.tex [32] [33] [34] [35]
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 195--195
+[]\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add --
+all[] 
+ []
+
+[36]
+Overfull \hbox (18.27701pt too wide) in paragraph at lines 206--206
+[]\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
+--all[] 
+ []
+
+
+Overfull \hbox (30.624pt too wide) in paragraph at lines 210--210
+[]\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add-se
+q --all[] 
+ []
+
+[37]
+Overfull \hbox (42.97098pt too wide) in paragraph at lines 245--245
+[]\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
+ tables |[] 
+ []
+
+
+Overfull \hbox (80.01193pt too wide) in paragraph at lines 247--247
+[]\T2A/cmtt/m/n/12 do sleep 60; done; echo '' | mail -s 'Replication done EOM' 
+user@domain.com[] 
+ []
+
+) [38]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 14923 strings out of 494818
- 204717 string characters out of 1178667
+ 14937 strings out of 494818
+ 204859 string characters out of 1178667
  334203 words of memory out of 3000000
- 17728 multiletter control sequences out of 15000+50000
+ 17729 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1120,9 +1150,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (34 pages, 405443 bytes).
+Output written on postgresql.pdf (38 pages, 422108 bytes).
 PDF statistics:
- 335 PDF objects out of 1000 (max. 8388607)
- 89 named destinations out of 1000 (max. 500000)
+ 365 PDF objects out of 1000 (max. 8388607)
+ 102 named destinations out of 1000 (max. 500000)
  117 words of extra memory for PDF output out of 10000 (max. 10000000)
 

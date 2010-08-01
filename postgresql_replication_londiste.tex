@@ -81,3 +81,180 @@ Skytools version 2.1.11
 \item host1~--- мастер; 
 \item host2~--- слейв;
 \end{itemize}
+
+
+\subsubsection{Настройка ticker-а}
+Londiste требуется ticker для работы с мастер базой данных, который может быть запущен и на другой машине. 
+Но, конечно, лучше его запускать на той же, где и мастер база данных. Для этого мы настраиваем специальный 
+конфиг для ticker-а (пусть конфиг будет у нас /etc/skytools/db1-ticker.ini):
+\begin{verbatim}
+[pgqadm]
+# название
+job_name = db1-ticker
+
+# мастер база данных 
+db = dbname=P host=host1 
+
+# Задержка между запусками обслуживания 
+# (ротация очередей и т.п.) в секундах
+maint_delay = 600
+
+# Задержка между проверками наличия активности 
+# (новых пакетов данных) в секундах
+loop_delay = 0.1
+
+# log и pid демона
+logfile = /var/log/%(job_name)s.log
+pidfile = /var/pid/%(job_name)s.pid
+\end{verbatim}
+
+Теперь необходимо инсталлировать служебный код (SQL) и запустить ticker как демона для базы данных. 
+Делается это с помощью утилиты pgqadm.py следующими командами:
+\begin{verbatim}
+pgqadm.py /etc/skytools/db1-ticker.ini install
+pgqadm.py /etc/skytools/db1-ticker.ini ticker -d
+\end{verbatim}
+
+Проверим, что в логах (/var/log/skytools/db1-tickers.log) всё нормально. На данном этапе там должны быть редкие записи (раз в минуту).
+
+Если нам потребуется остановить ticker, мы можем воспользоватся этой командой:
+\begin{verbatim}
+pgqadm.py /etc/skytools/db1-ticker.ini ticker -s
+\end{verbatim}
+или если потребуется <<убить>> ticker:
+\begin{verbatim}
+pgqadm.py /etc/skytools/db1-ticker.ini ticker -k
+\end{verbatim}
+
+\subsubsection{Востанавливаем схему базы}
+Londiste не умеет переносить изменения структуры базы данных. 
+Поэтому на всех slave базах данных перед репликацией должна быть создана такая же структура БД, что и на мастере.
+
+\subsubsection{Создаём конфигурацию репликатора}
+Для каждой из реплицируемых баз создадим конфигурационные файлы 
+(пусть конфиг будет у нас /etc/skytools/db1-londiste.ini):
+\begin{verbatim}
+[londiste]
+# название
+job_name = db1-londiste
+
+# мастер база данных
+provider_db = dbname=db1 port=5432 host=host1
+# слейв база данных
+subscriber_db = dbname=db1 host=host2
+
+# Это будет использоваться в качестве 
+# SQL-идентификатора, т.ч. не используйте
+# точки и пробелы.
+# ВАЖНО! Если есть живая репликация на другой слейв, 
+# именуем очередь так-же
+pgq_queue_name = db1-londiste-queue
+
+# log и pid демона
+logfile = /var/log/%(job_name)s.log
+pidfile = /var/run/%(job_name)s.pid
+
+# рзмер лога
+log_size = 5242880
+log_count = 3
+\end{verbatim}
+
+\subsubsection{Устанавливаем Londiste в базы на мастере и слейве}
+Теперь необходимо установить служебный SQL для каждой из созданных в предыдущем
+пункте конфигураций.
+
+Устанавливаем код на стороне мастера:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini provider install
+\end{verbatim}
+и подобным образом на стороне слейва:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini subscriber install
+\end{verbatim}
+
+После этого пункта на мастере будут созданы очереди для репликации.
+
+\subsubsection{Запускаем процессы Londiste}
+Для каждой реплицируемой базы делаем:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini replay -d
+\end{verbatim}
+
+Таким образом запустятся слушатели очередей репликации, но, т.к. мы ещё не
+указывали какие таблицы хотим реплицировать, они пока будут работать в холостую.
+
+Убедимся что в логах нет ошибок (/var/log/db1-londistes.log).
+
+\subsubsection{Добавляем реплицируемые таблицы}
+Для каждой конфигурации указываем что будем реплицировать с мастера:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini provider add --all
+\end{verbatim}
+и что со слейва:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini subscriber add --all
+\end{verbatim}
+
+В данном примере я использую спец-параметр <<--all>>, который означает все таблицы,
+но вместо него вы можете перечислить список конкретных таблиц, если не хотите
+реплицировать все.
+
+\subsubsection{Добавляем реплицируемые последовательности (sequence)}
+Так же для всех конфигураций.
+Для мастера:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini provider add-seq --all
+\end{verbatim}
+Для слейва:
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini subscriber add-seq --all
+\end{verbatim}
+
+Точно также как и с таблицами можно указать конкретные последовательности вместо <<--all>>.
+
+\subsubsection{Проверка}
+Итак, всё что надо сделано. Теперь Londiste запустит так называемый bulk copy
+процесс, который массово (с помощью COPY) зальёт присутствующие на момент
+добавления таблиц данные на слейв, а затем перейдёт в состояние обычной репликации.
+
+Мониторим логи на предмет ошибок:
+\begin{verbatim}
+less /var/log/db1-londiste.log
+\end{verbatim}
+
+Если всё хорошо, смотрим состояние репликации. Данные уже синхронизированы для
+тех таблиц, где статус отображается как "ok".
+\begin{verbatim}
+londiste.py /etc/skytools/db1-londiste.ini subscriber tables
+
+   Table State
+   public.table1 ok
+   public.table2 ok
+   public.table3 in-copy
+   public.table4 -
+   public.table5 -
+   public.table6 -
+   ...
+\end{verbatim}
+
+Для удобства представляю следующий трюк с уведомление в почту об окончании
+первоначального копирования (мыло поменять на своё):
+\begin{verbatim}
+(
+while [ $(
+python londiste.py /etc/skytools/db1-londiste.ini subscriber tables |
+tail -n+2 | awk '{print $2}' | grep -v ok | wc -l) -ne 0 ];
+do sleep 60; done; echo '' | mail -s 'Replication done EOM' user@domain.com
+) &
+\end{verbatim}
+
+\subsubsection{Проверка состояния слейвов}
+Этот запрос на мастере дает некоторую информацию о каждой очереди и слейве.
+\begin{verbatim}
+SELECT queue_name, consumer_name, lag, last_seen
+  FROM pgq.get_consumer_info();
+\end{verbatim}
+
+<<lag>> столбец показывает отставание от мастера в синхронизации, 
+<<last\_seen>>~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, 
+чем 60 секунд для конфигурации по умолчанию.
