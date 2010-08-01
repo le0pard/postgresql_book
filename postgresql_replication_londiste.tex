@@ -18,16 +18,66 @@ Londiste представляет собой движок для организ�
 \footnote{http://skytools.projects.postgresql.org/skytools-3.0/doc/skytools3.html})
 \end{itemize}
 
-\subsection{Перед началом}
-На серверах, которые мы настраиваем расматривается ОС Linux. 
+
+\subsection{Установка}
+На серверах, которые мы настраиваем расматривается ОС Linux, а именно Ubuntu Server. 
 Автор данной книги считает, что под другие операционные системы (кроме Windows) все мало чем будет отличаться, 
 а держать кластера PostgreSQL под ОС Windows, по меньшей мере, неразумно.
+
+Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет. На таких системах, как Debian или Ubuntu skytools 
+можно найти в репозитории пакетов и поставить одной командой:
+\begin{verbatim}
+$sudo aptitude install skytools
+\end{verbatim}
+
+Но все же лучше скачать самую последнюю версию пакета с официального сайта~--- http://pgfoundry.org/projects/skytools. 
+На момент написания статьи последняя версия была 2.1.11. Итак, начнем:
+
+\begin{verbatim}
+$wget http://pgfoundry.org/frs/download.php/2561/
+skytools-2.1.11.tar.gz
+$tar zxvf skytools-2.1.11.tar.gz
+$cd skytools-2.1.11/
+# это для сборки deb пакета
+$sudo aptitude install build-essential autoconf \ 
+automake autotools-dev dh-make \ 
+debhelper devscripts fakeroot xutils lintian pbuilder \
+python-dev yada
+# ставим пакет исходников для postgresql 8.4.x
+$sudo aptitude install postgresql-server-dev-8.4
+# python-psycopg нужен для работы Londiste
+$sudo aptitude install python-psycopg2
+# данной командой я собираю deb пакет для 
+# postgresql 8.4.x (для 8.3.x например будет "make deb83")
+$sudo make deb84
+$cd ../
+# ставим skytools
+$dpkg -i skytools-modules-8.4_2.1.11_i386.deb 
+skytools_2.1.11_i386.deb
+\end{verbatim}
+
+Для других систем можно собрать Skytools командами 
+
+\begin{verbatim}
+$./configure
+$make
+$make install
+\end{verbatim}
+
+Дальше проверим, что все у нас правильно установилось
+\begin{verbatim}
+$londiste.py -V
+Skytools version 2.1.11
+$pgqadm.py -V
+Skytools version 2.1.11
+\end{verbatim}
+
+Если у Вас похожий вывод, значит все установленно правильно и можно приступать к настройке.
+
+
+\subsection{Настройка}
 Обозначения: 
 \begin{itemize}
 \item host1~--- мастер; 
 \item host2~--- слейв;
 \end{itemize}
-
-\subsection{Установка}
-
-
