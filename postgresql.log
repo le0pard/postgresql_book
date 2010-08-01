@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  2 AUG 2010 01:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  2 AUG 2010 01:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1094,14 +1094,25 @@ Overfull \hbox (10.52614pt too wide) in paragraph at lines 72--74
 о-то-рая под-дер-жи-ва-ет Multi-
  []
 
-[32]) (./postgresql_replication_slony.tex)
-(./postgresql_replication_londiste.tex [33] [34] [35] [36]
+[32]) (./postgresql_replication_slony.tex
+Overfull \hbox (1.13255pt too wide) in paragraph at lines 7--10
+\T2A/cmr/m/n/12 ных ком-по-нент, ре-пли-ка-ци-он-но-го де-мо-на slony и ад-ми-н
+и-стра-тив-ной кон-
+ []
+
+
+Overfull \hbox (18.98232pt too wide) in paragraph at lines 23--25
+[]\T2A/cmr/m/n/12 Рассмотрим те-перь уста-нов-ку на ги-по-те-ти-че-скую ба-зу д
+ан-ных customers
+ []
+
+[33]) (./postgresql_replication_londiste.tex [34] [35] [36] [37]
 Overfull \hbox (5.93002pt too wide) in paragraph at lines 195--195
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add --
 all[] 
  []
 
-[37]
+[38]
 Overfull \hbox (18.27701pt too wide) in paragraph at lines 206--206
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
 --all[] 
@@ -1113,7 +1124,7 @@ Overfull \hbox (30.624pt too wide) in paragraph at lines 210--210
 q --all[] 
  []
 
-[38]
+[39]
 Overfull \hbox (42.97098pt too wide) in paragraph at lines 245--245
 []\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
  tables |[] 
@@ -1131,7 +1142,7 @@ Overfull \hbox (73.83844pt too wide) in paragraph at lines 257--257
 subscriber add[] 
  []
 
-[39]
+[40]
 Overfull \hbox (18.32822pt too wide) in paragraph at lines 289--290
 []\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
 name'); 
@@ -1143,16 +1154,16 @@ Overfull \hbox (18.32822pt too wide) in paragraph at lines 297--298
 name'); 
  []
 
-[40]) [41]
+[41]) [42]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 14985 strings out of 494818
- 205497 string characters out of 1178667
+ 14994 strings out of 494818
+ 205598 string characters out of 1178667
  334203 words of memory out of 3000000
- 17752 multiletter control sequences out of 15000+50000
+ 17755 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1169,9 +1180,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (41 pages, 448455 bytes).
+Output written on postgresql.pdf (42 pages, 453184 bytes).
 PDF statistics:
- 489 PDF objects out of 1000 (max. 8388607)
- 124 named destinations out of 1000 (max. 500000)
- 285 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 511 PDF objects out of 1000 (max. 8388607)
+ 130 named destinations out of 1000 (max. 500000)
+ 309 words of extra memory for PDF output out of 10000 (max. 10000000)
 
