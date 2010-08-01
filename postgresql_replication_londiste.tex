@@ -248,6 +248,15 @@ do sleep 60; done; echo '' | mail -s 'Replication done EOM' user@domain.com
 ) &
 \end{verbatim}
 
+
+\subsection{Общие задачи}
+
+\subsubsection{Добавление всех таблиц мастера слейву}
+Просто используя эту команду:
+\begin{verbatim}
+londiste.py <ini> provider tables | xargs londiste.py <ini> subscriber add
+\end{verbatim}
+
 \subsubsection{Проверка состояния слейвов}
 Этот запрос на мастере дает некоторую информацию о каждой очереди и слейве.
 \begin{verbatim}
@@ -258,3 +267,65 @@ SELECT queue_name, consumer_name, lag, last_seen
 <<lag>> столбец показывает отставание от мастера в синхронизации, 
 <<last\_seen>>~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, 
 чем 60 секунд для конфигурации по умолчанию.
+
+\subsubsection{Удаление очереди всех событий из мастера}
+При работе с Londiste может потребоватся удалить все ваши настройки для того, чтобы начать все заново. 
+Для PGQ, чтобы остановить накопление данных, используйте следующие API:
+\begin{verbatim}
+SELECT pgq.unregister_consumer('queue_name', 'consumer_name');
+\end{verbatim}
+
+Или воспользуйтесь pgqadm.py:
+\begin{verbatim}
+pgqadm.py <ticker.ini> unregister queue_name consumer_name
+\end{verbatim}
+
+\subsubsection{Добавление столбца в таблицу}
+Добавляем в следующей последовательности:
+\begin{enumerate}
+ \item добавить поле на все слейвы
+ \item BEGIN; -- на мастере
+ \item добавить поле на мастере
+ \item SELECT londiste.provider\_refresh\_trigger('queue\_name', 'tablename');
+ \item COMMIT;
+\end{enumerate}
+
+\subsubsection{Удаление столбца из таблицу}
+\begin{enumerate}
+ \item BEGIN; -- на мастере
+ \item удалить поле на мастере
+ \item SELECT londiste.provider\_refresh\_trigger('queue\_name', 'tablename');
+ \item COMMIT;
+ \item Проверить <<lag>>, когда londiste пройдет момент удаления поля
+ \item удалить поле на всех слейвах
+\end{enumerate}
+
+Хитрость тут в том, чтобы удалить поле на слейвах только тогда, когда больше нет событий в очереди на это поле.
+
+
+\subsection{Устранение неисправностей}
+
+\subsubsection{Londiste пожирает процессор и lag все растет}
+Это происходит, например, если во время сбоя админ забыл перезапустить ticker. Или когда вы сделали большой 
+UPDATE или DELETE в одной транзакции, но теперь что бы реализовать каждое собитие в этом запросе создаются 
+транзакции на слейвах \dots
+
+Следующий запрос позволяет подсчитать, сколько событий пришло в pgq.subscription в колонках sub\_last\_tick и sub\_next\_tick.
+\begin{verbatim}
+SELECT count(*)
+  FROM pgq.event_1,
+    (SELECT tick_snapshot
+      FROM pgq.tick
+      WHERE tick_id BETWEEN 5715138 AND 5715139
+    ) as t(snapshots)
+WHERE txid_visible_in_snapshot(ev_txid, snapshots);
+\end{verbatim}
+
+В нашем случае, это было более чем 5 миллионов и 400 тысяч событий. Многовато. Чем больше событий 
+с базы данных требуется обработать Londiste, тем больше ему требуется памяти для этого. Мы можем сообщить 
+Londiste не загружать все события сразу. Достаточно добавить в INI конфиг ticker-а следующую настройку:
+\begin{verbatim}
+pgq_lazy_fetch = 500
+\end{verbatim}
+ 
+Теперь Londiste будет брать максимум 500 событий в один пакет запросов. Остальные попадут в следующие пакеты запросов.

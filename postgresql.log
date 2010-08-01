@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  1 AUG 2010 22:56
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  2 AUG 2010 00:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -929,10 +929,10 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 2.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-))
-(./postgresql_performance_begin.tex [3
+) [3
 
-]
+])
+(./postgresql_performance_begin.tex [4]
 Overfull \hbox (12.32004pt too wide) in paragraph at lines 7--8
 []\T2A/cmr/m/n/12 возможностью воз-ло-жить под-держ-ку це-лост-но-сти дан-ных н
 а СУБД; 
@@ -944,7 +944,7 @@ Overfull \hbox (16.85295pt too wide) in paragraph at lines 18--25
 ыл-ки postgresql-
  []
 
-[4
+[5
 
 ]
 Overfull \hbox (8.41139pt too wide) in paragraph at lines 56--57
@@ -958,25 +958,25 @@ Overfull \hbox (7.27072pt too wide) in paragraph at lines 57--58
 -ше-ние управ-
  []
 
-[5]
+[6]
 Overfull \hbox (0.89517pt too wide) in paragraph at lines 61--63
 []\T2A/cmr/m/n/12 В вер-сии 8.3 внед-рен пол-но-тек-сто-вый по-иск, под-держ-ка
  SQL/XML
  []
 
-[6]
+[7]
 Overfull \hbox (6.95pt too wide) in paragraph at lines 84--85
 []\T2A/cmr/m/n/12 Использование за-ве-до-мо мед-лен-но ра-бо-та-ю-щих за-про-со
 в (см. пункт
  []
 
-) (./postgresql_performance_settings.tex [7]
+) (./postgresql_performance_settings.tex [8]
 Overfull \hbox (6.09239pt too wide) in paragraph at lines 26--29
 []\T2A/cmr/m/n/12 К со-жа-ле-нию, что-бы знать точ-ное чис-ло shared_buffers, н
 уж-но учесть
  []
 
-[8]
+[9]
 Overfull \hbox (14.25293pt too wide) in paragraph at lines 68--75
 []\T2A/cmr/m/n/12 Объјм па-мя-ти за-да-јт-ся па-ра-мет-ром work_mem в фай-ле po
 stgresql.conf.
@@ -988,7 +988,7 @@ Overfull \hbox (20.44102pt too wide) in paragraph at lines 77--83
 CUUM, ANALYZE,
  []
 
-[9]
+[10]
 Overfull \hbox (19.9684pt too wide) in paragraph at lines 88--90
 []\T2A/cmr/m/n/12 При из-ме-не-нии дан-ных в таб-ли-це (ко-ман-да-ми UPDATE или
  DELETE)
@@ -1000,13 +1000,13 @@ Overfull \hbox (15.79718pt too wide) in paragraph at lines 91--92
 зом, в PostgreSQL
  []
 
-[10]
+[11]
 Overfull \hbox (16.71483pt too wide) in paragraph at lines 129--131
 []\T2A/cmr/m/n/12 Количество од-но-вре-мен-но под-го-тав-ли-ва-е-мых тран-зак-ц
 ий (PREPARE
  []
 
-[11]
+[12]
 Overfull \hbox (29.259pt too wide) in paragraph at lines 173--181
 \T2A/cmr/m/n/12 уве-ли-чить ко-ли-че-ство сег-мен-тов жур-на-ла тран-зак-ций (c
 heckpoint_segments).
@@ -1018,13 +1018,13 @@ Overfull \hbox (0.74103pt too wide) in paragraph at lines 173--181
 пре-иму-ще-ствен-
  []
 
-[12]
+[13]
 Overfull \hbox (11.43828pt too wide) in paragraph at lines 196--197
 []\T2A/cmr/bx/n/12 commit_delay \T2A/cmr/m/n/12 (в мик-ро-се-кун-дах, 0 по умол
 -ча-нию) и \T2A/cmr/bx/n/12 commit_sib-
  []
 
-[13] [14]
+[14] [15]
 Overfull \hbox (3.31612pt too wide) in paragraph at lines 249--253
 []\T2A/cmr/m/n/12 Пусть в ва-шем ком-пью-те-ре 1,5 ГБ па-мя-ти, па-ра-метр shar
 ed_buffers
@@ -1042,47 +1042,47 @@ Overfull \hbox (42.48538pt too wide) in paragraph at lines 260--268
 _page_cost
  []
 
-[15]
+[16]
 Overfull \hbox (0.52713pt too wide) in paragraph at lines 281--284
 []\T2A/cmr/bx/n/12 stats_command_string \T2A/cmr/m/n/12 пе-ре-да-вать ли сбор-щ
 и-ку ста-ти-сти-ки ин-
  []
 
-) (./postgresql_performance_hard_disk.tex [16])
-(./postgresql_performance_settings_sample.tex [17] [18] [19]
+) (./postgresql_performance_hard_disk.tex [17])
+(./postgresql_performance_settings_sample.tex [18] [19] [20]
 LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 72.
 
 
 (/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmtt.fd
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 ))
-(./postgresql_performance_db_end.tex [20] [21] [22]
+(./postgresql_performance_db_end.tex [21] [22] [23]
 Overfull \hbox (8.41634pt too wide) in paragraph at lines 68--72
 \T2A/cmr/m/n/12 мед-лен-нее про-смот-ра по ин-дек-су. Ес-ли, на-при-мер, в табл
 ице--справочнике
  []
 
-[23] [24]
+[24] [25]
 Overfull \hbox (2.59839pt too wide) in paragraph at lines 140--142
 []\T2A/cmr/m/n/12 Этот пункт оче-ви-ден для опыт-ных поль-зо-ва-те-лей PostrgeS
 QL и пред-
  []
 
-[25] [26]
+[26] [27]
 Overfull \hbox (5.93002pt too wide) in paragraph at lines 213--213
 []\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
  a;[] 
  []
 
-[27]
+[28]
 Overfull \hbox (5.93002pt too wide) in paragraph at lines 222--222
 []\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
  a;[] 
  []
 
-) (./postgresql_replication_begin.tex [28] [29
+) (./postgresql_replication_begin.tex [29] [30
 
-] [30]
+] [31]
 Overfull \hbox (24.92569pt too wide) in paragraph at lines 68--69
 []\T2A/cmr/m/n/12 балансировку SELECT-запросов на несколь-ко postgresql-серверо
 в; 
@@ -1094,13 +1094,13 @@ Overfull \hbox (10.52614pt too wide) in paragraph at lines 72--74
 о-то-рая под-дер-жи-ва-ет Multi-
  []
 
-[31]) (./postgresql_replication_londiste.tex [32] [33] [34] [35]
+[32]) (./postgresql_replication_londiste.tex [33] [34] [35] [36]
 Overfull \hbox (5.93002pt too wide) in paragraph at lines 195--195
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add --
 all[] 
  []
 
-[36]
+[37]
 Overfull \hbox (18.27701pt too wide) in paragraph at lines 206--206
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
 --all[] 
@@ -1112,7 +1112,7 @@ Overfull \hbox (30.624pt too wide) in paragraph at lines 210--210
 q --all[] 
  []
 
-[37]
+[38]
 Overfull \hbox (42.97098pt too wide) in paragraph at lines 245--245
 []\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
  tables |[] 
@@ -1124,16 +1124,34 @@ Overfull \hbox (80.01193pt too wide) in paragraph at lines 247--247
 user@domain.com[] 
  []
 
-) [38]
+
+Overfull \hbox (73.83844pt too wide) in paragraph at lines 257--257
+[]\T2A/cmtt/m/n/12 londiste.py <ini> provider tables | xargs londiste.py <ini> 
+subscriber add[] 
+ []
+
+[39]
+Overfull \hbox (18.32822pt too wide) in paragraph at lines 289--290
+[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
+name'); 
+ []
+
+
+Overfull \hbox (18.32822pt too wide) in paragraph at lines 297--298
+[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
+name'); 
+ []
+
+[40]) [41]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 14937 strings out of 494818
- 204859 string characters out of 1178667
+ 14978 strings out of 494818
+ 205313 string characters out of 1178667
  334203 words of memory out of 3000000
- 17729 multiletter control sequences out of 15000+50000
+ 17749 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1150,9 +1168,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (38 pages, 422108 bytes).
+Output written on postgresql.pdf (41 pages, 444812 bytes).
 PDF statistics:
- 365 PDF objects out of 1000 (max. 8388607)
- 102 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 484 PDF objects out of 1000 (max. 8388607)
+ 123 named destinations out of 1000 (max. 500000)
+ 277 words of extra memory for PDF output out of 10000 (max. 10000000)
 
