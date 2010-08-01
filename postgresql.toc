@@ -41,3 +41,6 @@
 \contentsline {section}{\numberline {1.7}\IeC {\CYRZ }\IeC {\cyra }\IeC {\cyrk }\IeC {\cyrl }\IeC {\cyryu }\IeC {\cyrch }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{28}{section.49}
 \contentsline {chapter}{\chapternumberline {2}\IeC {\CYRR }\IeC {\cyre }\IeC {\cyrp }\IeC {\cyrl }\IeC {\cyri }\IeC {\cyrk }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya }}{29}{chapter.50}
 \contentsline {section}{\numberline {2.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{29}{section.51}
+\contentsline {section}{\numberline {2.2}Londiste}{32}{section.52}
+\contentsline {subsection}{\IeC {\CYRP }\IeC {\cyre }\IeC {\cyrr }\IeC {\cyre }\IeC {\cyrd } \IeC {\cyrn }\IeC {\cyra }\IeC {\cyrch }\IeC {\cyra }\IeC {\cyrl }\IeC {\cyro }\IeC {\cyrm }}{32}{section*.53}
+\contentsline {subsection}{\IeC {\CYRU }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrk }\IeC {\cyra }}{33}{section*.54}
