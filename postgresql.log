@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  2 AUG 2010 01:58
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  3 AUG 2010 22:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1101,18 +1101,162 @@ Overfull \hbox (1.13255pt too wide) in paragraph at lines 7--10
  []
 
 
-Overfull \hbox (18.98232pt too wide) in paragraph at lines 23--25
+Overfull \hbox (18.98232pt too wide) in paragraph at lines 24--26
 []\T2A/cmr/m/n/12 Рассмотрим те-перь уста-нов-ку на ги-по-те-ти-че-скую ба-зу д
 ан-ных customers
  []
 
-[33]) (./postgresql_replication_londiste.tex [34] [35] [36] [37]
+[33]
+Overfull \hbox (0.25566pt too wide) in paragraph at lines 49--52
+[]\T2A/cmr/m/n/12 Здесь я рас-смат-ри-ваю, что сер-ве-ры кла-сте-ра со-еди-не-н
+ы по-сред-ством
+ []
+
+
+Overfull \hbox (1.1366pt too wide) in paragraph at lines 57--59
+\T2A/cmr/m/n/12 строй-ках firewall-a, или фай-ле pg_hba.conf, ко-то-рый ле-жит 
+в $PGDATA. 
+ []
+
+[34]
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 78--78
+[]\T2A/cmtt/m/n/12 user customers_owner with password 'customers_owner_password
+';"[] 
+ []
+
+
+Overfull \hbox (84.04637pt too wide) in paragraph at lines 88--90
+\T2A/cmr/m/n/12 все-го для вы-пол-не-ния каж-дой из них по-тре-бу-ет-ся вве-сти
+ па-роль (slony_user_password).
+ []
+
+
+Overfull \hbox (59.31194pt too wide) in paragraph at lines 113--118
+\T2A/cmr/m/n/12 slony -h customers_slave.com customers при-дјт-ся на-брать па-р
+оль (slony_user_pass).
+ []
+
+[35]
+Overfull \hbox (59.99869pt too wide) in paragraph at lines 123--123
+ []\T2A/cmtt/m/n/12 node Y admin conninfo = 'dbname=customers host=customers_ma
+ster.com[] 
+ []
+
+
+Overfull \hbox (6.29521pt too wide) in paragraph at lines 129--131
+\T2A/cmr/m/n/12 name мо-жет иметь какой-то дру-гое зна-че-ние, на-при-мер T1 (d
+efault).
+ []
+
+[36]
+Overfull \hbox (12.10352pt too wide) in paragraph at lines 158--158
+[]\T2A/cmtt/m/n/12 node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 port=$P
+ORT1[] 
+ []
+
+
+Overfull \hbox (86.18542pt too wide) in paragraph at lines 174--174
+[]\T2A/cmtt/m/n/12 name = 'public.customers_sales', comment = 'Table public.cus
+tomers_sales' );[] 
+ []
+
+
+Overfull \hbox (86.18542pt too wide) in paragraph at lines 186--186
+[]\T2A/cmtt/m/n/12 store path ( server = 1, client = 2, conninfo = 'dbname=$DBN
+AME1 host=$HOST1[] 
+ []
+
+
+Overfull \hbox (86.18542pt too wide) in paragraph at lines 189--189
+[]\T2A/cmtt/m/n/12 store path ( server = 2, client = 1, conninfo = 'dbname=$DBN
+AME2 host=$HOST2[] 
+ []
+
+[37]
+Overfull \hbox (24.4505pt too wide) in paragraph at lines 232--232
+[]\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 2, forward 
+= no);[] 
+ []
+
+[38]
+Overfull \hbox (30.624pt too wide) in paragraph at lines 268--268
+[]\T2A/cmtt/m/n/12 node 3 admin conninfo = 'dbname=customers host=customers_sla
+ve3.com[] 
+ []
+
+[39]
+Overfull \hbox (12.10352pt too wide) in paragraph at lines 305--305
+[]\T2A/cmtt/m/n/12 store path ( server = 1, client = 3, conninfo = 'dbname=$DBN
+AME1[] 
+ []
+
+
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 306--306
+[]\T2A/cmtt/m/n/12 host=$HOST1 port=$PORT1 user=slony password=slony_user_pass'
+ );[] 
+ []
+
+
+Overfull \hbox (12.10352pt too wide) in paragraph at lines 308--308
+[]\T2A/cmtt/m/n/12 store path ( server = 3, client = 1, conninfo = 'dbname=$DBN
+AME3[] 
+ []
+
+
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 309--309
+[]\T2A/cmtt/m/n/12 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass'
+ );[] 
+ []
+
+[40]
+Overfull \hbox (24.4505pt too wide) in paragraph at lines 343--343
+[]\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 3, forward 
+= no);[] 
+ []
+
+[41]
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 380--380
+[]\T2A/cmtt/m/n/12 CONFIG storeSubscribe: sub_set=1 sub_provider=1 sub_forward=
+'f'[] 
+ []
+
+
+Overfull \hbox (12.10352pt too wide) in paragraph at lines 390--390
+[]\T2A/cmtt/m/n/12 serializable; lock table "_customers_rep".sl_config_lock; se
+lect[] 
+ []
+
+
+Overfull \hbox (5.93002pt too wide) in paragraph at lines 392--392
+[]\T2A/cmtt/m/n/12 notify "_customers_rep_Event"; notify "_customers_rep_Confir
+m";[] 
+ []
+
+[42]
+Overfull \hbox (67.66495pt too wide) in paragraph at lines 424--424
+[]\T2A/cmtt/m/n/12 slony_user@masterhost$ psql -d customers -h _every_one_of_sl
+aves -U slony[] 
+ []
+
+
+Overfull \hbox (55.31796pt too wide) in paragraph at lines 438--438
+[]\T2A/cmtt/m/n/12 select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxx
+id, ev_xip,[] 
+ []
+
+
+Overfull \hbox (36.79749pt too wide) in paragraph at lines 439--439
+[]\T2A/cmtt/m/n/12 ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, e
+v_data6,[] 
+ []
+
+[43]) (./postgresql_replication_londiste.tex [44] [45] [46] [47] [48]
 Overfull \hbox (5.93002pt too wide) in paragraph at lines 195--195
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add --
 all[] 
  []
 
-[38]
+
 Overfull \hbox (18.27701pt too wide) in paragraph at lines 206--206
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
 --all[] 
@@ -1124,7 +1268,7 @@ Overfull \hbox (30.624pt too wide) in paragraph at lines 210--210
 q --all[] 
  []
 
-[39]
+[49]
 Overfull \hbox (42.97098pt too wide) in paragraph at lines 245--245
 []\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
  tables |[] 
@@ -1142,7 +1286,7 @@ Overfull \hbox (73.83844pt too wide) in paragraph at lines 257--257
 subscriber add[] 
  []
 
-[40]
+[50]
 Overfull \hbox (18.32822pt too wide) in paragraph at lines 289--290
 []\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
 name'); 
@@ -1154,16 +1298,16 @@ Overfull \hbox (18.32822pt too wide) in paragraph at lines 297--298
 name'); 
  []
 
-[41]) [42]
+[51]) [52]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 14994 strings out of 494818
- 205598 string characters out of 1178667
+ 15017 strings out of 494818
+ 205816 string characters out of 1178667
  334203 words of memory out of 3000000
- 17755 multiletter control sequences out of 15000+50000
+ 17758 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1180,9 +1324,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (42 pages, 453184 bytes).
+Output written on postgresql.pdf (52 pages, 477397 bytes).
 PDF statistics:
- 511 PDF objects out of 1000 (max. 8388607)
- 130 named destinations out of 1000 (max. 500000)
- 309 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 578 PDF objects out of 1000 (max. 8388607)
+ 150 named destinations out of 1000 (max. 500000)
+ 325 words of extra memory for PDF output out of 10000 (max. 10000000)
 
