@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  4 AUG 2010 14:06
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 00:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1177,7 +1177,8 @@ Overfull \hbox (2.98961pt too wide) in paragraph at lines 298--299
 name'); 
  []
 
-[47]) (./postgresql_replication_rubyrep.tex [48]
+[47]) (./postgresql_replication_bucardo.tex)
+(./postgresql_replication_rubyrep.tex [48]
 Overfull \hbox (3.34798pt too wide) in paragraph at lines 61--62
 []\T2A/cmr/m/n/12 Команда generate со-зда-ла при-мер кон-фи-гу-ра-ции в файл my
 rubyrep.conf: 
@@ -1189,16 +1190,52 @@ Overfull \hbox (33.80586pt too wide) in paragraph at lines 81--81
 ing with e[] 
  []
 
-[50]) [51]
+[50]
+Overfull \hbox (15.28539pt too wide) in paragraph at lines 139--139
+[]\T2A/cmtt/m/n/12 Checking for and removing rubyrep triggers from unconfigured
+ tables[] 
+ []
+
+
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 142--142
+[]\T2A/cmtt/m/n/12 Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual 
+join(0xb758cfac)[] 
+ []
+
+
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 152--152
+ []\T2A/cmtt/m/n/12 +++ ./replication_runner.rb 2010-07-16 17:38:03.000000000 -
+0400[] 
+ []
+
+[51]
+Overfull \hbox (75.52754pt too wide) in paragraph at lines 165--165
+ []   \T2A/cmtt/m/n/12 # This class implements the functionality of the 'replic
+ate' command.[] 
+ []
+
+
+Overfull \hbox (26.1396pt too wide) in paragraph at lines 167--167
+ []     \T2A/cmtt/m/n/12 # Initializes the waiter thread used for replication p
+auses[] 
+ []
+
+
+Overfull \hbox (13.79262pt too wide) in paragraph at lines 174--174
+ []       \T2A/cmtt/m/n/12 @waiter_thread ||= Thread.new {@termination_mutex.lo
+ck;[] 
+ []
+
+) [52]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15041 strings out of 494818
- 206201 string characters out of 1178667
- 334203 words of memory out of 3000000
- 17765 multiletter control sequences out of 15000+50000
+ 15056 strings out of 494818
+ 206484 string characters out of 1178667
+ 335203 words of memory out of 3000000
+ 17770 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1215,9 +1252,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (51 pages, 485522 bytes).
+Output written on postgresql.pdf (52 pages, 491428 bytes).
 PDF statistics:
- 612 PDF objects out of 1000 (max. 8388607)
- 164 named destinations out of 1000 (max. 500000)
- 365 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 635 PDF objects out of 1000 (max. 8388607)
+ 171 named destinations out of 1000 (max. 500000)
+ 389 words of extra memory for PDF output out of 10000 (max. 10000000)
 

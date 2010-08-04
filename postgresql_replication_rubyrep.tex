@@ -129,3 +129,50 @@ rubyrep replicate -c myrubyrep.conf
 \begin{verbatim}
 rubyrep uninstall -c myrubyrep.conf
 \end{verbatim}
+
+\subsection{Устранение неисправностей}
+\subsubsection{Ошибка при запуске репликации}
+При зепуске rubyrep через Ruby может возникнуть подобная ошибка:
+\begin{verbatim}
+$rubyrep replicate -c myrubyrep.conf 
+Verifying RubyRep tables
+Checking for and removing rubyrep triggers from unconfigured tables
+Verifying rubyrep triggers of configured tables
+Starting replication
+Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual join(0xb758cfac)
+\end{verbatim}
+
+Это проблема с запусками потоков в Ruby. Решается двумя способами:
+\begin{enumerate}
+\item Запускать rubyrep через JRuby (тут с потоками не будет проблем)
+\item Пофиксить rubyrep патчем:
+\begin{verbatim}
+--- /Library/Ruby/Gems/1.8/gems/rubyrep-1.1.2/lib/rubyrep/
+replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
++++ ./replication_runner.rb 2010-07-16 17:38:03.000000000 -0400
+@@ -2,6 +2,12 @@
+ 
+ require 'optparse'
+ require 'thread'
++require 'monitor'
++
++class Monitor
++ alias lock mon_enter
++ alias unlock mon_exit
++end
+ 
+ module RR
+   # This class implements the functionality of the 'replicate' command.
+@@ -94,7 +100,7 @@
+     # Initializes the waiter thread used for replication pauses 
+     # and processing
+     # the process TERM signal.
+     def init_waiter
+- @termination_mutex = Mutex.new
++ @termination_mutex = Monitor.new
+       @termination_mutex.lock
+       @waiter_thread ||= Thread.new {@termination_mutex.lock; 
+         self.termination_requested = true}
+       %w(TERM INT).each do |signal|
+\end{verbatim}
+\end{enumerate}
