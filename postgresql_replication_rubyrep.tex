@@ -1,0 +1,87 @@
+\section{RubyRep}
+\subsection{Введение}
+RubyRep представляет собой движок для организации асинхронной репликации, написанный на языке ruby. 
+Основные принципы: простота использования и не зависить от БД. 
+Поддерживает как master-master, так и master-slave репликацию, может работать с PostgreSQL и MySQL.
+Отличительными особенностями решения являются:
+\begin{itemize}
+\item возможность двухстороннего сравнения и синхронизации баз данных
+\item простота установки
+\end{itemize}
+К недостаткам можно отнести:
+\begin{itemize}
+\item работа только с двумя базами данных
+\item медленная работа синхронизации 
+\item при больших обьемах данных <<ест>> процессор и память
+\end{itemize}
+
+
+\subsection{Установка}
+RubyRep поддерживает два типа установки: через стандартный Ruby или JRuby. 
+Рекомендую ставить JRuby вариант~--- производительность будет выше.
+
+\textbf{Установка JRuby версии}
+
+Предварительно должна быть установлена Java (версия 1.6).
+\begin{enumerate}
+ \item Загрузите последнюю версию JRuby rubyrep c Rubyforge\footnote{http://rubyforge.org/frs/?group\_id=7932, выберите ZIP}.
+ \item Распакуйте
+ \item Готово
+\end{enumerate}
+
+\textbf{Установка стандартной Ruby версии}
+\begin{enumerate}
+\item Установить Ruby, Rubygems.
+\item Установить драйвера базы данных.
+
+Для Mysql: 
+\begin{verbatim}
+sudo gem install mysql
+\end{verbatim}
+
+Для PostgreSQL:
+\begin{verbatim}
+sudo gem install postgres
+\end{verbatim}
+
+\item Устанавливаем rubyrep:
+\begin{verbatim}
+sudo gem install rubyrep
+\end{verbatim}
+\end{enumerate}
+
+
+\subsection{Настройка}
+\subsubsection{Создание файла конфигурации}
+Выполним команду:
+\begin{verbatim}
+rubyrep generate myrubyrep.conf
+\end{verbatim}
+
+Команда generate создала пример конфигурации в файл myrubyrep.conf:
+\begin{verbatim}
+RR::Initializer::run do |config|
+config.left = {
+:adapter  => 'postgresql', # or 'mysql'
+:database => 'SCOTT',
+:username => 'scott',
+:password => 'tiger',
+:host     => '172.16.1.1'
+}
+ 
+config.right = {
+:adapter  => 'postgresql',
+:database => 'SCOTT',
+:username => 'scott',
+:password => 'tiger',
+:host     => '172.16.1.2'
+}
+ 
+config.include_tables 'dept'
+config.include_tables /^e/ # regexp matches all tables starting with e
+# config.include_tables /./ # regexp matches all tables
+end
+\end{verbatim}
+
+В настройках просто разобраться. Базы данных делят на <<left>> и <<right>>.
+Через config.include\_tables мы указываем какие таблицы включать в репликацию (поддерживает RegEx).

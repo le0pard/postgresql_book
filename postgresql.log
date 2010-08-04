@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  3 AUG 2010 22:38
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  4 AUG 2010 13:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -929,385 +929,282 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 2.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [3
-
-])
-(./postgresql_performance_begin.tex [4]
-Overfull \hbox (12.32004pt too wide) in paragraph at lines 7--8
-[]\T2A/cmr/m/n/12 возможностью воз-ло-жить под-держ-ку це-лост-но-сти дан-ных н
-а СУБД; 
+)
+Overfull \hbox (6.65433pt too wide) in paragraph at lines 25--25
+ [][] []\T2A/cmr/m/n/12 Сред-не-ста-ти-че-ская на-строй-ка для окон-но-го при-л
+о-же-ния (1С), 
  []
 
+[3
 
-Overfull \hbox (16.85295pt too wide) in paragraph at lines 18--25
-\T2A/cmr/m/n/12 аль-ный FAQ. Так-же су-ще-ству-ет ан-гло-языч-ный спи-сок рас-с
-ыл-ки postgresql-
+]) (./postgresql_performance_begin.tex [4]
+Overfull \hbox (2.43155pt too wide) in paragraph at lines 18--25
+\T2A/cmr/m/n/12 са, наи-бо-лее пол-ным и точ-ным ру-ко-вод-ством по ис-поль-зо-
+ва-нию PostgreSQL
  []
 
 [5
 
-]
-Overfull \hbox (8.41139pt too wide) in paragraph at lines 56--57
-[]\T2A/cmr/m/n/12 В вер-сии 7.4 бы-ла уско-ре-на ра-бо-та мно-гих слож-ных за-п
-ро-сов (вклю-
- []
-
-
-Overfull \hbox (7.27072pt too wide) in paragraph at lines 57--58
-[]\T2A/cmr/m/n/12 В вер-сии 8.0 бы-ло внед-ре-но мет-ки во-ста-нов-ле-ния, улуч
--ше-ние управ-
- []
-
-[6]
-Overfull \hbox (0.89517pt too wide) in paragraph at lines 61--63
-[]\T2A/cmr/m/n/12 В вер-сии 8.3 внед-рен пол-но-тек-сто-вый по-иск, под-держ-ка
- SQL/XML
- []
-
-[7]
-Overfull \hbox (6.95pt too wide) in paragraph at lines 84--85
-[]\T2A/cmr/m/n/12 Использование за-ве-до-мо мед-лен-но ра-бо-та-ю-щих за-про-со
-в (см. пункт
- []
-
-) (./postgresql_performance_settings.tex [8]
-Overfull \hbox (6.09239pt too wide) in paragraph at lines 26--29
-[]\T2A/cmr/m/n/12 К со-жа-ле-нию, что-бы знать точ-ное чис-ло shared_buffers, н
-уж-но учесть
+] [6]) (./postgresql_performance_settings.tex [7] [8]
+Overfull \hbox (120.17177pt too wide) in paragraph at lines 42--48
+\T2A/cmr/m/n/12 опи-са-но, как мож-но из-ме-нить эти на-строй-ки: http://develo
+per.postgresql.org/docs/postgres/kernel-
  []
 
 [9]
-Overfull \hbox (14.25293pt too wide) in paragraph at lines 68--75
-[]\T2A/cmr/m/n/12 Объјм па-мя-ти за-да-јт-ся па-ра-мет-ром work_mem в фай-ле po
-stgresql.conf.
+Overfull \hbox (29.0757pt too wide) in paragraph at lines 77--83
+\T2A/cmr/m/n/12 за-да-јт объ-јм па-мя-ти, ис-поль-зу-е-мый ко-ман-да-ми VACUUM,
+ ANALYZE, CREATE
  []
 
 
-Overfull \hbox (20.44102pt too wide) in paragraph at lines 77--83
-\T2A/cmr/m/n/12 метр за-да-јт объ-јм па-мя-ти, ис-поль-зу-е-мый ко-ман-да-ми VA
-CUUM, ANALYZE,
- []
-
-[10]
-Overfull \hbox (19.9684pt too wide) in paragraph at lines 88--90
+Overfull \hbox (4.62979pt too wide) in paragraph at lines 88--90
 []\T2A/cmr/m/n/12 При из-ме-не-нии дан-ных в таб-ли-це (ко-ман-да-ми UPDATE или
  DELETE)
  []
 
 
-Overfull \hbox (15.79718pt too wide) in paragraph at lines 91--92
+Overfull \hbox (0.45857pt too wide) in paragraph at lines 91--92
 \T2A/cmr/m/n/12 В каж-дой СУБД сбор-ка му-со-ра ре-а-ли-зо-ва-на осо-бым об-ра-
 зом, в PostgreSQL
  []
 
-[11]
-Overfull \hbox (16.71483pt too wide) in paragraph at lines 129--131
+[10]
+Overfull \hbox (1.37622pt too wide) in paragraph at lines 129--131
 []\T2A/cmr/m/n/12 Количество од-но-вре-мен-но под-го-тав-ли-ва-е-мых тран-зак-ц
 ий (PREPARE
  []
 
-[12]
-Overfull \hbox (29.259pt too wide) in paragraph at lines 173--181
-\T2A/cmr/m/n/12 уве-ли-чить ко-ли-че-ство сег-мен-тов жур-на-ла тран-зак-ций (c
-heckpoint_segments).
+
+Overfull \hbox (26.10226pt too wide) in paragraph at lines 134--141
+\T2A/cmr/m/n/12 до 200 мс. Для бо-лее тон-кой на-строй-ки по-вы-шай-те vacuum_c
+ost_page_hit
  []
 
 
-Overfull \hbox (0.74103pt too wide) in paragraph at lines 173--181
-\T2A/cmr/m/n/12 ет осо-бо-го зна-че-ния для ба-зы дан-ных, пред-на-зна-чен-ной 
-пре-иму-ще-ствен-
+Overfull \hbox (11.40163pt too wide) in paragraph at lines 134--141
+\T2A/cmr/m/n/12 и по-ни-жай-те vacuum_cost_page_limit. Это осла-бит вли-я-ние V
+ACUUM,
  []
 
-[13]
-Overfull \hbox (11.43828pt too wide) in paragraph at lines 196--197
-[]\T2A/cmr/bx/n/12 commit_delay \T2A/cmr/m/n/12 (в мик-ро-се-кун-дах, 0 по умол
--ча-нию) и \T2A/cmr/bx/n/12 commit_sib-
+[11] [12] [13]
+Overfull \hbox (17.18806pt too wide) in paragraph at lines 213--214
+[]\T2A/cmr/m/n/12 open_sync --- за-пись дан-ных ме-то-дом open() с па-ра-мет-ро
+м O_SYNC 
  []
 
-[14] [15]
-Overfull \hbox (3.31612pt too wide) in paragraph at lines 249--253
-[]\T2A/cmr/m/n/12 Пусть в ва-шем ком-пью-те-ре 1,5 ГБ па-мя-ти, па-ра-метр shar
-ed_buffers
- []
-
-
-Overfull \hbox (12.71793pt too wide) in paragraph at lines 254--257
-[]\T2A/cmr/m/n/12 На вы-де-лен-ном сер-ве-ре име-ет смысл вы-став-лять effectiv
-e_cache_size
- []
-
-
-Overfull \hbox (42.48538pt too wide) in paragraph at lines 260--268
-\T2A/cmr/m/n/12 ние random_page_cost ни-же 2.0; ес-ли вам ка-жет-ся, что random
-_page_cost
- []
-
-[16]
-Overfull \hbox (0.52713pt too wide) in paragraph at lines 281--284
-[]\T2A/cmr/bx/n/12 stats_command_string \T2A/cmr/m/n/12 пе-ре-да-вать ли сбор-щ
-и-ку ста-ти-сти-ки ин-
- []
-
-) (./postgresql_performance_hard_disk.tex [17])
-(./postgresql_performance_settings_sample.tex [18] [19] [20]
+[14] [15]) (./postgresql_performance_hard_disk.tex [16])
+(./postgresql_performance_settings_sample.tex [17] [18]
 LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 72.
 
 
 (/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmtt.fd
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
-))
-(./postgresql_performance_db_end.tex [21] [22] [23]
-Overfull \hbox (8.41634pt too wide) in paragraph at lines 68--72
-\T2A/cmr/m/n/12 мед-лен-нее про-смот-ра по ин-дек-су. Ес-ли, на-при-мер, в табл
-ице--справочнике
+) [19]
+Overfull \hbox (3.0831pt too wide) in paragraph at lines 92--93
+\T2A/cmr/m/n/12 Указывает тип ба-зы дан-ных. Оп-ции: DW, OLTP, Web, Mixed, Desk
+top. 
  []
 
-[24] [25]
-Overfull \hbox (2.59839pt too wide) in paragraph at lines 140--142
-[]\T2A/cmr/m/n/12 Этот пункт оче-ви-ден для опыт-ных поль-зо-ва-те-лей PostrgeS
-QL и пред-
+) (./postgresql_performance_db_end.tex [20] [21] [22] [23] [24] [25] [26])
+(./postgresql_replication_begin.tex [27] [28
+
+]
+Overfull \hbox (14.51682pt too wide) in paragraph at lines 53--57
+\T2A/cmr/m/n/12 ка-ды(cascading) и от-ка-зо-устой-чи-вость(failover). Slony-I и
+с-поль-зу-ет триг-
  []
 
-[26] [27]
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 213--213
-[]\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
- a;[] 
+
+Overfull \hbox (18.22432pt too wide) in paragraph at lines 53--57
+\T2A/cmr/m/n/12 ге-ры PostgreSQL для при-вяз-ки к со-бы-ти-ям INSERT/ DELETE/UP
+DATE
  []
 
-[28]
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 222--222
-[]\T2A/cmtt/m/n/12 postgres=# select count(*) from (select i from g group by i)
- a;[] 
- []
-
-) (./postgresql_replication_begin.tex [29] [30
-
-] [31]
-Overfull \hbox (24.92569pt too wide) in paragraph at lines 68--69
+[29]
+Overfull \hbox (9.58708pt too wide) in paragraph at lines 68--69
 []\T2A/cmr/m/n/12 балансировку SELECT-запросов на несколь-ко postgresql-серверо
 в; 
  []
 
-
-Overfull \hbox (10.52614pt too wide) in paragraph at lines 72--74
-[]\T2A/cmr/bx/n/12 Bucardo[] \T2A/cmr/m/n/12 --- асин-хрон-ной ре-пли-ка-ция, к
-о-то-рая под-дер-жи-ва-ет Multi-
+) (./postgresql_replication_slony.tex
+Overfull \hbox (51.3412pt too wide) in paragraph at lines 3--6
+\T2A/cmr/m/n/12 ис-поль-зу-ет триг-ге-ры Postgre для при-вяз-ки к со-бы-ти-ям I
+NSERT/ DELETE/UPDATE
  []
 
-[32]) (./postgresql_replication_slony.tex
-Overfull \hbox (1.13255pt too wide) in paragraph at lines 7--10
-\T2A/cmr/m/n/12 ных ком-по-нент, ре-пли-ка-ци-он-но-го де-мо-на slony и ад-ми-н
-и-стра-тив-ной кон-
- []
-
-
-Overfull \hbox (18.98232pt too wide) in paragraph at lines 24--26
+[30]
+Overfull \hbox (3.6437pt too wide) in paragraph at lines 24--26
 []\T2A/cmr/m/n/12 Рассмотрим те-перь уста-нов-ку на ги-по-те-ти-че-скую ба-зу д
 ан-ных customers
  []
 
-[33]
-Overfull \hbox (0.25566pt too wide) in paragraph at lines 49--52
-[]\T2A/cmr/m/n/12 Здесь я рас-смат-ри-ваю, что сер-ве-ры кла-сте-ра со-еди-не-н
-ы по-сред-ством
+[31]
+Overfull \hbox (38.68732pt too wide) in paragraph at lines 88--90
+\T2A/cmr/m/n/12 для вы-пол-не-ния каж-дой из них по-тре-бу-ет-ся вве-сти па-рол
+ь (slony_user_password).
+ []
+
+[32]
+Overfull \hbox (4.72505pt too wide) in paragraph at lines 97--100
+[]\T2A/cmr/m/n/12 Внимание! Все таб-ли-цы, ко-то-рые бу-дут до-бав-ле-ны в repl
+ication set долж-
  []
 
 
-Overfull \hbox (1.1366pt too wide) in paragraph at lines 57--59
-\T2A/cmr/m/n/12 строй-ках firewall-a, или фай-ле pg_hba.conf, ко-то-рый ле-жит 
-в $PGDATA. 
- []
-
-[34]
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 78--78
-[]\T2A/cmtt/m/n/12 user customers_owner with password 'customers_owner_password
-';"[] 
- []
-
-
-Overfull \hbox (84.04637pt too wide) in paragraph at lines 88--90
-\T2A/cmr/m/n/12 все-го для вы-пол-не-ния каж-дой из них по-тре-бу-ет-ся вве-сти
- па-роль (slony_user_password).
- []
-
-
-Overfull \hbox (59.31194pt too wide) in paragraph at lines 113--118
+Overfull \hbox (43.97333pt too wide) in paragraph at lines 113--118
 \T2A/cmr/m/n/12 slony -h customers_slave.com customers при-дјт-ся на-брать па-р
 оль (slony_user_pass).
  []
 
-[35]
-Overfull \hbox (59.99869pt too wide) in paragraph at lines 123--123
+
+Overfull \hbox (44.66008pt too wide) in paragraph at lines 123--123
  []\T2A/cmtt/m/n/12 node Y admin conninfo = 'dbname=customers host=customers_ma
 ster.com[] 
  []
 
-
-Overfull \hbox (6.29521pt too wide) in paragraph at lines 129--131
-\T2A/cmr/m/n/12 name мо-жет иметь какой-то дру-гое зна-че-ние, на-при-мер T1 (d
-efault).
- []
-
-[36]
-Overfull \hbox (12.10352pt too wide) in paragraph at lines 158--158
-[]\T2A/cmtt/m/n/12 node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 port=$P
-ORT1[] 
- []
-
-
-Overfull \hbox (86.18542pt too wide) in paragraph at lines 174--174
+[33]
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 174--174
 []\T2A/cmtt/m/n/12 name = 'public.customers_sales', comment = 'Table public.cus
 tomers_sales' );[] 
  []
 
-
-Overfull \hbox (86.18542pt too wide) in paragraph at lines 186--186
+[34]
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 186--186
 []\T2A/cmtt/m/n/12 store path ( server = 1, client = 2, conninfo = 'dbname=$DBN
 AME1 host=$HOST1[] 
  []
 
 
-Overfull \hbox (86.18542pt too wide) in paragraph at lines 189--189
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 189--189
 []\T2A/cmtt/m/n/12 store path ( server = 2, client = 1, conninfo = 'dbname=$DBN
 AME2 host=$HOST2[] 
  []
 
-[37]
-Overfull \hbox (24.4505pt too wide) in paragraph at lines 232--232
+[35]
+Overfull \hbox (9.1119pt too wide) in paragraph at lines 232--232
 []\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 2, forward 
 = no);[] 
  []
 
-[38]
-Overfull \hbox (30.624pt too wide) in paragraph at lines 268--268
+
+Overfull \hbox (15.28539pt too wide) in paragraph at lines 268--268
 []\T2A/cmtt/m/n/12 node 3 admin conninfo = 'dbname=customers host=customers_sla
 ve3.com[] 
  []
 
-[39]
-Overfull \hbox (12.10352pt too wide) in paragraph at lines 305--305
-[]\T2A/cmtt/m/n/12 store path ( server = 1, client = 3, conninfo = 'dbname=$DBN
-AME1[] 
- []
-
-
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 306--306
-[]\T2A/cmtt/m/n/12 host=$HOST1 port=$PORT1 user=slony password=slony_user_pass'
- );[] 
- []
-
-
-Overfull \hbox (12.10352pt too wide) in paragraph at lines 308--308
-[]\T2A/cmtt/m/n/12 store path ( server = 3, client = 1, conninfo = 'dbname=$DBN
-AME3[] 
- []
-
-
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 309--309
-[]\T2A/cmtt/m/n/12 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass'
- );[] 
- []
-
-[40]
-Overfull \hbox (24.4505pt too wide) in paragraph at lines 343--343
+[36] [37]
+Overfull \hbox (9.1119pt too wide) in paragraph at lines 343--343
 []\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 3, forward 
 = no);[] 
  []
 
-[41]
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 380--380
-[]\T2A/cmtt/m/n/12 CONFIG storeSubscribe: sub_set=1 sub_provider=1 sub_forward=
-'f'[] 
- []
-
-
-Overfull \hbox (12.10352pt too wide) in paragraph at lines 390--390
-[]\T2A/cmtt/m/n/12 serializable; lock table "_customers_rep".sl_config_lock; se
-lect[] 
- []
-
-
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 392--392
-[]\T2A/cmtt/m/n/12 notify "_customers_rep_Event"; notify "_customers_rep_Confir
-m";[] 
- []
-
-[42]
-Overfull \hbox (67.66495pt too wide) in paragraph at lines 424--424
+[38] [39]
+Overfull \hbox (52.32634pt too wide) in paragraph at lines 424--424
 []\T2A/cmtt/m/n/12 slony_user@masterhost$ psql -d customers -h _every_one_of_sl
 aves -U slony[] 
  []
 
 
-Overfull \hbox (55.31796pt too wide) in paragraph at lines 438--438
+Overfull \hbox (39.97935pt too wide) in paragraph at lines 438--438
 []\T2A/cmtt/m/n/12 select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxx
 id, ev_xip,[] 
  []
 
 
-Overfull \hbox (36.79749pt too wide) in paragraph at lines 439--439
+Overfull \hbox (21.45888pt too wide) in paragraph at lines 439--439
 []\T2A/cmtt/m/n/12 ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, e
 v_data6,[] 
  []
 
-[43]) (./postgresql_replication_londiste.tex [44] [45] [46] [47] [48]
-Overfull \hbox (5.93002pt too wide) in paragraph at lines 196--196
-[]\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add --
-all[] 
+[40]) (./postgresql_replication_londiste.tex
+Overfull \hbox (0.90639pt too wide) in paragraph at lines 462--1
+[]\T2A/cmr/m/n/12 Производительность долж-на вер-нуть-ся к из-на-чаль-ным зна-ч
+е-ни-ям. Воз-
  []
 
 
-Overfull \hbox (18.27701pt too wide) in paragraph at lines 207--207
+Overfull \hbox (32.72397pt too wide) in paragraph at lines 17--20
+[]\T2A/cmr/m/n/12 отсутствие под-держ-ки кас-кад-ной ре-пли-ка-ции, от-ка-зо-ус
+той-чи-во-сти(failover)
+ []
+
+[41] [42] [43] [44]
+Overfull \hbox (2.9384pt too wide) in paragraph at lines 207--207
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
 --all[] 
  []
 
 
-Overfull \hbox (30.624pt too wide) in paragraph at lines 211--211
+Overfull \hbox (15.28539pt too wide) in paragraph at lines 211--211
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini subscriber add-se
 q --all[] 
  []
 
-[49]
-Overfull \hbox (42.97098pt too wide) in paragraph at lines 246--246
+[45]
+Overfull \hbox (27.63237pt too wide) in paragraph at lines 246--246
 []\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
  tables |[] 
  []
 
 
-Overfull \hbox (80.01193pt too wide) in paragraph at lines 248--248
+Overfull \hbox (64.67332pt too wide) in paragraph at lines 248--248
 []\T2A/cmtt/m/n/12 do sleep 60; done; echo '' | mail -s 'Replication done EOM' 
 user@domain.com[] 
  []
 
 
-Overfull \hbox (73.83844pt too wide) in paragraph at lines 258--258
+Overfull \hbox (58.49983pt too wide) in paragraph at lines 258--258
 []\T2A/cmtt/m/n/12 londiste.py <ini> provider tables | xargs londiste.py <ini> 
 subscriber add[] 
  []
 
+[46]
+Overfull \hbox (46.88313pt too wide) in paragraph at lines 268--271
+[]\T2A/cmr/m/n/12 <<lag>> стол-бец по-ка-зы-ва-ет от-ста-ва-ние от ма-сте-ра в 
+син-хро-ни-за-ции, <<last_seen>> ---
+ []
+
+
+Overfull \hbox (2.98961pt too wide) in paragraph at lines 290--291
+[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
+name'); 
+ []
+
+
+Overfull \hbox (2.98961pt too wide) in paragraph at lines 298--299
+[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
+name'); 
+ []
+
+[47]) (./postgresql_replication_rubyrep.tex [48]
+Overfull \hbox (3.34798pt too wide) in paragraph at lines 61--62
+[]\T2A/cmr/m/n/12 Команда generate со-зда-ла при-мер кон-фи-гу-ра-ции в файл my
+rubyrep.conf: 
+ []
+
+[49]
+Overfull \hbox (33.80586pt too wide) in paragraph at lines 81--81
+[]\T2A/cmtt/m/n/12 config.include_tables /^e/ # regexp matches all tables start
+ing with e[] 
+ []
+
+)
+Overfull \hbox (5.31236pt too wide) in paragraph at lines 86--40
+[]\T2A/cmr/m/n/12 В на-строй-ках про-сто разо-брать-ся. Ба-зы дан-ных де-лят на
+ <<left>> и <<right>>.
+ []
+
 [50]
-Overfull \hbox (18.32822pt too wide) in paragraph at lines 290--291
-[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
-name'); 
- []
-
-
-Overfull \hbox (18.32822pt too wide) in paragraph at lines 298--299
-[]\T2A/cmr/m/n/12 SELECT londiste.provider_refresh_trigger('queue_name', 'table
-name'); 
- []
-
-[51]) [52]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15019 strings out of 494818
- 205840 string characters out of 1178667
+ 15037 strings out of 494818
+ 206158 string characters out of 1178667
  334203 words of memory out of 3000000
- 17759 multiletter control sequences out of 15000+50000
+ 17765 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1324,9 +1221,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (52 pages, 478117 bytes).
+Output written on postgresql.pdf (50 pages, 483286 bytes).
 PDF statistics:
- 584 PDF objects out of 1000 (max. 8388607)
- 151 named destinations out of 1000 (max. 500000)
- 333 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 604 PDF objects out of 1000 (max. 8388607)
+ 160 named destinations out of 1000 (max. 500000)
+ 365 words of extra memory for PDF output out of 10000 (max. 10000000)
 
