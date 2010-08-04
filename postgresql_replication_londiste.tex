@@ -306,7 +306,7 @@ pgqadm.py <ticker.ini> unregister queue_name consumer_name
 
 \subsection{Устранение неисправностей}
 
-\subsubsection{Londiste пожирает процессор и lag все растет}
+\subsubsection{Londiste пожирает процессор и lag растет}
 Это происходит, например, если во время сбоя админ забыл перезапустить ticker. Или когда вы сделали большой 
 UPDATE или DELETE в одной транзакции, но теперь что бы реализовать каждое собитие в этом запросе создаются 
 транзакции на слейвах \dots
