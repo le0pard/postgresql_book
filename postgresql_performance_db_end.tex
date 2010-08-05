@@ -229,6 +229,48 @@ Time: 25,270 ms
 
 \end{verbatim}
 
+\subsection{Оптимизация запросов с помощью pgFouine}
+pgFouine\footnote{http://pgfouine.projects.postgresql.org/}~--- это 
+анализатор log-файлов для PostgreSQL, используемый для генерации детальных отчетов из 
+log-файлов PostgreSQL. pgFouine поможет определить, какие запросы следует оптимизировать в первую очередь.
+pgFouine написан на языке программирования PHP с использованием объектно-ориентированных технологий и легко 
+расширяется для поддержки специализированных отчетов, является свободным программным обеспечением и 
+распространяется на условиях GNU General Public License. Утилита спроектирована таким образом, чтобы обработка 
+очень больших log-файлов не требовала много ресурсов.
+
+Для работы с pgFouine сначала нужно сконфигурировать PostgreSQL для создания нужного формата log-файлов:
+\begin{itemize}
+\item Чтобы включить протоколирование в syslog
+\begin{verbatim}
+log_destination = 'syslog'
+redirect_stderr = off
+silent_mode = on
+\end{verbatim}
+\item Для записи запросов, длящихся дольше n миллисекунд:
+\begin{verbatim}
+log_min_duration_statement = n
+log_duration = off
+log_statement = 'none'
+\end{verbatim}
+\end{itemize}
+
+Для записи каждого обработанного запроса установите log\_min\_duration\_statement на 0. 
+Чтобы отключить запись запросов, установите этот параметр на -1.
+
+pgFouine~--- простой в использовании инструмент командной строки. Следующая команда создаёт 
+HTML-отчёт со стандартными параметрами:
+\begin{verbatim}
+$pgfouine.php -file your/log/file.log > your-report.html
+\end{verbatim}
+
+С помощью этой строки можно отобразить текстовый отчёт с 10 запросами на каждый экран на стандартном выводе:
+\begin{verbatim}
+$ pgfouine.php -file your/log/file.log -top 10 -format text
+\end{verbatim}
+
+Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайта проекта~--- 
+http://pgfouine.projects.postgresql.org.
+
 
 \section{Заключение}
 К счастью, PostgreSQL не требует особо сложной настройки. В большинстве случаев вполне достаточно будет увеличить 

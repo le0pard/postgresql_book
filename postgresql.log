@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 23:03
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 23:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1006,8 +1006,19 @@ Overfull \hbox (3.0831pt too wide) in paragraph at lines 92--93
 top. 
  []
 
-) (./postgresql_performance_db_end.tex [21] [22] [23] [24] [25] [26] [27])
-(./postgresql_replication_begin.tex [28] [29
+) (./postgresql_performance_db_end.tex [21] [22] [23] [24] [25] [26] [27]
+Overfull \hbox (71.44861pt too wide) in paragraph at lines 257--259
+[]\T2A/cmr/m/n/12 Для за-пи-си каж-до-го об-ра-бо-тан-но-го за-про-са уста-но-в
+и-те log_min_duration_statement
+ []
+
+
+Overfull \hbox (55.1006pt too wide) in paragraph at lines 271--273
+\T2A/cmr/m/n/12 мож-но най-ти на офи-ци-аль-ном сай-та про-ек-та --- http://pgf
+ouine.projects.postgresql.org. 
+ []
+
+) (./postgresql_replication_begin.tex [28] [29] [30
 
 ]
 Overfull \hbox (14.51682pt too wide) in paragraph at lines 53--57
@@ -1021,7 +1032,7 @@ Overfull \hbox (18.22432pt too wide) in paragraph at lines 53--57
 DATE
  []
 
-[30]
+[31]
 Overfull \hbox (9.58708pt too wide) in paragraph at lines 68--69
 []\T2A/cmr/m/n/12 балансировку SELECT-запросов на несколь-ко postgresql-серверо
 в; 
@@ -1033,19 +1044,19 @@ Overfull \hbox (51.3412pt too wide) in paragraph at lines 3--6
 NSERT/ DELETE/UPDATE
  []
 
-[31]
+[32]
 Overfull \hbox (3.6437pt too wide) in paragraph at lines 24--26
 []\T2A/cmr/m/n/12 Рассмотрим те-перь уста-нов-ку на ги-по-те-ти-че-скую ба-зу д
 ан-ных customers
  []
 
-[32]
+[33]
 Overfull \hbox (38.68732pt too wide) in paragraph at lines 88--90
 \T2A/cmr/m/n/12 для вы-пол-не-ния каж-дой из них по-тре-бу-ет-ся вве-сти па-рол
 ь (slony_user_password).
  []
 
-[33]
+[34]
 Overfull \hbox (4.72505pt too wide) in paragraph at lines 97--100
 []\T2A/cmr/m/n/12 Внимание! Все таб-ли-цы, ко-то-рые бу-дут до-бав-ле-ны в repl
 ication set долж-
@@ -1063,13 +1074,13 @@ Overfull \hbox (44.66008pt too wide) in paragraph at lines 123--123
 ster.com[] 
  []
 
-[34]
+[35]
 Overfull \hbox (70.84682pt too wide) in paragraph at lines 174--174
 []\T2A/cmtt/m/n/12 name = 'public.customers_sales', comment = 'Table public.cus
 tomers_sales' );[] 
  []
 
-[35]
+[36]
 Overfull \hbox (70.84682pt too wide) in paragraph at lines 186--186
 []\T2A/cmtt/m/n/12 store path ( server = 1, client = 2, conninfo = 'dbname=$DBN
 AME1 host=$HOST1[] 
@@ -1081,7 +1092,7 @@ Overfull \hbox (70.84682pt too wide) in paragraph at lines 189--189
 AME2 host=$HOST2[] 
  []
 
-[36]
+[37]
 Overfull \hbox (9.1119pt too wide) in paragraph at lines 232--232
 []\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 2, forward 
 = no);[] 
@@ -1093,13 +1104,13 @@ Overfull \hbox (15.28539pt too wide) in paragraph at lines 268--268
 ve3.com[] 
  []
 
-[37] [38]
+[38] [39]
 Overfull \hbox (9.1119pt too wide) in paragraph at lines 343--343
 []\T2A/cmtt/m/n/12 subscribe set ( id = 1, provider = 1, receiver = 3, forward 
 = no);[] 
  []
 
-[39] [40]
+[40] [41]
 Overfull \hbox (52.32634pt too wide) in paragraph at lines 424--424
 []\T2A/cmtt/m/n/12 slony_user@masterhost$ psql -d customers -h _every_one_of_sl
 aves -U slony[] 
@@ -1117,7 +1128,7 @@ Overfull \hbox (21.45888pt too wide) in paragraph at lines 439--439
 v_data6,[] 
  []
 
-[41]) (./postgresql_replication_londiste.tex
+[42]) (./postgresql_replication_londiste.tex
 Overfull \hbox (0.90639pt too wide) in paragraph at lines 462--1
 []\T2A/cmr/m/n/12 Производительность долж-на вер-нуть-ся к из-на-чаль-ным зна-ч
 е-ни-ям. Воз-
@@ -1129,7 +1140,7 @@ Overfull \hbox (32.72397pt too wide) in paragraph at lines 17--20
 той-чи-во-сти(failover)
  []
 
-[42] [43] [44] [45]
+[43] [44] [45] [46]
 Overfull \hbox (2.9384pt too wide) in paragraph at lines 207--207
 []\T2A/cmtt/m/n/12 londiste.py /etc/skytools/db1-londiste.ini provider add-seq 
 --all[] 
@@ -1141,7 +1152,7 @@ Overfull \hbox (15.28539pt too wide) in paragraph at lines 211--211
 q --all[] 
  []
 
-[46]
+[47]
 Overfull \hbox (27.63237pt too wide) in paragraph at lines 246--246
 []\T2A/cmtt/m/n/12 python londiste.py /etc/skytools/db1-londiste.ini subscriber
  tables |[] 
@@ -1159,7 +1170,7 @@ Overfull \hbox (58.49983pt too wide) in paragraph at lines 258--258
 subscriber add[] 
  []
 
-[47]
+[48]
 Overfull \hbox (46.88313pt too wide) in paragraph at lines 268--271
 []\T2A/cmr/m/n/12 <<lag>> стол-бец по-ка-зы-ва-ет от-ста-ва-ние от ма-сте-ра в 
 син-хро-ни-за-ции, <<last_seen>> ---
@@ -1177,13 +1188,13 @@ Overfull \hbox (2.98961pt too wide) in paragraph at lines 298--299
 name'); 
  []
 
-[48]) (./postgresql_replication_bucardo.tex
+[49]) (./postgresql_replication_bucardo.tex
 Overfull \hbox (41.36095pt too wide) in paragraph at lines 3--5
 []\T2A/cmr/m/n/12 Bucardo --- асин-хрон-ная master-master или master-slave ре-п
 ли-ка-ция PostgreSQL,
  []
 
-[49]
+[50]
 Overfull \hbox (52.32634pt too wide) in paragraph at lines 45--45
 []\T2A/cmtt/m/n/12 This will install the bucardo database into an existing Post
 gres cluster.[] 
@@ -1195,7 +1206,7 @@ Overfull \hbox (18.52066pt too wide) in paragraph at lines 60--62
 е уста-нов-ку, Bucardo
  []
 
-[50]
+[51]
 Overfull \hbox (9.1119pt too wide) in paragraph at lines 78--78
 []\T2A/cmtt/m/n/12 bucardo_ctl add db slave_db name=replica port=6543 host=slav
 e_host[] 
@@ -1213,7 +1224,7 @@ Overfull \hbox (26.57317pt too wide) in paragraph at lines 102--103
 aster_db
  []
 
-[51]
+[52]
 Overfull \hbox (13.71661pt too wide) in paragraph at lines 103--104
 []\T2A/cmr/m/n/12 target --- при кон-флик-те мы ко-пи-ру-ем дан-ные с target (s
 lave_db
@@ -1225,7 +1236,7 @@ Overfull \hbox (39.97935pt too wide) in paragraph at lines 122--122
 tdb=replica[] 
  []
 
-[52]) (./postgresql_replication_rubyrep.tex [53]
+[53]) (./postgresql_replication_rubyrep.tex [54]
 Overfull \hbox (3.34798pt too wide) in paragraph at lines 61--62
 []\T2A/cmr/m/n/12 Команда generate со-зда-ла при-мер кон-фи-гу-ра-ции в файл my
 rubyrep.conf: 
@@ -1237,13 +1248,13 @@ Overfull \hbox (33.80586pt too wide) in paragraph at lines 81--81
 ing with e[] 
  []
 
-[54]
+[55]
 Overfull \hbox (15.28539pt too wide) in paragraph at lines 139--139
 []\T2A/cmtt/m/n/12 Checking for and removing rubyrep triggers from unconfigured
  tables[] 
  []
 
-[55]
+[56]
 Overfull \hbox (70.84682pt too wide) in paragraph at lines 142--142
 []\T2A/cmtt/m/n/12 Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual 
 join(0xb758cfac)[] 
@@ -1273,7 +1284,7 @@ Overfull \hbox (13.79262pt too wide) in paragraph at lines 174--174
 ck;[] 
  []
 
-) (./postgresql_replication_end.tex) (./postgresql_pgpool.tex [56] [57
+) (./postgresql_replication_end.tex) (./postgresql_pgpool.tex [57] [58
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1287,7 +1298,7 @@ Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
 projects.postgresql.org/pgpool-
  []
 
-[58]
+[59]
 Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
 \T2A/cmr/m/n/12 да-ет-ся, ва-ша биб-лио-те-ка libpq, ве-ро-ят-но, не рас-по-зна
 -ет-ся скрип-том configure. 
@@ -1311,7 +1322,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
 .conf[] 
  []
 
-[59]
+[60]
 Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
 []\T2A/cmr/m/n/12 При уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-ся фай
 л pcp.conf.sample.
@@ -1323,19 +1334,19 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[60] [61]
+[61] [62]
 Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-[62] [63]
+[63] [64]
 Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
 load_balance_mode
  []
 
-[64]
+[65]
 Overfull \hbox (28.2086pt too wide) in paragraph at lines 355--357
 \T2A/cmr/m/n/12 один из ин-стру-мен-тов вклю-чен-ных в ка-та-лог contrib ис-ход
 -но-го ко-да PostgreSQL. 
@@ -1355,19 +1366,19 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[65] [66] [67] [68]) (./postgresql_connection_pooling.tex [69] [70] [71
+[66] [67] [68] [69]) (./postgresql_connection_pooling.tex [70] [71] [72
 
 ])
-[72]
+[73]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15406 strings out of 494818
- 210771 string characters out of 1178667
- 339203 words of memory out of 3000000
- 18052 multiletter control sequences out of 15000+50000
+ 15409 strings out of 494818
+ 210804 string characters out of 1178667
+ 338203 words of memory out of 3000000
+ 18053 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1384,9 +1395,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (72 pages, 571568 bytes).
+Output written on postgresql.pdf (73 pages, 576319 bytes).
 PDF statistics:
- 874 PDF objects out of 1000 (max. 8388607)
- 227 named destinations out of 1000 (max. 500000)
- 597 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 886 PDF objects out of 1000 (max. 8388607)
+ 229 named destinations out of 1000 (max. 500000)
+ 605 words of extra memory for PDF output out of 10000 (max. 10000000)
 
