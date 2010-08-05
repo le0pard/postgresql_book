@@ -328,3 +328,248 @@ load_balance_mode = true
 listen\_addresses равным <<*>>, replication\_mode равным false.
 
 
+\subsection{Настройка SystemDB}
+В основном, нет отличий между простой и системной базами данных. Однако, в системной базе данных определяется функция 
+dblink и присутствует таблица, в которой хранятся правила распределения данных. Таблицу dist\_def необходимо определять. 
+Более того, один из узлов базы данных может хранить системную базу данных, а pgpool-II может использоваться для 
+распределения нагрузки каскадным подключеним.
+
+В этом разделе мы создадим SystemDB на узле с портом 5432. Далее приведен список параметров конфигурации для SystemDB
+\begin{verbatim}
+system_db_hostname = 'localhost'
+system_db_port = 5432
+system_db_dbname = 'pgpool'
+system_db_schema = 'pgpool_catalog'
+system_db_user = 'pgpool'
+system_db_password = ''
+\end{verbatim}
+
+На самом деле, указанные выше параметры являются параметрами по-умолчанию в файле pgpool.conf. Теперь мы должны 
+создать пользователя с именем <<pgpool>> и базу данных с именем <<pgpool>> и владельцем <<pgpool>>.
+\begin{verbatim}
+$ createuser -p 5432 pgpool
+$ createdb -p 5432 -O pgpool pgpool
+\end{verbatim}
+
+\subsubsection{Установка dblink}
+Далее мы должны установить dblink в базу данных <<pgpool>>. dblink~--- один из инструментов включенных в каталог 
+contrib исходного кода PostgreSQL.
+
+Для установки dblink на вашей системе выполните следующие команды.
+\begin{verbatim}
+$ USE_PGXS=1 make -C contrib/dblink
+$ USE_PGXS=1 make -C contrib/dblink install
+\end{verbatim}
+
+После того как dblink был установлен в вашей системе мы добавим функции dblink в базу данных <<pgpool>>. Если PostgreSQL 
+установлен в каталог /usr/local/pgsql, dblink.sql (файл с определениями функций) должен быть установлен в каталог 
+/usr/local/pgsql/share/contrib. Теперь выполним следующую команду для добавления функций dblink.
+\begin{verbatim}
+$ psql -f /usr/local/pgsql/share/contrib/dblink.sql -p 5432 pgpool
+\end{verbatim}
+
+\subsubsection{Создание таблицы dist\_def}
+Следующим шагом мы создадим таблицу с именем <<dist\_def>>, в которой будут храниться правила распределения данных. 
+Поскольку pgpool-II уже был установлен, файл с именем system\_db.sql должен буть установлен в 
+/usr/local/share/system\_db.sql (имейте в виду что это учебное руководство и мы использовали для установки каталог 
+по-умолчанию – /usr/local). Файл system\_db.sql содержит директивы для создания специальных таблиц, включая и 
+таблицу <<dist\_def>>. Выполните следующую команду для создания таблицы <<dist\_def>>.
+\begin{verbatim}
+$ psql -f /usr/local/share/system_db.sql -p 5432 -U pgpool pgpool
+\end{verbatim}
+
+Все таблицы в файле system\_db.sql, включая <<dist\_def>>, создаются в схеме <<pgpool\_catalog>>. Если вы установили 
+параметр system\_db\_schema на использование другой схемы вам нужно, соответственно, отредактировать файл system\_db.sql.
+
+Описание таблицы <<dist\_def>> выглядит так как показано ниже. Имя таблицы не должно измениться.
+\begin{verbatim}
+CREATE TABLE pgpool_catalog.dist_def (
+    dbname text, -- имя базы данных
+    schema_name text, -- имя схемы
+    table_name text, -- имя таблицы
+    col_name text NOT NULL CHECK (col_name = ANY (col_list)), 
+    -- столбец-ключ для распределения данных
+    col_list text[] NOT NULL, -- список имен столбцов
+    type_list text[] NOT NULL, -- список типов столбцов
+    dist_def_func text NOT NULL, 
+    -- имя функции распределения данных
+    PRIMARY KEY (dbname, schema_name, table_name)
+);
+\end{verbatim}
+
+Записи, хранимые в таблице <<dist\_def>>, могут быть двух типов.
+\begin{itemize}
+\item Правило Распределения Данных (col\_name, dist\_def\_func)
+\item Мета-информация о таблицах (dbname, schema\_name, table\_name, col\_list, type\_list)
+\end{itemize}
+
+Правило распределения данных определяет как будут распределены данные на конкретный узел базы данных. Данные будут 
+распределены в зависимости от значения столбца <<col\_name>>. <<dist\_def\_func>>~--- это функция, которая принимает 
+значение <<col\_name>> в качестве агрумента и возвращает целое число, которое соответствует идентификатору узла 
+базы данных, на котором должны быть сохранены данные.
+
+Мета-информация используется для того чтобы переписывать запросы. Параллельный запрос должен переписывать исходные запросы 
+так чтобы результаты, возвращаемые узлами-бэкендами, могли быть объединены в единый результат.
+
+
+\subsubsection{Создание таблицы replicate\_def}
+В случае если указана таблица, для которой производится репликация в выражение SQL, использующее зарегистрированную в 
+dist\_def таблицу путем объединения таблиц, информация о таблице, для которой необходимо производить репликацию, 
+предварительно регистрируется в таблице с именем replicate\_def. Таблица replicate\_def уже была создана при обработке
+файла system\_db.sql во время создания таблицы dist\_def. Таблица replicate\_def описана так как показано ниже.
+\begin{verbatim}
+CREATE TABLE pgpool_catalog.replicate_def (
+    dbname text, -- имя базы данных
+    schema_name text, -- имя схемы
+    table_name text, -- имя таблицы
+    col_list text[] NOT NULL, -- список имен столбцов
+    type_list text[] NOT NULL, -- список типов столбцов
+    PRIMARY KEY (dbname, schema_name, table_name)
+);
+\end{verbatim}
+
+
+\subsection{Установка правил распределения данных}
+В этом учебном руководстве мы определим правила распределения данных, созданных программой pgbench, на три узла 
+базы данных. Тестовые данные будут созданы командой <<pgbench -i -s 3>> (т.е. масштабный коэффициент равен 3). 
+Для этого раздела мы создадим новую базу данных с именем <<bench\_parallel>>.
+
+В каталоге sample исходного кода pgpool-II вы можете найти файл dist\_def\_pgbench.sql. Мы будем использовать 
+этот файл с примером для создания правил распределения для pgbench. Выполните следующую команду в каталоге с распакованным 
+исходным кодом pgpool-II.
+\begin{verbatim}
+$ psql -f sample/dist_def_pgbench.sql -p 5432 pgpool
+\end{verbatim}
+
+Ниже представлено описание файла dist\_def\_pgbench.sql.
+
+В файле dist\_def\_pgbench.sql мы добавляем одну строку в таблицу <<dist\_def>>. Это функция распределения данных 
+для таблицы accounts. В качестве столбца-ключа указан столбец aid.
+\begin{verbatim}
+INSERT INTO pgpool_catalog.dist_def VALUES (
+    'bench_parallel',
+    'public',
+    'accounts',
+    'aid',
+    ARRAY['aid', 'bid', 'abalance', 'filler'],
+    ARRAY['integer', 'integer', 'integer', 
+    'character(84)'],
+    'pgpool_catalog.dist_def_accounts'
+);
+\end{verbatim}
+
+Теперь мы должны создать функцию распределения данных для таблицы accounts. Заметим, что вы можете использовать 
+одну и ту же функцию для разных таблиц. Также вы можете создавать функции с использованием языков отличных от SQL 
+(например, PL/pgSQL, PL/Tcl, и т.д.).
+
+Таблица accounts в момент инициализации данных хранит значение масштабного коэффициента равное 3, значения 
+столбца aid от 1 до 300000. Функция создана таким образом что данные равномерно распределяются по трем узлам базы данных.
+
+Следующая SQL-функция будет возвращать число узлов базы данных.
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION 
+pgpool_catalog.dist_def_branches(anyelement)
+RETURNS integer AS $$
+    SELECT CASE WHEN $1 > 0 AND $1 <= 1 THEN 0
+        WHEN $1 > 1 AND $1 <= 2 THEN 1
+        ELSE 2
+    END;
+$$ LANGUAGE sql;
+\end{verbatim}
+
+\subsection{Установка правил репликации}
+Правило репликации~--- это то что определяет какие таблицы должны быть использованы для выполнения репликации.
+
+Здесь это сделано при помощи pgbench с зарегистрированными таблицами branches и tellers.
+
+Как результат, стало возможно создание таблицы accounts и выполнение запросов, использующих таблицы branches и tellers.
+\begin{verbatim}
+INSERT INTO pgpool_catalog.replicate_def VALUES (
+    'bench_parallel',
+    'public',
+    'branches',
+    ARRAY['bid', 'bbalance', 'filler'],
+    ARRAY['integer', 'integer', 'character(88)']
+);
+
+INSERT INTO pgpool_catalog.replicate_def VALUES (
+    'bench_parallel',
+    'public',
+    'tellers',
+    ARRAY['tid', 'bid', 'tbalance', 'filler'],
+    ARRAY['integer', 'integer', 'integer', 'character(84)']
+);
+\end{verbatim}
+
+Подготовленный файл Replicate\_def\_pgbench.sql находится в каталоге sample. Команда psql запускается с указанием пути к 
+исходному коду, определяющему правила репликации, например, как показано ниже.
+\begin{verbatim}
+$ psql -f sample/replicate_def_pgbench.sql -p 5432 pgpool
+\end{verbatim}
+
+\subsection{Проверка параллельного запроса}
+Для отражения изменений, сделанных в файле pgpool.conf, pgpool-II должен быть перезапущен. 
+Пожалуйста обращайтесь к разделу <<Запуск/Остановка pgpool-II>>.
+
+После настройки pgpool.conf и перезапуска pgpool-II, давайте проверим хорошо ли работают параллельные запросы.
+
+Сначала нам нужно создать базу данных, которая будет распределена. Мы назовем ее <<bench\_parallel>>. 
+Эту базу данных нужно создать на всех узлах. Используйте команду createdb посредством pgpool-II и база 
+данных будет создана на всех узлах.
+\begin{verbatim}
+$ createdb -p 9999 bench_parallel
+\end{verbatim}
+
+Затем запустим pgbench с параметрами -i -s 3. Параметр -i инициализирует базу данных предопределенными 
+таблицами и данными. Параметр -s указывает масштабный коэффициент для инициализации.
+\begin{verbatim}
+$ pgbench -i -s 3 -p 9999 bench_parallel
+\end{verbatim}
+
+Созданные таблицы и данные в них показаны в разделе <<Установка правил распределения данных>>.
+
+Один из способов проверить корректно ли были распределены данные~--- выполнить запрос SELECT посредством 
+pgpool-II и напрямую на бэкендах и сравнить результаты. Если все настроено правильно база данных 
+<<bench\_parallel>> должна быть распределена как показано ниже.
+
+\begin{tabular}{ | c | c | }
+  \hline
+  Имя таблицы & Число строк \\
+  \hline
+  branches & 3 \\
+  \hline
+  tellers & 30 \\
+  \hline
+  accounts & 300000 \\
+  \hline
+  history & 0 \\
+  \hline
+\end{tabular}
+
+Для проверки указанной выше информации на всех узлах и посредством pgpool-II используем простой скрипт на shell. 
+Приведенный ниже скрипт покажет минимальное и максимальное значение в таблице accounts используя для соединения 
+порты 5432, 5433, 5434 и 9999.
+\begin{verbatim}
+$ for port in 5432 5433 5434i 9999; do
+>     echo $port
+>     psql -c "SELECT min(aid), max(aid) FROM accounts" \
+>     -p $port bench_parallel
+> done
+\end{verbatim}
+
+
+\section{Master-slave режим}
+Этот режим предназначен для использования pgpool-II с другой репликацией (например Slony-I, Londiste). 
+Информация про БД указывается как для репликации. master\_slave\_mode и load\_balance\_mode устанавливается в true. 
+pgpool-II будет посылать запросы INSERT/UPDATE/DELETE на Master DB (1 в списке), а SELECT~--- использовать балансировку 
+нагрузки, если это возможно.
+
+При этом, DDL и DML для временной таблицы может быть выполнен только на мастере. Если нужен SELECT только на мастере, то для этого 
+нужно использовать комментарий /*NO LOAD BALANCE*/ перед SELECT.
+
+В Master/Slave режиме replication\_mode должен быть установлен false, а master\_slave\_mode~--- true.
+
+\section{Онлайн востановление}
+...
+
+
