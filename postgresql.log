@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 23:41
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  6 AUG 2010 01:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1366,7 +1366,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[66] [67] [68] [69]) (./postgresql_connection_pooling.tex [70] [71] [72
+[66] [67] [68] [69] [70]) (./postgresql_connection_pooling.tex [71] [72
 
 ])
 [73]
@@ -1395,7 +1395,7 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (73 pages, 576319 bytes).
+Output written on postgresql.pdf (73 pages, 576943 bytes).
 PDF statistics:
  886 PDF objects out of 1000 (max. 8388607)
  229 named destinations out of 1000 (max. 500000)
