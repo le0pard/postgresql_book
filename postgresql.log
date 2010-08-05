@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 13:55
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 16:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1323,22 +1323,28 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[59] [60] [61]
-Overfull \hbox (67.79485pt too wide) in paragraph at lines 279--280
+[59] [60]
+Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 ¬ этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-) [62]
+[61] [62]
+Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
+[]\T2A/cmr/m/n/12 ¬ этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
+load_balance_mode
+ []
+
+) [63]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15115 strings out of 494818
- 207322 string characters out of 1178667
- 335203 words of memory out of 3000000
- 17791 multiletter control sequences out of 15000+50000
+ 15121 strings out of 494818
+ 207402 string characters out of 1178667
+ 336203 words of memory out of 3000000
+ 17794 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1355,9 +1361,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (62 pages, 537693 bytes).
+Output written on postgresql.pdf (63 pages, 542775 bytes).
 PDF statistics:
- 766 PDF objects out of 1000 (max. 8388607)
- 203 named destinations out of 1000 (max. 500000)
- 509 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 783 PDF objects out of 1000 (max. 8388607)
+ 206 named destinations out of 1000 (max. 500000)
+ 525 words of extra memory for PDF output out of 10000 (max. 10000000)
 
