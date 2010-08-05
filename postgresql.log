@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 11:28
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  5 AUG 2010 13:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1273,16 +1273,72 @@ Overfull \hbox (13.79262pt too wide) in paragraph at lines 174--174
 ck;[] 
  []
 
-) [55]
+) (./postgresql_replication_end.tex) (./postgresql_pgpool.tex [55] [56
+
+]
+Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
+\T2A/cmr/m/n/12 рас-по-ла-га-ет-с€ меж-ду ни-ми. “а-ким об-ра-зом, при-ло-же-ни
+е ба-зы дан-ных (фрон-
+ []
+
+
+Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
+[]\T2A/cmr/m/n/12 ќригинал ру-ко-вод-ства до-сту-пен по ад-ре-су http://pgpool.
+projects.postgresql.org/pgpool-
+ []
+
+[57]
+Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
+\T2A/cmr/m/n/12 да-ет-с€, ва-ша биб-лио-те-ка libpq, ве-ро-€т-но, не рас-по-зна
+-ет-с€ скрип-том configure. 
+ []
+
+
+Overfull \hbox (30.4031pt too wide) in paragraph at lines 77--80
+[]\T2A/cmr/m/n/12 —крипт configure ищет биб-лио-те-ку libpq на-чи-на€ от ка-та-
+ло-га /usr/local/pgsql.
+ []
+
+
+Overfull \hbox (20.70758pt too wide) in paragraph at lines 77--80
+\T2A/cmr/m/n/12 includedir вме-сте с па-ра-мет-ром --with-pgsql-libdir при за-п
+ус-ке скрип-та configure. 
+ []
+
+
+Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
+[]\T2A/cmtt/m/n/12 $ cp /usr/local/etc/pgpool.conf.sample /usr/local/etc/pgpool
+.conf[] 
+ []
+
+[58]
+Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
+[]\T2A/cmr/m/n/12 ѕри уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-с€ фай
+л pcp.conf.sample.
+ []
+
+
+Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
+[]\T2A/cmr/m/n/12 ћы бу-дем ис-поль-зо-вать зна-че-ние по-умолчанию дл€ па-ра-м
+ет-ра pcp_port
+ []
+
+[59] [60] [61]
+Overfull \hbox (67.79485pt too wide) in paragraph at lines 279--280
+[]\T2A/cmr/m/n/12 ¬ этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
+ode и load_balance_mode. 
+ []
+
+) [62]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15073 strings out of 494818
- 206691 string characters out of 1178667
- 334203 words of memory out of 3000000
- 17774 multiletter control sequences out of 15000+50000
+ 15115 strings out of 494818
+ 207322 string characters out of 1178667
+ 335203 words of memory out of 3000000
+ 17791 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1299,9 +1355,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (55 pages, 503190 bytes).
+Output written on postgresql.pdf (62 pages, 537693 bytes).
 PDF statistics:
- 673 PDF objects out of 1000 (max. 8388607)
- 184 named destinations out of 1000 (max. 500000)
- 413 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 766 PDF objects out of 1000 (max. 8388607)
+ 203 named destinations out of 1000 (max. 500000)
+ 509 words of extra memory for PDF output out of 10000 (max. 10000000)
 
