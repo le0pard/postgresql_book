@@ -1,2 +1,160 @@
 \section{Bucardo}
 \subsection{Введение}
+Bucardo~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl. 
+Система очень гибкая, поддерживает несколько видов синхронизации и обработки конфликтов.
+
+\subsection{Установка}
+Установку будем проводить на Ubuntu Server. Сначала нам нужно установить DBIx::Safe Perl модуль.
+\begin{verbatim}
+sudo aptitude install libdbix-safe-perl
+\end{verbatim}
+
+Для других систем можно поставить из исходников\footnote{http://search.cpan.org/CPAN/authors/id/T/TU/TURNSTEP/}:
+\begin{verbatim}
+tar xvfz DBIx-Safe-1.2.5.tar.gz
+cd DBIx-Safe-1.2.5
+perl Makefile.PL
+make && make test && sudo make install
+\end{verbatim}
+
+Теперь ставим сам Bucardo. Скачиваем\footnote{http://bucardo.org/wiki/Bucardo\#Obtaining\_Bucardo} его и инсталируем:
+\begin{verbatim}
+tar xvfz Bucardo-4.4.0.tar.gz
+cd Bucardo-4.4.0
+perl Makefile.PL
+make
+sudo make install
+\end{verbatim}
+
+Для работы Bucardo потребуется установить поддержку pl/perlu языка PostgreSQL.
+\begin{verbatim}
+sudo aptitude install postgresql-plperl-8.4
+\end{verbatim}
+
+Можем приступать к настройке.
+
+\subsection{Настройка}
+\subsubsection{Инициализация Bucardo}
+Запускаем установку командой:
+\begin{verbatim}
+bucardo_ctl install
+\end{verbatim}
+
+Bucardo покажет настройки подключения к PostgreSQL, которые можно будет изменить:
+\begin{verbatim}
+This will install the bucardo database into an existing Postgres cluster.
+Postgres must have been compiled with Perl support,
+and you must connect as a superuser
+
+We will create a new superuser named 'bucardo',
+and make it the owner of a new database named 'bucardo'
+
+Current connection settings:
+1. Host:          <none>
+2. Port:          5432
+3. User:          postgres
+4. Database:      postgres
+5. PID directory: /var/run/bucardo
+\end{verbatim}
+
+Когда вы измените требуемые настройки и подтвердите установку, Bucardo создаст пользователя bucardo и базу данных bucardo.
+Данный пользователь должен иметь право логинится через Unix socket, поэтому лучше заранее дать ему такие права в pg\_hda.conf.
+
+\subsubsection{Настройка баз данных}
+Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo. 
+Пусть у нас будет master\_db и slave\_db. Сначала настроим мастер:
+\begin{verbatim}
+bucardo_ctl add db master_db name=master
+bucardo_ctl add all tables herd=all_tables
+bucardo_ctl add all sequences herd=all_tables
+\end{verbatim}
+
+Первой командой мы указали базу данных и дали ей имя master (для того, что в реальной жизни master\_db и slave\_db 
+имеют одинаковое название и их нужно Bucardo отличать). Второй и третей командой мы указали реплицыровать все 
+таблицы и последовательности, обьеденив их в групу all\_tables.
+
+Дальше добавляем slave\_db:
+\begin{verbatim}
+bucardo_ctl add db slave_db name=replica port=6543 host=slave_host
+\end{verbatim}
+
+Мы назвали replica базу данных в Bucardo.
+
+\subsubsection{Настройка синхронизации}
+Теперь нам нужно настроить синхронизацию между этими базами данных. Делается это командой (master-slave):
+\begin{verbatim}
+bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
+\end{verbatim}
+
+Данной командой мы установим Bucardo тригеры в PostgreSQL. А теперь по параметрам:
+\begin{itemize}
+\item \textbf{type}
+
+Это тип синхронизации. Существует 3 типа:
+\begin{itemize}
+\item \textbf{Fullcopy}. Полное копирование.
+\item \textbf{Pushdelta}. Master-slave репликация.
+\item \textbf{Swap}. Master-master репликация. 
+Для работы в таком режиме потребуется указать как Bucardo должен решать конфликты синхронизации.
+Для этого в таблице <<goat>> (в которой находятся таблицы и последовательности) нужно в <<standard\_conflict>> 
+поле поставить значение (это значение может быть разным для разных таблиц и последовательностей):
+\begin{itemize}
+\item source~--- при конфликте мы копируем данные с source (master\_db в нашем случае).
+\item target~--- при конфликте мы копируем данные с target (slave\_db в нашем случае).
+\item skip~--- конфликт мы просто не реплицируем. Не рекомендуется.
+\item random~--- каждая БД имеет одинаковый шанс, что её изменение будет взято для решение конфликта.
+\item latest~--- запись, которая была последней изменена решает конфликт.
+\item abort~--- синхронизация прерывается.
+\end{itemize}
+\end{itemize}
+
+\item \textbf{source}
+
+Источник синхронизации.
+
+\item \textbf{targetdb}
+
+БД, в которум производим репликацию.
+\end{itemize}
+
+Для master-master:
+\begin{verbatim}
+bucardo_ctl add sync delta type=swap source=all_tables targetdb=replica
+\end{verbatim}
+
+\subsubsection{Запуск репликации}
+Запуск репликации:
+\begin{verbatim}
+bucardo_ctl start
+\end{verbatim}
+
+Остановка репликации:
+\begin{verbatim}
+bucardo_ctl stop
+\end{verbatim}
+
+\subsection{Общие задачи}
+
+\subsubsection{Просмотр значений конфигурации}
+Просто используя эту команду:
+\begin{verbatim}
+bucardo_ctl show all
+\end{verbatim}
+
+\subsubsection{Изменения значений конфигурации}
+\begin{verbatim}
+bucardo_ctl set name=value
+\end{verbatim}
+
+Например:
+\begin{verbatim}
+bucardo_ctl set syslog_facility=LOG_LOCAL3
+\end{verbatim}
+
+\subsubsection{Перегрузка конфигурации}
+\begin{verbatim}
+bucardo_ctl reload_config
+\end{verbatim}
+
+Более полный список команд~--- http://bucardo.org/wiki/Bucardo\_ctl
+
