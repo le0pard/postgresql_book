@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  8 AUG 2010 14:13
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  8 AUG 2010 16:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1284,8 +1284,22 @@ Overfull \hbox (13.79262pt too wide) in paragraph at lines 174--174
 ck;[] 
  []
 
-) (./postgresql_replication_end.tex [57]) (./postgresql_pgpool.tex [58]
-[59
+) (./postgresql_replication_end.tex [57]) (./postgresql_clustering_begin.tex
+[58]
+Overfull \hbox (5.14268pt too wide) in paragraph at lines 3--8
+[]\T2A/cmr/m/n/12 Кластер (в ин-фор-ма-цон-ных тех-но-ло-ги-ях) --- груп-па сер
+-ве-ров (про-грамм-
+ []
+
+
+Overfull \hbox (6.67584pt too wide) in paragraph at lines 3--8
+\T2A/cmr/m/n/12 иден-тич-ные за-про-сы и ис-поль-зу-ю-щих-ся как еди-ный ре-сур
+с. Для PostgreSQL
+ []
+
+) (./postgresql_clustering_plproxy.tex) (./postgresql_pgpool.tex [59
+
+] [60
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1299,7 +1313,7 @@ Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
 projects.postgresql.org/pgpool-
  []
 
-[60]
+[61]
 Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
 \T2A/cmr/m/n/12 да-ет-ся, ва-ша биб-лио-те-ка libpq, ве-ро-ят-но, не рас-по-зна
 -ет-ся скрип-том configure. 
@@ -1323,7 +1337,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
 .conf[] 
  []
 
-[61]
+[62]
 Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
 []\T2A/cmr/m/n/12 При уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-ся фай
 л pcp.conf.sample.
@@ -1335,19 +1349,19 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[62] [63]
+[63] [64]
 Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-[64] [65]
+[65] [66]
 Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
 load_balance_mode
  []
 
-[66]
+[67]
 Overfull \hbox (28.2086pt too wide) in paragraph at lines 355--357
 \T2A/cmr/m/n/12 один из ин-стру-мен-тов вклю-чен-ных в ка-та-лог contrib ис-ход
 -но-го ко-да PostgreSQL. 
@@ -1367,19 +1381,24 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[67] [68] [69] [70] [71]) (./postgresql_connection_pooling.tex [72] [73
+[68] [69] [70] [71] [72]) (./postgresql_connection_pooling.tex [73]
+Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
+\T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Это так-же важ-н
+о для веб-приложений,
+ []
 
-])
-[74]
+[74
+
+]) [75]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15412 strings out of 494818
- 210835 string characters out of 1178667
+ 15429 strings out of 494818
+ 211238 string characters out of 1178667
  338203 words of memory out of 3000000
- 18054 multiletter control sequences out of 15000+50000
+ 18061 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1396,9 +1415,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (74 pages, 580081 bytes).
+Output written on postgresql.pdf (75 pages, 585501 bytes).
 PDF statistics:
- 895 PDF objects out of 1000 (max. 8388607)
- 231 named destinations out of 1000 (max. 500000)
- 613 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 915 PDF objects out of 1000 (max. 8388607)
+ 235 named destinations out of 1000 (max. 500000)
+ 637 words of extra memory for PDF output out of 10000 (max. 10000000)
 

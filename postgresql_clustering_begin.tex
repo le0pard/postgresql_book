@@ -1,0 +1,15 @@
+\chapter{Кластеризация}
+\section{Введение}
+Кластер (в информацонных технологиях)~--- группа серверов (программных или аппаратных), объединённых логически, 
+способных обрабатывать идентичные запросы и использующихся как единый ресурс. Для PostgreSQL это означает, что несколько серверов 
+баз данных ведут себя как одна база данных. В большинстве случаев, кластеры серверов функционируют на раздельных компьютерах. 
+Это позволяет повышать производительность за счёт распределения нагрузки на аппаратные ресурсы и обеспечивает отказоустойчивость 
+на аппаратном уровне.
+
+Для создания кластера PostgreSQL существует несколько решений:
+\begin{itemize}
+\item \textbf{Greenplum Database}\footnote{http://www.greenplum.com/index.php?page=greenplum-database}
+\item \textbf{GridSQL for EnterpriseDB Advanced Server}\footnote{http://www.enterprisedb.com/products/gridsql.do}
+\item \textbf{PL/Proxy}\footnote{http://plproxy.projects.postgresql.org/doc/tutorial.html}
+\item \textbf{HadoopDB}\footnote{http://db.cs.yale.edu/hadoopdb/hadoopdb.html}
+\end{itemize}
