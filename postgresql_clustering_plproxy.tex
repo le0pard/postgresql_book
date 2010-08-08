@@ -1,1 +1,224 @@
 \section{PL/Proxy}
+PL/Proxy представляет собой прокси-язык для удаленного вызова процедур и партицирования данных между разными базами. 
+Основная идея его использования заключается в том, что появляется возможность вызывать функции, расположенные в удаленных 
+базах, а также свободно работать с кластером баз данных (например, вызвать функцию на всех узлах кластера, или на 
+случайном узле, или на каком-то одном определенном).
+
+Чем PL/Proxy может быть полезен? Он существенно упрощает горизонтальное масштабирование системы. 
+Становится удобным разделять таблицу с пользователями, например, по первой латинской букве имени~--- на 26 узлов. 
+При этом приложение, которое работает непосредственно с прокси-базой, ничего не будет замечать: запрос на авторизацию, 
+например, сам будет направлен прокси-сервером на нужный узел. То есть администратор баз данных может проводить масштабирование 
+системы практически независимо от разработчиков приложения.
+
+PL/Proxy позволяет полностью решить проблемы масштабирования OLTP систем. В систему легко вводится резервирование с 
+failover-ом не только по узлам, но и по самим прокси-серверам, каждый из которых работает со всеми узлами.
+
+Недостатки и ограничения:
+\begin{itemize}
+\item все запросы и вызовы функций вызываются в autocommit-режиме на удаленных серверах
+\item в теле функции разрешен только один SELECT; при необходимости нужно писать отдельную процедуру
+\item при каждом вызове прокси-сервер стартует новое соединение к бакенд-серверу; в высоконагруженных системах 
+целесообразно использовать менеджер для кеширования соединений к бакенд-серверам, для этой цели идеально подходит PgBouncer
+\item изменение конфигурации кластера (количества партиций, например) требует перезапуска прокси-сервера
+\end{itemize}
+
+
+\subsection{Установка}
+\begin{enumerate}
+\item Скачать PL/Proxy\footnote{http://pgfoundry.org/projects/plproxy} и распаковать.
+\item Собрать PL/Proxy командами make и make install. 
+\end{enumerate}
+
+Так же можно установить PL/Proxy из репозитория пакетов. 
+Например в Ubuntu Server достаточно выполнить команду для PostgreSQL 8.4:
+\begin{verbatim}
+sudo aptitude install postgresql-8.4-plproxy
+\end{verbatim}
+
+\subsection{Настройка}
+Для примера настройки используется 3 сервера PostgreSQL. 2 сервера пусть будут node1 и node2, 
+а главный, что будет проксировать запросы на два других~--- proxy.
+Для корректной работы pl/proxy рекомендуется использовать количество нод равное степеням двойки. 
+База данных будет называтся plproxytest, а таблица в ней~--- users. Начнем!
+
+Для начала настроим node1 и node2. Команды написаные нижу нужно выполнять на каждом ноде.
+
+Создадим базу данных plproxytest(если её ещё нет):
+\begin{verbatim}
+CREATE DATABASE plproxytest
+     WITH OWNER = postgres
+       ENCODING = 'UTF8';
+\end{verbatim}
+
+Добавляем табличку users:
+\begin{verbatim}
+CREATE TABLE public.users
+  (
+   username character varying(255),
+   email character varying(255)
+  )
+  WITH (OIDS=FALSE);
+ALTER TABLE public.users OWNER TO postgres;
+\end{verbatim}
+  
+Теперь создадим функцию для добавления данных в таблицу users:
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION public.insert_user(i_username text, 
+i_emailaddress   text)
+RETURNS integer AS
+$BODY$
+INSERT INTO public.users (username, email) VALUES ($1,$2);
+    SELECT 1;
+$BODY$
+  LANGUAGE 'sql' VOLATILE;
+ALTER FUNCTION public.insert_user(text, text) OWNER TO postgres;
+\end{verbatim}
+
+С настройкой нодов закончено. Приступим к серверу proxy.
+
+Как и на всех нодах, на главном сервере (proxy) должна присутствовать база данных: 
+\begin{verbatim}
+CREATE DATABASE plproxytest
+     WITH OWNER = postgres
+       ENCODING = 'UTF8';
+\end{verbatim}
+
+Теперь надо укзать серверу что эта база данных управляется с помощью pl/proxy:
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION public.plproxy_call_handler()
+  RETURNS language_handler AS
+'$libdir/plproxy', 'plproxy_call_handler'
+  LANGUAGE 'c' VOLATILE
+COST 1;
+ALTER FUNCTION public.plproxy_call_handler() 
+OWNER TO postgres;
+-- language
+CREATE LANGUAGE plproxy HANDLER plproxy_call_handler;
+CREATE LANGUAGE plpgsql;
+\end{verbatim}
+
+Также, для того что бы сервер знал где и какие ноды него есть надо создать 
+3 сервисные функции которые pl/proxy будет использовать в своей работе. 
+Первая функция~--- конфиг для кластера баз данных. Тут указывается параметры через kay-value:
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION public.get_cluster_config
+(IN cluster_name text,   OUT "key" text, OUT val text)
+  RETURNS SETOF record AS
+$BODY$
+BEGIN
+  -- lets use same config for all clusters
+  key := 'connection_lifetime';
+  val := 30*60; -- 30m
+  RETURN NEXT;
+  RETURN;
+END;
+$BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION public.get_cluster_config(text) 
+OWNER TO postgres;  
+\end{verbatim}
+
+Вторая важная функция код которой надо будет подправить. В ней надо будет указать DSN нод:
+\begin{verbatim}
+СREATE OR REPLACE FUNCTION 
+public.get_cluster_partitions(cluster_name text)
+  RETURNS SETOF text AS
+$BODY$
+BEGIN
+  IF cluster_name = 'usercluster' THEN
+    RETURN NEXT 'dbname=plproxytest host=node1 user=postgres';
+    RETURN NEXT 'dbname=plproxytest host=node2 user=postgres';
+    RETURN;
+  END IF;
+  RAISE EXCEPTION 'Unknown cluster';
+END;
+$BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION public.get_cluster_partitions(text) 
+OWNER TO postgres;
+\end{verbatim}
+
+И последняя:
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION 
+public.get_cluster_version(cluster_name text)
+  RETURNS integer AS
+$BODY$
+BEGIN
+  IF cluster_name = 'usercluster' THEN
+    RETURN 1;
+  END IF;
+  RAISE EXCEPTION 'Unknown cluster';
+END;
+$BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100;
+ALTER FUNCTION public.get_cluster_version(text) 
+OWNER TO postgres;
+\end{verbatim}
+
+Ну и собственно самая главная функция которая будет вызываться уже непосредственно в приложении:
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION 
+public.insert_user(i_username text, i_emailaddress text)
+  RETURNS integer AS
+$BODY$
+  CLUSTER 'usercluster';
+  RUN ON hashtext(i_username);
+$BODY$
+  LANGUAGE 'plproxy' VOLATILE
+  COST 100;
+ALTER FUNCTION public.insert_user(text, text) 
+OWNER TO postgres;
+\end{verbatim}
+
+Все готово. Подключаемся к серверу proxy и заносим данные в базу:
+\begin{verbatim}
+SELECT insert_user('Sven','sven@somewhere.com');
+SELECT insert_user('Marko', 'marko@somewhere.com');
+SELECT insert_user('Steve','steve@somewhere.com');
+\end{verbatim}
+
+Пробуем извлечь данные.
+Для этого напишем новую серверную функцию: 
+\begin{verbatim}
+CREATE OR REPLACE FUNCTION 
+public.get_user_email(i_username text)
+ RETURNS SETOF text AS
+$BODY$
+ CLUSTER 'usercluster';
+ RUN ON hashtext(i_username) ;
+ SELECT email FROM public.users 
+ WHERE username = i_username;
+$BODY$
+ LANGUAGE 'plproxy' VOLATILE
+ COST 100
+ ROWS 1000;
+ALTER FUNCTION public.get_user_email(text) 
+OWNER TO postgres;
+\end{verbatim}
+
+И попробуем её вызвать:
+\begin{verbatim}
+select plproxy.get_user_email('Steve');
+\end{verbatim}
+
+Если потом подключится к каждой ноде отдельно, то можно четко увидеть, что данные users разбросаны по таблицам каждой ноды.
+
+\subsection{Все ли так просто?}
+Как видно на тестовом примере ничего сложного в работе с pl/proxy нет. 
+Но, я думаю все кто смог дочитать до этой строчки уже поняли что в реальной жизни все не так просто.
+Представьте что у вас 16 нод. Это же надо как-то синхронизировать код функций. А что если ошибка закрадётся~--- 
+как её оперативно исправлять?
+
+Этот вопрос был задан и на конференции Highload++ 2008, на что Аско Ойя ответил что соответствующие средства 
+уже реализованы внутри самого Skype, но ещё не достаточно готовы для того что бы отдавать их на суд сообществе opensource.
+
+Второй проблема которая не дай бог коснётся вас при разработке такого рода системы, это проблема перераспределения данных 
+в тот момент когда нам захочется добавить ещё нод в кластер.
+Планировать эту масштабную операцию прийдётся очень тщательно, подготовив все сервера заранее, 
+занеся данные и потом в один момент подменив код функции get\_cluster\_partitions.
