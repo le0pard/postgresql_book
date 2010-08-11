@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  10 AUG 2010 22:36
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  12 AUG 2010 01:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1311,7 +1311,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-л€-ют-с€ по кла-
  []
 
-<images/hdfsarchitecture.pdf, id=783, 877.2775pt x 606.265pt>
+<images/hdfsarchitecture.pdf, id=788, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [65] [66 <./images/hdfsarchitecture.pdf>]
@@ -1337,14 +1337,37 @@ Overfull \hbox (0.2536pt too wide) in paragraph at lines 74--77
 
 (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2004/10/17 UCS: Unicode data U+2000..U+20FF
-) [67])
-(./postgresql_pgpool.tex
-Overfull \hbox (4.63795pt too wide) in paragraph at lines 132--1
+) [67]
+Overfull \hbox (4.63795pt too wide) in paragraph at lines 132--138
 \T2A/cmr/m/n/12 че-та-ю-щую пре-иму-ще-ства тех-но-ло-гий и MapReduce, и па-рал
 -лель-ных —”Ѕƒ.
  []
 
-[68] [69] [70
+[68]
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 163--163
+ []\T2A/cmtt/m/n/12 Enter file in which to save the key (/home/hadoop/.ssh/id_r
+sa):[] 
+ []
+
+
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 164--164
+ []\T2A/cmtt/m/n/12 Your identification has been saved in /home/hadoop/.ssh/id_
+rsa.[] 
+ []
+
+
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 165--165
+ []\T2A/cmtt/m/n/12 Your public key has been saved in /home/hadoop/.ssh/id_rsa.
+pub.[] 
+ []
+
+
+Overfull \hbox (26.1396pt too wide) in paragraph at lines 167--167
+ []\T2A/cmtt/m/n/12 7b:5c:cf:79:6b:93:d6:d6:8d:41:e3:a6:9d:04:f9:85 hadoop@loca
+lhost[] 
+ []
+
+[69]) (./postgresql_pgpool.tex [70] [71
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1358,7 +1381,7 @@ Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
 projects.postgresql.org/pgpool-
  []
 
-[71]
+[72]
 Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
 \T2A/cmr/m/n/12 да-ет-с€, ва-ша биб-лио-те-ка libpq, ве-ро-€т-но, не рас-по-зна
 -ет-с€ скрип-том configure. 
@@ -1382,7 +1405,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
 .conf[] 
  []
 
-[72]
+[73]
 Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
 []\T2A/cmr/m/n/12 ѕри уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-с€ фай
 л pcp.conf.sample.
@@ -1394,19 +1417,19 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[73] [74]
+[74] [75]
 Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 ¬ этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-[75] [76]
+[76] [77]
 Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
 []\T2A/cmr/m/n/12 ¬ этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
 load_balance_mode
  []
 
-[77]
+[78]
 Overfull \hbox (28.2086pt too wide) in paragraph at lines 355--357
 \T2A/cmr/m/n/12 один из ин-стру-мен-тов вклю-чен-ных в ка-та-лог contrib ис-ход
 -но-го ко-да PostgreSQL. 
@@ -1424,24 +1447,24 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[78] [79] [80] [81] [82]) (./postgresql_connection_pooling.tex [83]
+[79] [80] [81] [82] [83]) (./postgresql_connection_pooling.tex [84]
 Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
 \T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Ёто так-же важ-н
 о дл€ веб-приложений,
  []
 
-[84
+[85
 
-]) [85]
+]) [86]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15954 strings out of 494818
- 216860 string characters out of 1178667
+ 15957 strings out of 494818
+ 216891 string characters out of 1178667
  338203 words of memory out of 3000000
- 18558 multiletter control sequences out of 15000+50000
+ 18559 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1458,9 +1481,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (85 pages, 634693 bytes).
+Output written on postgresql.pdf (86 pages, 638460 bytes).
 PDF statistics:
- 989 PDF objects out of 1000 (max. 8388607)
- 252 named destinations out of 1000 (max. 500000)
- 674 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1000 PDF objects out of 1000 (max. 8388607)
+ 254 named destinations out of 1000 (max. 500000)
+ 682 words of extra memory for PDF output out of 10000 (max. 10000000)
 
