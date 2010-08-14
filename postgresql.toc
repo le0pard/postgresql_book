@@ -135,7 +135,8 @@
 \contentsline {subsection}{\IeC {\CYRP }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrr }\IeC {\cyrk }\IeC {\cyra } \IeC {\cyrp }\IeC {\cyra }\IeC {\cyrr }\IeC {\cyra }\IeC {\cyrl }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyrg }\IeC {\cyro } \IeC {\cyrz }\IeC {\cyra }\IeC {\cyrp }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrs }\IeC {\cyra }}{90}{section*.165}
 \contentsline {section}{\numberline {4.5}Master-slave \IeC {\cyrr }\IeC {\cyre }\IeC {\cyrzh }\IeC {\cyri }\IeC {\cyrm }}{91}{section.166}
 \contentsline {section}{\numberline {4.6}\IeC {\CYRO }\IeC {\cyrn }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrishrt }\IeC {\cyrn } \IeC {\cyrv }\IeC {\cyro }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{92}{section.167}
-\contentsline {chapter}{\chapternumberline {5}\IeC {\CYRM }\IeC {\cyru }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyri }\IeC {\cyrp }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrk }\IeC {\cyrs }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyrery } \IeC {\cyrs }\IeC {\cyro }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyri }\IeC {\cyrn }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrishrt }}{93}{chapter.168}
-\contentsline {section}{\numberline {5.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{93}{section.169}
-\contentsline {section}{\numberline {5.2}PgBouncer}{93}{section.170}
-\contentsline {section}{\numberline {5.3}PgPool-II vs PgBouncer}{94}{section.171}
+\contentsline {section}{\numberline {4.7}\IeC {\CYRZ }\IeC {\cyra }\IeC {\cyrk }\IeC {\cyrl }\IeC {\cyryu }\IeC {\cyrch }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{92}{section.168}
+\contentsline {chapter}{\chapternumberline {5}\IeC {\CYRM }\IeC {\cyru }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyri }\IeC {\cyrp }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrk }\IeC {\cyrs }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyrery } \IeC {\cyrs }\IeC {\cyro }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyri }\IeC {\cyrn }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrishrt }}{93}{chapter.169}
+\contentsline {section}{\numberline {5.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{93}{section.170}
+\contentsline {section}{\numberline {5.2}PgBouncer}{93}{section.171}
+\contentsline {section}{\numberline {5.3}PgPool-II vs PgBouncer}{94}{section.172}
