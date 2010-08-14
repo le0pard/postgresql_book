@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" 
+            xmlns:dc="http://purl.org/dc/elements/1.1/" 
+            unique-identifier="bookid" version="2.0">
+  <metadata>
+    <dc:title>Работа с Postgresql: настройка, масштабирование</dc:title>
+    <dc:creator>Алексей Васильев</dc:creator>
+    <dc:identifier id="bookid">urn:uuid:12345654321</dc:identifier>
+    <dc:language>ru-RU</dc:language>
+    <meta name="cover" content="cover-image" /> 
+  </metadata>
+  <manifest>
+    <item id="ncx" href="toc.ncx" media-type="text/xml"/>
+    <item id="cover" href="title.html" media-type="application/xhtml+xml"/>
+    <item id="content" href="postgresql.html" media-type="application/xhtml+xml"/>
+    <item id="cover-image" href="images/cover.png" media-type="image/png"/>
+    <item id="css" href="stylesheet.css" media-type="text/css"/>
+    <item id="css2" href="postgresql.css" media-type="text/css"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover" linear="no"/>
+    <itemref idref="content"/>
+  </spine>
+  <guide>
+    <reference href="title.html" type="cover" title="Cover"/>
+  </guide>
+</package>
