@@ -137,9 +137,10 @@ HQL очень прост по своей сути, если Вы уже зна�
 производительности. 
 
 
-\section{Установка и настройка}
+\subsection{Установка и настройка}
 Вся настройка ведется на Ubuntu Server операционной системе.
 
+\subsubsection{Установка Hadoop}
 Перед тем, как приступить собственно говоря к установке Hadoop, необходимо выполнить два элементарных действия, 
 необходимых для правильного функционирования системы:
 \begin{itemize}
@@ -187,3 +188,390 @@ ssh localhost
 sudo aptitude install openjdk-6-jdk
 \end{verbatim}
 \end{itemize}
+
+Дальше скачиваем и устанавливаем Hadoop:
+\begin{verbatim}
+cd /opt
+sudo wget http://www.gtlib.gatech.edu/pub/apache/hadoop
+/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
+sudo tar zxvf hadoop-0.20.2.tar.gz
+sudo ln -s /opt/hadoop-0.20.2 /opt/hadoop
+sudo chown -R hadoop:hadoop /opt/hadoop /opt/hadoop-0.20.2
+sudo mkdir -p /opt/hadoop-data/tmp-base
+sudo chown -R hadoop:hadoop /opt/hadoop-data/
+\end{verbatim}
+
+Далее переходим в /opt/hadoop/conf/hadoop-env.sh и добавляем вначале:
+\begin{verbatim}
+export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
+export HADOOP_HOME=/opt/hadoop
+export HADOOP_CONF=$HADOOP_HOME/conf
+export HADOOP_PATH=$HADOOP_HOME/bin
+export HIVE_HOME=/opt/hive
+export HIVE_PATH=$HIVE_HOME/bin
+
+export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH
+\end{verbatim}
+
+Далее добавим в /opt/hadoop/conf/hadoop-site.xml:
+\begin{verbatim}
+<configuration>
+<property>
+  <name>hadoop.tmp.dir</name>
+  <value>/opt/hadoop-data/tmp-base</value>
+  <description>A base for other temporary 
+  directories</description>
+</property>
+
+<property>
+  <name>fs.default.name</name>
+  <value>localhost:54311</value>
+  <description>
+    The name of the default file system.
+  </description>
+</property>
+
+<property>
+  <name>hadoopdb.config.file</name>
+  <value>HadoopDB.xml</value>
+  <description>The name of the HadoopDB 
+  cluster configuration file</description>
+</property>
+</configuration>
+\end{verbatim}
+
+В /opt/hadoop/conf/mapred-site.xml:
+\begin{verbatim}
+<configuration>
+<property>
+  <name>mapred.job.tracker</name>
+  <value>localhost:54310</value>
+  <description>
+    The host and port that the 
+    MapReduce job tracker runs at.
+  </description>
+</property>
+</configuration>
+\end{verbatim}
+
+В /opt/hadoop/conf/hdfs-site.xml:
+\begin{verbatim}
+<configuration>
+<property>
+  <name>dfs.replication</name>
+  <value>1</value>
+  <description>
+    Default block replication.
+  </description>
+</property>
+</configuration>
+\end{verbatim}
+
+Теперь необходимо отформатировать Namenode:
+\begin{verbatim}
+$ hadoop namenode -format
+10/05/07 14:24:12 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = hadoop1/127.0.1.1
+STARTUP_MSG:   args = [-format]
+STARTUP_MSG:   version = 0.20.2
+STARTUP_MSG:   build = https://svn.apache.org/repos
+/asf/hadoop/common/branches/branch-0.20 -r
+911707; compiled by 'chrisdo' on Fri Feb 19 08:07:34 UTC 2010
+************************************************************/
+10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+fsOwner=hadoop,hadoop
+10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+supergroup=supergroup
+10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+isPermissionEnabled=true
+10/05/07 14:24:12 INFO common.Storage: 
+Image file of size 96 saved in 0 seconds.
+10/05/07 14:24:12 INFO common.Storage: 
+Storage directory /opt/hadoop-data/tmp-base/dfs/name has been
+successfully formatted.
+10/05/07 14:24:12 INFO namenode.NameNode: 
+SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at hadoop1/127.0.1.1
+************************************************************/
+$
+\end{verbatim}
+
+Готово. Теперь мы можем запустить Hadoop:
+\begin{verbatim}
+$ start-all.sh
+starting namenode, logging to /opt/hadoop/bin/..
+/logs/hadoop-hadoop-namenode-hadoop1.out
+localhost: starting datanode, logging to 
+/opt/hadoop/bin/../logs/hadoop-hadoop-datanode-hadoop1.out
+localhost: starting secondarynamenode, logging to
+/opt/hadoop/bin/../logs/hadoop-hadoop-secondarynamenode-hadoop1.out
+starting jobtracker, logging to 
+/opt/hadoop/bin/../logs/hadoop-hadoop-jobtracker-hadoop1.out
+localhost: starting tasktracker, logging to
+/opt/hadoop/bin/../logs/hadoop-hadoop-tasktracker-hadoop1.out
+$
+\end{verbatim}
+
+Остановка Hadoop производится скриптом stop-all.sh.
+
+\subsubsection{Установка HadoopDB и Hive}
+Теперь скачаем HaddopDB\footnote{http://sourceforge.net/projects/hadoopdb/files/} и распакуем hadoopdb.jar в \$HADOOP\_HOME/lib:
+\begin{verbatim}
+$cp hadoopdb.jar $HADOOP_HOME/lib
+\end{verbatim}
+
+Также нам потребуется PostgreSQL JDBC библиотека. Скачайте её\footnote{http://jdbc.postgresql.org/download.html} и 
+распакуйте в директорию \$HADOOP\_HOME/lib.
+
+Hive используется HadoopDB как SQL интерфейс. Подготовим директорию в HDFS для Hive:
+\begin{verbatim}
+hadoop fs -mkdir /tmp
+hadoop fs -mkdir /user/hive/warehouse
+hadoop fs -chmod g+w /tmp
+hadoop fs -chmod g+w /user/hive/warehouse
+\end{verbatim}
+
+В архиве HadoopDB также есть архив SMS\_dist. Распакуем его:
+\begin{verbatim}
+tar zxvf SMS_dist.tar.gz
+sudo mv dist /opt/hive
+sudo chown -R hadoop:hadoop hive
+\end{verbatim}
+
+Поскольку мы успешно запустили Hadoop, то и проблем с запуском Hive не должно быть:
+\begin{verbatim}
+$ hive
+Hive history file=/tmp/hadoop/
+hive_job_log_hadoop_201005081717_1990651345.txt
+hive> 
+
+hive> quit;
+$
+\end{verbatim}
+
+\subsubsection{Тестирование}
+Теперь проведем тестирование. Скачаем бенчмарк:
+\begin{verbatim}
+svn co http://graffiti.cs.brown.edu/svn/benchmarks/
+cd benchmarks/datagen/teragen
+\end{verbatim}
+
+Изменим скрипт benchmarks/datagen/teragen/teragen.pl:
+\begin{verbatim}
+use strict;
+use warnings;
+
+my $CUR_HOSTNAME = `hostname -s`;
+chomp($CUR_HOSTNAME);
+
+my $NUM_OF_RECORDS_1TB    = 10000000000;
+my $NUM_OF_RECORDS_535MB  = 100;
+my $BASE_OUTPUT_DIR   = "/data";
+my $PATTERN_STRING    = "XYZ";
+my $PATTERN_FREQUENCY = 108299;
+my $TERAGEN_JAR       = "teragen.jar";
+my $HADOOP_COMMAND    = $ENV{'HADOOP_HOME'}."/bin/hadoop";
+
+my %files = ( "535MB" => 1,
+);
+system("$HADOOP_COMMAND fs -rmr $BASE_OUTPUT_DIR");
+foreach my $target (keys %files) {
+my $output_dir = $BASE_OUTPUT_DIR."/SortGrep$target";
+my $num_of_maps = $files{$target};
+my $num_of_records = ($target eq "535MB" ? 
+$NUM_OF_RECORDS_535MB : $NUM_OF_RECORDS_1TB);
+print "Generating $num_of_maps files in '$output_dir'\n";
+
+##
+## EXEC: hadoop jar teragen.jar 10000000000 
+## /data/SortGrep/ XYZ 108299 100
+##
+my @args = ( $num_of_records,
+	    $output_dir,
+	    $PATTERN_STRING,
+	    $PATTERN_FREQUENCY,
+	    $num_of_maps );
+my $cmd = "$HADOOP_COMMAND jar $TERAGEN_JAR ".join(" ", @args);
+print "$cmd\n";
+system($cmd) == 0 || die("ERROR: $!");
+} # FOR
+exit(0);
+\end{verbatim}
+
+При запуске данного Perl скрипта сгенерится данные, которые будут сохранены на HDFS. 
+Поскольку мы настроили систему как единственный кластер, то все данные будут загружены на один HDFS. 
+При работе с большим количеством кластеров данные были бы распределены по кластерам.
+Теперь создадим базу данных, таблицу и загрузим наши данные в нее:
+\begin{verbatim}
+$hadoop fs -get /data/SortGrep535MB/part-00000 my_file
+$psql
+psql> CREATE DATABASE grep0;
+psql> USE grep0;
+psql> CREATE TABLE grep (
+    ->   key1 character varying(255),
+    ->   field character varying(255)
+    -> );
+COPY grep FROM 'my_file' WITH DELIMITER '|';
+\end{verbatim}
+
+Теперь настроим HadoopDB. В архиве HadoopDB можно найти пример файла Catalog.properties. Распакуйт его и настройте:
+\begin{verbatim}
+#Properties for Catalog Generation
+##################################
+nodes_file=machines.txt
+relations_unchunked=grep, EntireRankings
+relations_chunked=Rankings, UserVisits
+catalog_file=HadoopDB.xml
+##
+#DB Connection Parameters
+##
+port=5432
+username=postgres
+password=password
+driver=com.postgresql.Driver
+url_prefix=jdbc\:postgresql\://
+##
+#Chunking properties
+##
+chunks_per_node=0
+unchunked_db_prefix=grep
+chunked_db_prefix=cdb
+##
+#Replication Properties
+##
+dump_script_prefix=/root/dump_
+replication_script_prefix=/root/load_replica_
+dump_file_u_prefix=/mnt/dump_udb
+dump_file_c_prefix=/mnt/dump_cdb
+##
+#Cluster Connection
+##
+ssh_key=id_rsa
+\end{verbatim}
+
+Создайте файл machines.txt и добавте туда <<localhost>> строчку (без кавычек). Тепер создадим HadoopDB конфиг и скопируем его в HDFS:
+\begin{verbatim}
+java -cp $HADOOP_HOME/lib/hadoopdb.jar \
+> edu.yale.cs.hadoopdb.catalog.SimpleCatalogGenerator \
+> Catalog.properties
+hadoop dfs -put HadoopDB.xml HadoopDB.xml
+\end{verbatim}
+
+Теперь мы готовы проверить работы HadoopDB. Теперь можем протестировать поиск по данным, загруженым ранее в БД и HDFS:
+\begin{verbatim}
+java -cp $CLASSPATH:hadoopdb.jar \
+> edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
+> -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
+\end{verbatim}
+
+Приблизительный результат:
+\begin{verbatim}
+$java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
+> -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
+14.08.2010 19:08:48 edu.yale.cs.hadoopdb.exec.DBJobBase initConf
+INFO: SELECT key1, field FROM grep WHERE field LIKE '%%wo%%';
+14.08.2010 19:08:48 org.apache.hadoop.metrics.jvm.JvmMetrics init
+INFO: Initializing JVM Metrics with processName=JobTracker, sessionId=
+14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient configureCommandLineOptions
+WARNING: Use GenericOptionsParser for parsing the arguments. 
+Applications should implement Tool for the same.
+14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Running job: job_local_0001
+14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Data locality failed for leo-pgsql
+14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Task from leo-pgsql is connecting to chunk 0 on host localhost with 
+db url jdbc:postgresql://localhost:5434/grep0
+14.08.2010 19:08:48 org.apache.hadoop.mapred.MapTask runOldMapper
+INFO: numReduceTasks: 0
+14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: DB times (ms): connection = 104, query execution = 20, row retrieval  = 79
+14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: Rows retrieved = 3
+14.08.2010 19:08:48 org.apache.hadoop.mapred.Task done
+INFO: Task:attempt_local_0001_m_000000_0 is done. And is in the process of commiting
+14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+14.08.2010 19:08:48 org.apache.hadoop.mapred.Task commit
+INFO: Task attempt_local_0001_m_000000_0 is allowed to commit now
+14.08.2010 19:08:48 org.apache.hadoop.mapred.FileOutputCommitter commitTask
+INFO: Saved output of task 'attempt_local_0001_m_000000_0' to file:/home/leo/padraig
+14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+14.08.2010 19:08:48 org.apache.hadoop.mapred.Task sendDone
+INFO: Task 'attempt_local_0001_m_000000_0' done.
+14.08.2010 19:08:49 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO:  map 100% reduce 0%
+14.08.2010 19:08:49 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Job complete: job_local_0001
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO: Counters: 6
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:   FileSystemCounters
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_READ=141370
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_WRITTEN=153336
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:   Map-Reduce Framework
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     Map input records=3
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     Spilled Records=0
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     Map input bytes=3
+14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
+INFO:     Map output records=3
+14.08.2010 19:08:49 edu.yale.cs.hadoopdb.exec.DBJobBase run
+INFO: 
+JOB TIME : 1828 ms.
+
+
+$
+\end{verbatim}
+
+Результат сохранен в HDFS, в папке padraig:
+\begin{verbatim}
+$ cd padraig
+$ cat part-00000
+some data
+$
+\end{verbatim}
+
+Проверим данные в PostgreSQL:
+\begin{verbatim}
+psql> select * from grep where field like '%wo%';
++--------------------------------+-------------------+
+| key1                           | field
+|
++--------------------------------+-------------------+
+some data
+
+1 rows in set (0.00 sec)
+
+psql>
+\end{verbatim}
+
+Значения совадают. Все работает как требуется.
+
+
+\subsection{Заключение}
+В данной статье не показывается, как настроить Hive для работы с HadoopDB. Эта книга не сможет учесть все, 
+что требуется для работы c Hadoop. Назначение этой главы - дать основу для работы с Hadoop и HaddopDB.
+HadoopDB не заменяет Hadoop. Эти системы сосуществуют, позволяя аналитику выбирать соответствующие средства в зависимости 
+от имеющихся данных и задач.
+
+Наш эксперимент показывает, что HadoopDB может приблизиться в отношении производительности к параллельным системам 
+баз данных, обеспечивая при этом отказоустойчивость и возможность использования в неоднородной среде при тех же правилах 
+лицензирования, что и Hadoop. Хотя производительность HadoopDB, вообще говоря, ниже производительности параллельных систем 
+баз данных, во многом это объясняется тем, что в PostgreSQL таблицы хранятся не по столбцам, и тем, что в PostgreSQL 
+не использовалось сжатие данных. Кроме того, Hadoop и Hive~--- это сравнительно молодые проекты с открытыми кодами. 
+
+В HadoopDB применяется некоторый гибрид подходов параллельных СУБД и Hadoop к анализу данных, позволяющий достичь производительности 
+и эффективности параллельных систем баз данных, обеспечивая при этом масштабируемсть, отказоустойчивость и гибкость систем, 
+основанных на MapReduce. Способность HadoopDB к прямому включению Hadoop и программного обеспечения СУБД с открытыми исходными 
+текстами (без изменения кода) делает HadoopDB особенно пригодной для выполнения крупномасштабного анализа данных в будущих 
+рабочих нагрузках.

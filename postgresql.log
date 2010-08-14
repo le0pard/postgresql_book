@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  12 AUG 2010 01:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 19:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1311,7 +1311,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-<images/hdfsarchitecture.pdf, id=788, 877.2775pt x 606.265pt>
+<images/hdfsarchitecture.pdf, id=793, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [65] [66 <./images/hdfsarchitecture.pdf>]
@@ -1344,30 +1344,168 @@ Overfull \hbox (4.63795pt too wide) in paragraph at lines 132--138
  []
 
 [68]
-Overfull \hbox (19.96611pt too wide) in paragraph at lines 163--163
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 164--164
  []\T2A/cmtt/m/n/12 Enter file in which to save the key (/home/hadoop/.ssh/id_r
 sa):[] 
  []
 
 
-Overfull \hbox (19.96611pt too wide) in paragraph at lines 164--164
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 165--165
  []\T2A/cmtt/m/n/12 Your identification has been saved in /home/hadoop/.ssh/id_
 rsa.[] 
  []
 
 
-Overfull \hbox (19.96611pt too wide) in paragraph at lines 165--165
+Overfull \hbox (19.96611pt too wide) in paragraph at lines 166--166
  []\T2A/cmtt/m/n/12 Your public key has been saved in /home/hadoop/.ssh/id_rsa.
 pub.[] 
  []
 
 
-Overfull \hbox (26.1396pt too wide) in paragraph at lines 167--167
+Overfull \hbox (26.1396pt too wide) in paragraph at lines 168--168
  []\T2A/cmtt/m/n/12 7b:5c:cf:79:6b:93:d6:d6:8d:41:e3:a6:9d:04:f9:85 hadoop@loca
 lhost[] 
  []
 
-[69]) (./postgresql_pgpool.tex [70] [71
+[69] [70] [71]
+Overfull \hbox (15.28539pt too wide) in paragraph at lines 310--310
+[]\T2A/cmtt/m/n/12 /opt/hadoop/bin/../logs/hadoop-hadoop-secondarynamenode-hado
+op1.out[] 
+ []
+
+
+Overfull \hbox (41.84154pt too wide) in paragraph at lines 321--322
+[]\T2A/cmr/m/n/12 Теперь ска-ча-ем HaddopDB[] и рас-па-ку-ем hadoopdb.jar в $HA
+DOOP_HOME/lib: 
+ []
+
+[72] [73] [74] [75]
+Overfull \hbox (77.02031pt too wide) in paragraph at lines 472--472
+[]\T2A/cmtt/m/n/12 $java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.bench
+mark.GrepTaskDB \[] 
+ []
+
+
+Overfull \hbox (2.9384pt too wide) in paragraph at lines 476--476
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.metrics.jvm.JvmMetrics
+ init[] 
+ []
+
+
+Overfull \hbox (33.80586pt too wide) in paragraph at lines 477--477
+[]\T2A/cmtt/m/n/12 INFO: Initializing JVM Metrics with processName=JobTracker, 
+sessionId=[] 
+ []
+
+
+Overfull \hbox (107.88777pt too wide) in paragraph at lines 478--478
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient confi
+gureCommandLineOptions[] 
+ []
+
+
+Overfull \hbox (52.32634pt too wide) in paragraph at lines 481--481
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient monit
+orAndPrintJob[] 
+ []
+
+
+Overfull \hbox (138.75523pt too wide) in paragraph at lines 483--483
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractD
+BRecordReader getConnection[] 
+ []
+
+
+Overfull \hbox (138.75523pt too wide) in paragraph at lines 485--485
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractD
+BRecordReader getConnection[] 
+ []
+
+
+Overfull \hbox (52.32634pt too wide) in paragraph at lines 486--486
+[]\T2A/cmtt/m/n/12 INFO: Task from leo-pgsql is connecting to chunk 0 on host l
+ocalhost with[] 
+ []
+
+
+Overfull \hbox (2.9384pt too wide) in paragraph at lines 488--488
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.MapTask runOldM
+apper[] 
+ []
+
+
+Overfull \hbox (89.3673pt too wide) in paragraph at lines 490--490
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractD
+BRecordReader close[] 
+ []
+
+
+Overfull \hbox (95.54079pt too wide) in paragraph at lines 491--491
+[]\T2A/cmtt/m/n/12 INFO: DB times (ms): connection = 104, query execution = 20,
+ row retrieval  = 79[] 
+ []
+
+
+Overfull \hbox (89.3673pt too wide) in paragraph at lines 492--492
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractD
+BRecordReader close[] 
+ []
+
+
+Overfull \hbox (120.23476pt too wide) in paragraph at lines 495--495
+[]\T2A/cmtt/m/n/12 INFO: Task:attempt_local_0001_m_000000_0 is done. And is in 
+the process of commiting[] 
+ []
+
+
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 496--496
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$
+Job statusUpdate[] 
+ []
+
+
+Overfull \hbox (2.9384pt too wide) in paragraph at lines 499--499
+[]\T2A/cmtt/m/n/12 INFO: Task attempt_local_0001_m_000000_0 is allowed to commi
+t now[] 
+ []
+
+
+Overfull \hbox (64.67332pt too wide) in paragraph at lines 500--500
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.FileOutputCommi
+tter commitTask[] 
+ []
+
+
+Overfull \hbox (120.23476pt too wide) in paragraph at lines 501--501
+[]\T2A/cmtt/m/n/12 INFO: Saved output of task 'attempt_local_0001_m_000000_0' t
+o file:/home/leo/padraig[] 
+ []
+
+
+Overfull \hbox (70.84682pt too wide) in paragraph at lines 502--502
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$
+Job statusUpdate[] 
+ []
+
+
+Overfull \hbox (52.32634pt too wide) in paragraph at lines 506--506
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:49 org.apache.hadoop.mapred.JobClient monit
+orAndPrintJob[] 
+ []
+
+[76]
+Overfull \hbox (52.32634pt too wide) in paragraph at lines 508--508
+[]\T2A/cmtt/m/n/12 14.08.2010 19:08:49 org.apache.hadoop.mapred.JobClient monit
+orAndPrintJob[] 
+ []
+
+[77]
+Overfull \hbox (3.79797pt too wide) in paragraph at lines 567--572
+\T2A/cmr/m/n/12 что в PostgreSQL таб-ли-цы хра-нят-ся не по столб-цам, и тем, ч
+то в PostgreSQL
+ []
+
+) (./postgresql_pgpool.tex [78] [79
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1381,7 +1519,7 @@ Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
 projects.postgresql.org/pgpool-
  []
 
-[72]
+[80]
 Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
 \T2A/cmr/m/n/12 да-ет-ся, ва-ша биб-лио-те-ка libpq, ве-ро-ят-но, не рас-по-зна
 -ет-ся скрип-том configure. 
@@ -1405,7 +1543,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
 .conf[] 
  []
 
-[73]
+[81]
 Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
 []\T2A/cmr/m/n/12 При уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-ся фай
 л pcp.conf.sample.
@@ -1417,19 +1555,19 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[74] [75]
+[82] [83]
 Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-[76] [77]
+[84] [85]
 Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
 load_balance_mode
  []
 
-[78]
+[86]
 Overfull \hbox (28.2086pt too wide) in paragraph at lines 355--357
 \T2A/cmr/m/n/12 один из ин-стру-мен-тов вклю-чен-ных в ка-та-лог contrib ис-ход
 -но-го ко-да PostgreSQL. 
@@ -1447,24 +1585,24 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[79] [80] [81] [82] [83]) (./postgresql_connection_pooling.tex [84]
+[87] [88] [89] [90] [91]) (./postgresql_connection_pooling.tex [92]
 Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
 \T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Это так-же важ-н
 о для веб-приложений,
  []
 
-[85
+[93
 
-]) [86]
+]) [94]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15957 strings out of 494818
- 216891 string characters out of 1178667
+ 15970 strings out of 494818
+ 217011 string characters out of 1178667
  338203 words of memory out of 3000000
- 18559 multiletter control sequences out of 15000+50000
+ 18560 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1481,9 +1619,9 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (86 pages, 638460 bytes).
+Output written on postgresql.pdf (94 pages, 654356 bytes).
 PDF statistics:
- 1000 PDF objects out of 1000 (max. 8388607)
- 254 named destinations out of 1000 (max. 500000)
- 682 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1043 PDF objects out of 1200 (max. 8388607)
+ 266 named destinations out of 1000 (max. 500000)
+ 690 words of extra memory for PDF output out of 10000 (max. 10000000)
 
