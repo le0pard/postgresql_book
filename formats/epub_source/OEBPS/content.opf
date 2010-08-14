@@ -1,13 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<package xmlns="http://www.idpf.org/2007/opf" 
-            xmlns:dc="http://purl.org/dc/elements/1.1/" 
-            unique-identifier="bookid" version="2.0">
-  <metadata>
+
+<package xmlns="http://www.idpf.org/2007/opf"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  unique-identifier="bookid" version="2.0">
+  <metadata 
+    xmlns:opf="http://www.idpf.org/2007/opf"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
     <dc:title>Работа с Postgresql: настройка, масштабирование</dc:title>
     <dc:creator>Алексей Васильев</dc:creator>
     <dc:identifier id="bookid">urn:uuid:12345654321</dc:identifier>
     <dc:language>ru-RU</dc:language>
-    <meta name="cover" content="cover-image" /> 
   </metadata>
   <manifest>
     <item id="ncx" href="toc.ncx" media-type="text/xml"/>
