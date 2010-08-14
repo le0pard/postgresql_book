@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 19:31
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 19:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1500,9 +1500,9 @@ orAndPrintJob[]
  []
 
 [77]
-Overfull \hbox (3.79797pt too wide) in paragraph at lines 567--572
-\T2A/cmr/m/n/12 что в PostgreSQL таб-ли-цы хра-н€т-с€ не по столб-цам, и тем, ч
-то в PostgreSQL
+Overfull \hbox (3.6668pt too wide) in paragraph at lines 568--573
+\T2A/cmr/m/n/12 ви-лах ли-цен-зи-ро-ва-ни€, что и Hadoop. ’о-т€ про-из-во-ди-те
+ль-ность HadoopDB,
  []
 
 ) (./postgresql_pgpool.tex [78] [79
@@ -1619,7 +1619,7 @@ onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
 </usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on postgresql.pdf (94 pages, 654356 bytes).
+Output written on postgresql.pdf (94 pages, 654360 bytes).
 PDF statistics:
  1043 PDF objects out of 1200 (max. 8388607)
  266 named destinations out of 1000 (max. 500000)
