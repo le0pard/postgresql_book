@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 21:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 22:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -911,13 +911,24 @@ ed
 pdfTeX warning: /usr/bin/pdflatex (file /home/leo/.texmf-var/fonts/map/pdftex/u
 pdmap/pdftex.map): fontmap entry for `ftmro8r' already exists, duplicates ignor
 ed
-}] (./postgresql_title.tex [2
+}] (./postgresql_title.tex
+Overfull \hbox (15.98042pt too wide) in paragraph at lines 4--6
+[]\T2A/cmr/m/n/12 PostgreSQL: на-строй-ка про-из-во-ди-тель-но-сти. Алек-сей Бо
+р-зов (Sad Spirit)
+ []
+
+
+Overfull \hbox (9.2845pt too wide) in paragraph at lines 8--10
+[]\T2A/cmr/m/n/12 Установка Londiste в по-дроб-но-стях, Sergey Konoplev gray.ru
+@gmail.com, 
+ []
+
+[2
 
 ])
 LaTeX Font Info:    Try loading font information for T2A+cmss on input line 20.
 
-
-(/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmss.fd
+ (/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmss.fd
 File: t2acmss.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 ) (./postgresql.toc<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
 LaTeX Font Info:    Try loading font information for U+msa on input line 2.
@@ -1311,7 +1322,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-<images/hdfsarchitecture.pdf, id=798, 877.2775pt x 606.265pt>
+<images/hdfsarchitecture.pdf, id=802, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [65] [66 <./images/hdfsarchitecture.pdf>]
@@ -1505,7 +1516,7 @@ Overfull \hbox (3.6668pt too wide) in paragraph at lines 568--573
 ль-ность HadoopDB,
  []
 
-) (./postgresql_pgpool.tex [78] [79
+) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [78] [79
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1611,10 +1622,10 @@ Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 15972 strings out of 494818
- 217035 string characters out of 1178667
+ 15979 strings out of 494818
+ 217206 string characters out of 1178667
  338203 words of memory out of 3000000
- 18561 multiletter control sequences out of 15000+50000
+ 18564 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,44p,892b,680s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1626,14 +1637,13 @@ b></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/
 fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/c
 m-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb
 ></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sftt1200.pfb>
-Output written on postgresql.pdf (94 pages, 655521 bytes).
+onts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm
+-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fo
+nts/type1/public/cm-super/sftt1200.pfb>
+Output written on postgresql.pdf (94 pages, 647542 bytes).
 PDF statistics:
- 1048 PDF objects out of 1200 (max. 8388607)
- 267 named destinations out of 1000 (max. 500000)
- 698 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1049 PDF objects out of 1200 (max. 8388607)
+ 268 named destinations out of 1000 (max. 500000)
+ 706 words of extra memory for PDF output out of 10000 (max. 10000000)
 
