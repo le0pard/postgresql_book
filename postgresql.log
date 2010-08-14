@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 22:17
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  14 AUG 2010 23:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,25 +981,25 @@ Overfull \hbox (0.45857pt too wide) in paragraph at lines 91--92
  []
 
 [11]
-Overfull \hbox (1.37622pt too wide) in paragraph at lines 129--131
+Overfull \hbox (1.37622pt too wide) in paragraph at lines 131--133
 []\T2A/cmr/m/n/12 Количество од-но-вре-мен-но под-го-тав-ли-ва-е-мых тран-зак-ц
 ий (PREPARE
  []
 
 
-Overfull \hbox (26.10226pt too wide) in paragraph at lines 134--141
+Overfull \hbox (26.10226pt too wide) in paragraph at lines 136--143
 \T2A/cmr/m/n/12 до 200 мс. Для бо-лее тон-кой на-строй-ки по-вы-шай-те vacuum_c
 ost_page_hit
  []
 
 
-Overfull \hbox (11.40163pt too wide) in paragraph at lines 134--141
+Overfull \hbox (11.40163pt too wide) in paragraph at lines 136--143
 \T2A/cmr/m/n/12 и по-ни-жай-те vacuum_cost_page_limit. Это осла-бит вли-я-ние V
 ACUUM,
  []
 
 [12] [13] [14]
-Overfull \hbox (17.18806pt too wide) in paragraph at lines 213--214
+Overfull \hbox (17.18806pt too wide) in paragraph at lines 215--216
 []\T2A/cmr/m/n/12 open_sync --- за-пись дан-ных ме-то-дом open() с па-ра-мет-ро
 м O_SYNC 
  []
@@ -1641,7 +1641,7 @@ onts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm
 -super/sfsl1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb>
 </usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fo
 nts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (94 pages, 647542 bytes).
+Output written on postgresql.pdf (94 pages, 647685 bytes).
 PDF statistics:
  1049 PDF objects out of 1200 (max. 8388607)
  268 named destinations out of 1000 (max. 500000)
