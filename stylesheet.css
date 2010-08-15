@@ -137,7 +137,6 @@ h3 a {
 	font-size: 13px;
 	line-height: 18px;
 	height: 22px;
-	background: url(../img/bg_preview.png) 0 0 no-repeat;
 	padding-left: 33px;
 	width: 270px;
 }
@@ -154,17 +153,6 @@ h3 a {
 	top: -40px;
 	padding-top: 73px;
 	padding-left: 45px;
-	background: url(../img/iphone.png) 0 0 no-repeat;
-}
-
-.tweet ul {
-	list-style-type: none;
-}
-
-.tweet li {
-	padding: 6px 0;
-	font-size: 14px;
-	line-height: 18px;
 }
 
 /* @group Sidebar */
@@ -175,44 +163,6 @@ h3 a {
 	left: 0;
 	padding-left: 40px;
 }
-
-#donate, #share {
-	width: 195px;
-	overflow: hidden;
-	height: 0;
-	display: block;
-	margin: 5px 0;
-	border: 0;
-}
-
-#donate {
-	background: url(../img/btn_donate.png) 0 0 no-repeat;
-	padding-top: 45px;
-
-}
-
-#donate:hover {
-	background-position: 0 -45px;
-}
-
-#donate:active {
-	background-position: 0 -90px;
-}
-
-#share {
-	background: url(../img/btn_share.png) 0 0 no-repeat;
-	padding-top: 30px;
-	margin-top: 70px;
-}
-
-#share:hover {
-	background-position: 0 -30px;
-}
-
-#share:active {
-	background-position: 0 -60px;
-}
-
 
 /* @end */
 
