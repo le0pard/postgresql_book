@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.6.1)  17 AUG 2010 00:16
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  18 AUG 2010 02:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1618,7 +1618,7 @@ Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
  15977 strings out of 494818
- 217176 string characters out of 1178667
+ 217176 string characters out of 1178666
  338203 words of memory out of 3000000
  18562 multiletter control sequences out of 15000+50000
  22740 words of font info for 58 fonts, out of 3000000 for 9000
