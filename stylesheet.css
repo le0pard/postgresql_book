@@ -140,6 +140,7 @@ h3 a {
 	height: 22px;
 	padding-left: 33px;
 	width: 270px;
+	background: url(images/bg_preview.png) no-repeat scroll 0 0 transparent;
 }
 
 #pre {
