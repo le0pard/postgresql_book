@@ -22,7 +22,7 @@
       <navLabel>
         <text>Содержание</text>
       </navLabel>
-      <content src="postgresql.html"/>
+      <content src="postgresql-xhtml.html"/>
     </navPoint>
   </navMap>
 </ncx>

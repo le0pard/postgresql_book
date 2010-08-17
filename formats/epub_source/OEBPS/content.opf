@@ -12,18 +12,19 @@
     <dc:language>ru-RU</dc:language>
   </metadata>
   <manifest>
-    <item id="ncx" href="toc.ncx" media-type="text/xml"/>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
     <item id="cover" href="title.html" media-type="application/xhtml+xml"/>
-    <item id="content" href="postgresql.html" media-type="application/xhtml+xml"/>
-    <item id="cover-image" href="images/cover.png" media-type="image/png"/>
-    <item id="css" href="stylesheet.css" media-type="text/css"/>
-    <item id="css2" href="postgresql.css" media-type="text/css"/>
+    <item id="content" href="postgresql-xhtml.html" media-type="application/xhtml+xml"/>
+    <item id="cover-image" href="postgresql-img1.png" media-type="image/png"/>
+    <item id="css" href="postgresql.css" media-type="text/css"/>
   </manifest>
   <spine toc="ncx">
     <itemref idref="cover" linear="no"/>
-    <itemref idref="content"/>
+    <itemref idref="content" linear="yes"/>
   </spine>
+<!--
   <guide>
     <reference href="title.html" type="cover" title="Cover"/>
   </guide>
+-->
 </package>
