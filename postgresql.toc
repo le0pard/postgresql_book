@@ -141,3 +141,7 @@
 \contentsline {section}{\numberline {5.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{93}{section.171}
 \contentsline {section}{\numberline {5.2}PgBouncer}{93}{section.172}
 \contentsline {section}{\numberline {5.3}PgPool-II vs PgBouncer}{94}{section.173}
+\contentsline {chapter}{\chapternumberline {6}\IeC {\CYRB }\IeC {\cyrerev }\IeC {\cyrk }\IeC {\cyra }\IeC {\cyrp } \IeC {\cyri } \IeC {\cyrv }\IeC {\cyro }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre } PostgreSQL}{95}{chapter.174}
+\contentsline {section}{\numberline {6.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{95}{section.175}
+\contentsline {chapter}{\chapternumberline {7}PostgreSQL 9}{96}{chapter.176}
+\contentsline {section}{\numberline {7.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{96}{section.177}
