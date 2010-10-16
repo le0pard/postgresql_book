@@ -37,12 +37,12 @@
 \end{itemize}
 
 Базовая утилита запускается так:
-\begin{verbatim}
-$pgbouncer [-d][-R][-v][-u user] <pgbouncer.ini>
-\end{verbatim}
+\begin{lstlisting}[label=lst:pgbouncer1,caption=PgBouncer]
+pgbouncer [-d][-R][-v][-u user] <pgbouncer.ini>
+\end{lstlisting}
 
 Простой пример для конфига:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:pgbouncer2,caption=PgBouncer]
 [databases]
 template1 = host=127.0.0.1 port=5432 dbname=template1
 [pgbouncer]
@@ -53,14 +53,14 @@ auth_file = userlist.txt
 logfile = pgbouncer.log
 pidfile = pgbouncer.pid
 admin_users = someuser
-\end{verbatim}
+\end{lstlisting}
 
-Нужно создать файл пользователей userlist.txt примерного содержания:"someuser" "same\_password\_as\_in\_server"
+Нужно создать файл пользователей userlist.txt примерного содержания:''someuser'' ''same\_password\_as\_in\_server''
 
 Админский доступ из консоли к базе данных pgbouncer:
-\begin{verbatim}
-$psql -h 127.0.0.1 -p 6543 pgbouncer
-\end{verbatim}
+\begin{lstlisting}[label=lst:pgbouncer3,caption=PgBouncer]
+psql -h 127.0.0.1 -p 6543 pgbouncer
+\end{lstlisting}
 
 Здесь можно получить различную статистическую информацию с помощью команды SHOW.
 

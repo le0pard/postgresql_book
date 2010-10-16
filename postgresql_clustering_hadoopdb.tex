@@ -324,7 +324,7 @@ $cp hadoopdb.jar $HADOOP_HOME/lib
 распакуйте в директорию \$HADOOP\_HOME/lib.
 
 Hive используется HadoopDB как SQL интерфейс. Подготовим директорию в HDFS для Hive:
-\begin{lstlisting}[label=lst:haddop15,caption=Установка HadoopDB]
+\begin{lstlisting}[label=lst:haddop16,caption=Установка HadoopDB]
 hadoop fs -mkdir /tmp
 hadoop fs -mkdir /user/hive/warehouse
 hadoop fs -chmod g+w /tmp
@@ -332,14 +332,14 @@ hadoop fs -chmod g+w /user/hive/warehouse
 \end{lstlisting}
 
 В архиве HadoopDB также есть архив SMS\_dist. Распакуем его:
-\begin{lstlisting}[label=lst:haddop16,caption=Установка HadoopDB]
+\begin{lstlisting}[label=lst:haddop17,caption=Установка HadoopDB]
 tar zxvf SMS_dist.tar.gz
 sudo mv dist /opt/hive
 sudo chown -R hadoop:hadoop hive
 \end{lstlisting}
 
 Поскольку мы успешно запустили Hadoop, то и проблем с запуском Hive не должно быть:
-\begin{lstlisting}[label=lst:haddop17,caption=Установка HadoopDB]
+\begin{lstlisting}[label=lst:haddop18,caption=Установка HadoopDB]
 $ hive
 Hive history file=/tmp/hadoop/
 hive_job_log_hadoop_201005081717_1990651345.txt
@@ -350,13 +350,13 @@ hive> quit;
 
 \subsubsection{Тестирование}
 Теперь проведем тестирование. Скачаем бенчмарк:
-\begin{lstlisting}[label=lst:haddop18,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop19,caption=Тестирование]
 svn co http://graffiti.cs.brown.edu/svn/benchmarks/
 cd benchmarks/datagen/teragen
 \end{lstlisting}
 
 Изменим скрипт benchmarks/datagen/teragen/teragen.pl:
-\begin{lstlisting}[language=Java,label=lst:haddop19,caption=Тестирование]
+\begin{lstlisting}[language=Java,label=lst:haddop20,caption=Тестирование]
 use strict;
 use warnings;
 
@@ -401,7 +401,7 @@ exit(0);
 Поскольку мы настроили систему как единственный кластер, то все данные будут загружены на один HDFS. 
 При работе с большим количеством кластеров данные были бы распределены по кластерам.
 Создадим базу данных, таблицу и загрузим данные, что мы сохранили на HDFS, в нее:
-\begin{lstlisting}[label=lst:haddop20,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop21,caption=Тестирование]
 $hadoop fs -get /data/SortGrep535MB/part-00000 my_file
 $psql
 psql> CREATE DATABASE grep0;
@@ -414,7 +414,7 @@ COPY grep FROM 'my_file' WITH DELIMITER '|';
 \end{lstlisting}
 
 Теперь настроим HadoopDB. В архиве HadoopDB можно найти пример файла Catalog.properties. Распакуйт его и настройте:
-\begin{lstlisting}[label=lst:haddop21,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop22,caption=Тестирование]
 #Properties for Catalog Generation
 ##################################
 nodes_file=machines.txt
@@ -449,7 +449,7 @@ ssh_key=id_rsa
 \end{lstlisting}
 
 Создайте файл machines.txt и добавте туда <<localhost>> строчку (без кавычек). Тепер создадим HadoopDB конфиг и скопируем его в HDFS:
-\begin{lstlisting}[label=lst:haddop22,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop23,caption=Тестирование]
 java -cp $HADOOP_HOME/lib/hadoopdb.jar \
 > edu.yale.cs.hadoopdb.catalog.SimpleCatalogGenerator \
 > Catalog.properties
@@ -457,14 +457,14 @@ hadoop dfs -put HadoopDB.xml HadoopDB.xml
 \end{lstlisting}
 
 Теперь мы готовы проверить работы HadoopDB. Теперь можем протестировать поиск по данным, загруженым ранее в БД и HDFS:
-\begin{lstlisting}[label=lst:haddop23,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop24,caption=Тестирование]
 java -cp $CLASSPATH:hadoopdb.jar \
 > edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
 > -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
 \end{lstlisting}
 
 Приблизительный результат:
-\begin{lstlisting}[label=lst:haddop24,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop25,caption=Тестирование]
 $java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
 > -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.exec.DBJobBase initConf
@@ -528,14 +528,14 @@ JOB TIME : 1828 ms.
 \end{lstlisting}
 
 Результат сохранен в HDFS, в папке padraig:
-\begin{lstlisting}[label=lst:haddop25,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop26,caption=Тестирование]
 $ cd padraig
 $ cat part-00000
 some data
 \end{lstlisting}
 
 Проверим данные в PostgreSQL:
-\begin{lstlisting}[label=lst:haddop26,caption=Тестирование]
+\begin{lstlisting}[label=lst:haddop27,caption=Тестирование]
 psql> select * from grep where field like '%wo%';
 +--------------------------------+-------------------+
 | key1                           | field
