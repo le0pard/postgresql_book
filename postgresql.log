@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 01:55
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 02:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1330,16 +1330,83 @@ Overfull \hbox (6.94446pt too wide) in paragraph at lines 20--22
 е-ние к бакенд-
  []
 
-[60] [61] [62] [63]) (./postgresql_clustering_hadoopdb.tex [64]
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 34--34
+[][][][][][][] 
+ []
+
+[60] (/usr/share/texmf-texlive/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2004/09/05 1.3 listings language file
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 47--47
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 54--54
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 65--65
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 80--80
+[][][][][][][] 
+ []
+
+[61]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 87--87
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 103--103
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 124--124
+[][][][][][][] 
+ []
+
+[62]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 146--146
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 165--165
+[][][][][][][] 
+ []
+
+[63]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 180--180
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 188--188
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 206--206
+[][][][][][][] 
+ []
+
+[64]) (./postgresql_clustering_hadoopdb.tex
 Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
 []\T2A/cmr/bx/n/12 Экономичность: \T2A/cmr/m/n/12 ин-фор-ма-ция и вы-чис-ле-ния
  рас-пре-де-ля-ют-ся по кла-
  []
 
-<images/hdfsarchitecture.pdf, id=822, 877.2775pt x 606.265pt>
+[65] <images/hdfsarchitecture.pdf, id=953, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
-<use images/hdfsarchitecture.pdf> [65] [66 <./images/hdfsarchitecture.pdf>]
+<use images/hdfsarchitecture.pdf> [66 <./images/hdfsarchitecture.pdf>]
 (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
 )
@@ -1360,15 +1427,15 @@ Overfull \hbox (0.2536pt too wide) in paragraph at lines 74--77
 -то-рых ко-манд-
  []
 
-(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-32.def
+[67] (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2004/10/17 UCS: Unicode data U+2000..U+20FF
-) [67]
+) [68]
 Overfull \hbox (4.63795pt too wide) in paragraph at lines 132--138
 \T2A/cmr/m/n/12 че-та-ю-щую пре-иму-ще-ства тех-но-ло-гий и MapReduce, и па-рал
 -лель-ных СУБД.
  []
 
-[68]
+[69]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 149--149
 [][][][][][][] 
  []
@@ -1413,7 +1480,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 161--161
 
  []
 
-[69]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 172--172
 [][][][][][][] 
  []
@@ -1443,7 +1510,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 177--177
 
  []
 
-
+[70]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 182--182
 [][][][][][][] 
  []
@@ -1478,7 +1545,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 193--193
 [][][][][][][] 
  []
 
-[70]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 205--205
 [][][][][][][] 
  []
@@ -1493,17 +1560,17 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 217--217
 [][][][][][][] 
  []
 
-
+[71]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 243--243
 [][][][][][][] 
  []
 
-[71]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 257--257
 [][][][][][][] 
  []
 
-
+[72]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 270--270
 [][][][][][][] 
  []
@@ -1518,7 +1585,7 @@ Overfull \hbox (31.61012pt too wide) in paragraph at lines 281--282
 [][][][][]  
  []
 
-[72]
+
 Overfull \hbox (31.61012pt too wide) in paragraph at lines 295--296
 [][][][][]  
  []
@@ -1533,7 +1600,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 301--301
 [][][][][][][] 
  []
 
-
+[73]
 Overfull \hbox (10.4651pt too wide) in paragraph at lines 306--307
 [][][][][][][][][][][][][][][][][][][][][][]  
  []
@@ -1569,7 +1636,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 327--327
 [][][][][][][] 
  []
 
-[73]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 335--335
 [][][][][][][] 
  []
@@ -1579,7 +1646,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 342--342
 [][][][][][][] 
  []
 
-
+[74]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 353--353
 [][][][][][][] 
  []
@@ -1591,22 +1658,22 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 359--359
 [][][][][][][] 
  []
 
-[74]
+[75]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 404--404
 [][][][][][][] 
  []
 
-[75]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 417--417
 [][][][][][][] 
  []
 
-
+[76]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 452--452
 [][][][][][][] 
  []
 
-[76]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 460--460
 [][][][][][][] 
  []
@@ -1616,7 +1683,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 467--467
 [][][][][][][] 
  []
 
-
+[77]
 Overfull \hbox (2.27174pt too wide) in paragraph at lines 479--480
 [][][][][][][][][][][][][] 
  []
@@ -1626,7 +1693,7 @@ Overfull \hbox (2.27174pt too wide) in paragraph at lines 481--482
 [][][][][][][][][][][][][] 
  []
 
-[77]
+
 Overfull \hbox (2.27174pt too wide) in paragraph at lines 486--487
 [][][][][][][][][][][][][] 
  []
@@ -1636,7 +1703,7 @@ Overfull \hbox (2.27174pt too wide) in paragraph at lines 488--489
 [][][][][][][][][][][][][] 
  []
 
-[78]
+[78] [79]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 531--531
 [][][][][][][] 
  []
@@ -1646,13 +1713,13 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 538--538
 [][][][][][][] 
  []
 
-[79]
+[80]
 Overfull \hbox (3.6668pt too wide) in paragraph at lines 561--566
 \T2A/cmr/m/n/12 ви-лах ли-цен-зи-ро-ва-ния, что и Hadoop. Хо-тя про-из-во-ди-те
 ль-ность HadoopDB,
  []
 
-) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [80] [81
+) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [81] [82
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -1666,7 +1733,7 @@ Overfull \hbox (81.20927pt too wide) in paragraph at lines 45--46
 projects.postgresql.org/pgpool-
  []
 
-[82]
+[83]
 Overfull \hbox (10.69394pt too wide) in paragraph at lines 74--76
 \T2A/cmr/m/n/12 да-ет-ся, ва-ша биб-лио-те-ка libpq, ве-ро-ят-но, не рас-по-зна
 -ет-ся скрип-том configure. 
@@ -1690,7 +1757,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 92--92
 .conf[] 
  []
 
-[83]
+[84]
 Overfull \hbox (0.3035pt too wide) in paragraph at lines 116--118
 []\T2A/cmr/m/n/12 При уста-нов-ке pgpool-II ав-то-ма-ти-че-ски со-зда-ет-ся фай
 л pcp.conf.sample.
@@ -1702,19 +1769,19 @@ Overfull \hbox (8.40579pt too wide) in paragraph at lines 135--136
 ет-ра pcp_port
  []
 
-[84] [85]
+[85] [86]
 Overfull \hbox (67.79485pt too wide) in paragraph at lines 229--230
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы вклю-чи-ли оба па-ра-мет-ра replication_m
 ode и load_balance_mode. 
  []
 
-[86] [87]
+[87] [88]
 Overfull \hbox (31.90082pt too wide) in paragraph at lines 327--329
 []\T2A/cmr/m/n/12 В этом раз-де-ле мы уста-но-вим па-ра-мет-ры parallel_mode и 
 load_balance_mode
  []
 
-[88]
+[89]
 Overfull \hbox (28.2086pt too wide) in paragraph at lines 355--357
 \T2A/cmr/m/n/12 один из ин-стру-мен-тов вклю-чен-ных в ка-та-лог contrib ис-ход
 -но-го ко-да PostgreSQL. 
@@ -1732,7 +1799,7 @@ Overfull \hbox (2.9384pt too wide) in paragraph at lines 378--378
 gpool[] 
  []
 
-[89] [90] [91] [92] [93]
+[90] [91] [92] [93] [94]
 Overfull \hbox (38.77647pt too wide) in paragraph at lines 577--580
 \T2A/cmr/m/n/12 http://pgpool.projects.postgresql.org/pgpool-II/doc/pgpool-en.h
 tml#online-recovery
@@ -1744,18 +1811,18 @@ Overfull \hbox (19.98102pt too wide) in paragraph at lines 577--580
 r_beginners.pdf 
  []
 
-) (./postgresql_connection_pooling.tex [94]
+) (./postgresql_connection_pooling.tex [95]
 Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
 \T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Это так-же важ-н
 о для веб-приложений,
  []
 
-[95
+[96
 
-]) (./postgresql_backup_and_restore.tex [96]) (./postgresql_9.tex [97
+]) (./postgresql_backup_and_restore.tex [97]) (./postgresql_9.tex [98
 
 ])
-[98
+[99
 
 ]
 \tf@toc=\write6
@@ -1767,13 +1834,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 17227 strings out of 494818
- 231955 string characters out of 1178666
- 425448 words of memory out of 3000000
- 19470 multiletter control sequences out of 15000+50000
+ 17620 strings out of 494818
+ 236868 string characters out of 1178666
+ 437838 words of memory out of 3000000
+ 19735 multiletter control sequences out of 15000+50000
  23610 words of font info for 59 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
- 55i,12n,51p,931b,1877s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 55i,12n,51p,931b,1882s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf
 /fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type
 1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
@@ -1787,9 +1854,9 @@ m1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/shar
 e/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (98 pages, 741404 bytes).
+Output written on postgresql.pdf (99 pages, 764714 bytes).
 PDF statistics:
- 1467 PDF objects out of 1728 (max. 8388607)
- 586 named destinations out of 1000 (max. 500000)
+ 1621 PDF objects out of 1728 (max. 8388607)
+ 712 named destinations out of 1000 (max. 500000)
  738 words of extra memory for PDF output out of 10000 (max. 10000000)
 
