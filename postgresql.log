@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 03:04
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 03:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1729,7 +1729,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-[66] <images/hdfsarchitecture.pdf, id=1151, 877.2775pt x 606.265pt>
+[66] <images/hdfsarchitecture.pdf, id=1141, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [67 <./images/hdfsarchitecture.pdf>]
@@ -2500,152 +2500,29 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 18354 strings out of 494818
- 256635 string characters out of 1178666
- 447984 words of memory out of 3000000
+ 18313 strings out of 494818
+ 256165 string characters out of 1178666
+ 449844 words of memory out of 3000000
  19811 multiletter control sequences out of 15000+50000
  23610 words of font info for 59 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{section.897} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.896} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.895} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.894} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.893} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.877} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.876} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.875} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.874} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.873} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.872} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.861} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.842} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.819} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.776} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.765} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.764} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.750} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.745} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.744} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.729} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.718} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.708} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.702} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.693} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.692} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.691} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.690} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.689} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.688} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.373} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.371} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.370} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.246} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.241} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.240} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.239} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.238} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.237} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.233} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.228} has been referenced but does not exis
-t, replaced by a fixed one
-
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf/f
-onts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfb
-x1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/shar
-e/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
-0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1
-728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/
-texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/pu
-blic/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti17
-28.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (103 pages, 849205 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf
+/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+fbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/sh
+are/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type
+1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
+rm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/sha
+re/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
+m1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
+1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on postgresql.pdf (103 pages, 845042 bytes).
 PDF statistics:
- 2122 PDF objects out of 2487 (max. 8388607)
- 1118 named destinations out of 1200 (max. 500000)
+ 2071 PDF objects out of 2073 (max. 8388607)
+ 1077 named destinations out of 1200 (max. 500000)
  738 words of extra memory for PDF output out of 10000 (max. 10000000)
 
