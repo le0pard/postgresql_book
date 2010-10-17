@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 02:50
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  17 OCT 2010 03:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1468,56 +1468,150 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 155--155
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ))
-(./postgresql_replication_rubyrep.tex [54] [55]
+(./postgresql_replication_rubyrep.tex [54]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 38--38
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 38--38
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--38
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 43--43
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 43--43
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--43
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 48--48
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 48--48
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [55]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 57--57
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
 Overfull \hbox (3.34798pt too wide) in paragraph at lines 61--62
 []\T2A/cmr/m/n/12 Команда generate со-зда-ла при-мер кон-фи-гу-ра-ции в файл my
 rubyrep.conf: 
  []
 
 
-Overfull \hbox (33.80586pt too wide) in paragraph at lines 81--81
-[]\T2A/cmtt/m/n/12 config.include_tables /^e/ # regexp matches all tables start
-ing with e[] 
+Overfull \hbox (6.0pt too wide) in paragraph at lines 62--62
+[][][][][][][] 
  []
 
-[56]
-Overfull \hbox (15.28539pt too wide) in paragraph at lines 139--139
-[]\T2A/cmtt/m/n/12 Checking for and removing rubyrep triggers from unconfigured
- tables[] 
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [56]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 91--91
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 96--96
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 105--105
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 110--110
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 119--119
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 129--129
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [57]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 136--136
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 149--149
+[][][][][][][] 
  []
 
 
-Overfull \hbox (70.84682pt too wide) in paragraph at lines 142--142
-[]\T2A/cmtt/m/n/12 Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual 
-join(0xb758cfac)[] 
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 149--149
+[] []
  []
 
 
-Overfull \hbox (19.96611pt too wide) in paragraph at lines 152--152
- []\T2A/cmtt/m/n/12 +++ ./replication_runner.rb 2010-07-16 17:38:03.000000000 -
-0400[] 
+Underfull \hbox (badness 10000) in paragraph at lines 149--149
+
  []
 
-[57]
-Overfull \hbox (75.52754pt too wide) in paragraph at lines 165--165
- []   \T2A/cmtt/m/n/12 # This class implements the functionality of the 'replic
-ate' command.[] 
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (31.64644pt too wide) in paragraph at lines 150--151
+[][][][][][][][][][][][][][][][]  
  []
 
-
-Overfull \hbox (26.1396pt too wide) in paragraph at lines 167--167
- []     \T2A/cmtt/m/n/12 # Initializes the waiter thread used for replication p
-auses[] 
- []
-
-
-Overfull \hbox (13.79262pt too wide) in paragraph at lines 174--174
- []       \T2A/cmtt/m/n/12 @waiter_thread ||= Thread.new {@termination_mutex.lo
-ck;[] 
- []
-
-) (./postgresql_replication_end.tex) (./postgresql_clustering_begin.tex
-[58] [59]
+[58]) (./postgresql_replication_end.tex) (./postgresql_clustering_begin.tex
+[59]
 Overfull \hbox (5.14268pt too wide) in paragraph at lines 3--8
 []\T2A/cmr/m/n/12 Кластер (в ин-фор-ма-цон-ных тех-но-ло-ги-ях) --- груп-па сер
 -ве-ров (про-грамм-
@@ -1635,7 +1729,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-[66] <images/hdfsarchitecture.pdf, id=1063, 877.2775pt x 606.265pt>
+[66] <images/hdfsarchitecture.pdf, id=1151, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [67 <./images/hdfsarchitecture.pdf>]
@@ -2406,29 +2500,152 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 18136 strings out of 494818
- 252980 string characters out of 1178666
+ 18354 strings out of 494818
+ 256635 string characters out of 1178666
  447984 words of memory out of 3000000
- 19738 multiletter control sequences out of 15000+50000
+ 19811 multiletter control sequences out of 15000+50000
  23610 words of font info for 59 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf
-/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type
-1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-fbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/sh
-are/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type
-1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
-rm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/sha
-re/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1
-/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
-m1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/shar
-e/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
-1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (103 pages, 820693 bytes).
+pdfTeX warning (dest): name{section.897} has been referenced but does not exi
+st, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.896} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.895} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.894} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.893} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.877} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.876} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.875} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.874} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.873} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.872} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.861} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.842} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.819} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.776} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.765} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.764} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.750} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.745} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.744} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.729} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.718} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.708} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.702} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.693} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.692} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.691} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.690} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.689} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.688} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.373} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.371} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.370} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.246} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.241} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.240} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.239} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.238} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.237} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.233} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.228} has been referenced but does not exis
+t, replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf/f
+onts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type1/
+public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfb
+x1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
+0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share
+/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/p
+ublic/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1
+728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/
+texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/pu
+blic/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti17
+28.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on postgresql.pdf (103 pages, 849205 bytes).
 PDF statistics:
- 1978 PDF objects out of 2073 (max. 8388607)
- 999 named destinations out of 1000 (max. 500000)
+ 2122 PDF objects out of 2487 (max. 8388607)
+ 1118 named destinations out of 1200 (max. 500000)
  738 words of extra memory for PDF output out of 10000 (max. 10000000)
 
