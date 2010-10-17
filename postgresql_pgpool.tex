@@ -388,7 +388,7 @@ CREATE TABLE pgpool_catalog.dist_def (
     schema_name text, -- имя схемы
     table_name text, -- имя таблицы
     col_name text NOT NULL CHECK (col_name = ANY (col_list)), 
-    -- столбец-ключ для распределения данных
+    -- столбец ключ для распределения данных
     col_list text[] NOT NULL, -- список имен столбцов
     type_list text[] NOT NULL, -- список типов столбцов
     dist_def_func text NOT NULL, 
