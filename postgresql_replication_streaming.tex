@@ -26,4 +26,48 @@ wall xlog записи на резервные сервера для созда�
 Все работы, как пологается, будут проводится на ОС Linux. 
 
 \subsection{Настройка}
-Для начала обозначим мастер сервер как masterdb и слейв как slavedb.
+Для начала обозначим мастер сервер как masterdb(192.168.0.10) и слейв как slavedb(192.168.0.20).
+
+Для начала позволим определенному пользователю без пароля ходить по ssh. Пусть это будет postgres юзер. 
+Если же нет, то создаем набором команд:
+\begin{lstlisting}[label=lst:streaming1,caption=Создаем пользователя userssh]
+$sudo groupadd userssh
+$sudo useradd -m -g userssh -d /home/userssh -s /bin/bash \
+-c "user ssh allow" userssh
+\end{lstlisting}
+
+Дальше выполняем команды от имени пользователя (в данном случае postgres):
+\begin{lstlisting}[label=lst:streaming2,caption=Логинимся под пользователем postgres]
+su postgres
+\end{lstlisting}
+
+Генерим RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:
+\begin{lstlisting}[label=lst:streaming3,caption=Генерим RSA-ключ]
+postgres@localhost ~ $ ssh-keygen -t rsa -P ""
+Generating public/private rsa key pair.
+Enter file in which to save the key (/var/lib/postgresql/.ssh/id_rsa): 
+Created directory '/var/lib/postgresql/.ssh'.
+Your identification has been saved in /var/lib/postgresql/.ssh/id_rsa.
+Your public key has been saved in /var/lib/postgresql/.ssh/id_rsa.pub.
+The key fingerprint is:
+16:08:27:97:21:39:b5:7b:86:e1:46:97:bf:12:3d:76 postgres@localhost
+\end{lstlisting}
+
+И добавляем его в список авторизованных ключей:
+\begin{lstlisting}[label=lst:streaming4,caption=Добавляем его в список авторизованных ключей]
+cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+\end{lstlisting}
+
+Этого должно быть более чем достаточно, проверить работоспособность соединения можно просто написав:
+\begin{lstlisting}[label=lst:streaming5,caption=Пробуем зайти на ssh без пароля]
+ssh localhost
+\end{lstlisting}
+
+Не забываем предварительно инициализировать sshd:
+\begin{lstlisting}[label=lst:streaming6,caption=Запуск sshd]
+/etc/init.d/sshd start
+\end{lstlisting}
+
+После успешно проделаной операции скопируйте <<\$HOME/.ssh>> на slavedb. 
+Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
+
