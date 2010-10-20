@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  21 OCT 2010 00:03
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  21 OCT 2010 00:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -965,18 +965,18 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 ) [3
 
 ] [4]
-Overfull \hbox (2.03697pt too wide) detected at line 144
- \T2A/cmr/bx/n/12 103
+Overfull \hbox (2.03697pt too wide) detected at line 145
+ \T2A/cmr/bx/n/12 104
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 148
- \T2A/cmr/bx/n/12 106
- []
-
-
-Overfull \hbox (2.03697pt too wide) detected at line 150
+Overfull \hbox (2.03697pt too wide) detected at line 149
  \T2A/cmr/bx/n/12 107
+ []
+
+
+Overfull \hbox (2.03697pt too wide) detected at line 151
+ \T2A/cmr/bx/n/12 108
  []
 
 ) (./postgresql_performance_begin.tex [5]
@@ -1574,54 +1574,69 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 328--328
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ) [52])
 (./postgresql_replication_streaming.tex [53]
-Overfull \hbox (6.0pt too wide) in paragraph at lines 33--33
+Overfull \hbox (6.0pt too wide) in paragraph at lines 34--34
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
-Overfull \hbox (6.0pt too wide) in paragraph at lines 40--40
+Overfull \hbox (6.0pt too wide) in paragraph at lines 41--41
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
-Overfull \hbox (6.0pt too wide) in paragraph at lines 45--45
+Overfull \hbox (6.0pt too wide) in paragraph at lines 46--46
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
-Overfull \hbox (6.0pt too wide) in paragraph at lines 57--57
-[][][][][][][] 
- []
-
-(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
-File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
-Overfull \hbox (6.0pt too wide) in paragraph at lines 62--62
+Overfull \hbox (6.0pt too wide) in paragraph at lines 58--58
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ) [54]
-Overfull \hbox (6.0pt too wide) in paragraph at lines 67--67
+Overfull \hbox (6.0pt too wide) in paragraph at lines 63--63
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
-Overfull \hbox (20.01195pt too wide) in paragraph at lines 71--73
+Overfull \hbox (6.0pt too wide) in paragraph at lines 68--68
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (20.01195pt too wide) in paragraph at lines 72--74
 []\T2A/cmr/m/n/12 ѕосле успеш-но про-де-ла-ной опе-ра-ции ско-пи-руй-те <<$HOME
 /.ssh>> на slavedb.
  []
 
-) (./postgresql_replication_bucardo.tex
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 76--76
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 79--79
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(./postgresql_replication_bucardo.tex
 Overfull \hbox (41.36095pt too wide) in paragraph at lines 3--5
 []\T2A/cmr/m/n/12 Bucardo --- асин-хрон-на€ master-master или master-slave ре-п
 ли-ка-ци€ PostgreSQL,
@@ -1641,14 +1656,14 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 13--13
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [55]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 21--21
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [55]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 30--30
 [][][][][][][] 
  []
@@ -1669,13 +1684,13 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 44--44
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [56]
 Overfull \hbox (18.52066pt too wide) in paragraph at lines 60--62
 []\T2A/cmr/m/n/12  огда вы из-ме-ни-те тре-бу-е-мые на-строй-ки и под-твер-ди-т
 е уста-нов-ку, Bucardo
  []
 
-[56]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 66--66
 [][][][][][][] 
  []
@@ -1722,7 +1737,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 127--127
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [58]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 132--132
 [][][][][][][] 
  []
@@ -1736,7 +1751,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 140--140
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [58]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 145--145
 [][][][][][][] 
  []
@@ -1809,7 +1824,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--48
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [60]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 57--57
 [][][][][][][] 
  []
@@ -1827,7 +1842,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 62--62
 [][][][][][][] 
  []
 
-[60] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (6.0pt too wide) in paragraph at lines 91--91
@@ -1836,14 +1851,14 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 91--91
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [61]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 96--96
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [61]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 105--105
 [][][][][][][] 
  []
@@ -1871,14 +1886,14 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 129--129
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [62]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 136--136
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [62]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 149--149
 [][][][][][][] 
  []
@@ -2019,7 +2034,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-л€-ют-с€ по кла-
  []
 
-[71] <images/hdfsarchitecture.pdf, id=1630, 877.2775pt x 606.265pt>
+[71] <images/hdfsarchitecture.pdf, id=1617, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [72 <./images/hdfsarchitecture.pdf>]
@@ -2790,158 +2805,29 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 19211 strings out of 494818
- 272066 string characters out of 1178666
- 480200 words of memory out of 3000000
- 20122 multiletter control sequences out of 15000+50000
+ 19180 strings out of 494818
+ 271851 string characters out of 1178666
+ 481397 words of memory out of 3000000
+ 20125 multiletter control sequences out of 15000+50000
  23610 words of font info for 59 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1504s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{chapter.1385} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1368} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1367} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.1366} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1365} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1364} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1363} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1352} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1333} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1310} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1267} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1256} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1255} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1236} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1235} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1209} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1199} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1193} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1184} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1183} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1182} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.1181} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.1180} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.1179} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.864} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.862} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.861} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.737} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.732} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.731} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.730} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.729} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.728} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.689} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.647} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.634} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.633} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.632} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.620} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.585} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.569} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.568} has been referenced but does not exis
-t, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.567} has been referenced but does not exist
-, replaced by a fixed one
-
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf/f
-onts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfb
-x1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/shar
-e/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
-0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1
-728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/
-texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/pu
-blic/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti17
-28.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (108 pages, 920043 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf
+/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+fbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/sh
+are/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type
+1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
+rm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/sha
+re/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
+m1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
+1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on postgresql.pdf (108 pages, 916912 bytes).
 PDF statistics:
- 2683 PDF objects out of 2984 (max. 8388607)
- 1559 named destinations out of 1728 (max. 500000)
+ 2638 PDF objects out of 2984 (max. 8388607)
+ 1521 named destinations out of 1728 (max. 500000)
  770 words of extra memory for PDF output out of 10000 (max. 10000000)
 
