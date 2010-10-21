@@ -79,3 +79,79 @@ host  all  all  192.168.0.20/32  trust
 \begin{lstlisting}[label=lst:streaming8,caption=Слейв pg\_hba.conf]
 host  all  all  192.168.0.10/32  trust
 \end{lstlisting}
+
+Не забываем после этого перегрузить postgresql на обоих серверах.
+
+\subsubsection{Настройка мастера}
+Для начала настроим masterdb. Установим параметры в postgresql.conf для репликации:
+\begin{lstlisting}[label=lst:streaming9,caption=Настройка мастера]
+# To enable read-only queries on a standby server, wal_level must be set to
+# "hot_standby". But you can choose "archive" if you never connect to the
+# server in standby mode.
+wal_level = hot_standby
+
+# Set the maximum number of concurrent connections from the standby servers.
+max_wal_senders = 5
+
+# To prevent the primary server from removing the WAL segments required for
+# the standby server before shipping them, set the minimum number of segments
+# retained in the pg_xlog directory. At least wal_keep_segments should be
+# larger than the number of segments generated between the beginning of
+# online-backup and the startup of streaming replication. If you enable WAL
+# archiving to an archive directory accessible from the standby, this may
+# not be necessary.
+wal_keep_segments = 32
+
+# Enable WAL archiving on the primary to an archive directory accessible from
+# the standby. If wal_keep_segments is a high enough number to retain the WAL
+# segments required for the standby server, this may not be necessary.
+archive_mode    = on
+archive_command = 'cp %p /path_to/archive/%f'
+\end{lstlisting}
+
+Давайте по порядку:
+\begin{itemize}
+\item <<wal\_level = hot\_standby>>~--- сервер начнет писать в WAL логи так же как и при режиме <<archive>>, 
+добавляя информацию, необходимую для востановления транзакции (можно также поставить <<archive>>, 
+но тогда сервер не может быть слейвом при необходимости).
+\item <<max\_wal\_senders = 5>>~--- максимальное количество слейвов.
+\item <<wal\_keep\_segments = 32>>~--- минимальное количество файлов c WAL сегментами в pg\_xlog директории.
+\item <<archive\_mode = on>>~--- позволяем сохранять WAL сегменты в указаное переменной <<archive\_command>> хранилище. 
+В данном случае в директорию <</path\_to/archive/>>.
+\end{itemize}
+
+После изменения параметров перегружаем postgresql сервер. Теперь перейдем к slavedb.
+
+\subsubsection{Настройка слейва}
+Для начала нам потребуется создать на slavedb точную копию masterdb. Перенесем данные с помощью <<Онлайн бекапа>>.
+
+Для начала зайдем на masterdb сервер. Выполним в консоли:
+\begin{lstlisting}[label=lst:streaming10,caption=Выполняем на мастере]
+psql -c "SELECT pg_start_backup('label', true)" 
+\end{lstlisting}
+
+Теперь нам нужно перенести данные с мастера на слейв. Выполняем на мастере:
+\begin{lstlisting}[label=lst:streaming11,caption=Выполняем на мастере]
+rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid \
+--exclude postmaster.opts --exclude pg_log --exclude pg_xlog \
+--exclude recovery.conf master_db_datadir/ slavedb_host:slave_db_datadir/ 
+\end{lstlisting}
+где
+\begin{itemize}
+\item <<master\_db\_datadir>>~--- директория с postgresql данными на masterdb
+\item <<slave\_db\_datadir>>~--- директория с postgresql данными на slavedb
+\item <<slavedb\_host>>~--- хост slavedb(в нашем случае - 192.168.1.20)
+\end{itemize}
+
+После копирования данных с мастера на слейв, остановим онлайн бекап. Выполняем на мастере:
+\begin{lstlisting}[label=lst:streaming12,caption=Выполняем на мастере]
+psql -c "SELECT pg_stop_backup()"
+\end{lstlisting}
+
+Устанавливаем такие же данные в конфиге postgresql.conf, что и у мастера (чтобы при падении мастера слейв мог его заменить). 
+Так же установим допольнительный параметр:
+\begin{lstlisting}[label=lst:streaming13,caption=Конфиг слейва]
+hot_standby = on
+\end{lstlisting}
+Внимание! Если на мастере поставили <<wal\_level = archive>>, тогда параметр оставляем по умолчанию (hot\_standby = off).
+
