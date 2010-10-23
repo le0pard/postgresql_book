@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  22 OCT 2010 00:03
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  23 OCT 2010 23:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -965,18 +965,18 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 ) [3
 
 ] [4]
-Overfull \hbox (2.03697pt too wide) detected at line 147
- \T2A/cmr/bx/n/12 106
+Overfull \hbox (2.03697pt too wide) detected at line 148
+ \T2A/cmr/bx/n/12 108
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 151
- \T2A/cmr/bx/n/12 109
+Overfull \hbox (2.03697pt too wide) detected at line 152
+ \T2A/cmr/bx/n/12 111
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 153
- \T2A/cmr/bx/n/12 110
+Overfull \hbox (2.03697pt too wide) detected at line 154
+ \T2A/cmr/bx/n/12 112
  []
 
 ) (./postgresql_performance_begin.tex [5]
@@ -1688,6 +1688,27 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 153--153
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 159--159
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [57]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 193--193
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [58]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 214--214
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ))
 (./postgresql_replication_bucardo.tex
 Overfull \hbox (41.36095pt too wide) in paragraph at lines 3--5
@@ -1695,12 +1716,12 @@ Overfull \hbox (41.36095pt too wide) in paragraph at lines 3--5
 ли-ка-ци€ PostgreSQL,
  []
 
-[57]
+
 Overfull \hbox (6.0pt too wide) in paragraph at lines 8--8
 [][][][][][][] 
  []
 
-(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+[59] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (6.0pt too wide) in paragraph at lines 13--13
@@ -1735,9 +1756,9 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 44--44
 [][][][][][][] 
  []
 
-[58] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [60]
 Overfull \hbox (18.52066pt too wide) in paragraph at lines 60--62
 []\T2A/cmr/m/n/12  огда вы из-ме-ни-те тре-бу-е-мые на-строй-ки и под-твер-ди-т
 е уста-нов-ку, Bucardo
@@ -1757,12 +1778,12 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 77--77
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [59]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 85--85
 [][][][][][][] 
  []
 
-(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+[61] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (26.57317pt too wide) in paragraph at lines 102--103
@@ -1783,7 +1804,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 121--121
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [60]
+) [62]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 127--127
 [][][][][][][] 
  []
@@ -1826,7 +1847,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 155--155
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ))
-(./postgresql_replication_rubyrep.tex [61]
+(./postgresql_replication_rubyrep.tex [63]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 38--38
 [][][][][][][] 
  []
@@ -1858,7 +1879,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 43--43
 
  []
 
-[62] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (6.0pt too wide) in paragraph at lines 48--48
@@ -1877,7 +1898,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--48
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [64]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 57--57
 [][][][][][][] 
  []
@@ -1897,7 +1918,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 62--62
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [63]
+) [65]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 91--91
 [][][][][][][] 
  []
@@ -1932,14 +1953,14 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 119--119
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [64]
+)
 Overfull \hbox (6.0pt too wide) in paragraph at lines 129--129
 [][][][][][][] 
  []
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-)
+) [66]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 136--136
 [][][][][][][] 
  []
@@ -1968,8 +1989,8 @@ Overfull \hbox (31.64644pt too wide) in paragraph at lines 150--151
 [][][][][][][][][][][][][][][][]  
  []
 
-[65]) (./postgresql_replication_end.tex) (./postgresql_clustering_begin.tex
-[66]
+[67]) (./postgresql_replication_end.tex) (./postgresql_clustering_begin.tex
+[68]
 Overfull \hbox (5.14268pt too wide) in paragraph at lines 3--8
 []\T2A/cmr/m/n/12  ластер (в ин-фор-ма-цон-ных тех-но-ло-ги-€х) --- груп-па сер
 -ве-ров (про-грамм-
@@ -1981,7 +2002,7 @@ Overfull \hbox (6.67584pt too wide) in paragraph at lines 3--8
 с. ƒл€ PostgreSQL
  []
 
-) (./postgresql_clustering_plproxy.tex [67
+) (./postgresql_clustering_plproxy.tex [69
 
 ]
 Overfull \hbox (6.94446pt too wide) in paragraph at lines 20--22
@@ -1996,7 +2017,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 34--34
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [68]
+) [70]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 47--47
 [][][][][][][] 
  []
@@ -2024,7 +2045,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 80--80
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [69]
+) [71]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 87--87
 [][][][][][][] 
  []
@@ -2045,7 +2066,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 124--124
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [70]
+) [72]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 146--146
 [][][][][][][] 
  []
@@ -2059,7 +2080,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 165--165
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [71]
+) [73]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 180--180
 [][][][][][][] 
  []
@@ -2080,17 +2101,17 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 206--206
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [72])
+) [74])
 (./postgresql_clustering_hadoopdb.tex
 Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
 []\T2A/cmr/bx/n/12 Ёкономичность: \T2A/cmr/m/n/12 ин-фор-ма-ци€ и вы-чис-ле-ни€
  рас-пре-де-л€-ют-с€ по кла-
  []
 
-[73] <images/hdfsarchitecture.pdf, id=1661, 877.2775pt x 606.265pt>
+[75] <images/hdfsarchitecture.pdf, id=1713, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
-<use images/hdfsarchitecture.pdf> [74 <./images/hdfsarchitecture.pdf>]
+<use images/hdfsarchitecture.pdf> [76 <./images/hdfsarchitecture.pdf>]
 (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
 )
@@ -2111,15 +2132,15 @@ Overfull \hbox (0.2536pt too wide) in paragraph at lines 74--77
 -то-рых ко-манд-
  []
 
-[75] (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-32.def
+[77] (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2004/10/17 UCS: Unicode data U+2000..U+20FF
-) [76]
+) [78]
 Overfull \hbox (4.63795pt too wide) in paragraph at lines 132--138
 \T2A/cmr/m/n/12 че-та-ю-щую пре-иму-ще-ства тех-но-ло-гий и MapReduce, и па-рал
 -лель-ных —”Ѕƒ.
  []
 
-[77]
+[79]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 149--149
 [][][][][][][] 
  []
@@ -2204,7 +2225,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 177--177
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [78]
+) [80]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 182--182
 [][][][][][][] 
  []
@@ -2265,7 +2286,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 217--217
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [79]
+) [81]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 243--243
 [][][][][][][] 
  []
@@ -2279,7 +2300,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 257--257
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [80]
+) [82]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 270--270
 [][][][][][][] 
  []
@@ -2313,7 +2334,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 301--301
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [81]
+) [83]
 Overfull \hbox (10.4651pt too wide) in paragraph at lines 306--307
 [][][][][][][][][][][][][][][][][][][][][][]  
  []
@@ -2367,7 +2388,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 342--342
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [82]
+) [84]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 353--353
 [][][][][][][] 
  []
@@ -2384,7 +2405,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 359--359
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [83]
+) [85]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 404--404
 [][][][][][][] 
  []
@@ -2398,7 +2419,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 417--417
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [84]
+) [86]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 452--452
 [][][][][][][] 
  []
@@ -2419,7 +2440,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 467--467
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [85]
+) [87]
 Overfull \hbox (2.27174pt too wide) in paragraph at lines 479--480
 [][][][][][][][][][][][][] 
  []
@@ -2439,7 +2460,7 @@ Overfull \hbox (2.27174pt too wide) in paragraph at lines 488--489
 [][][][][][][][][][][][][] 
  []
 
-[86] [87]
+[88] [89]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 531--531
 [][][][][][][] 
  []
@@ -2453,13 +2474,13 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 538--538
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [88]
+) [90]
 Overfull \hbox (3.6668pt too wide) in paragraph at lines 561--566
 \T2A/cmr/m/n/12 ви-лах ли-цен-зи-ро-ва-ни€, что и Hadoop. ’о-т€ про-из-во-ди-те
 ль-ность HadoopDB,
  []
 
-) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [89] [90
+) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [91] [92
 
 ]
 Overfull \hbox (11.67805pt too wide) in paragraph at lines 40--44
@@ -2480,7 +2501,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 55--55
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [91]
+) [93]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 70--70
 [][][][][][][] 
  []
@@ -2526,7 +2547,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 97--97
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [92]
+) [94]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 112--112
 [][][][][][][] 
  []
@@ -2566,7 +2587,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 136--136
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [93]
+) [95]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 149--149
 [][][][][][][] 
  []
@@ -2587,7 +2608,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 176--176
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [94]
+) [96]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 182--182
 [][][][][][][] 
  []
@@ -2620,7 +2641,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 218--218
 [][][][][][][] 
  []
 
-[95] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+[97] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (6.0pt too wide) in paragraph at lines 225--225
@@ -2649,7 +2670,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 247--247
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [96]
+) [98]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 271--271
 [][][][][][][] 
  []
@@ -2663,7 +2684,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 300--300
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [97]
+) [99]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 309--309
 [][][][][][][] 
  []
@@ -2697,7 +2718,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 338--338
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [98]
+) [100]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 349--349
 [][][][][][][] 
  []
@@ -2729,7 +2750,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 377--377
 [][][][][][][] 
  []
 
-[99] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+[101] (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
 Overfull \hbox (6.0pt too wide) in paragraph at lines 385--385
@@ -2738,7 +2759,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 385--385
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [100]
+) [102]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 420--420
 [][][][][][][] 
  []
@@ -2759,7 +2780,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 448--448
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [101]
+) [103]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 469--469
 [][][][][][][] 
  []
@@ -2773,7 +2794,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 486--486
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [102]
+) [104]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 506--506
 [][][][][][][] 
  []
@@ -2794,7 +2815,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 525--525
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [103]
+) [105]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 552--552
 [][][][][][][] 
  []
@@ -2813,13 +2834,13 @@ Overfull \hbox (19.98102pt too wide) in paragraph at lines 577--580
 r_beginners.pdf 
  []
 
-[104]) (./postgresql_connection_pooling.tex [105]
+[106]) (./postgresql_connection_pooling.tex [107]
 Overfull \hbox (23.09772pt too wide) in paragraph at lines 3--7
 \T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Ёто так-же важ-н
 о дл€ веб-приложений,
  []
 
-[106
+[108
 
 ]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 40--40
@@ -2842,10 +2863,10 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 61--61
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [107])
-(./postgresql_backup_and_restore.tex [108]) (./postgresql_9.tex [109
+) [109])
+(./postgresql_backup_and_restore.tex [110]) (./postgresql_9.tex [111
 
-]) [110
+]) [112
 
 ]
 \tf@toc=\write6
@@ -2858,10 +2879,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 19250 strings out of 494818
- 273199 string characters out of 1178666
- 482074 words of memory out of 3000000
- 20148 multiletter control sequences out of 15000+50000
+ 19322 strings out of 494818
+ 274455 string characters out of 1178666
+ 482568 words of memory out of 3000000
+ 20168 multiletter control sequences out of 15000+50000
  23610 words of font info for 59 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1504s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -2878,9 +2899,9 @@ m1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/shar
 e/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (110 pages, 929453 bytes).
+Output written on postgresql.pdf (112 pages, 941418 bytes).
 PDF statistics:
- 2690 PDF objects out of 2984 (max. 8388607)
- 1558 named destinations out of 1728 (max. 500000)
+ 2751 PDF objects out of 2984 (max. 8388607)
+ 1604 named destinations out of 1728 (max. 500000)
  770 words of extra memory for PDF output out of 10000 (max. 10000000)
 

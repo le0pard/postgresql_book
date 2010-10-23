@@ -155,3 +155,67 @@ hot_standby = on
 \end{lstlisting}
 Внимание! Если на мастере поставили <<wal\_level = archive>>, тогда параметр оставляем по умолчанию (hot\_standby = off).
 
+Далее на slavedb в директории с данными PostgreSQL создадим файл recovery.conf с таким содержимым:
+\begin{lstlisting}[label=lst:streaming14,caption=Конфиг recovery.conf]
+# Specifies whether to start the server as a standby. In streaming replication,
+# this parameter must to be set to on.
+standby_mode          = 'on'
+
+# Specifies a connection string which is used for the standby server to connect
+# with the primary.
+primary_conninfo      = 'host=192.168.0.10 port=5432 user=postgres'
+
+# Specifies a trigger file whose presence should cause streaming replication to
+# end (i.e., failover).
+trigger_file = '/path_to/trigger'
+
+# Specifies a command to load archive segments from the WAL archive. If
+# wal_keep_segments is a high enough number to retain the WAL segments
+# required for the standby server, this may not be necessary. But
+# a large workload can cause segments to be recycled before the standby
+# is fully synchronized, requiring you to start again from a new base backup.
+restore_command = 'scp masterdb_host:/path_to/archive/%f "%p"'
+\end{lstlisting}
+
+где
+\begin{itemize}
+\item <<standby\_mode='on'>>~--- указываем серверу работать в режиме слейв
+\item <<primary\_conninfo>>~--- настройки соединения слейва с мастером
+\item <<trigger\_file>>~--- указываем триггер-файл, при наличии которого будет остановлена репликация.
+\item <<restore\_command>>~--- команда, которой будет востанавливатся WAL логи. В нашем случае через 
+scp копируем с masterdb (masterdb\_host - хост masterdb).
+\end{itemize}
+
+Теперь мы можем запустить PostgreSQL на slavedb.
+
+\subsubsection{Тестирование репликации}
+Теперь мы можем посмотреть отставание слейвов от мастера с помощью таких команд:
+\begin{lstlisting}[label=lst:streaming15,caption=Тестирование репликации]
+$ psql -c "SELECT pg_current_xlog_location()" -h192.168.0.10 (masterdb)
+ pg_current_xlog_location 
+--------------------------
+ 0/2000000
+(1 row)
+
+$ psql -c "select pg_last_xlog_receive_location()" -h192.168.0.20 (slavedb)
+ pg_last_xlog_receive_location 
+-------------------------------
+ 0/2000000
+(1 row)
+
+$ psql -c "select pg_last_xlog_replay_location()" -h192.168.0.20 (slavedb)
+ pg_last_xlog_replay_location 
+------------------------------
+ 0/2000000
+(1 row)
+\end{lstlisting}
+
+Еще проверить работу репликации можно с помощью утилиты ps:
+\begin{lstlisting}[label=lst:streaming16,caption=Тестирование репликации]
+[masterdb] $ ps -ef | grep sender
+postgres  6879  6831  0 10:31 ?        00:00:00 postgres: wal sender process postgres 127.0.0.1(44663) streaming 0/2000000
+
+[slavedb] $ ps -ef | grep receiver
+postgres  6878  6872  1 10:31 ?        00:00:01 postgres: wal receiver process   streaming 0/2000000
+\end{lstlisting}
+
