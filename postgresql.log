@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  28 OCT 2010 02:19
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  28 OCT 2010 02:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2922,7 +2922,7 @@ e/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share
 /texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (117 pages, 984650 bytes).
+Output written on postgresql.pdf (117 pages, 984648 bytes).
 PDF statistics:
  2813 PDF objects out of 2984 (max. 8388607)
  1620 named destinations out of 1728 (max. 500000)
