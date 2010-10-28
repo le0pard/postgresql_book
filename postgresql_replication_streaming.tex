@@ -219,6 +219,29 @@ postgres  6879  6831  0 10:31 ?        00:00:00 postgres: wal sender process pos
 postgres  6878  6872  1 10:31 ?        00:00:01 postgres: wal receiver process   streaming 0/2000000
 \end{lstlisting}
 
+Теперь проверим реприкацию. Выполним на мастере:
+\begin{lstlisting}[language=SQL,label=lst:streaming17,caption=Выполняем на мастере]
+$psql test_db
+test_db=# create table test3(id int not null primary key,name varchar(20));
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "test3_pkey" for table "test3"
+CREATE TABLE
+test_db=# insert into test3(id, name) values('1', 'test1');
+INSERT 0 1
+test_db=#
+\end{lstlisting}
+
+Теперь проверим на слейве:
+\begin{lstlisting}[language=SQL,label=lst:streaming18,caption=Выполняем на слейве]
+$psql test_db
+test_db=# select * from test3;
+ id | name  
+----+-------
+  1 | test1
+(1 row)
+\end{lstlisting}
+
+Как видим, таблица с данными успешно скопирована с мастера на слейв. 
+
 \subsection{Общие задачи}
 \subsubsection{Переключение на слейв при падении мастера}
 Достаточно создать триггер-файл (trigger\_file) на слейве, который становится мастером.
