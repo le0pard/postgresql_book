@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  30 OCT 2010 17:55
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  30 OCT 2010 18:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3084,7 +3084,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  19583 strings out of 494818
  279398 string characters out of 1178666
- 591754 words of memory out of 3000000
+ 592975 words of memory out of 3000000
  20243 multiletter control sequences out of 15000+50000
  25666 words of font info for 65 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
@@ -3103,7 +3103,7 @@ e/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share
 /texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (127 pages, 1036357 bytes).
+Output written on postgresql.pdf (127 pages, 1037009 bytes).
 PDF statistics:
  3084 PDF objects out of 3580 (max. 8388607)
  1800 named destinations out of 2073 (max. 500000)
