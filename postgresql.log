@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  31 OCT 2010 18:09
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  31 OCT 2010 18:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -962,22 +962,17 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 
 ] [4]
 Overfull \hbox (2.03697pt too wide) detected at line 141
- \T2A/cmr/bx/n/12 106
+ \T2A/cmr/bx/n/12 107
  []
 
 
 Overfull \hbox (2.03697pt too wide) detected at line 164
- \T2A/cmr/bx/n/12 122
+ \T2A/cmr/bx/n/12 123
  []
 
 
 Overfull \hbox (2.03697pt too wide) detected at line 168
- \T2A/cmr/bx/n/12 125
- []
-
-
-Overfull \hbox (2.03697pt too wide) detected at line 176
- \T2A/cmr/bx/n/12 132
+ \T2A/cmr/bx/n/12 126
  []
 
 ) (./postgresql_introduction.tex [5]) (./postgresql_performance_begin.tex
@@ -2293,7 +2288,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-[89] <images/hdfsarchitecture.pdf, id=2020, 877.2775pt x 606.265pt>
+[89] <images/hdfsarchitecture.pdf, id=2010, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [90]
@@ -3256,9 +3251,7 @@ Overfull \hbox (15.31818pt too wide) in paragraph at lines 190--193
 -строй-ки непре-
  []
 
-) (./postgresql_9.tex [130] [131]) [132
-
-]
+) [130] [131]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
@@ -3268,10 +3261,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 19694 strings out of 494818
- 282025 string characters out of 1178666
+ 19684 strings out of 494818
+ 281883 string characters out of 1178666
  595964 words of memory out of 3000000
- 20277 multiletter control sequences out of 15000+50000
+ 20273 multiletter control sequences out of 15000+50000
  25666 words of font info for 65 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -3289,9 +3282,9 @@ e/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share
 /texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (132 pages, 1062853 bytes).
+Output written on postgresql.pdf (131 pages, 1059630 bytes).
 PDF statistics:
- 3171 PDF objects out of 3580 (max. 8388607)
- 1846 named destinations out of 2073 (max. 500000)
- 886 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3157 PDF objects out of 3580 (max. 8388607)
+ 1843 named destinations out of 2073 (max. 500000)
+ 870 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -173,5 +173,3 @@
 \contentsline {section}{\numberline {8.4}\IeC {\CYRN }\IeC {\cyre }\IeC {\cyrp }\IeC {\cyrr }\IeC {\cyre }\IeC {\cyrr }\IeC {\cyrery }\IeC {\cyrv }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyre } \IeC {\cyrr }\IeC {\cyre }\IeC {\cyrz }\IeC {\cyre }\IeC {\cyrr }\IeC {\cyrv }\IeC {\cyrn }\IeC {\cyro }\IeC {\cyre } \IeC {\cyrk }\IeC {\cyro }\IeC {\cyrp }\IeC {\cyri }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{129}{section.1702}
 \contentsline {subsection}{\IeC {\CYRN }\IeC {\cyra }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrishrt }\IeC {\cyrk }\IeC {\cyra }}{130}{section*.1703}
 \contentsline {section}{\numberline {8.5}\IeC {\CYRZ }\IeC {\cyra }\IeC {\cyrk }\IeC {\cyrl }\IeC {\cyryu }\IeC {\cyrch }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{130}{section.1713}
-\contentsline {chapter}{\chapternumberline {9}PostgreSQL 9 (\IeC {\cyrb }\IeC {\cyro }\IeC {\cyrn }\IeC {\cyru }\IeC {\cyrs })}{132}{chapter.1714}
-\contentsline {section}{\numberline {9.1}\IeC {\CYRV }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre }}{132}{section.1715}
