@@ -572,14 +572,163 @@ pgpool-II будет посылать запросы INSERT/UPDATE/DELETE на M
 
 В Master/Slave режиме replication\_mode должен быть установлен false, а master\_slave\_mode~--- true.
 
+\subsection{Streaming Replication (Потоковая репликация)}
+В master-slave режиме с потоковой репликацией, если мастер или слейв упал, возможно использовать 
+отказоустоичивый функционал внутри pgpool-II. Автоматически отключив упавший нод PostgreSQL, pgpool-II переключится на следующий 
+слейв как на новый мастер (при падении мастера), или останется работать на мастере (при падении слейва). 
+В потоковой репликации, когда слейв становится мастером, требуется создать триггер файл 
+(который указан в recovery.conf, параметр <<trigger\_file>>), чтобы PostgreSQL перешел из режима 
+восстановления в нормальный. Для этого можно создать небольшой скрипт:
+\begin{lstlisting}[label=lst:pgpool40,caption=Скрипт выполняется при падении нода PostgreSQL]
+#! /bin/sh
+# Failover command for streming replication.
+# This script assumes that DB node 0 is primary, and 1 is standby.
+# 
+# If standby goes down, does nothing. If primary goes down, create a
+# trigger file so that standby take over primary node.
+#
+# Arguments: $1: failed node id. $2: new master hostname. $3: path to
+# trigger file.
+
+failed_node=$1
+new_master=$2
+trigger_file=$3
+
+# Do nothing if standby goes down.
+if [ $failed_node = 1 ]; then
+	exit 0;
+fi
+
+# Create trigger file.
+/usr/bin/ssh -T $new_master /bin/touch $trigger_file
+
+exit 0;
+\end{lstlisting}
+
+Работает он просто: если падает слейв~--- скрипт ничего не выполняет, при падении мастера~--- 
+создает триггер файл на новом мастере. Сохраним этот файл под именем <<failover\_stream.sh>> и 
+в pgpool.conf добавим:
+\begin{lstlisting}[label=lst:pgpool41,caption=Что выполнять при падении нода]
+failover_command = '/path_to_script/failover_stream.sh %d %H /tmp/trigger_file'
+\end{lstlisting}
+где <</tmp/trigger\_file>>~--- триггер файл, указаный в конфиге recovery.conf.
+
+Теперь, если мастер СУБД упадет, слейв будет переключен с режима восстановления в обычный и сможет принимать запросы на запись.
+
 \section{Онлайн востановление}
 pgpool-II, в режиме репликации, может синхронизировать базы данных и добавлять их как ноды к pgpool. 
 Называется это <<онлайн восстановление>>. Этот метод также может быть использован, когда нужно вернуть 
 в репликацию упавший нод базы данных.
 
-В данной статье не будет рассматриватся, как настроить онлайн восстановление. Данную информацию можно подчеркнуть из \\
-http://pgpool.projects.postgresql.org/pgpool-II/doc/pgpool-en.html\#online-recovery или \\
-http://pgpool.projects.postgresql.org/contrib\_docs/pgpool-II\_for\_beginners.pdf
+Вся процедура выполняется в два задания. Несколько секунд или минут клиента может ждать подключения к pgpool, 
+в то время как восстановливается узел базы данных. Онлайн востановление состоит из следующих шагов:
+\begin{itemize}
+\item CHECKPOINT;
+\item Первый этап восстановления;
+\item Ждем, пока все клиенты не отключатся;
+\item CHECKPOINT;
+\item Второй этап восстановления;
+\item Запуск postmaster (выполнить pgpool\_remote\_start);
+\item Восстанавливаем нод СУБД;
+\end{itemize}
+
+Для работы онлайн восстановления потребуется указать следующие параметры:
+\begin{itemize}
+\item \textbf{backend\_data\_directory}
+
+Каталог данных определенного PostgreSQL кластера.
+
+\item \textbf{recovery\_user}
+
+Имя пользователя PostgreSQL.
+
+\item \textbf{recovery\_password}
+
+Пароль пользователя PostgreSQL.
+
+\item \textbf{recovery\_1st\_stage\_command}
+
+Параметр указывает команду для первого этапа онлайн восстановления. 
+Файл с командами должен быть помещен в каталог данных СУБД кластера из-за проблем безопасности. 
+Например, если \\recovery\_1st\_stage\_command = 'some\_script', 
+то pgpool-II выполнит \$PGDATA/some\_script. 
+Обратите внимание, что pgpool-II принимает подключения и запросы в то время как выполняется recovery\_1st\_stage.
+
+\item \textbf{recovery\_2nd\_stage\_command}
+
+Параметр указывает команду для второго этапа онлайн восстановления. 
+Файл с командами должен быть помещен в каталог данных СУБД кластера из-за проблем безопасности. 
+Например, если \\recovery\_2st\_stage\_command = 'some\_script', 
+то pgpool-II выполнит \$PGDATA/some\_script. 
+Обратите внимание, что pgpool-II НЕ принимает подключения и запросы в то время как выполняется recovery\_2st\_stage.
+Таким образом, pgpool-II будет ждать, пока все клиенты не закроют подключения.
+
+\end{itemize}
+
+
+\subsection{Streaming Replication (Потоковая репликация)}
+В master-slave режиме с потоковой репликацией, онлайн восстановление отличное средство вернуть назад упавший нод PostgreSQL. 
+Вернуть возможно только слейв ноды, таким методом не восстановить упавший мастер. Для восстановления мастера потребуется остановить 
+все PostgreSQL ноды и pgpool-II (для восстановления из резервной копии мастера).
+
+Для настройки онлайн восстановления нам потребуется:
+\begin{itemize}
+\item Установить <<recovery\_user>>. Обычно это <<postgres>>.
+
+\begin{lstlisting}[label=lst:pgpool42,caption=recovery\_user]
+recovery_user = 'postgres'
+\end{lstlisting}
+\item Установить <<recovery\_password>> для <<recovery\_user>> для подключения к СУБД.
+
+\begin{lstlisting}[label=lst:pgpool43,caption=recovery\_password]
+recovery_password = 'some_password'
+\end{lstlisting}
+
+\item Настроить <<recovery\_1st\_stage\_command>>. Для этого создадим скрипт basebackup.sh 
+и положим его в папку с данными мастера (\$PGDATA), установив ему права на выполнение.
+Содержание скрипта:
+\begin{lstlisting}[label=lst:pgpool44,caption=basebackup.sh]
+#! /bin/sh
+# Recovery script for streaming replication.
+# This script assumes that DB node 0 is primary, and 1 is standby.
+#
+datadir=$1
+desthost=$2
+destdir=$3
+
+psql -c "SELECT pg_start_backup('Streaming Replication', true)" postgres
+
+rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid \
+--exclude postmaster.opts --exclude pg_log --exclude pg_xlog \
+--exclude recovery.conf $datadir/ $desthost:$destdir/
+
+ssh -T localhost mv $destdir/recovery.done $destdir/recovery.conf
+
+psql -c "SELECT pg_stop_backup()" postgres
+\end{lstlisting}
+
+При восстановления слейва, скрипт запускает бэкап мастера и через rsync передает данные с мастера на слейв. 
+Для этого необходимо настроить SSH так, чтобы <<recovery\_user>> мог логинится с мастера на слейв без пароля.
+
+Далее добавим скрипт на выполнение для первого этапа онлайн востановления:
+\begin{lstlisting}[label=lst:pgpool45,caption=recovery\_1st\_stage\_command]
+recovery_1st_stage_command = 'basebackup.sh'
+\end{lstlisting}
+
+\item Оставляем <<recovery\_2nd\_stage\_command>> пустым. После успешного выполнения первого этапа онлайн восстановления, 
+разницу в данных, что успели записатся во время работы скрипта basebackup.sh, слейв заберет через WAL файлы с мастера.
+\item Устанавливаем C и SQL функции для работы онлайн востановления в каждый нод СУБД.
+\begin{lstlisting}[label=lst:pgpool46,caption=Устанавливаем C и SQL функции]
+$ cd pgpool-II-x.x.x/sql/pgpool-recovery
+$ make
+$ make install
+$ psql -f pgpool-recovery.sql template1
+\end{lstlisting}
+  
+\end{itemize}
+
+Вот и все. Теперь возможно использовать <<pcp\_recovery\_node>> для онлайн восстановления упарших слейвов.
+
 
 \section{Заключение}
 PgPool-II~--- прекрасное средство, которое нужно применять при масштабировании PostgreSQL.

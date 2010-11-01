@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  1 NOV 2010 23:49
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 01:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -966,13 +966,13 @@ Overfull \hbox (2.03697pt too wide) detected at line 141
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 164
- \T2A/cmr/bx/n/12 126
+Overfull \hbox (2.03697pt too wide) detected at line 166
+ \T2A/cmr/bx/n/12 130
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 168
- \T2A/cmr/bx/n/12 129
+Overfull \hbox (2.03697pt too wide) detected at line 170
+ \T2A/cmr/bx/n/12 133
  []
 
 ) (./postgresql_introduction.tex [5]) (./postgresql_performance_begin.tex
@@ -2288,7 +2288,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-[89] <images/hdfsarchitecture.pdf, id=2010, 877.2775pt x 606.265pt>
+[89] <images/hdfsarchitecture.pdf, id=2020, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [90]
@@ -2719,12 +2719,12 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 636--636
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 )
-Overfull \hbox (3.6668pt too wide) in paragraph at lines 655--660
+Overfull \hbox (3.6668pt too wide) in paragraph at lines 659--664
 \T2A/cmr/m/n/12 ви-лах ли-цен-зи-ро-ва-ния, что и Hadoop. Хо-тя про-из-во-ди-те
 ль-ность HadoopDB,
  []
 
-) (./postgresql_clustering_end.tex [108]) (./postgresql_pgpool.tex [109]
+[108]) (./postgresql_clustering_end.tex) (./postgresql_pgpool.tex [109]
 [110
 
 ]
@@ -3068,24 +3068,148 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 555--555
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
 ) [124]
-Overfull \hbox (38.77647pt too wide) in paragraph at lines 580--583
-\T2A/cmr/m/n/12 http://pgpool.projects.postgresql.org/pgpool-II/doc/pgpool-en.h
-tml#online-recovery
+Overfull \hbox (9.8754pt too wide) in paragraph at lines 576--582
+\T2A/cmr/m/n/12 упал, воз-мож-но ис-поль-зо-вать от-ка-зо-у-сто-и-чи-вый функ-ц
+и-о-нал внут-ри pgpool-
  []
 
 
-Overfull \hbox (19.98102pt too wide) in paragraph at lines 580--583
-\T2A/cmr/m/n/12 http://pgpool.projects.postgresql.org/contrib_docs/pgpool-II_fo
-r_beginners.pdf 
+Overfull \hbox (6.0pt too wide) in paragraph at lines 582--582
+[][][][][][][] 
  []
 
-) (./postgresql_connection_pooling.tex [125]
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [125]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 611--611
+[][][][][][][] 
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+) [126]
+Overfull \hbox (29.26395pt too wide) in paragraph at lines 651--656
+\T2A/cmr/m/n/12 ет под-клю-че-ния и за-про-сы в то вре-мя как вы-пол-ня-ет-ся r
+ecovery_1st_stage. 
+ []
+
+
+Overfull \hbox (42.96893pt too wide) in paragraph at lines 659--665
+\T2A/cmr/m/n/12 ма-ет под-клю-че-ния и за-про-сы в то вре-мя как вы-пол-ня-ет-с
+я recovery_2st_stage.
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 678--678
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 678--678
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 678--678
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 683--683
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 683--683
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 683--683
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (13.76347pt too wide) in paragraph at lines 687--690
+[]\T2A/cmr/m/n/12 Настроить <<recovery_1st_stage_command>>. Для это-го со-зда-д
+им скрипт
+ []
+
+
+Overfull \hbox (0.94301pt too wide) in paragraph at lines 687--690
+\T2A/cmr/m/n/12 basebackup.sh и по-ло-жим его в пап-ку с дан-ны-ми ма-сте-ра ($
+PGDATA),
+ []
+
+[127]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 690--690
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 690--690
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 690--690
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 714--714
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 714--714
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 714--714
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+)
+Overfull \hbox (3.16039pt too wide) in paragraph at lines 718--720
+\T2A/cmr/m/n/12 дан-ных, что успе-ли за-пи-сат-ся во вре-мя ра-бо-ты скрип-та b
+asebackup.sh,
+ []
+
+[128]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 721--721
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 721--721
+[] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 721--721
+
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(./postgresql_connection_pooling.tex [129]
 Overfull \hbox (23.09772pt too wide) in paragraph at lines 7--11
 \T2A/cmr/m/n/12 чи-ва-ет боль-шое ко-ли-че-ство со-еди-не-ний. Это так-же важ-н
 о для веб-приложений,
  []
 
-[126
+[130
 
 ]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 44--44
@@ -3108,8 +3232,8 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 65--65
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [127])
-(./postgresql_backup_and_restore.tex [128] [129
+) [131])
+(./postgresql_backup_and_restore.tex [132] [133
 
 ]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 30--30
@@ -3153,7 +3277,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 60--60
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [130]
+) [134]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 72--72
 [][][][][][][] 
  []
@@ -3238,7 +3362,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--93
 
 (/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
 File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
-) [131]
+) [135]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 101--101
 [][][][][][][] 
  []
@@ -3285,7 +3409,7 @@ Overfull \hbox (3.18768pt too wide) in paragraph at lines 126--127
 е с та-ко-го бэка-
  []
 
-[132] [133]
+[136] [137]
 Overfull \hbox (12.63608pt too wide) in paragraph at lines 166--168
 \T2A/cmr/m/n/12 пи-ро-вать WAL фай-лы в ар-хив-ный ка-та-лог из стан-дарт-но-го
  ка-та-ло-га pg_xlog.
@@ -3318,7 +3442,7 @@ Overfull \hbox (15.31818pt too wide) in paragraph at lines 190--193
 -строй-ки непре-
  []
 
-) [134] [135]
+) [138] [139]
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
@@ -3328,10 +3452,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 19788 strings out of 494818
- 283658 string characters out of 1178666
- 596536 words of memory out of 3000000
- 20288 multiletter control sequences out of 15000+50000
+ 19896 strings out of 494818
+ 285652 string characters out of 1178666
+ 597781 words of memory out of 3000000
+ 20321 multiletter control sequences out of 15000+50000
  25666 words of font info for 65 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -3349,9 +3473,9 @@ e/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share
 /texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (135 pages, 1079527 bytes).
+Output written on postgresql.pdf (139 pages, 1101112 bytes).
 PDF statistics:
- 3264 PDF objects out of 3580 (max. 8388607)
- 1922 named destinations out of 2073 (max. 500000)
- 870 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3359 PDF objects out of 3580 (max. 8388607)
+ 1983 named destinations out of 2073 (max. 500000)
+ 886 words of extra memory for PDF output out of 10000 (max. 10000000)
 
