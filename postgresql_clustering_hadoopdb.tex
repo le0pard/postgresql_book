@@ -349,13 +349,13 @@ hive> quit;
 \end{lstlisting}
 
 \subsubsection{Тестирование}
-Теперь проведем тестирование. Скачаем бенчмарк:
+Теперь проведем тестирование. Для этого скачаем бенчмарк:
 \begin{lstlisting}[label=lst:haddop19,caption=Тестирование]
 svn co http://graffiti.cs.brown.edu/svn/benchmarks/
 cd benchmarks/datagen/teragen
 \end{lstlisting}
 
-Изменим скрипт benchmarks/datagen/teragen/teragen.pl:
+Изменим скрипт benchmarks/datagen/teragen/teragen.pl к виду:
 \begin{lstlisting}[language=Java,label=lst:haddop20,caption=Тестирование]
 use strict;
 use warnings;
@@ -456,6 +456,19 @@ java -cp $HADOOP_HOME/lib/hadoopdb.jar \
 hadoop dfs -put HadoopDB.xml HadoopDB.xml
 \end{lstlisting}
 
+Также возможно создать конфиг для создания репликации командой:
+\begin{lstlisting}[label=lst:haddop23:1,caption=Репликация]
+java -cp hadoopdb.jar edu.yale.cs.hadoopdb.catalog.SimpleRandomReplicationFactorTwo Catalog.properties
+\end{lstlisting}
+
+Инструмент генерирует новый файл HadoopDB.xml, в котором случайные порции данных реплицируются на все узлы.
+После этого не забываем обновить конфиг на HDFS:
+\begin{lstlisting}[label=lst:haddop23:2,caption=Обновляем конфиг]
+hadoop dfs -rmr HadoopDB.xml
+hadoop dfs -put HadoopDB.xml HadoopDB.xml
+\end{lstlisting}
+и поставить <<true>> для <<hadoopdb.config.replication>> в HADOOP\_HOME/conf/hadoop-site.xml.
+
 Теперь мы готовы проверить работы HadoopDB. Теперь можем протестировать поиск по данным, загруженым ранее в БД и HDFS:
 \begin{lstlisting}[label=lst:haddop24,caption=Тестирование]
 java -cp $CLASSPATH:hadoopdb.jar \
@@ -550,10 +563,91 @@ psql>
 
 Значения совадают. Все работает как требуется.
 
+Проведем еще один тест. Добавим данные в PostgreSQL:
+\begin{lstlisting}[label=lst:haddop27:1,caption=Тестирование]
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybe');
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybewqe');
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybewqesad');
+psql> INSERT into grep(key1, field) VALUES(':)', 'May cool string!');
+\end{lstlisting}
+
+Теперь проверим через HadoopDB:
+\begin{lstlisting}[label=lst:haddop27:2,caption=Тестирование]
+$ java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.benchmark.GrepTaskDB -pattern %May% -output padraig -hadoopdb.config.file /opt/hadoop/conf/HadoopDB.xml
+padraig
+01.11.2010 23:14:45 edu.yale.cs.hadoopdb.exec.DBJobBase initConf
+INFO: SELECT key1, field FROM grep WHERE field LIKE '%%May%%';
+01.11.2010 23:14:46 org.apache.hadoop.metrics.jvm.JvmMetrics init
+INFO: Initializing JVM Metrics with processName=JobTracker, sessionId=
+01.11.2010 23:14:46 org.apache.hadoop.mapred.JobClient configureCommandLineOptions
+WARNING: Use GenericOptionsParser for parsing the arguments. Applications should implement Tool for the same.
+01.11.2010 23:14:46 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Running job: job_local_0001
+01.11.2010 23:14:46 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Data locality failed for leo-pgsql
+01.11.2010 23:14:46 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Task from leo-pgsql is connecting to chunk 0 on host localhost with db url jdbc:postgresql://localhost:5434/grep0
+01.11.2010 23:14:47 org.apache.hadoop.mapred.MapTask runOldMapper
+INFO: numReduceTasks: 0
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: DB times (ms): connection = 181, query execution = 22, row retrieval  = 96
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: Rows retrieved = 4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task done
+INFO: Task:attempt_local_0001_m_000000_0 is done. And is in the process of commiting
+01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task commit
+INFO: Task attempt_local_0001_m_000000_0 is allowed to commit now
+01.11.2010 23:14:47 org.apache.hadoop.mapred.FileOutputCommitter commitTask
+INFO: Saved output of task 'attempt_local_0001_m_000000_0' to file:/home/hadoop/padraig
+01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task sendDone
+INFO: Task 'attempt_local_0001_m_000000_0' done.
+01.11.2010 23:14:47 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO:  map 100% reduce 0%
+01.11.2010 23:14:47 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Job complete: job_local_0001
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO: Counters: 6
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:   FileSystemCounters
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_READ=141345
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_WRITTEN=153291
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:   Map-Reduce Framework
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map input records=4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Spilled Records=0
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map input bytes=4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map output records=4
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.exec.DBJobBase run
+INFO: 
+JOB TIME : 2332 ms.
+\end{lstlisting}
+
+Как паттерн поиска я задал <<May>>. В логах можно увидеть как производится поиск. На выходе получаем:
+\begin{lstlisting}[label=lst:haddop26:3,caption=Тестирование]
+$ cd padraig
+$ cat part-00000
+I am live!	Maybe
+I am live!	Maybewqe
+I am live!	Maybewqesad
+:)	May cool string!
+\end{lstlisting}
+
+Более подробно по HadoopDB можно почитать по данной ссылке \\http://hadoopdb.sourceforge.net/guide/quick\_start\_guide.html.
+
 
 \subsection{Заключение}
-В данной статье не показывается, как настроить Hive для работы с HadoopDB. Эта книга не сможет учесть все, 
-что требуется для работы c Hadoop. Назначение этой главы - дать основу для работы с Hadoop и HaddopDB.
+В данной статье не показывается, как работать с Hive, как более проще работать с HadoopDB. Эта книга не сможет учесть все, 
+что требуется для работы c Hadoop. Назначение этой главы~--- дать основу для работы с Hadoop и HaddopDB.
 
 HadoopDB не заменяет Hadoop. Эти системы сосуществуют, позволяя аналитику выбирать соответствующие средства в зависимости 
 от имеющихся данных и задач.
