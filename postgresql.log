@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 02:06
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 02:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -877,8 +877,23 @@ Redoing nameref's label
 (/usr/share/texmf-texlive/tex/latex/ucs/data/uni-4.def
 File: uni-4.def 2004/10/17 UCS: Unicode data U+0400..U+04FF
 )
-Underfull \hbox (badness 10000) in paragraph at lines 12--12
+Overfull \hbox (35.7008pt too wide) in paragraph at lines 13--13
+ [][] 
+ []
 
+
+Overfull \hbox (35.7008pt too wide) in paragraph at lines 13--13
+ [] 
+ []
+
+
+Overfull \hbox (35.7008pt too wide) in paragraph at lines 13--13
+ [][] 
+ []
+
+
+Overfull \hbox (35.7008pt too wide) in paragraph at lines 13--13
+ [] 
  []
 
 [1
@@ -935,10 +950,22 @@ Overfull \hbox (9.2845pt too wide) in paragraph at lines 8--10
 @gmail.com, 
  []
 
+
+Overfull \hbox (26.43796pt too wide) in paragraph at lines 22--24
+[]\T2A/cmr/m/n/12 Шардинг, пар-ти-ци-о-ни-ро-ва-ние, ре-пли-ка-ция - за-чем и к
+о-гда?, Den Golotyuk, 
+ []
+
+
+Overfull \hbox (38.26985pt too wide) in paragraph at lines 22--24
+\T2A/cmr/m/n/12 http://highload.com.ua/index.php/2009/05/06/шардинг-партиционир
+ование-
+ []
+
 [2
 
 ])
-LaTeX Font Info:    Try loading font information for T2A+cmss on input line 20.
+LaTeX Font Info:    Try loading font information for T2A+cmss on input line 21.
 
  (/usr/share/texmf-texlive/tex/latex/cyrillic/t2acmss.fd
 File: t2acmss.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
@@ -3441,11 +3468,11 @@ Overfull \hbox (15.31818pt too wide) in paragraph at lines 190--193
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 19898 strings out of 494818
- 285690 string characters out of 1178666
- 597977 words of memory out of 3000000
- 20323 multiletter control sequences out of 15000+50000
- 25666 words of font info for 65 fonts, out of 3000000 for 9000
+ 19901 strings out of 494818
+ 285722 string characters out of 1178666
+ 598424 words of memory out of 3000000
+ 20325 multiletter control sequences out of 15000+50000
+ 26350 words of font info for 66 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.en
@@ -3453,16 +3480,16 @@ c}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf
 -texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type
 1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
 bx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/sha
-re/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1
-/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
-m0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/shar
-e/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
-1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1
-728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (139 pages, 1101112 bytes).
+re/texmf/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfcc1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
+m0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
+1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share
+/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/p
+ublic/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1
+200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on postgresql.pdf (139 pages, 1109937 bytes).
 PDF statistics:
  3359 PDF objects out of 3580 (max. 8388607)
  1983 named destinations out of 2073 (max. 500000)

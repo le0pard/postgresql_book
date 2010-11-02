@@ -717,7 +717,7 @@ recovery_1st_stage_command = 'basebackup.sh'
 
 \item Оставляем <<recovery\_2nd\_stage\_command>> пустым. После успешного выполнения первого этапа онлайн восстановления, 
 разницу в данных, что успели записатся во время работы скрипта basebackup.sh, слейв заберет через WAL файлы с мастера.
-\item Устанавливаем C и SQL функции для работы онлайн востановления в каждый нод СУБД.
+\item Устанавливаем C и SQL функции для работы онлайн востановления на каждый нод СУБД.
 \begin{lstlisting}[label=lst:pgpool46,caption=Устанавливаем C и SQL функции]
 $ cd pgpool-II-x.x.x/sql/pgpool-recovery
 $ make
