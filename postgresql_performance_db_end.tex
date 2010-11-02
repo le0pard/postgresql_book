@@ -164,9 +164,9 @@ PostgreSQL расширение стандарта SQL, позволяющее, 
 запроса индекс первичного ключа таблицы, всё равно потребуется чтение записей собственно из файла таблицы.
 
 \textbf{Проблема} Запрос вида
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:sql_performance1,caption=SQL]
 SELECT count(*) FROM foo;
-\end{verbatim}
+\end{lstlisting}
 осуществляет полный просмотр таблицы foo, что весьма долго для таблиц с большим количеством записей.
 
 \textbf{Решение} Простого решения проблемы, к сожалению, нет. Возможны следу-
@@ -175,9 +175,9 @@ SELECT count(*) FROM foo;
 \item Если точное число записей не важно, а важен порядок\footnote{<<на нашем форуме более 10000 зарегистрированных 
 пользователей, оставивших более 50000 сообщений!>>}, то можно использовать информацию о количестве 
 записей в таблице, собранную при выполнении команды ANALYZE:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:sql_performance2,caption=SQL]
 SELECT reltuples FROM pg_class WHERE relname = 'foo';
-\end{verbatim}
+\end{lstlisting}
 \item Если подобные выборки выполняются часто, а изменения в таблице достаточно редки, то можно завести вспомогательную 
 таблицу, хранящую число записей в основной. На основную же таблицу повесить триггер, который будет уменьшать это число 
 в случае удаления записи и увеличивать в случае вставки. Таким образом, для получения количества записей потребуется лишь 
@@ -188,9 +188,8 @@ SELECT reltuples FROM pg_class WHERE relname = 'foo';
 \subsubsection{Медленый DISTINCT}
 Текущая реализация DISTINCT для больших таблиц очень медленна. Но возможно использовать GROUP BY взамен DISTINCT. 
 GROUP BY может использовать агрегирующий хэш, что значительно быстрее, чем DISTINCT.
-\begin{verbatim}
-DISTINCT
 
+\begin{lstlisting}[language=SQL,label=lst:sql_performance3,caption=DISTINCT]
 postgres=# select count(*) from (select distinct i from g) a;
  count 
 -------
@@ -199,7 +198,7 @@ postgres=# select count(*) from (select distinct i from g) a;
 
 Time: 580,553 ms
 
-Второй раз:
+
 postgres=# select count(*) from (select distinct i from g) a;
  count 
 -------
@@ -207,10 +206,9 @@ postgres=# select count(*) from (select distinct i from g) a;
 (1 row)
 
 Time: 36,281 ms
+\end{lstlisting}
 
-
-GROUP BY
-
+\begin{lstlisting}[language=SQL,label=lst:sql_performance4,caption=GROUP BY]
 postgres=# select count(*) from (select i from g group by i) a;
  count 
 -------
@@ -219,7 +217,7 @@ postgres=# select count(*) from (select i from g group by i) a;
 
 Time: 26,562 ms
 
-Второй раз:
+
 postgres=# select count(*) from (select i from g group by i) a;
  count 
 -------
@@ -228,7 +226,7 @@ postgres=# select count(*) from (select i from g group by i) a;
 
 Time: 25,270 ms
 
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Оптимизация запросов с помощью pgFouine}
 pgFouine\footnote{http://pgfouine.projects.postgresql.org/}~--- это 
@@ -242,17 +240,17 @@ pgFouine написан на языке программирования PHP с 
 Для работы с pgFouine сначала нужно сконфигурировать PostgreSQL для создания нужного формата log-файлов:
 \begin{itemize}
 \item Чтобы включить протоколирование в syslog
-\begin{verbatim}
+\begin{lstlisting}[label=lst:sql_performance5,caption=pgFouine]
 log_destination = 'syslog'
 redirect_stderr = off
 silent_mode = on
-\end{verbatim}
+\end{lstlisting}
 \item Для записи запросов, длящихся дольше n миллисекунд:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:sql_performance6,caption=pgFouine]
 log_min_duration_statement = n
 log_duration = off
 log_statement = 'none'
-\end{verbatim}
+\end{lstlisting}
 \end{itemize}
 
 Для записи каждого обработанного запроса установите log\_min\_duration\_statement на 0. 
@@ -260,14 +258,14 @@ log_statement = 'none'
 
 pgFouine~--- простой в использовании инструмент командной строки. Следующая команда создаёт 
 HTML-отчёт со стандартными параметрами:
-\begin{verbatim}
-$pgfouine.php -file your/log/file.log > your-report.html
-\end{verbatim}
+\begin{lstlisting}[label=lst:sql_performance7,caption=pgFouine]
+pgfouine.php -file your/log/file.log > your-report.html
+\end{lstlisting}
 
 С помощью этой строки можно отобразить текстовый отчёт с 10 запросами на каждый экран на стандартном выводе:
-\begin{verbatim}
-$ pgfouine.php -file your/log/file.log -top 10 -format text
-\end{verbatim}
+\begin{lstlisting}[label=lst:sql_performance8,caption=pgFouine]
+pgfouine.php -file your/log/file.log -top 10 -format text
+\end{lstlisting}
 
 Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайта проекта~--- 
 http://pgfouine.projects.postgresql.org.

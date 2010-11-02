@@ -69,30 +69,30 @@ RAM~--- размер памяти;
 Утилита проста в использовании и в многих Linux системах может идти в составе пакетов. 
 Если же нет, можно просто скачать архив и распаковать.
 Для начала:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:p_settings1,caption=Pgtune]
 pgtune -i $PGDATA/postgresql.conf \
 -o $PGDATA/postgresql.conf.pgtune
-\end{verbatim}
+\end{lstlisting}
 опцией 
-\begin{verbatim}-i, --input-config\end{verbatim} 
+\lstinline[frame=tblr]{-i, --input-config}
 указываем текущий файл postgresql.conf, 
 а 
-\begin{verbatim}-o, --output-config\end{verbatim}
+\lstinline[frame=tblr]{-o, --output-config}
 указываем имя файла для нового postgresql.conf.
 
 Есть также дополнительные опции для настройки конфига. 
 \begin{itemize}
 \item 
-\begin{verbatim}-M, --memory\end{verbatim}
+\lstinline[frame=single]{-M, --memory}
 Используйте этот параметр, чтобы определить общий объем системной памяти. 
 Если не указано, pgtune будет пытаться использовать текущий объем системной памяти.
 
 \item 
-\begin{verbatim}-T, --type\end{verbatim}
+\lstinline[frame=single]{-T, --type}
 Указывает тип базы данных. Опции: DW,  OLTP,  Web, Mixed, Desktop.
 
 \item 
-\begin{verbatim}-c, --connections\end{verbatim}
+\lstinline[frame=single]{-c, --connections}
 Указывает максимальное количество соединений. Если он не указан, это будет братся взависимости от типа базы данных.
 
 \end{itemize}

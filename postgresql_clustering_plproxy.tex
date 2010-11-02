@@ -31,9 +31,9 @@ failover-ом не только по узлам, но и по самим про�
 
 Так же можно установить PL/Proxy из репозитория пакетов. 
 Например в Ubuntu Server достаточно выполнить команду для PostgreSQL 8.4:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:plproxy1,caption=Установка]
 sudo aptitude install postgresql-8.4-plproxy
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Настройка}
 Для примера настройки используется 3 сервера PostgreSQL. 2 сервера пусть будут node1 и node2, 
@@ -44,14 +44,14 @@ sudo aptitude install postgresql-8.4-plproxy
 Для начала настроим node1 и node2. Команды написаные нижу нужно выполнять на каждом ноде.
 
 Создадим базу данных plproxytest(если её ещё нет):
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy2,caption=Настройка]
 CREATE DATABASE plproxytest
      WITH OWNER = postgres
        ENCODING = 'UTF8';
-\end{verbatim}
+\end{lstlisting}
 
 Добавляем табличку users:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy3,caption=Настройка]
 CREATE TABLE public.users
   (
    username character varying(255),
@@ -59,10 +59,10 @@ CREATE TABLE public.users
   )
   WITH (OIDS=FALSE);
 ALTER TABLE public.users OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
   
 Теперь создадим функцию для добавления данных в таблицу users:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy4,caption=Настройка]
 CREATE OR REPLACE FUNCTION public.insert_user(i_username text, 
 i_emailaddress   text)
 RETURNS integer AS
@@ -72,19 +72,19 @@ INSERT INTO public.users (username, email) VALUES ($1,$2);
 $BODY$
   LANGUAGE 'sql' VOLATILE;
 ALTER FUNCTION public.insert_user(text, text) OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
 
 С настройкой нодов закончено. Приступим к серверу proxy.
 
 Как и на всех нодах, на главном сервере (proxy) должна присутствовать база данных: 
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy5,caption=Настройка]
 CREATE DATABASE plproxytest
      WITH OWNER = postgres
        ENCODING = 'UTF8';
-\end{verbatim}
+\end{lstlisting}
 
 Теперь надо укзать серверу что эта база данных управляется с помощью pl/proxy:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy6,caption=Настройка]
 CREATE OR REPLACE FUNCTION public.plproxy_call_handler()
   RETURNS language_handler AS
 '$libdir/plproxy', 'plproxy_call_handler'
@@ -95,12 +95,12 @@ OWNER TO postgres;
 -- language
 CREATE LANGUAGE plproxy HANDLER plproxy_call_handler;
 CREATE LANGUAGE plpgsql;
-\end{verbatim}
+\end{lstlisting}
 
 Также, для того что бы сервер знал где и какие ноды него есть надо создать 
 3 сервисные функции которые pl/proxy будет использовать в своей работе. 
 Первая функция~--- конфиг для кластера баз данных. Тут указывается параметры через kay-value:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy7,caption=Настройка]
 CREATE OR REPLACE FUNCTION public.get_cluster_config
 (IN cluster_name text,   OUT "key" text, OUT val text)
   RETURNS SETOF record AS
@@ -118,11 +118,11 @@ $BODY$
   ROWS 1000;
 ALTER FUNCTION public.get_cluster_config(text) 
 OWNER TO postgres;  
-\end{verbatim}
+\end{lstlisting}
 
 Вторая важная функция код которой надо будет подправить. В ней надо будет указать DSN нод:
-\begin{verbatim}
-СREATE OR REPLACE FUNCTION 
+\begin{lstlisting}[language=SQL,label=lst:plproxy8,caption=Настройка]
+CREATE OR REPLACE FUNCTION 
 public.get_cluster_partitions(cluster_name text)
   RETURNS SETOF text AS
 $BODY$
@@ -140,10 +140,10 @@ $BODY$
   ROWS 1000;
 ALTER FUNCTION public.get_cluster_partitions(text) 
 OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
 
 И последняя:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy9,caption=Настройка]
 CREATE OR REPLACE FUNCTION 
 public.get_cluster_version(cluster_name text)
   RETURNS integer AS
@@ -159,10 +159,10 @@ $BODY$
   COST 100;
 ALTER FUNCTION public.get_cluster_version(text) 
 OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
 
 Ну и собственно самая главная функция которая будет вызываться уже непосредственно в приложении:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy10,caption=Настройка]
 CREATE OR REPLACE FUNCTION 
 public.insert_user(i_username text, i_emailaddress text)
   RETURNS integer AS
@@ -174,18 +174,18 @@ $BODY$
   COST 100;
 ALTER FUNCTION public.insert_user(text, text) 
 OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
 
 Все готово. Подключаемся к серверу proxy и заносим данные в базу:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy11,caption=Настройка]
 SELECT insert_user('Sven','sven@somewhere.com');
 SELECT insert_user('Marko', 'marko@somewhere.com');
 SELECT insert_user('Steve','steve@somewhere.com');
-\end{verbatim}
+\end{lstlisting}
 
 Пробуем извлечь данные.
 Для этого напишем новую серверную функцию: 
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy12,caption=Настройка]
 CREATE OR REPLACE FUNCTION 
 public.get_user_email(i_username text)
  RETURNS SETOF text AS
@@ -200,12 +200,12 @@ $BODY$
  ROWS 1000;
 ALTER FUNCTION public.get_user_email(text) 
 OWNER TO postgres;
-\end{verbatim}
+\end{lstlisting}
 
 И попробуем её вызвать:
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:plproxy13,caption=Настройка]
 select plproxy.get_user_email('Steve');
-\end{verbatim}
+\end{lstlisting}
 
 Если потом подключится к каждой ноде отдельно, то можно четко увидеть, что данные users разбросаны по таблицам каждой ноды.
 

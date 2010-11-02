@@ -9,7 +9,8 @@
 \begin{document}
 
 \pagestyle{empty}
-\titleGM
+%\titleGM
+\titleTMB
 \clearpage
 
 \input{postgresql_title}
@@ -24,6 +25,7 @@
 \setcounter{tocdepth}{2}% subsections and above
 \tableofcontents
 
+\input{postgresql_introduction}
 %performance begin
 \input{postgresql_performance_begin}
 \input{postgresql_performance_settings}
@@ -31,10 +33,14 @@
 \input{postgresql_performance_settings_sample}
 \input{postgresql_performance_db_end}
 %performance end
+%postgresql partitioning
+\input{postgresql_partitioning}
+%postgresql partitioning
 %replication begin
 \input{postgresql_replication_begin}
 \input{postgresql_replication_slony}
 \input{postgresql_replication_londiste}
+\input{postgresql_replication_streaming}
 \input{postgresql_replication_bucardo}
 \input{postgresql_replication_rubyrep}
 \input{postgresql_replication_end}
@@ -51,5 +57,8 @@
 %connection pooling begin
 \input{postgresql_connection_pooling}
 %connection pooling end
+%postgresql backup begin
+\input{postgresql_backup_and_restore}
+%postgresql backup end
 
 \end{document}          

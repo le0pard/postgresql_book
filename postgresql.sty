@@ -1,11 +1,25 @@
 \ProvidesPackage{postgresql}
-\RequirePackage{cmap,cite,enumerate,tabularx,textcomp,amssymb,amsmath,amsfonts,subfig,listings,longtable,multirow,comment}
+\RequirePackage{cite,enumerate,tabularx,textcomp,amssymb,amsmath,amsfonts,subfig,listings,longtable,multirow,comment}
 \RequirePackage{graphicx}
 \RequirePackage{indentfirst}
 \RequirePackage[T2A]{fontenc}
 \RequirePackage[utf8x]{inputenc}
 \RequirePackage[english,russian]{babel}
 \RequirePackage[unicode,hypertexnames=false]{hyperref}
+\RequirePackage{color,listings}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\lstset {language=bash,title=Листинг,tabsize=2,breaklines=true,breakatwhitespace=true}
+\lstset {caption=\lstname,keepspaces=true,title=Листинг}
+\lstset {numbers=left,numberblanklines=false,frame=B}
+\lstset {inputencoding=utf8x, extendedchars=\true}
+
+\usepackage{caption}
+
+\setlength{\epigraphwidth}{0.7\textwidth}
 
 %\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
 %\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}

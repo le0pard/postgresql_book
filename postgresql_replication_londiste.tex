@@ -27,14 +27,14 @@ Londiste представляет собой движок для организ�
 
 Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет. На таких системах, как Debian или Ubuntu skytools 
 можно найти в репозитории пакетов и поставить одной командой:
-\begin{verbatim}
-$sudo aptitude install skytools
-\end{verbatim}
+\begin{lstlisting}[label=lst:londiste1,caption=Установка]
+sudo aptitude install skytools
+\end{lstlisting}
 
 Но все же лучше скачать самую последнюю версию пакета с официального сайта~--- http://pgfoundry.org/projects/skytools. 
 На момент написания статьи последняя версия была 2.1.11. Итак, начнем:
 
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste2,caption=Установка]
 $wget http://pgfoundry.org/frs/download.php/2561/
 skytools-2.1.11.tar.gz
 $tar zxvf skytools-2.1.11.tar.gz
@@ -55,23 +55,23 @@ $cd ../
 # ставим skytools
 $dpkg -i skytools-modules-8.4_2.1.11_i386.deb 
 skytools_2.1.11_i386.deb
-\end{verbatim}
+\end{lstlisting}
 
 Для других систем можно собрать Skytools командами 
 
-\begin{verbatim}
-$./configure
-$make
-$make install
-\end{verbatim}
+\begin{lstlisting}[label=lst:londiste3,caption=Установка]
+./configure
+make
+make install
+\end{lstlisting}
 
 Дальше проверим, что все у нас правильно установилось
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste4,caption=Установка]
 $londiste.py -V
 Skytools version 2.1.11
 $pgqadm.py -V
 Skytools version 2.1.11
-\end{verbatim}
+\end{lstlisting}
 
 Если у Вас похожий вывод, значит все установленно правильно и можно приступать к настройке.
 
@@ -88,7 +88,7 @@ Skytools version 2.1.11
 Londiste требуется ticker для работы с мастер базой данных, который может быть запущен и на другой машине. 
 Но, конечно, лучше его запускать на той же, где и мастер база данных. Для этого мы настраиваем специальный 
 конфиг для ticker-а (пусть конфиг будет у нас /etc/skytools/db1-ticker.ini):
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste5,caption=Настройка ticker-а]
 [pgqadm]
 # название
 job_name = db1-ticker
@@ -107,25 +107,25 @@ loop_delay = 0.1
 # log и pid демона
 logfile = /var/log/%(job_name)s.log
 pidfile = /var/pid/%(job_name)s.pid
-\end{verbatim}
+\end{lstlisting}
 
 Теперь необходимо инсталлировать служебный код (SQL) и запустить ticker как демона для базы данных. 
 Делается это с помощью утилиты pgqadm.py следующими командами:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste6,caption=Настройка ticker-а]
 pgqadm.py /etc/skytools/db1-ticker.ini install
 pgqadm.py /etc/skytools/db1-ticker.ini ticker -d
-\end{verbatim}
+\end{lstlisting}
 
 Проверим, что в логах (/var/log/skytools/db1-tickers.log) всё нормально. На данном этапе там должны быть редкие записи (раз в минуту).
 
 Если нам потребуется остановить ticker, мы можем воспользоватся этой командой:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste7,caption=Настройка ticker-а]
 pgqadm.py /etc/skytools/db1-ticker.ini ticker -s
-\end{verbatim}
+\end{lstlisting}
 или если потребуется <<убить>> ticker:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste8,caption=Настройка ticker-а]
 pgqadm.py /etc/skytools/db1-ticker.ini ticker -k
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Востанавливаем схему базы}
 Londiste не умеет переносить изменения структуры базы данных. 
@@ -134,7 +134,7 @@ Londiste не умеет переносить изменения структу�
 \subsubsection{Создаём конфигурацию репликатора}
 Для каждой из реплицируемых баз создадим конфигурационные файлы 
 (пусть конфиг будет у нас /etc/skytools/db1-londiste.ini):
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste9,caption=Создаём конфигурацию репликатора]
 [londiste]
 # название
 job_name = db1-londiste
@@ -158,28 +158,28 @@ pidfile = /var/run/%(job_name)s.pid
 # рзмер лога
 log_size = 5242880
 log_count = 3
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Устанавливаем Londiste в базы на мастере и слейве}
 Теперь необходимо установить служебный SQL для каждой из созданных в предыдущем
 пункте конфигураций.
 
 Устанавливаем код на стороне мастера:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste10,caption=Londiste]
 londiste.py /etc/skytools/db1-londiste.ini provider install
-\end{verbatim}
+\end{lstlisting}
 и подобным образом на стороне слейва:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste11,caption=Londiste]
 londiste.py /etc/skytools/db1-londiste.ini subscriber install
-\end{verbatim}
+\end{lstlisting}
 
 После этого пункта на мастере будут созданы очереди для репликации.
 
 \subsubsection{Запускаем процессы Londiste}
 Для каждой реплицируемой базы делаем:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste12,caption=Запускаем]
 londiste.py /etc/skytools/db1-londiste.ini replay -d
-\end{verbatim}
+\end{lstlisting}
 
 Таким образом запустятся слушатели очередей репликации, но, т.к. мы ещё не
 указывали какие таблицы хотим реплицировать, они пока будут работать в холостую.
@@ -188,13 +188,13 @@ londiste.py /etc/skytools/db1-londiste.ini replay -d
 
 \subsubsection{Добавляем реплицируемые таблицы}
 Для каждой конфигурации указываем что будем реплицировать с мастера:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste13,caption=Добавляем реплицируемые таблицы]
 londiste.py /etc/skytools/db1-londiste.ini provider add --all
-\end{verbatim}
+\end{lstlisting}
 и что со слейва:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste14,caption=Добавляем реплицируемые таблицы]
 londiste.py /etc/skytools/db1-londiste.ini subscriber add --all
-\end{verbatim}
+\end{lstlisting}
 
 В данном примере я использую спец-параметр <<--all>>, который означает все таблицы,
 но вместо него вы можете перечислить список конкретных таблиц, если не хотите
@@ -203,13 +203,13 @@ londiste.py /etc/skytools/db1-londiste.ini subscriber add --all
 \subsubsection{Добавляем реплицируемые последовательности (sequence)}
 Так же для всех конфигураций.
 Для мастера:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste15,caption=Добавляем последовательности]
 londiste.py /etc/skytools/db1-londiste.ini provider add-seq --all
-\end{verbatim}
+\end{lstlisting}
 Для слейва:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste16,caption=Добавляем реплицируемые таблицы]
 londiste.py /etc/skytools/db1-londiste.ini subscriber add-seq --all
-\end{verbatim}
+\end{lstlisting}
 
 Точно также как и с таблицами можно указать конкретные последовательности вместо <<--all>>.
 
@@ -219,13 +219,13 @@ londiste.py /etc/skytools/db1-londiste.ini subscriber add-seq --all
 добавления таблиц данные на слейв, а затем перейдёт в состояние обычной репликации.
 
 Мониторим логи на предмет ошибок:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste17,caption=Проверка]
 less /var/log/db1-londiste.log
-\end{verbatim}
+\end{lstlisting}
 
 Если всё хорошо, смотрим состояние репликации. Данные уже синхронизированы для
 тех таблиц, где статус отображается как "ok".
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste18,caption=Проверка]
 londiste.py /etc/skytools/db1-londiste.ini subscriber tables
 
    Table State
@@ -236,34 +236,34 @@ londiste.py /etc/skytools/db1-londiste.ini subscriber tables
    public.table5 -
    public.table6 -
    ...
-\end{verbatim}
+\end{lstlisting}
 
 Для удобства представляю следующий трюк с уведомление в почту об окончании
 первоначального копирования (мыло поменять на своё):
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste19,caption=Проверка]
 (
 while [ $(
 python londiste.py /etc/skytools/db1-londiste.ini subscriber tables |
 tail -n+2 | awk '{print $2}' | grep -v ok | wc -l) -ne 0 ];
 do sleep 60; done; echo '' | mail -s 'Replication done EOM' user@domain.com
 ) &
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsection{Общие задачи}
 
 \subsubsection{Добавление всех таблиц мастера слейву}
 Просто используя эту команду:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste20,caption=Добавление всех таблиц мастера слейву]
 londiste.py <ini> provider tables | xargs londiste.py <ini> subscriber add
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Проверка состояния слейвов}
 Этот запрос на мастере дает некоторую информацию о каждой очереди и слейве.
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:londiste21,caption=Проверка состояния слейвов]
 SELECT queue_name, consumer_name, lag, last_seen
   FROM pgq.get_consumer_info();
-\end{verbatim}
+\end{lstlisting}
 
 <<lag>> столбец показывает отставание от мастера в синхронизации, 
 <<last\_seen>>~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, 
@@ -272,14 +272,14 @@ SELECT queue_name, consumer_name, lag, last_seen
 \subsubsection{Удаление очереди всех событий из мастера}
 При работе с Londiste может потребоватся удалить все ваши настройки для того, чтобы начать все заново. 
 Для PGQ, чтобы остановить накопление данных, используйте следующие API:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste22,caption=Удаление очереди всех событий из мастера]
 SELECT pgq.unregister_consumer('queue_name', 'consumer_name');
-\end{verbatim}
+\end{lstlisting}
 
 Или воспользуйтесь pgqadm.py:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste23,caption=Удаление очереди всех событий из мастера]
 pgqadm.py <ticker.ini> unregister queue_name consumer_name
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Добавление столбца в таблицу}
 Добавляем в следующей последовательности:
@@ -312,7 +312,7 @@ UPDATE или DELETE в одной транзакции, но теперь чт�
 транзакции на слейвах \dots
 
 Следующий запрос позволяет подсчитать, сколько событий пришло в pgq.subscription в колонках sub\_last\_tick и sub\_next\_tick.
-\begin{verbatim}
+\begin{lstlisting}[language=SQL,label=lst:londiste24,caption=Устранение неисправностей]
 SELECT count(*)
   FROM pgq.event_1,
     (SELECT tick_snapshot
@@ -320,13 +320,13 @@ SELECT count(*)
       WHERE tick_id BETWEEN 5715138 AND 5715139
     ) as t(snapshots)
 WHERE txid_visible_in_snapshot(ev_txid, snapshots);
-\end{verbatim}
+\end{lstlisting}
 
 В нашем случае, это было более чем 5 миллионов и 400 тысяч событий. Многовато. Чем больше событий 
 с базы данных требуется обработать Londiste, тем больше ему требуется памяти для этого. Мы можем сообщить 
 Londiste не загружать все события сразу. Достаточно добавить в INI конфиг ticker-а следующую настройку:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:londiste25,caption=Устранение неисправностей]
 pgq_lazy_fetch = 500
-\end{verbatim}
+\end{lstlisting}
  
 Теперь Londiste будет брать максимум 500 событий в один пакет запросов. Остальные попадут в следующие пакеты запросов.

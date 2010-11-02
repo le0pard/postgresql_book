@@ -146,19 +146,19 @@ HQL очень прост по своей сути, если Вы уже зна�
 \begin{itemize}
 \item открыть доступ одному из пользователей по ssh к этому же компьютеру без пароля, 
 можно например создать отдельного пользователя для этого [hadoop]:
-\begin{verbatim}
-sudo groupadd hadoop
-sudo useradd -m -g hadoop -d /home/hadoop -s /bin/bash \
+\begin{lstlisting}[label=lst:haddop1,caption=Создаем пользователя с правами]
+$sudo groupadd hadoop
+$sudo useradd -m -g hadoop -d /home/hadoop -s /bin/bash \
 -c "Hadoop software owner" hadoop
-\end{verbatim}
+\end{lstlisting}
 
 Далее действия выполняем от его имени:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop2,caption=Логинимся под пользователем hadoop]
 su hadoop
-\end{verbatim}
+\end{lstlisting}
 
-Генерируем RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:
-\begin{verbatim}
+Генерим RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:
+\begin{lstlisting}[label=lst:haddop3,caption=Генерим RSA-ключ]
 hadoop@localhost ~ $ ssh-keygen -t rsa -P ""
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/hadoop/.ssh/id_rsa):
@@ -166,31 +166,31 @@ Your identification has been saved in /home/hadoop/.ssh/id_rsa.
 Your public key has been saved in /home/hadoop/.ssh/id_rsa.pub.
 The key fingerprint is:
 7b:5c:cf:79:6b:93:d6:d6:8d:41:e3:a6:9d:04:f9:85 hadoop@localhost
-\end{verbatim}
+\end{lstlisting}
 
 И добавляем его в список авторизованных ключей:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop4,caption=Добавляем его в список авторизованных ключей]
 cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-\end{verbatim}
+\end{lstlisting}
 
 Этого должно быть более чем достаточно, проверить работоспособность соединения можно просто написав:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop5,caption=Пробуем зайти на ssh без пароля]
 ssh localhost
-\end{verbatim}
+\end{lstlisting}
 
 Не забываем предварительно инициализировать sshd:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop6,caption=Запуск sshd]
 /etc/init.d/sshd start
-\end{verbatim}
+\end{lstlisting}
 
 \item Помимо этого необходимо убедиться в наличии установленной JVM версии 1.5.0 или выше.
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop7,caption=Устанавливаем JVM]
 sudo aptitude install openjdk-6-jdk
-\end{verbatim}
+\end{lstlisting}
 \end{itemize}
 
 Дальше скачиваем и устанавливаем Hadoop:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop8,caption=Устанавливаем Hadoop]
 cd /opt
 sudo wget http://www.gtlib.gatech.edu/pub/apache/hadoop
 /core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
@@ -199,10 +199,10 @@ sudo ln -s /opt/hadoop-0.20.2 /opt/hadoop
 sudo chown -R hadoop:hadoop /opt/hadoop /opt/hadoop-0.20.2
 sudo mkdir -p /opt/hadoop-data/tmp-base
 sudo chown -R hadoop:hadoop /opt/hadoop-data/
-\end{verbatim}
+\end{lstlisting}
 
 Далее переходим в /opt/hadoop/conf/hadoop-env.sh и добавляем вначале:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop9,caption=Указываем переменные окружения]
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
 export HADOOP_HOME=/opt/hadoop
 export HADOOP_CONF=$HADOOP_HOME/conf
@@ -211,16 +211,15 @@ export HIVE_HOME=/opt/hive
 export HIVE_PATH=$HIVE_HOME/bin
 
 export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH
-\end{verbatim}
+\end{lstlisting}
 
 Далее добавим в /opt/hadoop/conf/hadoop-site.xml:
-\begin{verbatim}
+\begin{lstlisting}[language=XML,label=lst:haddop10,caption=Настройки hadoop]
 <configuration>
 <property>
   <name>hadoop.tmp.dir</name>
   <value>/opt/hadoop-data/tmp-base</value>
-  <description>A base for other temporary 
-  directories</description>
+  <description>A base for other temporary directories</description>
 </property>
 
 <property>
@@ -238,10 +237,10 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH
   cluster configuration file</description>
 </property>
 </configuration>
-\end{verbatim}
+\end{lstlisting}
 
 В /opt/hadoop/conf/mapred-site.xml:
-\begin{verbatim}
+\begin{lstlisting}[language=XML,label=lst:haddop11,caption=Настройки mapreduce]
 <configuration>
 <property>
   <name>mapred.job.tracker</name>
@@ -252,10 +251,10 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH
   </description>
 </property>
 </configuration>
-\end{verbatim}
+\end{lstlisting}
 
 В /opt/hadoop/conf/hdfs-site.xml:
-\begin{verbatim}
+\begin{lstlisting}[language=XML,label=lst:haddop12,caption=Настройки hdfs]
 <configuration>
 <property>
   <name>dfs.replication</name>
@@ -265,10 +264,10 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH
   </description>
 </property>
 </configuration>
-\end{verbatim}
+\end{lstlisting}
 
 Теперь необходимо отформатировать Namenode:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop13,caption=Форматирование Namenode]
 $ hadoop namenode -format
 10/05/07 14:24:12 INFO namenode.NameNode: STARTUP_MSG: 
 /************************************************************
@@ -296,11 +295,10 @@ SHUTDOWN_MSG:
 /************************************************************
 SHUTDOWN_MSG: Shutting down NameNode at hadoop1/127.0.1.1
 ************************************************************/
-$
-\end{verbatim}
+\end{lstlisting}
 
 Готово. Теперь мы можем запустить Hadoop:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop14,caption=Запуск Hadoop]
 $ start-all.sh
 starting namenode, logging to /opt/hadoop/bin/..
 /logs/hadoop-hadoop-namenode-hadoop1.out
@@ -312,55 +310,53 @@ starting jobtracker, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-jobtracker-hadoop1.out
 localhost: starting tasktracker, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-tasktracker-hadoop1.out
-$
-\end{verbatim}
+\end{lstlisting}
 
 Остановка Hadoop производится скриптом stop-all.sh.
 
 \subsubsection{Установка HadoopDB и Hive}
 Теперь скачаем HaddopDB\footnote{http://sourceforge.net/projects/hadoopdb/files/} и распакуем hadoopdb.jar в \$HADOOP\_HOME/lib:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop15,caption=Установка HadoopDB]
 $cp hadoopdb.jar $HADOOP_HOME/lib
-\end{verbatim}
+\end{lstlisting}
 
 Также нам потребуется PostgreSQL JDBC библиотека. Скачайте её\footnote{http://jdbc.postgresql.org/download.html} и 
 распакуйте в директорию \$HADOOP\_HOME/lib.
 
 Hive используется HadoopDB как SQL интерфейс. Подготовим директорию в HDFS для Hive:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop16,caption=Установка HadoopDB]
 hadoop fs -mkdir /tmp
 hadoop fs -mkdir /user/hive/warehouse
 hadoop fs -chmod g+w /tmp
 hadoop fs -chmod g+w /user/hive/warehouse
-\end{verbatim}
+\end{lstlisting}
 
 В архиве HadoopDB также есть архив SMS\_dist. Распакуем его:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop17,caption=Установка HadoopDB]
 tar zxvf SMS_dist.tar.gz
 sudo mv dist /opt/hive
 sudo chown -R hadoop:hadoop hive
-\end{verbatim}
+\end{lstlisting}
 
 Поскольку мы успешно запустили Hadoop, то и проблем с запуском Hive не должно быть:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop18,caption=Установка HadoopDB]
 $ hive
 Hive history file=/tmp/hadoop/
 hive_job_log_hadoop_201005081717_1990651345.txt
 hive> 
 
 hive> quit;
-$
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Тестирование}
-Теперь проведем тестирование. Скачаем бенчмарк:
-\begin{verbatim}
+Теперь проведем тестирование. Для этого скачаем бенчмарк:
+\begin{lstlisting}[label=lst:haddop19,caption=Тестирование]
 svn co http://graffiti.cs.brown.edu/svn/benchmarks/
 cd benchmarks/datagen/teragen
-\end{verbatim}
+\end{lstlisting}
 
-Изменим скрипт benchmarks/datagen/teragen/teragen.pl:
-\begin{verbatim}
+Изменим скрипт benchmarks/datagen/teragen/teragen.pl к виду:
+\begin{lstlisting}[language=Java,label=lst:haddop20,caption=Тестирование]
 use strict;
 use warnings;
 
@@ -399,13 +395,13 @@ print "$cmd\n";
 system($cmd) == 0 || die("ERROR: $!");
 } # FOR
 exit(0);
-\end{verbatim}
+\end{lstlisting}
 
 При запуске данного Perl скрипта сгенерится данные, которые будут сохранены на HDFS. 
 Поскольку мы настроили систему как единственный кластер, то все данные будут загружены на один HDFS. 
 При работе с большим количеством кластеров данные были бы распределены по кластерам.
 Создадим базу данных, таблицу и загрузим данные, что мы сохранили на HDFS, в нее:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop21,caption=Тестирование]
 $hadoop fs -get /data/SortGrep535MB/part-00000 my_file
 $psql
 psql> CREATE DATABASE grep0;
@@ -415,10 +411,10 @@ psql> CREATE TABLE grep (
     ->   field character varying(255)
     -> );
 COPY grep FROM 'my_file' WITH DELIMITER '|';
-\end{verbatim}
+\end{lstlisting}
 
 Теперь настроим HadoopDB. В архиве HadoopDB можно найти пример файла Catalog.properties. Распакуйт его и настройте:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop22,caption=Тестирование]
 #Properties for Catalog Generation
 ##################################
 nodes_file=machines.txt
@@ -450,25 +446,38 @@ dump_file_c_prefix=/mnt/dump_cdb
 #Cluster Connection
 ##
 ssh_key=id_rsa
-\end{verbatim}
+\end{lstlisting}
 
 Создайте файл machines.txt и добавте туда <<localhost>> строчку (без кавычек). Тепер создадим HadoopDB конфиг и скопируем его в HDFS:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop23,caption=Тестирование]
 java -cp $HADOOP_HOME/lib/hadoopdb.jar \
 > edu.yale.cs.hadoopdb.catalog.SimpleCatalogGenerator \
 > Catalog.properties
 hadoop dfs -put HadoopDB.xml HadoopDB.xml
-\end{verbatim}
+\end{lstlisting}
+
+Также возможно создать конфиг для создания репликации командой:
+\begin{lstlisting}[label=lst:haddop23:1,caption=Репликация]
+java -cp hadoopdb.jar edu.yale.cs.hadoopdb.catalog.SimpleRandomReplicationFactorTwo Catalog.properties
+\end{lstlisting}
+
+Инструмент генерирует новый файл HadoopDB.xml, в котором случайные порции данных реплицируются на все узлы.
+После этого не забываем обновить конфиг на HDFS:
+\begin{lstlisting}[label=lst:haddop23:2,caption=Обновляем конфиг]
+hadoop dfs -rmr HadoopDB.xml
+hadoop dfs -put HadoopDB.xml HadoopDB.xml
+\end{lstlisting}
+и поставить <<true>> для <<hadoopdb.config.replication>> в HADOOP\_HOME/conf/hadoop-site.xml.
 
 Теперь мы готовы проверить работы HadoopDB. Теперь можем протестировать поиск по данным, загруженым ранее в БД и HDFS:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop24,caption=Тестирование]
 java -cp $CLASSPATH:hadoopdb.jar \
 > edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
 > -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
-\end{verbatim}
+\end{lstlisting}
 
 Приблизительный результат:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop25,caption=Тестирование]
 $java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.benchmark.GrepTaskDB \
 > -pattern %wo% -output padraig -hadoop.config.file HadoopDB.xml
 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.exec.DBJobBase initConf
@@ -529,20 +538,17 @@ INFO:     Map output records=3
 INFO: 
 JOB TIME : 1828 ms.
 
-
-$
-\end{verbatim}
+\end{lstlisting}
 
 Результат сохранен в HDFS, в папке padraig:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop26,caption=Тестирование]
 $ cd padraig
 $ cat part-00000
 some data
-$
-\end{verbatim}
+\end{lstlisting}
 
 Проверим данные в PostgreSQL:
-\begin{verbatim}
+\begin{lstlisting}[label=lst:haddop27,caption=Тестирование]
 psql> select * from grep where field like '%wo%';
 +--------------------------------+-------------------+
 | key1                           | field
@@ -553,14 +559,99 @@ some data
 1 rows in set (0.00 sec)
 
 psql>
-\end{verbatim}
+\end{lstlisting}
 
 Значения совадают. Все работает как требуется.
 
+Проведем еще один тест. Добавим данные в PostgreSQL:
+\begin{lstlisting}[label=lst:haddop27:1,caption=Тестирование]
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybe');
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybewqe');
+psql> INSERT into grep(key1, field) VALUES('I am live!', 'Maybewqesad');
+psql> INSERT into grep(key1, field) VALUES(':)', 'May cool string!');
+\end{lstlisting}
+
+Теперь проверим через HadoopDB:
+\begin{lstlisting}[label=lst:haddop27:2,caption=Тестирование]
+$ java -cp $CLASSPATH:hadoopdb.jar edu.yale.cs.hadoopdb.benchmark.GrepTaskDB -pattern %May% -output padraig -hadoopdb.config.file /opt/hadoop/conf/HadoopDB.xml
+padraig
+01.11.2010 23:14:45 edu.yale.cs.hadoopdb.exec.DBJobBase initConf
+INFO: SELECT key1, field FROM grep WHERE field LIKE '%%May%%';
+01.11.2010 23:14:46 org.apache.hadoop.metrics.jvm.JvmMetrics init
+INFO: Initializing JVM Metrics with processName=JobTracker, sessionId=
+01.11.2010 23:14:46 org.apache.hadoop.mapred.JobClient configureCommandLineOptions
+WARNING: Use GenericOptionsParser for parsing the arguments. Applications should implement Tool for the same.
+01.11.2010 23:14:46 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Running job: job_local_0001
+01.11.2010 23:14:46 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Data locality failed for leo-pgsql
+01.11.2010 23:14:46 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
+INFO: Task from leo-pgsql is connecting to chunk 0 on host localhost with db url jdbc:postgresql://localhost:5434/grep0
+01.11.2010 23:14:47 org.apache.hadoop.mapred.MapTask runOldMapper
+INFO: numReduceTasks: 0
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: DB times (ms): connection = 181, query execution = 22, row retrieval  = 96
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader close
+INFO: Rows retrieved = 4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task done
+INFO: Task:attempt_local_0001_m_000000_0 is done. And is in the process of commiting
+01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task commit
+INFO: Task attempt_local_0001_m_000000_0 is allowed to commit now
+01.11.2010 23:14:47 org.apache.hadoop.mapred.FileOutputCommitter commitTask
+INFO: Saved output of task 'attempt_local_0001_m_000000_0' to file:/home/hadoop/padraig
+01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
+INFO: 
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Task sendDone
+INFO: Task 'attempt_local_0001_m_000000_0' done.
+01.11.2010 23:14:47 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO:  map 100% reduce 0%
+01.11.2010 23:14:47 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
+INFO: Job complete: job_local_0001
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO: Counters: 6
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:   FileSystemCounters
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_READ=141345
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     FILE_BYTES_WRITTEN=153291
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:   Map-Reduce Framework
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map input records=4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Spilled Records=0
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map input bytes=4
+01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
+INFO:     Map output records=4
+01.11.2010 23:14:47 edu.yale.cs.hadoopdb.exec.DBJobBase run
+INFO: 
+JOB TIME : 2332 ms.
+\end{lstlisting}
+
+Как паттерн поиска я задал <<May>>. В логах можно увидеть как производится поиск. На выходе получаем:
+\begin{lstlisting}[label=lst:haddop27:3,caption=Тестирование]
+$ cd padraig
+$ cat part-00000
+I am live!	Maybe
+I am live!	Maybewqe
+I am live!	Maybewqesad
+:)	May cool string!
+\end{lstlisting}
+
+В упрощенной системе с одним кластером PostgreSQL не понятно ради чего такие сложности. 
+Но если к HadoopDB подключить более одного кластера PostgreSQL, 
+то данной методикой возможно работать с данными PostgreSQL, объединенных в shared-nothing кластер.
+
+Более подробно по HadoopDB можно почитать по данной ссылке \\http://hadoopdb.sourceforge.net/guide/quick\_start\_guide.html.
+
 
 \subsection{Заключение}
-В данной статье не показывается, как настроить Hive для работы с HadoopDB. Эта книга не сможет учесть все, 
-что требуется для работы c Hadoop. Назначение этой главы - дать основу для работы с Hadoop и HaddopDB.
+В данной статье не показывается, как работать с Hive, как более проще работать с HadoopDB. Эта книга не сможет учесть все, 
+что требуется для работы c Hadoop. Назначение этой главы~--- дать основу для работы с Hadoop и HaddopDB.
 
 HadoopDB не заменяет Hadoop. Эти системы сосуществуют, позволяя аналитику выбирать соответствующие средства в зависимости 
 от имеющихся данных и задач.
