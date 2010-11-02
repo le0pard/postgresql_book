@@ -240,13 +240,13 @@ pgFouine написан на языке программирования PHP с 
 Для работы с pgFouine сначала нужно сконфигурировать PostgreSQL для создания нужного формата log-файлов:
 \begin{itemize}
 \item Чтобы включить протоколирование в syslog
-\begin{lstlisting}[label=lst:sql_performance4,caption=pgFouine]
+\begin{lstlisting}[label=lst:sql_performance5,caption=pgFouine]
 log_destination = 'syslog'
 redirect_stderr = off
 silent_mode = on
 \end{lstlisting}
 \item Для записи запросов, длящихся дольше n миллисекунд:
-\begin{lstlisting}[label=lst:sql_performance5,caption=pgFouine]
+\begin{lstlisting}[label=lst:sql_performance6,caption=pgFouine]
 log_min_duration_statement = n
 log_duration = off
 log_statement = 'none'
@@ -258,12 +258,12 @@ log_statement = 'none'
 
 pgFouine~--- простой в использовании инструмент командной строки. Следующая команда создаёт 
 HTML-отчёт со стандартными параметрами:
-\begin{lstlisting}[label=lst:sql_performance6,caption=pgFouine]
+\begin{lstlisting}[label=lst:sql_performance7,caption=pgFouine]
 pgfouine.php -file your/log/file.log > your-report.html
 \end{lstlisting}
 
 С помощью этой строки можно отобразить текстовый отчёт с 10 запросами на каждый экран на стандартном выводе:
-\begin{lstlisting}[label=lst:sql_performance7,caption=pgFouine]
+\begin{lstlisting}[label=lst:sql_performance8,caption=pgFouine]
 pgfouine.php -file your/log/file.log -top 10 -format text
 \end{lstlisting}
 

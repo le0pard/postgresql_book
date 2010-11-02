@@ -420,7 +420,7 @@ CREATE TABLE pgpool_catalog.dist_def (
 dist\_def таблицу путем объединения таблиц, информация о таблице, для которой необходимо производить репликацию, 
 предварительно регистрируется в таблице с именем replicate\_def. Таблица replicate\_def уже была создана при обработке
 файла system\_db.sql во время создания таблицы dist\_def. Таблица replicate\_def описана так как показано ниже.
-\begin{lstlisting}[language=SQL,label=lst:pgpool31,caption=Создание таблицы replicate\_def]
+\begin{lstlisting}[language=SQL,label=lst:pgpool31:1,caption=Создание таблицы replicate\_def]
 CREATE TABLE pgpool_catalog.replicate_def (
     dbname text, -- имя базы данных
     schema_name text, -- имя схемы

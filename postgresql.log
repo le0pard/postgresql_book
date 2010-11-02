@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 01:46
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 02:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -789,14 +789,7 @@ LaTeX Info: Redefining \cs on input line 9.
 \txtwidth=\skip188
 \drop=\skip189
 ) (./variables.tex)
-(./postgresql.aux
-
-LaTeX Warning: Label `lst:sql_performance4' multiply defined.
-
-
-LaTeX Warning: Label `lst:pgpool31' multiply defined.
-
-)
+(./postgresql.aux)
 \openout1 = `postgresql.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
@@ -3446,33 +3439,29 @@ Overfull \hbox (15.31818pt too wide) in paragraph at lines 190--193
 \tf@toc=\write6
 \openout6 = `postgresql.toc'.
 
- (./postgresql.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+ (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 19896 strings out of 494818
- 285652 string characters out of 1178666
- 597781 words of memory out of 3000000
- 20321 multiletter control sequences out of 15000+50000
+ 19898 strings out of 494818
+ 285690 string characters out of 1178666
+ 597977 words of memory out of 3000000
+ 20323 multiletter control sequences out of 15000+50000
  25666 words of font info for 65 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}{/usr/share/texmf
-/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-texlive/fonts/type
-1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-fbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/sh
-are/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type
-1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
-rm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/sha
-re/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1
-/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
-m1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb></usr/shar
-e/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
-1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.en
+c}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf
+-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type
+1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
+bx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/sha
+re/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfr
+m0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
+1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share
+/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share/texmf/fonts/type1/p
+ublic/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1
+728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
 Output written on postgresql.pdf (139 pages, 1101112 bytes).
 PDF statistics:
  3359 PDF objects out of 3580 (max. 8388607)
