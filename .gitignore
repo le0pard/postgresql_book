@@ -1,3 +1,9 @@
+*.aux
 *.backup
-*.tex~
+*.log
+*.idx
+*.out
+*.snm
 *.sty~
+*.tex~
+*.toc
