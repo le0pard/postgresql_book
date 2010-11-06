@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.8.17)  2 NOV 2010 02:45
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.11.6)  6 NOV 2010 11:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -570,7 +570,7 @@ File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
 (/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
+File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
 \Gread@gobject=\count167
 ))
 \Gin@req@height=\dimen169
@@ -3468,10 +3468,10 @@ Overfull \hbox (15.31818pt too wide) in paragraph at lines 190--193
 
  (./postgresql.aux) ) 
 Here is how much of TeX's memory you used:
- 19901 strings out of 494818
- 285722 string characters out of 1178666
- 598401 words of memory out of 3000000
- 20325 multiletter control sequences out of 15000+50000
+ 19904 strings out of 494818
+ 285775 string characters out of 1178666
+ 598670 words of memory out of 3000000
+ 20328 multiletter control sequences out of 15000+50000
  26350 words of font info for 66 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
