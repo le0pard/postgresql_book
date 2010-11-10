@@ -47,5 +47,189 @@ PostgreSQL может записывать, считывать, искать и 
 \subsection{Установка}
 Во время написания этой главы была доступна 2.0.4 версия 
 pgmemcache\footnote{http://pgfoundry.org/frs/download.php/2672/pgmemcache\_2.0.4.tar.bz2}. 
-Pgmemcache будет устанавливатся и настраиватся на PostgreSQL версии 8.4, операционная система~--- Ubuntu Server 10.10.
+Pgmemcache будет устанавливатся и настраиватся на PostgreSQL версии 8.4 (для версии 9.0 все аналогично), 
+операционная система~--- Ubuntu Server 10.10. Поскольку Pgmemcache идет как модуль, 
+то потребуется PostgreSQL с PGXS (если уже не установлен, поскольку в сборках для Linux присутствует PGXS). 
+Также потребуется memcached и libmemcached библиотека версии не ниже 0.38. 
 
+После скачивания и распаковки исходников, существует два варианта установки Pgmemcache:
+\begin{itemize}
+\item \textbf{Установка из исходников}
+
+Для этого достаточно выполнить в консоли:
+\begin{lstlisting}[label=lst:pgcache1,caption=Установка из исходников]
+$ make
+$ sudo make install
+\end{lstlisting}
+\item \textbf{Создание и установка deb пакета (для Debian, Ubuntu)}
+
+Иногда, если у Вас на серверах Debian или Ubuntu, удобнее создать deb пакет нужной программы и 
+распостранать его через собственный репозиторий на все сервера с PostgreSQL:
+\begin{lstlisting}[label=lst:pgcache2,caption=Создание и установка deb пакета]
+$ sudo apt-get install libmemcached-dev postgresql-server-dev-8.4 libpq-dev devscripts yada flex bison
+$ make deb84
+# устанавливаем deb пакет
+$ sudo dpkg -i ../postgresql-pgmemcache-8.4*.deb
+\end{lstlisting}
+
+Для версии 2.0.4 утилита yada выдавала ошибку при создании deb пакета со следующим текстом:
+\begin{lstlisting}[label=lst:pgcache3,caption=Создание и установка deb пакета]
+Cannot recognize source name in 'debian/changelog' at /usr/bin/yada line 145, <CHANGELOG> line 1.
+make: *** [deb84] Ошибка 9
+\end{lstlisting}
+
+Для устранения этой ошибки потребуется удалить первую строчку текста в <<debian/changelog>> в каталоге, котором происходит сборка:
+\begin{lstlisting}[label=lst:pgcache4,caption=Создание и установка deb пакета]
+$PostgreSQL: pgmemcache/debian/changelog,v 1.2 2010/05/05 19:56:50 ormod Exp $ <---- удалить
+pgmemcache (2.0.4) unstable; urgency=low
+
+  * v2.0.4
+\end{lstlisting}
+
+После этого собрать deb пакет не должно составить никаких проблем.
+\end{itemize}
+
+
+\subsection{Настройка}
+После успешной установки Pgmemcache потребуется добавит во все базы данных (на которых вы хотите использовать Pgmemcache) 
+функции для работы с этой библиотекой:
+\begin{lstlisting}[label=lst:pgcache5,caption=Настройка]
+% psql [mydbname] [pguser]
+[mydbname]=# BEGIN;
+[mydbname]=# \i /usr/local/postgresql/share/contrib/pgmemcache.sql
+# для Debian: \i /usr/share/postgresql/8.4/contrib/pgmemcache.sql
+[mydbname]=# COMMIT;
+\end{lstlisting}
+
+Теперь можно добавлять сервера memcached через memcache\_server\_add и работать с кэшем. Но есть одно но. Все сервера memcached придется 
+задавать при каждом новом подключении к PostgreSQL каждый раз заново. 
+Это ограничение можно обойти, если настроить параметры в postgresql.conf файле:
+\begin{itemize}
+\item Добавить <<pgmemcache>> в shared\_preload\_libraries (автозагрузка библиотеки pgmemcache во время старта PostgreSQL)
+\item Добавить <<pgmemcache>> в custom\_variable\_classes (устанавливаем переменную для pgmemcache)
+\item Создаем <<pgmemcache.default\_servers>>, указав в формате <<host:port>> (port - опционально) через запятую. Например:
+\begin{lstlisting}[label=lst:pgcache6,caption=Настройка default\_servers]
+pgmemcache.default_servers = '127.0.0.1, 192.168.0.20:11211' # подключили два сервера memcached
+\end{lstlisting}
+\item Также можем настроить работу самой библиотеки pgmemcache через <<pgmemcache.default\_behavior>>. 
+Настройки соответствуют настрокам libmemcached. Например:
+\begin{lstlisting}[label=lst:pgcache7,caption=Настройка pgmemcache]
+pgmemcache.default_behavior='BINARY_PROTOCOL:1'
+\end{lstlisting}
+\end{itemize}
+
+Теперь не требуется при подключении к PostgreSQL указывать сервера memcached.
+
+\subsection{Проверка}
+Теперь посмотрим на список команд, которые доступны для работы с memcached серверами:
+
+\begin{table}[h]
+\caption{Список команд pgmemcache}
+\label{tabular:pgmemcache1}
+\begin{tabular}{| >{\raggedright\scriptsize}p{7cm}| >{\scriptsize}p{7cm} |}
+\hline
+Команда & Описание\\
+\hline
+memcache\_server\_add('hostname:port'::TEXT) 
+
+memcache\_server\_add('hostname'::TEXT)
+& 
+Добавляет memcached сервер в список доступных серверов. Если порт не указан, по умолчанию используется 11211.\\
+
+\hline
+
+memcache\_add(key::TEXT, value::TEXT, expire::TIMESTAMPTZ)
+
+memcache\_add(key::TEXT, value::TEXT, expire::INTERVAL)
+
+memcache\_add(key::TEXT, value::TEXT)
+& 
+Добавляет ключ в кэш, если ключ не существует.\\
+
+\hline
+
+newval = memcache\_decr(key::TEXT, decrement::INT4)
+
+newval = memcache\_decr(key::TEXT)
+& 
+Если ключ существует и является целым числом, происходит уменьшение 
+его значения на указаное число (по умолчанию на единицу). 
+Возвращает целое число после уменьшения.\\
+
+\hline
+
+memcache\_delete(key::TEXT, hold\_timer::INTERVAL)
+
+memcache\_delete(key::TEXT)
+
+& 
+Удаляет указанный ключ. Если указать таймер, то ключ с таким же названием может
+быть добавлен только после окончания таймера.\\
+
+\hline
+
+memcache\_flush\_all()
+
+& 
+Очищает все данные на всех memcached серверах.\\
+
+\hline
+
+value = memcache\_get(key::TEXT)
+
+& 
+Выбирает ключ из кэша. Возвращает NULL, если ключ не существует, иначе~--- текстовую строку.\\
+
+\hline
+
+memcache\_get\_multi(keys::TEXT[])
+
+memcache\_get\_multi(keys::BYTEA[])
+
+& 
+Получает массив ключей из кэша.
+Возвращает список найденных записей в виде <<ключ=значение>>.\\
+
+\hline
+
+newval = memcache\_incr(key::TEXT, increment::INT4)
+
+newval = memcache\_incr(key::TEXT)
+
+& 
+Если ключ существует и является целым числом, происходит увеличение 
+его значения на указаное число (по умолчанию на единицу). 
+Возвращает целое число после увеличения.\\
+
+\hline
+
+memcache\_replace(key::TEXT, value::TEXT, expire::TIMESTAMPTZ)
+
+memcache\_replace(key::TEXT, value::TEXT, expire::INTERVAL)
+
+memcache\_replace(key::TEXT, value::TEXT)
+
+& 
+Заменяет значение для существующего ключа.\\
+
+\hline
+
+memcache\_set(key::TEXT, value::TEXT, expire::TIMESTAMPTZ)
+
+memcache\_set(key::TEXT, value::TEXT, expire::INTERVAL)
+
+memcache\_set(key::TEXT, value::TEXT)
+
+& 
+Независимо от того, существует ли указаный ключ, установите его значение на указаное, заменив предыдущее значение, если такое было.\\
+
+\hline
+
+stats = memcache\_stats()
+
+& 
+Возвращает статистику по всем серверам memcached.\\
+
+\hline
+\end{tabular}
+\end{table}
