@@ -121,7 +121,7 @@ pgmemcache.default_behavior='BINARY_PROTOCOL:1'
 Теперь не требуется при подключении к PostgreSQL указывать сервера memcached.
 
 \subsection{Проверка}
-Теперь посмотрим на список команд, которые доступны для работы с memcached серверами:
+После успешной установки и настройки pgmemcache, становится доступен список команд для работы с memcached серверами:
 
 \begin{table}[h]
 \caption{Список команд pgmemcache}
@@ -221,7 +221,7 @@ memcache\_set(key::TEXT, value::TEXT, expire::INTERVAL)
 memcache\_set(key::TEXT, value::TEXT)
 
 & 
-Независимо от того, существует ли указаный ключ, установите его значение на указаное, заменив предыдущее значение, если такое было.\\
+Создаем ключ со значение. Если такой ключ существует~--- заменяем в нем значение на указаное.\\
 
 \hline
 
@@ -233,3 +233,100 @@ stats = memcache\_stats()
 \hline
 \end{tabular}
 \end{table}
+
+Посмотрим работу в СУБД данных функций. Для начала узнаем информацию по memcached серверах:
+\begin{lstlisting}[label=lst:pgcache7,caption=Проверка memcache\_stats]
+pgmemcache=# SELECT memcache_stats();
+      memcache_stats       
+---------------------------
+ 
+ Server: 127.0.0.1 (11211)
+ pid: 1116
+ uptime: 70
+ time: 1289598098
+ version: 1.4.5
+ pointer_size: 32
+ rusage_user: 0.0
+ rusage_system: 0.24001
+ curr_items: 0
+ total_items: 0
+ bytes: 0
+ curr_connections: 5
+ total_connections: 7
+ connection_structures: 6
+ cmd_get: 0
+ cmd_set: 0
+ get_hits: 0
+ get_misses: 0
+ evictions: 0
+ bytes_read: 20
+ bytes_written: 782
+ limit_maxbytes: 67108864
+ threads: 4
+ 
+(1 row)
+\end{lstlisting}
+
+Теперь сохраним данные в memcached и попробуем их забрать:
+\begin{lstlisting}[label=lst:pgcache8,caption=Проверка]
+pgmemcache=# SELECT memcache_add('some_key', 'test_value');
+ memcache_add 
+--------------
+ t
+(1 row)
+
+pgmemcache=# SELECT memcache_get('some_key');
+ memcache_get 
+--------------
+ test_value
+(1 row)
+
+\end{lstlisting}
+
+Можно также проверить работу счетчиков в memcached (данный функционал может пригодится для создания последовательностей):
+\begin{lstlisting}[label=lst:pgcache9,caption=Проверка]
+pgmemcache=# SELECT memcache_add('some_seq', '10');
+ memcache_add 
+--------------
+ t
+(1 row)
+
+pgmemcache=# SELECT memcache_incr('some_seq');
+ memcache_incr 
+---------------
+            11
+(1 row)
+
+pgmemcache=# SELECT memcache_incr('some_seq');
+ memcache_incr 
+---------------
+            12
+(1 row)
+
+pgmemcache=# SELECT memcache_incr('some_seq', 10);
+ memcache_incr 
+---------------
+            22
+(1 row)
+
+pgmemcache=# SELECT memcache_decr('some_seq');
+ memcache_decr 
+---------------
+            21
+(1 row)
+
+pgmemcache=# SELECT memcache_decr('some_seq');
+ memcache_decr 
+---------------
+            20
+(1 row)
+
+pgmemcache=# SELECT memcache_decr('some_seq', 6);
+ memcache_decr 
+---------------
+            14
+(1 row)
+
+\end{lstlisting}
+
+Для работы с pgmemcache лучше создать функции и, если требуется, активировать эти функции через тригеры.
