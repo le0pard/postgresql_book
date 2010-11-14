@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.11.6)  15 NOV 2010 00:00
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.11.6)  15 NOV 2010 00:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1003,7 +1003,7 @@ Overfull \hbox (2.03697pt too wide) detected at line 170
  []
 
 
-Overfull \hbox (2.03697pt too wide) detected at line 176
+Overfull \hbox (2.03697pt too wide) detected at line 177
  \T2A/cmr/bx/n/12 143
  []
 
@@ -2320,7 +2320,7 @@ Overfull \hbox (5.43477pt too wide) in paragraph at lines 7--9
  рас-пре-де-ля-ют-ся по кла-
  []
 
-[90] <images/hdfsarchitecture.pdf, id=2054, 877.2775pt x 606.265pt>
+[90] <images/hdfsarchitecture.pdf, id=2059, 877.2775pt x 606.265pt>
 File: images/hdfsarchitecture.pdf Graphic file (type pdf)
 
 <use images/hdfsarchitecture.pdf> [91]
@@ -3689,10 +3689,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 20168 strings out of 494818
- 290440 string characters out of 1178666
+ 20170 strings out of 494818
+ 290468 string characters out of 1178666
  600172 words of memory out of 3000000
- 20412 multiletter control sequences out of 15000+50000
+ 20413 multiletter control sequences out of 15000+50000
  27153 words of font info for 67 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  55i,12n,51p,931b,1496s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -3711,9 +3711,9 @@ public/cm-super/sfrm2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss2488.pfb></usr/share
 /texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/p
 ublic/cm-super/sftt1200.pfb>
-Output written on postgresql.pdf (149 pages, 1193737 bytes).
+Output written on postgresql.pdf (149 pages, 1194853 bytes).
 PDF statistics:
- 3596 PDF objects out of 4296 (max. 8388607)
- 2131 named destinations out of 2487 (max. 500000)
- 934 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3601 PDF objects out of 4296 (max. 8388607)
+ 2132 named destinations out of 2487 (max. 500000)
+ 942 words of extra memory for PDF output out of 10000 (max. 10000000)
 
