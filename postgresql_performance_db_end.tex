@@ -185,7 +185,7 @@ SELECT reltuples FROM pg_class WHERE relname = 'foo';
 \item Вариант предыдущего подхода, но данные во вспомогательной таблице обновляются через определённые промежутки времени (cron).
 \end{enumerate}
 
-\subsubsection{Медленый DISTINCT}
+\subsubsection{Медленный DISTINCT}
 Текущая реализация DISTINCT для больших таблиц очень медленна. Но возможно использовать GROUP BY взамен DISTINCT. 
 GROUP BY может использовать агрегирующий хэш, что значительно быстрее, чем DISTINCT.
 
