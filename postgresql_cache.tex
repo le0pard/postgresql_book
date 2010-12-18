@@ -25,7 +25,7 @@ PostgreSQL не обладает подобным функционалом. По
 Для организации кэширования существует два инструмента для PostgreSQL:
 \begin{itemize}
 \item Pgmemcache (с memcached)
-\item Pgpool-II
+\item Pgpool-II (query cache)
 \end{itemize}
 
 
@@ -367,7 +367,7 @@ END;$$ LANGUAGE 'plpgsql';
 CREATE TRIGGER auth_passwd_del_trg AFTER DELETE ON passwd FOR EACH ROW EXECUTE PROCEDURE auth_passwd_upd();
 \end{lstlisting}
 
-Создавать кэш в memcached на кешированый пароль нового пользователя (или обновленного) лучше через приложение.
+Замечу от себя, что создавать кэш в memcached на кешированый пароль нового пользователя (или обновленного) лучше через приложение.
 
 \subsection{Заключение}
 PostgreSQL с помощью Pgmemcache библиотеки позволяет работать с memcached серверами, 
