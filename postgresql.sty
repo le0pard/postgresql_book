@@ -30,3 +30,15 @@
 %\@addtoreset{figure}{section} % Счетчик рисунков
 %\@addtoreset{table}{section} % Счетчик таблиц
 \makeatother
+
+\let\olditemize=\itemize
+\def\itemize{
+  \olditemize
+  \setlength{\itemsep}{-1ex}
+}
+
+\let\oldenumerate=\enumerate
+\def\enumerate{
+  \oldenumerate
+  \setlength{\itemsep}{-1ex}
+}
