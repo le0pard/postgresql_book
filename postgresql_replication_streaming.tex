@@ -74,10 +74,10 @@ ssh localhost
 
 Также отредактируем pg\_hba.conf на мастере и слейве, разрешив им друг к другу доступ без пароля(trust):
 \begin{lstlisting}[label=lst:streaming7,caption=Мастер pg\_hba.conf]
-host  all  all  192.168.0.20/32  trust
+host  replication  all  192.168.0.20/32  trust
 \end{lstlisting}
 \begin{lstlisting}[label=lst:streaming8,caption=Слейв pg\_hba.conf]
-host  all  all  192.168.0.10/32  trust
+host  replication  all  192.168.0.10/32  trust
 \end{lstlisting}
 
 Не забываем после этого перегрузить postgresql на обоих серверах.
