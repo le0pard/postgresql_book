@@ -1,0 +1,129 @@
+\chapter{Советы по разным вопросам (Performance Snippets)}
+\begin{epigraphs}
+\qitem{Быстро найти правильный ответ на трудный вопрос~--- ни с чем не сравнимое удовольствие.}{Макс Фрай. Обжора-Хохотун}
+\qitem{-- Вопрос риторический.
+
+-- Нет, но он таким кажется, потому что у тебя нет ответа.}{Доктор Хаус (House M.D.), сезон 1 серия 1}
+\end{epigraphs}
+
+\section{Введение}
+Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью, 
+красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с 
+которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения 
+мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска по Интернету. 
+
+Если вы вледеете интересными методами решения разных проблем, то добавляйте их на данной странице 
+\footnote{https://github.com/le0pard/postgresql\_book/issues}.
+
+\section{Советы}
+
+\subsection{Размер объектов в базе данных}
+
+\begin{framed}
+Данный запрос показывает размер объектов в базе данных (например таблиц и индексов). PostgreSQL версии >= 8.1.
+\end{framed}
+
+\begin{lstlisting}[label=lst:snippets1,caption=Поиск самых больших объектов в БД. SQL запрос]
+SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_relation_size(C.oid)) AS "size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+  ORDER BY pg_relation_size(C.oid) DESC
+  LIMIT 20;
+\end{lstlisting}
+
+Код для копирования: https://gist.github.com/910674
+
+Пример вывода:
+\begin{lstlisting}[label=lst:snippets2,caption=Поиск самых больших объектов в БД. Пример вывод]
+        relation        |    size    
+------------------------+------------
+ public.accounts        | 326 MB
+ public.accounts_pkey   | 44 MB
+ public.history         | 592 kB
+ public.tellers_pkey    | 16 kB
+ public.branches_pkey   | 16 kB
+ public.tellers         | 16 kB
+ public.branches        | 8192 bytes
+\end{lstlisting}
+
+\subsection{Размер самых больших таблиц}
+
+\begin{framed}
+Данный запрос показывает размер самых больших таблиц в базе данных. PostgreSQL версии >= 8.1.
+\end{framed}
+
+\begin{lstlisting}[label=lst:snippets3,caption=Размер самых больших таблиц. SQL запрос]
+SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+    AND C.relkind <> 'i'
+    AND nspname !~ '^pg_toast'
+  ORDER BY pg_total_relation_size(C.oid) DESC
+  LIMIT 20;
+\end{lstlisting}
+
+Код для копирования: https://gist.github.com/910696
+
+Пример вывода:
+\begin{lstlisting}[label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывод]
+            relation            | total_size 
+--------------------------------+------------
+ public.actions                 | 4249 MB
+ public.product_history_records | 197 MB
+ public.product_updates         | 52 MB
+ public.import_products         | 34 MB
+ public.products                | 29 MB
+ public.visits                  | 25 MB
+\end{lstlisting}
+
+\subsection{<<Средний>> count}
+
+\begin{framed}
+Данный метод позволяет узнать приблизительное количество записей в таблице. 
+Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
+\end{framed}
+
+\begin{lstlisting}[label=lst:snippets5,caption=<<Средний>> count. SQL запрос]
+CREATE LANGUAGE plpgsql;
+CREATE FUNCTION count_estimate(query text) RETURNS integer AS $$
+DECLARE
+    rec   record;
+    rows  integer;
+BEGIN
+    FOR rec IN EXECUTE 'EXPLAIN ' || query LOOP
+        rows := substring(rec."QUERY PLAN" FROM ' rows=([[:digit:]]+)');
+        EXIT WHEN rows IS NOT NULL;
+    END LOOP;
+ 
+    RETURN rows;
+END;
+$$ LANGUAGE plpgsql VOLATILE STRICT;
+
+
+Testing:
+
+
+CREATE TABLE foo (r double precision);
+INSERT INTO foo SELECT random() FROM generate_series(1, 1000);
+ANALYZE foo;
+
+# SELECT count(*) FROM foo WHERE r < 0.1;
+ count 
+-------
+    92
+(1 row)
+
+# SELECT count_estimate('SELECT * FROM foo WHERE r < 0.1');
+ count_estimate 
+----------------
+             94
+(1 row)
+\end{lstlisting}
+
+Код для копирования: https://gist.github.com/910728
+
+
