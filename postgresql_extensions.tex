@@ -58,3 +58,11 @@ Texcaller~--- это удобный интерфейс для командной
 
 Pgmemcache~--- это PostgreSQL API библиотека на основе libmemcached для взаимодействия с memcached. С помощью данной библиотеки 
 PostgreSQL может записывать, считывать, искать и удалять данные из memcached. Подробнее можно почитать в \Sref{sec:pgmemcache} главе.
+
+\section{Prefix}
+\textbf{Лицензия}: Open Source
+
+\textbf{Ссылка}: http://pgfoundry.org/projects/prefix
+
+Prefix реализует поиск текста по префиксу (prefix @> text). Чем это лучше << LIKE "prefix\%">>?
+Наличием GiST индекса для более быстрого поиска (тоесть, ваш автокомплит для поля будет очень быстрый).
