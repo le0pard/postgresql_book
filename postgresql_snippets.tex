@@ -329,3 +329,18 @@ foo~-- таблица, из которой идет выборка
 
 foo.catalog\_id~--- поле по которому ищем набор данных (замена foo.catalog\_id IN(3,2,6,1,4))
 
+\subsection{Куайн, Запрос который выводит сам себя}
+\begin{framed}
+Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), 
+которая выдаёт на выходе точную копию своего исходного текста. 
+
+В данном вот вариант с SQL для PostgreSQL.
+\end{framed}
+
+\begin{lstlisting}[label=lst:snippets13,caption=Запрос который выводит сам себя]
+select a || ' from (select ' || quote_literal(a) || b || ', ' || quote_literal(b) || '::text as b) as quine' from 
+(select 'select a || '' from (select '' || quote_literal(a) || b || '', '' || quote_literal(b) || ''::text as b) as 
+quine'''::text as a, '::text as a'::text as b) as quine;
+\end{lstlisting}
+
+Код для копирования: https://gist.github.com/972335
