@@ -4,7 +4,7 @@
 \RequirePackage{indentfirst}
 \RequirePackage[T2A]{fontenc}
 \RequirePackage[utf8x]{inputenc}
-\RequirePackage[english,russian]{babel}
+\RequirePackage[russian,USenglish]{babel}
 \RequirePackage[unicode,colorlinks=true,hypertexnames=false]{hyperref}
 \RequirePackage{color,listings}
 
@@ -12,7 +12,7 @@
 \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 
-\lstset {basicstyle=\ttfamily\footnotesize}
+\lstset {basicstyle=\rmfamily\footnotesize}
 \lstset {language=bash,title=Листинг,tabsize=2,breaklines=true,breakatwhitespace=true}
 \lstset {caption=\lstname,keepspaces=true,title=Листинг}
 \lstset {numbers=left,numberblanklines=false,frame=B}
@@ -20,7 +20,7 @@
 
 \usepackage{caption}
 
-\setlength{\epigraphwidth}{0.7\textwidth}
+\renewcommand{\familydefault}{\rmdefault}
 
 %\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
 %\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
