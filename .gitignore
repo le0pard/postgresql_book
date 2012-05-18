@@ -8,3 +8,6 @@
 *.tex~
 *.toc
 postgresql.pdf
+.DS_Store
+postgresql.synctex.gz
+latex/*
