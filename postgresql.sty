@@ -10,6 +10,7 @@
 \RequirePackage[scaled]{beramono}
 \RequirePackage{tgadventor}
 \RequirePackage[usenames,svgnames]{xcolor}
+%\RequirePackage[usenames,dvipsnames]{color}
 \RequirePackage{listings}
 \RequirePackage[colorlinks=true]{hyperref}
 \RequirePackage{perpage} %the perpage package
@@ -25,7 +26,7 @@
 \definecolor{title}{rgb}{0.4,0.4,0.4}
 
 \lstset{
-    language=Ruby,
+    language=SQL,
     basicstyle=\ttfamily\small\color{code},
     showspaces=false,
     showstringspaces=false,
@@ -38,9 +39,9 @@
     stringstyle=\itshape,
     morekeywords={dosync,if},
     deletekeywords={alter},
-    extendedchars=\true,
-    inputencoding=utf8x,
-    title=Листинг
+    title=Листинг,
+    extendedchars=\true
+    %inputencoding=utf8x
 }
 
 \lstdefinelanguage{JavaScript}{
