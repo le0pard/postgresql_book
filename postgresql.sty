@@ -1,44 +1,87 @@
 \ProvidesPackage{postgresql}
-\RequirePackage{cite,enumerate,tabularx,textcomp,amssymb,amsmath,amsfonts,subfig,listings,longtable,multirow,comment}
+\RequirePackage{cmap}
 \RequirePackage{graphicx}
+\RequirePackage{tabularx}
 \RequirePackage{indentfirst}
 \RequirePackage[T2A]{fontenc}
+\RequirePackage[english,russian]{babel}
+\RequirePackage{times}
 \RequirePackage[utf8x]{inputenc}
-\RequirePackage[russian,USenglish]{babel}
-\RequirePackage[unicode,colorlinks=true,hypertexnames=false]{hyperref}
-\RequirePackage{color,listings}
+%\RequirePackage[cp1251]{inputenc}
+%\RequirePackage{russ}
+\RequirePackage[scaled]{beramono}
+\RequirePackage{tgadventor}
+\RequirePackage{listings}
+\RequirePackage[usenames,svgnames]{xcolor}
+\RequirePackage[colorlinks=true]{hyperref}
+\RequirePackage{perpage} %the perpage package
+\RequirePackage{wrapfig}
 
-\DeclareCaptionFont{white}{\color{white}}
-\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
-\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 
-\lstset {basicstyle=\rmfamily\footnotesize}
-\lstset {language=bash,title=Листинг,tabsize=2,breaklines=true,breakatwhitespace=true}
-\lstset {caption=\lstname,keepspaces=true,title=Листинг}
-\lstset {numbers=left,numberblanklines=false,frame=B}
-\lstset {inputencoding=utf8x, extendedchars=\true}
+\definecolor{lineno}{rgb}{0.5,0.5,0.5}
+\definecolor{code}{rgb}{0,0.1,0.6}
+\definecolor{keyword}{rgb}{0.5,0.1,0.1}
+\definecolor{titlebox}{rgb}{0.85,0.85,0.85}
+\definecolor{download}{rgb}{0.8,0.1,0.5}
+\definecolor{title}{rgb}{0.4,0.4,0.4}
 
-\usepackage{caption}
+\lstset{
+    language=Ruby,
+    basicstyle=\ttfamily\small\color{code},
+    showspaces=false,
+    showstringspaces=false,
+    numbers=left,
+    firstnumber=1,
+    stepnumber=5,
+    numberfirstline=true,
+    numberstyle=\color{lineno}\sffamily\scriptsize,
+    keywordstyle=\color{keyword}\bfseries,
+    stringstyle=\itshape,
+    morekeywords={dosync,if},
+    deletekeywords={alter},
+    extendedchars=\true,
+    inputencoding=utf8x,
+    title=Листинг
+}
 
-\renewcommand{\familydefault}{\rmdefault}
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
 
-%\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
-%\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
-%\renewcommand{\thetable}{\arabic{section}.\arabic{table}}
 \makeatletter
-%\@addtoreset{equation}{section} % Счетчик формул
-%\@addtoreset{figure}{section} % Счетчик рисунков
-%\@addtoreset{table}{section} % Счетчик таблиц
+\gdef\lst@SkipOrPrintLabel{%
+    \ifnum\lst@skipnumbers=\z@
+        \global\advance\lst@skipnumbers-\lst@stepnumber\relax
+        \lst@PlaceNumber
+        \lst@numberfirstlinefalse
+    \else
+        \lst@ifnumberfirstline
+            {\def\thelstnumber{Line \@arabic\c@lstnumber}\lst@PlaceNumber}%
+            \lst@numberfirstlinefalse
+        \else
+            {\def\thelstnumber{-}\lst@PlaceNumber}%
+        \fi
+    \fi
+    \global\advance\lst@skipnumbers\@ne}%
+\def\lst@maketitle#1{
+   \vskip\abovecaptionskip
+   \colorbox{titlebox}{
+       \scriptsize
+       \color{download}\ttfamily\href{http://postgres.leopard.in.ua/codes/#1}{Download}
+       \color{title}\sffamily\bfseries#1}
+   \vskip\belowcaptionskip}
 \makeatother
 
-\let\olditemize=\itemize
-\def\itemize{
-  \olditemize
-  \setlength{\itemsep}{-1ex}
-}
 
-\let\oldenumerate=\enumerate
-\def\enumerate{
-  \oldenumerate
-  \setlength{\itemsep}{-1ex}
-}
+\MakePerPage{footnote} %the perpage package command
