@@ -20,6 +20,8 @@
 
 \graphicspath{{images/}{schemes/}{software/}}
 
+\renewcommand{\lstlistingname}{Код}
+
 \sloppy
 
 \definecolor{lineno}{rgb}{0.5,0.5,0.5}
@@ -27,7 +29,8 @@
 \definecolor{keyword}{rgb}{0.5,0.1,0.1}
 \definecolor{titlebox}{rgb}{0.85,0.85,0.85}
 \definecolor{download}{rgb}{0.8,0.1,0.5}
-\definecolor{title}{rgb}{0.4,0.4,0.4}
+\definecolor{code_title}{rgb}{0.8,0.1,0.4}
+\definecolor{title}{rgb}{0.2,0.2,0.2}
 
 \lstset{
     language=SQL,
@@ -83,10 +86,19 @@
 \def\lst@maketitle#1{
    \vskip\abovecaptionskip
    \colorbox{titlebox}{
-       \scriptsize
-       \color{download}\ttfamily\href{http://postgres.leopard.in.ua/codes/#1}{Download}
+       %\scriptsize
+       \small
+       \color{download}\ttfamily\href{http://postgres.leopard.in.ua/codes/#1}{Скачать}
        \color{title}\sffamily\bfseries#1}
    \vskip\belowcaptionskip}
+\def\lst@makecaption#1#2{
+  \vskip\abovecaptionskip
+  \colorbox{titlebox}{
+      %\scriptsize
+      \small
+      \color{code_title}\ttfamily#1
+      \color{title}\sffamily\bfseries#2}
+  \vskip\belowcaptionskip}
 \makeatother
 
 
