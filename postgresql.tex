@@ -1,26 +1,16 @@
 \documentclass[a4paper,12pt,oneside]{memoir}
 
 \usepackage{postgresql}
-\graphicspath{{images/}{schemes/}{software/}}
 
-\input{titlepages}
 \input{variables}
 
 \begin{document}
 
-\pagestyle{empty}
-%\titleGM
-\titleTMB
-\clearpage
+\input{titlepages}
 
 \setcounter{page}{1}
-\pagestyle{myindex}
-%\chapterstyle{bianchi}
 \chapterstyle{ell}
-%\chapterstyle{ger}
-%\chapterstyle{madsen}
-%\chapterstyle{veelo}
-\setcounter{tocdepth}{2}% subsections and above
+\setcounter{tocdepth}{2} % subsections and above
 \tableofcontents
 
 \input{postgresql_introduction}
