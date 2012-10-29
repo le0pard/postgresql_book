@@ -236,7 +236,7 @@ stats = memcache\_stats()
 \end{table}
 
 Посмотрим работу в СУБД данных функций. Для начала узнаем информацию по memcached серверах:
-\begin{lstlisting}[label=lst:pgcache7,caption=Проверка memcache\_stats]
+\begin{lstlisting}[label=lst:pgcache8,caption=Проверка memcache\_stats]
 pgmemcache=# SELECT memcache_stats();
       memcache_stats       
 ---------------------------
@@ -269,7 +269,7 @@ pgmemcache=# SELECT memcache_stats();
 \end{lstlisting}
 
 Теперь сохраним данные в memcached и попробуем их забрать:
-\begin{lstlisting}[label=lst:pgcache8,caption=Проверка]
+\begin{lstlisting}[label=lst:pgcache9,caption=Проверка]
 pgmemcache=# SELECT memcache_add('some_key', 'test_value');
  memcache_add 
 --------------
@@ -285,7 +285,7 @@ pgmemcache=# SELECT memcache_get('some_key');
 \end{lstlisting}
 
 Можно также проверить работу счетчиков в memcached (данный функционал может пригодится для создания последовательностей):
-\begin{lstlisting}[label=lst:pgcache9,caption=Проверка]
+\begin{lstlisting}[label=lst:pgcache10,caption=Проверка]
 pgmemcache=# SELECT memcache_add('some_seq', '10');
  memcache_add 
 --------------
@@ -335,7 +335,7 @@ pgmemcache=# SELECT memcache_decr('some_seq', 6);
 Например, наше приложение кэширует зашифрованые пароли пользователей в memcached 
 (для более быстрого доступа), 
 и нам требуется обновлять информацию в кэше, если она изменяется в СУБД. Создаем функцию:
-\begin{lstlisting}[label=lst:pgcache10,caption=Функция для обновления данных в кэше]
+\begin{lstlisting}[label=lst:pgcache11,caption=Функция для обновления данных в кэше]
 CREATE OR REPLACE FUNCTION auth_passwd_upd() RETURNS TRIGGER AS $$
 	BEGIN
 	IF OLD.passwd != NEW.passwd THEN
@@ -347,13 +347,13 @@ $$ LANGUAGE 'plpgsql';
 \end{lstlisting}
 
 Активируем триггер для обновления таблицы пользователей:
-\begin{lstlisting}[label=lst:pgcache11,caption=Триггер]
+\begin{lstlisting}[label=lst:pgcache12,caption=Триггер]
 CREATE TRIGGER auth_passwd_upd_trg AFTER UPDATE ON passwd FOR EACH ROW EXECUTE PROCEDURE auth_passwd_upd();
 \end{lstlisting}
 
 Но(!!!) данный пример транзакционно не безопасен~--- при отмене транзации кэш не вернется на старое значение. 
 Поэтому лучше очищать старые данные:
-\begin{lstlisting}[label=lst:pgcache12,caption=Очистка ключа в кэше]
+\begin{lstlisting}[label=lst:pgcache13,caption=Очистка ключа в кэше]
 CREATE OR REPLACE FUNCTION auth_passwd_upd() RETURNS TRIGGER AS $$
 BEGIN
 	IF OLD.passwd != NEW.passwd THEN
@@ -364,7 +364,7 @@ END;$$ LANGUAGE 'plpgsql';
 \end{lstlisting}
  
 Также нужен триггер на чистку кэша при удалении записи из СУБД:
-\begin{lstlisting}[label=lst:pgcache11,caption=Триггер]
+\begin{lstlisting}[label=lst:pgcache14,caption=Триггер]
 CREATE TRIGGER auth_passwd_del_trg AFTER DELETE ON passwd FOR EACH ROW EXECUTE PROCEDURE auth_passwd_upd();
 \end{lstlisting}
 
