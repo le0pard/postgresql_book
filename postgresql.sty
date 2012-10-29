@@ -10,6 +10,7 @@
 \RequirePackage[scaled]{beramono}
 \RequirePackage{tgadventor}
 \RequirePackage[usenames,svgnames]{xcolor}
+\RequirePackage{color}
 %\RequirePackage[usenames,dvipsnames]{color}
 \RequirePackage{listings}
 \RequirePackage[colorlinks=true]{hyperref}
@@ -49,8 +50,9 @@
     morekeywords={dosync,if},
     deletekeywords={alter},
     title=Листинг,
-    extendedchars=\true
-    %inputencoding=utf8x
+    keepspaces=true,
+    extendedchars=\true,
+    inputencoding=utf8x
 }
 
 \lstdefinelanguage{JavaScript}{
@@ -101,5 +103,16 @@
   \vskip\belowcaptionskip}
 \makeatother
 
+\let\olditemize=\itemize
+\def\itemize{
+  \olditemize
+  \setlength{\itemsep}{-1ex}
+}
+
+\let\oldenumerate=\enumerate
+\def\enumerate{
+  \oldenumerate
+  \setlength{\itemsep}{-1ex}
+}
 
 \MakePerPage{footnote} %the perpage package command
