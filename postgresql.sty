@@ -3,23 +3,28 @@
 \RequirePackage{graphicx}
 \RequirePackage{tabularx}
 \RequirePackage{indentfirst}
+\RequirePackage{mathtext}
 \RequirePackage[T2A]{fontenc}
-\RequirePackage[utf8x]{inputenc}
-\RequirePackage[english,russian]{babel}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[russian,english]{babel}
 \RequirePackage{times}
 \RequirePackage[scaled]{beramono}
 \RequirePackage{tgadventor}
 \RequirePackage[usenames,svgnames]{xcolor}
 \RequirePackage{color}
+\RequirePackage{amssymb,amsmath,amsfonts}
 %\RequirePackage[usenames,dvipsnames]{color}
 \RequirePackage{listings}
 \RequirePackage[colorlinks=true]{hyperref}
 \RequirePackage{perpage} %the perpage package
 \RequirePackage{wrapfig}
-\RequirePackage{mathtext}
 \RequirePackage{pdfpages} % cover image
+\RequirePackage{lmodern}
 
 \graphicspath{{images/}{schemes/}{software/}}
+
+%\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\rmdefault}{ftm}
 
 \renewcommand{\lstlistingname}{Код}
 
@@ -52,7 +57,7 @@
     title=Листинг,
     keepspaces=true,
     extendedchars=\true,
-    inputencoding=utf8x
+    inputencoding=utf8
 }
 
 \lstdefinelanguage{JavaScript}{
