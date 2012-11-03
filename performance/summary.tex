@@ -228,8 +228,8 @@ Time: 25,270 ms
 
 \end{lstlisting}
 
-\subsection{Оптимизация запросов с помощью pgFouine}
-pgFouine\footnote{http://pgfouine.projects.postgresql.org/}~--- это 
+\subsection{Оптимизация запросов с помощью pgFouine и pgBadger}
+pgFouine\footnote{http://pgfouine.projects.pgfoundry.org/}~--- это 
 анализатор log-файлов для PostgreSQL, используемый для генерации детальных отчетов из 
 log-файлов PostgreSQL. pgFouine поможет определить, какие запросы следует оптимизировать в первую очередь.
 pgFouine написан на языке программирования PHP с использованием объектно-ориентированных технологий и легко 
@@ -267,5 +267,42 @@ pgfouine.php -file your/log/file.log > your-report.html
 pgfouine.php -file your/log/file.log -top 10 -format text
 \end{lstlisting}
 
-Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайта проекта~--- 
-http://pgfouine.projects.postgresql.org.
+Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайта проекта~--- \href{http://pgfouine.projects.pgfoundry.org/}{pgfouine.projects.pgfoundry.org}.
+
+pgBadger\footnote{http://dalibo.github.com/pgbadger/}~--- аналогичная утилита, что и pgFouine, но написаная на Perl. Еще одно большое преимущество проекта в том, что он более активно сейчас разрабатывается (на момент написания этого текта последний релиз pgFouine был в 24.02.2010, а последняя версия pgBadger~--- 12.10.2012). Установка pgBadger проста:
+
+\begin{lstlisting}[label=lst:sql_performance9,caption=Установка pgBadger]
+tar xzf pgbadger-2.x.tar.gz
+cd pgbadger-2.x/
+perl Makefile.PL
+make && sudo make install
+\end{lstlisting}
+
+Как и с случае с pgFouine нужно настроить PostgreSQL логи:
+
+\begin{lstlisting}[label=lst:sql_performance10,caption=Настройка логов PostgreSQL]
+logging_collector = on
+log_min_messages = debug1
+log_min_error_statement = debug1
+log_min_duration_statement = 0
+log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '
+log_checkpoints = on
+log_connections = on
+log_disconnections = on
+log_lock_waits = on
+log_temp_files = 0
+\end{lstlisting}
+
+Парсим логи PostgreSQL через pgBadger:
+
+\begin{lstlisting}[label=lst:sql_performance11,caption=Запуск pgBadger]
+$ ./pgbadger ~/pgsql/master/pg_log/postgresql-2012-08-30_132*
+[========================>] Parsed 10485768 bytes of 10485768 (100.00%)
+[========================>] Parsed 10485828 bytes of 10485828 (100.00%)
+[========================>] Parsed 10485851 bytes of 10485851 (100.00%)
+[========================>] Parsed 10485848 bytes of 10485848 (100.00%)
+[========================>] Parsed 10485839 bytes of 10485839 (100.00%)
+[========================>] Parsed 982536 bytes of 982536 (100.00%)
+\end{lstlisting}
+
+В результате получится HTML файлы, которые содержат статистику по запросам к PostgreSQL. Более подробно о возможностях можно найти на официальном сайта проекта~--- \href{http://dalibo.github.com/pgbadger/}{dalibo.github.com/pgbadger}.
