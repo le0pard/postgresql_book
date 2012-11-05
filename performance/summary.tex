@@ -310,4 +310,80 @@ $ ./pgbadger ~/pgsql/master/pg_log/postgresql-2012-08-30_132*
 В результате получится HTML файлы, которые содержат статистику по запросам к PostgreSQL. Более подробно о возможностях можно найти на официальном сайта проекта \href{http://dalibo.github.com/pgbadger/}{dalibo.github.com/pgbadger}.
 
 \subsubsection{pg\_stat\_statements}
-pg\_stat\_statements~--- расширение для сбора статистики выполнения запросов в рамках всего сервера.
+pg\_stat\_statements~--- расширение для сбора статистики выполнения запросов в рамках всего сервера. Преимущество данного расширения в том, что ему не требуется собирать и парсить логи PostgreSQL, как это делает pgFouine и pgBadger. Для начала установим и настроим его:
+
+\begin{lstlisting}[label=lst:sql_performance12,caption=Настройка pg\_stat\_statements в postgresql.conf]
+shared_preload_libraries = 'pg_stat_statements'
+custom_variable_classes = 'pg_stat_statements' # данная настройка нужна для PostgreSQL 9.1 и ниже
+
+pg_stat_statements.max = 10000
+pg_stat_statements.track = all
+\end{lstlisting}
+
+После внесения этих параметров PostgreSQL потребуется перегрузить. Параметры конфигурации pg\_stat\_statements:
+
+\begin{enumerate}
+\item <<pg\_stat\_statements.max (integer)>>~--- максимальное количество sql запросов, которые будет хранится расширением (удаляются записи с наименьшим количеством вызовов)
+\item <<pg\_stat\_statements.track (enum)>>~--- какие SQL запросы требуется записывать. Возможные параметры: top (только запросы от приложения/клиента), all (все запросы, например в функциях) и none (отключить сбор статистики).
+\item <<pg\_stat\_statements.save (boolean)>>~--- следует ли сохранять собраную статистику после остановки PostgreSQL. По-умолчанию включено.
+\end{enumerate}
+
+Далее активируем расширение:
+
+\begin{lstlisting}[label=lst:sql_performance13,caption=Активация pg\_stat\_statements]
+# CREATE EXTENSION pg_stat_statements;
+\end{lstlisting}
+
+Пример собраной статистики:
+
+\begin{lstlisting}[label=lst:sql_performance14,caption=pg\_stat\_statements статистика]
+# SELECT query, calls, total_time, rows, 100.0 * shared_blks_hit /
+               nullif(shared_blks_hit + shared_blks_read, 0) AS hit_percent
+          FROM pg_stat_statements ORDER BY total_time DESC LIMIT 10;
+-[ RECORD 1 ]----------------------------------------------------------------------------
+query       | SELECT query, calls, total_time, rows, ? * shared_blks_hit /
+            |                nullif(shared_blks_hit + shared_blks_read, ?) AS hit_percent
+            |           FROM pg_stat_statements ORDER BY total_time DESC LIMIT ?;
+calls       | 3
+total_time  | 0.994
+rows        | 7
+hit_percent | 100.0000000000000000
+-[ RECORD 2 ]----------------------------------------------------------------------------
+query       | insert into x (i) select generate_series(?,?);
+calls       | 2
+total_time  | 0.591
+rows        | 110
+hit_percent | 100.0000000000000000
+-[ RECORD 3 ]----------------------------------------------------------------------------
+query       | select * from x where i = ?;
+calls       | 2
+total_time  | 0.157
+rows        | 6
+hit_percent | 100.0000000000000000
+-[ RECORD 4 ]----------------------------------------------------------------------------
+query       | SELECT pg_stat_statements_reset();
+calls       | 1
+total_time  | 0.102
+rows        | 1
+hit_percent | 
+\end{lstlisting}
+
+Для сброса статистики есть команда pg\_stat\_statements\_reset:
+
+\begin{lstlisting}[label=lst:sql_performance15,caption=Сброс статистика]
+# SELECT pg_stat_statements_reset();
+-[ RECORD 1 ]------------+-
+pg_stat_statements_reset | 
+
+# SELECT query, calls, total_time, rows, 100.0 * shared_blks_hit /
+               nullif(shared_blks_hit + shared_blks_read, 0) AS hit_percent
+          FROM pg_stat_statements ORDER BY total_time DESC LIMIT 10;
+-[ RECORD 1 ]-----------------------------------
+query       | SELECT pg_stat_statements_reset();
+calls       | 1
+total_time  | 0.175
+rows        | 1
+hit_percent | 
+\end{lstlisting}
+
+Хочется сразу отметить, что расширение только с версии PostgreSQL 9.2 contrib нормализирует SQL запросы. В версиях 9.1 и ниже SQL запросы сохраняются как есть, а значит <<select * from table where id = 3>> и <<select * from table where id = 21>> буду разными записями, что почти бесполезно для сбора полезной статистики.

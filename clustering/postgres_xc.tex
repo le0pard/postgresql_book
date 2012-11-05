@@ -235,65 +235,6 @@ $ psql -p15433
 
 \end{enumerate}
 
-Рассмотрим как выполняются запросы для распределенных таблиц. Выберем все записи из таблицы:
-
-\begin{lstlisting}[label=lst:postgres-xc6,caption=Выборка записей из распределенной таблицы]
-# EXPLAIN VERBOSE SELECT * from users_with_modulo ORDER BY id;
-                                      QUERY PLAN                                      
---------------------------------------------------------------------------------------
- Sort  (cost=49.83..52.33 rows=1000 width=8)
-   Output: id, type
-   Sort Key: users_with_modulo.id
-   ->  Result  (cost=0.00..0.00 rows=1000 width=8)
-         Output: id, type
-         ->  Data Node Scan on users_with_modulo  (cost=0.00..0.00 rows=1000 width=8)
-               Output: id, type
-               Node/s: dn1, dn2
-               Remote query: SELECT id, type FROM ONLY users_with_modulo WHERE true
-(9 rows)
-\end{lstlisting}
-
-Как видно на листинге~\ref{lst:postgres-xc6} координатор собирает данные и обработчиков данных, а потом собирает их вместе. 
-
-Подсчет суммы с групировкой по полю:
-
-\begin{lstlisting}[label=lst:postgres-xc7,caption=Выборка записей из распределенной таблицы]
-# EXPLAIN VERBOSE SELECT sum(id) from users_with_modulo GROUP BY type;
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- HashAggregate  (cost=5.00..5.01 rows=1 width=8)
-   Output: pg_catalog.sum((sum(users_with_modulo.id))), users_with_modulo.type
-   ->  Materialize  (cost=0.00..0.00 rows=0 width=0)
-         Output: (sum(users_with_modulo.id)), users_with_modulo.type
-         ->  Data Node Scan on "__REMOTE_GROUP_QUERY__"  (cost=0.00..0.00 rows=1000 width=8)
-               Output: sum(users_with_modulo.id), users_with_modulo.type
-               Node/s: dn1, dn2
-               Remote query: SELECT sum(group_1.id), group_1.type  FROM (SELECT id, type FROM ONLY users_with_modulo WHERE true) group_1 GROUP BY 2  
-(8 rows)
-\end{lstlisting}
-
-JOIN запрос:
-
-\begin{lstlisting}[label=lst:postgres-xc8,caption=Выборка записей из распределенной таблицы]
-# EXPLAIN VERBOSE SELECT * from users_with_modulo, users_with_hash WHERE users_with_modulo.id = users_with_hash.id;
-                                            QUERY PLAN                                            
---------------------------------------------------------------------------------------------------
- Nested Loop  (cost=0.00..0.01 rows=1 width=16)
-   Output: users_with_modulo.id, users_with_modulo.type, users_with_hash.id, users_with_hash.type
-   Join Filter: (users_with_modulo.id = users_with_hash.id)
-   ->  Data Node Scan on users_with_modulo  (cost=0.00..0.00 rows=1000 width=8)
-         Output: users_with_modulo.id, users_with_modulo.type
-         Node/s: dn1, dn2
-         Remote query: SELECT id, type FROM ONLY users_with_modulo WHERE true
-   ->  Data Node Scan on users_with_hash  (cost=0.00..0.00 rows=1000 width=8)
-         Output: users_with_hash.id, users_with_hash.type
-         Node/s: dn1, dn2
-         Remote query: SELECT id, type FROM ONLY users_with_hash WHERE true
-(11 rows)
-\end{lstlisting}
-
-JOIN между и с участием реплицированных таблиц, а также JOIN между распределенными по одному и тому же полю в таблицах будет выполняются на обработчиках данных. Но JOIN с участием распределенных таблиц по другим ключам будут выполнены на координаторе и скорее всего это будет медленно (листинг~\ref{lst:postgres-xc8}).
-
 Теперь создадим реплицированную таблицу:
 
 \begin{lstlisting}[label=lst:postgres-xc20,caption=Создание реплицированной таблицы]
@@ -325,7 +266,64 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;
     15 |    58
 \end{lstlisting} 
 
-Пример выборки данных:
+Рассмотрим как выполняются запросы для таблиц. Выберем все записи из распределенной таблицы:
+
+\begin{lstlisting}[label=lst:postgres-xc6,caption=Выборка записей из распределенной таблицы]
+# EXPLAIN VERBOSE SELECT * from users_with_modulo ORDER BY id;
+                                      QUERY PLAN                                      
+--------------------------------------------------------------------------------------
+ Sort  (cost=49.83..52.33 rows=1000 width=8)
+   Output: id, type
+   Sort Key: users_with_modulo.id
+   ->  Result  (cost=0.00..0.00 rows=1000 width=8)
+         Output: id, type
+         ->  Data Node Scan on users_with_modulo  (cost=0.00..0.00 rows=1000 width=8)
+               Output: id, type
+               Node/s: dn1, dn2
+               Remote query: SELECT id, type FROM ONLY users_with_modulo WHERE true
+(9 rows)
+\end{lstlisting}
+
+Как видно на листинге~\ref{lst:postgres-xc6} координатор собирает данные и обработчиков данных, а потом собирает их вместе. 
+
+Подсчет суммы с групировкой по полю из распределенной таблицы:
+
+\begin{lstlisting}[label=lst:postgres-xc7,caption=Выборка записей из распределенной таблицы]
+# EXPLAIN VERBOSE SELECT sum(id) from users_with_modulo GROUP BY type;
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=5.00..5.01 rows=1 width=8)
+   Output: pg_catalog.sum((sum(users_with_modulo.id))), users_with_modulo.type
+   ->  Materialize  (cost=0.00..0.00 rows=0 width=0)
+         Output: (sum(users_with_modulo.id)), users_with_modulo.type
+         ->  Data Node Scan on "__REMOTE_GROUP_QUERY__"  (cost=0.00..0.00 rows=1000 width=8)
+               Output: sum(users_with_modulo.id), users_with_modulo.type
+               Node/s: dn1, dn2
+               Remote query: SELECT sum(group_1.id), group_1.type  FROM (SELECT id, type FROM ONLY users_with_modulo WHERE true) group_1 GROUP BY 2  
+(8 rows)
+\end{lstlisting}
+
+JOIN между и с участием реплицированных таблиц, а также JOIN между распределенными по одному и тому же полю в таблицах будет выполняются на обработчиках данных. Но JOIN с участием распределенных таблиц по другим ключам будут выполнены на координаторе и скорее всего это будет медленно (листинг~\ref{lst:postgres-xc8}).
+
+\begin{lstlisting}[label=lst:postgres-xc8,caption=Выборка записей из распределенной таблицы]
+# EXPLAIN VERBOSE SELECT * from users_with_modulo, users_with_hash WHERE users_with_modulo.id = users_with_hash.id;
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=0.00..0.01 rows=1 width=16)
+   Output: users_with_modulo.id, users_with_modulo.type, users_with_hash.id, users_with_hash.type
+   Join Filter: (users_with_modulo.id = users_with_hash.id)
+   ->  Data Node Scan on users_with_modulo  (cost=0.00..0.00 rows=1000 width=8)
+         Output: users_with_modulo.id, users_with_modulo.type
+         Node/s: dn1, dn2
+         Remote query: SELECT id, type FROM ONLY users_with_modulo WHERE true
+   ->  Data Node Scan on users_with_hash  (cost=0.00..0.00 rows=1000 width=8)
+         Output: users_with_hash.id, users_with_hash.type
+         Node/s: dn1, dn2
+         Remote query: SELECT id, type FROM ONLY users_with_hash WHERE true
+(11 rows)
+\end{lstlisting}
+
+Пример выборки данных из реплицированной таблицы:
 
 \begin{lstlisting}[label=lst:postgres-xc22,caption=Выборка записей из реплицированной таблицы]
 # EXPLAIN VERBOSE SELECT * from users_replicated;
@@ -357,4 +355,4 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;
 \end{enumerate}
 
 \subsection{Заключение}
-Postgres-XC на сегодняшний день очень перспективное решение для создание кластера на основе PostgreSQL. И хоть это решение имеет ряд недостатков, зачастую нестабильно (очень часты случаи падения координаторов при тяжелых запросах) и еще очень молодое, со временем это решение может стать стандартом для масштабирования систем на PostgreSQL.
+Postgres-XC очень перспективное решение для создание кластера на основе PostgreSQL. И хоть это решение имеет ряд недостатков, нестабильно (очень часты случаи падения координаторов при тяжелых запросах) и еще очень молодое, со временем это решение может стать стандартом для масштабирования систем на PostgreSQL.
