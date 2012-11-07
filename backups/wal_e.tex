@@ -1,1 +1,22 @@
 \subsection{WAL-E}
+\textbf{Ссылка}: \href{https://github.com/heroku/WAL-E}{github.com/heroku/WAL-E}
+
+WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в S3 и управления использованием pg\_start\_backup и pg\_stop\_backup. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют. 
+
+\subsubsection{Установка}
+
+У WAL-E есть пару зависимостей: lzop, psql, mbuffer, python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
+
+\begin{lstlisting}[label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
+# PostgreSQL уже установлен
+aptitude install git-core python-dev python-setuptools build-essential libevent-dev lzop mbuffer daemontools daemontools-run
+\end{lstlisting}
+
+Теперь установим WAL-E:
+
+\begin{lstlisting}[label=lst:wal-e2,caption=Установка WAL-E]
+git clone git://github.com/heroku/WAL-E.git
+cd WAL-E
+python setup.py build
+sudo python setup.py install
+\end{lstlisting}
