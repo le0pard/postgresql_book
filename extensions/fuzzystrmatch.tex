@@ -1,0 +1,101 @@
+\section{Fuzzystrmatch}
+\textbf{Лицензия}: Open Source
+
+Fuzzystrmatch предоставляет несколько функций для определения сходства и расстояния между строками. Функция soundex используется для согласования сходно звучащих имен путем преобразования их в одинаковый код. Функция difference преобразует две строки в soundex код, а затем сообщает количество совпадающих позиций кода. В soundex код состоит из четырех символов, поэтому результат будет от нуля до четырех: 0~--- не совпадают, 4~--- точное совпадение (таким образом, функция названа неверно~--- как название лучше подходит similarity):
+
+\begin{lstlisting}[label=lst:ext_fuzzystrmatch1,caption=soundex]
+# CREATE EXTENSION fuzzystrmatch;
+CREATE EXTENSION
+# SELECT soundex('hello world!');
+ soundex 
+---------
+ H464
+(1 row)
+
+# SELECT soundex('Anne'), soundex('Ann'), difference('Anne', 'Ann');
+ soundex | soundex | difference 
+---------+---------+------------
+ A500    | A500    |          4
+(1 row)
+
+# SELECT soundex('Anne'), soundex('Andrew'), difference('Anne', 'Andrew');
+ soundex | soundex | difference 
+---------+---------+------------
+ A500    | A536    |          2
+(1 row)
+
+# SELECT soundex('Anne'), soundex('Margaret'), difference('Anne', 'Margaret');
+ soundex | soundex | difference 
+---------+---------+------------
+ A500    | M626    |          0
+(1 row)
+
+# CREATE TABLE s (nm text);
+CREATE TABLE
+# INSERT INTO s VALUES ('john'), ('joan'), ('wobbly'), ('jack');
+INSERT 0 4
+# SELECT * FROM s WHERE soundex(nm) = soundex('john');
+  nm  
+------
+ john
+ joan
+(2 rows)
+ 
+# SELECT * FROM s WHERE difference(s.nm, 'john') > 2;
+  nm  
+------
+ john
+ joan
+ jack
+(3 rows)
+\end{lstlisting}
+
+Функция levenshtein вычисляет расстояние Левенштейна\footnote{http://en.wikipedia.org/wiki/Levenshtein\_distance} между двумя строками. levenshtein\_less\_equal ускоряется функцию levenshtein для маленьких значений расстояния:
+
+\begin{lstlisting}[label=lst:ext_fuzzystrmatch2,caption=levenshtein]
+# SELECT levenshtein('GUMBO', 'GAMBOL');
+ levenshtein
+-------------
+           2
+(1 row)
+
+# SELECT levenshtein('GUMBO', 'GAMBOL', 2, 1, 1);
+ levenshtein
+-------------
+           3
+(1 row)
+
+# SELECT levenshtein_less_equal('extensive', 'exhaustive', 2);
+ levenshtein_less_equal
+------------------------
+                      3
+(1 row)
+
+test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
+ levenshtein_less_equal
+------------------------
+                      4
+(1 row)
+\end{lstlisting}
+
+Функция metaphone, как и soundex, построена на идее создания кода для строки: две строки, которые будут считатся похожими, будут иметь одинаковые коды. Последним параметром указывается максимальная длина metaphone кода. Функция dmetaphone вычисляет два <<как звучит>> кода для строки~--- <<первичный>> и <<альтернативный>>:
+
+\begin{lstlisting}[label=lst:ext_fuzzystrmatch3,caption=metaphone]
+# SELECT metaphone('GUMBO', 4);
+ metaphone
+-----------
+ KM
+(1 row)
+# SELECT dmetaphone('postgresql');
+ dmetaphone 
+------------
+ PSTK
+(1 row)
+
+# SELECT dmetaphone_alt('postgresql');
+ dmetaphone_alt 
+----------------
+ PSTK
+(1 row)
+\end{lstlisting}
+
