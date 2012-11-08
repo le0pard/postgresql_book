@@ -21,7 +21,10 @@ python setup.py build
 sudo python setup.py install
 \end{lstlisting}
 
-После успешной установки можно начать работать с WAL-E. Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>>. Команда для загрузки бэкапа всей базу данный в S3:
+После успешной установки можно начать работать с WAL-E. 
+
+\subsubsection{Работа}
+Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>>. Команда для загрузки бэкапа всей базу данный в S3:
 
 \begin{lstlisting}[label=lst:wal-e3,caption=Загрузка бэкапа всей базы данных в S3]
 AWS_SECRET_ACCESS_KEY=... wal-e                     \
@@ -120,12 +123,47 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
   \label{fig:wal-e3}
 \end{figure}
 
-Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. 
+Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Бэкапы сжаты через lzop (хуже сжимает, чем gzip, но скорость сжатия намного быстрее). Чтобы уменьшить нагрузку на чтения с жесткого диска бэкапы отправляются через mbuffer (через опцию << --cluster-read-rate-limit>> можно ограничить скорость чтения, если это требуется).
 
-Теперь перейдем к восстановлению данных. Для восстановления базы из бэкапа исполоьзутеся эта команда:
+Теперь перейдем к восстановлению данных. Для восстановления базы из бэкапа использутеся <<backup-fetch>> команда:
 
 \begin{lstlisting}[label=lst:wal-e10,caption=Восстановление бэкапа базы из S3]
 $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main LATEST"
 \end{lstlisting}
 
-Где <<LATEST>> означает восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен).
+Где <<LATEST>> означает восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен). Для восстановления из более позднего бэкапа:
+
+\begin{lstlisting}[label=lst:wal-e11,caption=Восстановление старшего бэкапа из S3]
+$ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main base_LONGWALNUMBER_POSITION_NUMBER"
+\end{lstlisting}
+
+Для получения списка доступных бэкапов есть команда <<backup-list>>:
+
+\begin{lstlisting}[label=lst:wal-e12,caption=Список бэкапов]
+$ envdir /etc/wal-e.d/env wal-e backup-list
+name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
+base_000000010000000000000008_00000032	2012-11-07T14:53:47.000Z		000000010000000000000008	00000032		
+base_00000001000000000000000C_00000032	2012-11-07T15:00:08.000Z		00000001000000000000000C	00000032
+\end{lstlisting}
+
+После завершения работы с основным бэкапом для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния) и для этого используем recovery.conf:
+
+\begin{lstlisting}[label=lst:wal-e13,caption=recovery.conf]
+restore_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch "%f" "%p"'
+\end{lstlisting}
+
+После создания этого файла нужно запустить PostgreSQL. Через небольшой интервал времени база станет полностью восстановленной. 
+
+Для удаления старых бэкапов (или вообще всех) используется команда <<delete>>:
+
+\begin{lstlisting}[label=lst:wal-e14,caption=Удаление бэкапов]
+# удаления старых бэкапов старше base_00000004000002DF000000A6_03626144
+$ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000000A6_03626144
+# удаления всех бэкапов
+$ envdir /etc/wal-e.d/env wal-e delete --confirm everything
+\end{lstlisting}
+
+Без опции <<--confirm>> команды будут запускатся и показывать, что будет удаляться, но фактического удаления не будет производится (dry run).
+
+\subsubsection{Заключение}
+WAL-E 
