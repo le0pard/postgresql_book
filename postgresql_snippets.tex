@@ -12,18 +12,12 @@
 которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения 
 мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска по Интернету. 
 
-Если вы вледеете интересными методами решения разных проблем, то добавляйте их на данной странице 
-\footnote{https://github.com/le0pard/postgresql\_book/issues}.
-
 \section{Советы}
 
 \subsection{Размер объектов в базе данных}
+Данный запрос показывает размер объектов в базе данных (например таблиц и индексов).
 
-\begin{framed}
-Данный запрос показывает размер объектов в базе данных (например таблиц и индексов). PostgreSQL версии >= 8.1.
-\end{framed}
-
-\begin{lstlisting}[label=lst:snippets1,caption=Поиск самых больших объектов в БД. SQL запрос]
+\begin{lstlisting}[label=lst:snippets1,title=snippets/biggest\_relations.sql]
 SELECT nspname || '.' || relname AS "relation",
     pg_size_pretty(pg_relation_size(C.oid)) AS "size"
   FROM pg_class C
@@ -33,10 +27,8 @@ SELECT nspname || '.' || relname AS "relation",
   LIMIT 20;
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/910674
-
 Пример вывода:
-\begin{lstlisting}[label=lst:snippets2,caption=Поиск самых больших объектов в БД. Пример вывод]
+\begin{lstlisting}[label=lst:snippets2,caption=Поиск самых больших объектов в БД. Пример вывода]
         relation        |    size    
 ------------------------+------------
  public.accounts        | 326 MB
@@ -49,12 +41,9 @@ SELECT nspname || '.' || relname AS "relation",
 \end{lstlisting}
 
 \subsection{Размер самых больших таблиц}
+Данный запрос показывает размер самых больших таблиц в базе данных.
 
-\begin{framed}
-Данный запрос показывает размер самых больших таблиц в базе данных. PostgreSQL версии >= 8.1.
-\end{framed}
-
-\begin{lstlisting}[label=lst:snippets3,caption=Размер самых больших таблиц. SQL запрос]
+\begin{lstlisting}[label=lst:snippets3,title=snippets/biggest\_tables.sql]
 SELECT nspname || '.' || relname AS "relation",
     pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
   FROM pg_class C
@@ -66,10 +55,8 @@ SELECT nspname || '.' || relname AS "relation",
   LIMIT 20;
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/910696
-
 Пример вывода:
-\begin{lstlisting}[label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывод]
+\begin{lstlisting}[label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывода]
             relation            | total_size 
 --------------------------------+------------
  public.actions                 | 4249 MB
@@ -81,13 +68,10 @@ SELECT nspname || '.' || relname AS "relation",
 \end{lstlisting}
 
 \subsection{<<Средний>> count}
-
-\begin{framed}
 Данный метод позволяет узнать приблизительное количество записей в таблице. 
 Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
-\end{framed}
 
-\begin{lstlisting}[label=lst:snippets5,caption=<<Средний>> count. SQL запрос]
+\begin{lstlisting}[label=lst:snippets5,title=snippets/count\_estimate.sql]
 CREATE LANGUAGE plpgsql;
 CREATE FUNCTION count_estimate(query text) RETURNS integer AS $$
 DECLARE
@@ -102,11 +86,10 @@ BEGIN
     RETURN rows;
 END;
 $$ LANGUAGE plpgsql VOLATILE STRICT;
+\end{lstlisting}
 
-
-Testing:
-
-
+Пример:
+\begin{lstlisting}[label=lst:snippets51,caption=<<Средний>> count. Пример]
 CREATE TABLE foo (r double precision);
 INSERT INTO foo SELECT random() FROM generate_series(1, 1000);
 ANALYZE foo;
@@ -124,15 +107,10 @@ ANALYZE foo;
 (1 row)
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/910728
-
-
 \subsection{Узнать значение по-умолчанию у поля в таблице}
-\begin{framed}
 Данный метод позволяет узнать значение по-умолчанию у поля в таблице (заданое через DEFAULT).
-\end{framed}
 
-\begin{lstlisting}[label=lst:snippets6,caption=Узнать значение по-умолчанию у поля в таблице. SQL запрос]
+\begin{lstlisting}[label=lst:snippets6,title=snippets/default\_value.sql]
 CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
 SELECT 
   COLUMNS.column_default::text
@@ -143,8 +121,6 @@ FROM
   AND column_name = $3
 $$ LANGUAGE sql IMMUTABLE;
 \end{lstlisting}
-
-Код для копирования: https://gist.github.com/910749
 
 Пример:
 \begin{lstlisting}[label=lst:snippets7,caption=Узнать значение по-умолчанию у поля в таблице. Пример]
@@ -164,19 +140,15 @@ SELECT ret_def('public','schema_migrations','version');
 \end{lstlisting}
 
 \subsection{Случайное число из диапазона}
-\begin{framed}
 Данный метод позволяет взять случайное(random) число из указаного диапазона (целое или с плавающей запятой).
-\end{framed}
 
-\begin{lstlisting}[label=lst:snippets8,caption=Случайное число из диапазона. SQL запрос]
+\begin{lstlisting}[label=lst:snippets8,title=snippets/random\_from\_range.sql]
 CREATE OR REPLACE FUNCTION random(numeric, numeric)
 RETURNS numeric AS
 $$
    SELECT ($1 + ($2 - $1) * random())::numeric;
 $$ LANGUAGE 'sql' VOLATILE;
 \end{lstlisting}
-
-Код для копирования: https://gist.github.com/910763
 
 Пример:
 \begin{lstlisting}[label=lst:snippets9,caption=Случайное число из диапазона. Пример]
@@ -194,8 +166,7 @@ SELECT random(1,10)::int, random(1,10);
 \end{lstlisting}
 
 \subsection{Алгоритм Луна}
-\begin{framed}
-Алгоритм Луна или формула Луна~--- алгоритм вычисления контрольной цифры, получивший широкую популярность. 
+Алгоритм Луна или формула Луна\footnote{http://en.wikipedia.org/wiki/Luhn\_algorithm}~--- алгоритм вычисления контрольной цифры, получивший широкую популярность. 
 Он используется, в частности, при первичной проверке номеров банковских пластиковых карт, номеров социального 
 страхования в США и Канаде. Алгоритм был разработан сотрудником компании <<IBM>> Хансом Петером Луном и 
 запатентован в 1960 году.
@@ -203,13 +174,9 @@ SELECT random(1,10)::int, random(1,10);
 Контрольные цифры вообще и алгоритм Луна в частности предназначены для защиты от случайных ошибок, 
 а не преднамеренных искажений данных.
 
-Подробней http://en.wikipedia.org/wiki/Luhn\_algorithm
-
-
 Алгоритм Луна реализован на чистом SQL. Обратите внимание, что эта реализация является чисто арифметической.
-\end{framed}
 
-\begin{lstlisting}[label=lst:snippets10,caption=Алгоритм Луна. SQL запрос]
+\begin{lstlisting}[label=lst:snippets10,title=snippets/luhn\_algorithm.sql]
 CREATE OR REPLACE FUNCTION luhn_verify(int8) RETURNS BOOLEAN AS $$
 -- Take the sum of the
 -- doubled digits and the even-numbered undoubled digits, and see if
@@ -287,8 +254,6 @@ the input value. Intended for use when stripping the check digit from a number
 including a Luhn''s algorithm check digit.';
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/910793
-
 Пример:
 \begin{lstlisting}[label=lst:snippets11,caption=Алгоритм Луна. Пример]
 Select luhn_verify(49927398716);
@@ -306,15 +271,13 @@ Select luhn_verify(49927398714);
 \end{lstlisting}
 
 \subsection{Выборка и сортировка по данному набору данных}
-\begin{framed}
 Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать 
 данные в том же порядке, в котором передан набор данных. Например:
 
 Дан набор: (2,6,4,10,25,7,9)
 Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
-\end{framed}
 
-\begin{lstlisting}[label=lst:snippets12,caption=Выборка и сортировка по данному набору данных. SQL запрос]
+\begin{lstlisting}[label=lst:snippets12,title=snippets/order\_like\_in.sql]
 SELECT foo.* FROM foo                                           
 JOIN (SELECT id.val, row_number() over() FROM (VALUES(3),(2),(6),(1),(4)) AS
 id(val)) AS id
@@ -330,33 +293,24 @@ foo~-- таблица, из которой идет выборка
 foo.catalog\_id~--- поле по которому ищем набор данных (замена foo.catalog\_id IN(3,2,6,1,4))
 
 \subsection{Куайн, Запрос который выводит сам себя}
-\begin{framed}
 Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), 
 которая выдаёт на выходе точную копию своего исходного текста. 
 
-В данном вот вариант с SQL для PostgreSQL.
-\end{framed}
-
-\begin{lstlisting}[label=lst:snippets13,caption=Запрос который выводит сам себя]
+\begin{lstlisting}[label=lst:snippets13,title=snippets/quine.sql]
 select a || ' from (select ' || quote_literal(a) || b || ', ' || quote_literal(b) || '::text as b) as quine' from 
 (select 'select a || '' from (select '' || quote_literal(a) || b || '', '' || quote_literal(b) || ''::text as b) as 
 quine'''::text as a, '::text as a'::text as b) as quine;
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/972335
-
-
 \subsection{Ускоряем LIKE}
-\begin{framed}
-Автокомплит~--- очень популярная фишка в web2.0 системах. Для базы это реализуется простым LIKE <<some\%>>, 
+Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым LIKE <<some\%>>, 
 где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и огромной таблице 
 (например таблица тегов) такой запрос будет очень медленный.
 
 Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать text\_pattern\_ops 
-(или varchar\_pattern\_ops если у поле varchar). Внимание на пример.
-\end{framed}
+(или varchar\_pattern\_ops если у поле varchar).
 
-\begin{lstlisting}[label=lst:snippets14,caption=Ускоряем LIKE]
+\begin{lstlisting}[label=lst:snippets14,title=snippets/speed\_like.sql]
 prefix_test=# create table tags (
 prefix_test(#  tag    text primary key,
 prefix_test(#  name      text not null,
@@ -395,11 +349,6 @@ prefix_test=# select count(*) from invalid_tags;
  11966
 (1 row)
 
-
-
-TEST STANDART LIKE
-
-
 # EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower('0146%');
                                                  QUERY PLAN                                                 
 ------------------------------------------------------------------------------------------------------------
@@ -415,11 +364,6 @@ TEST STANDART LIKE
    Filter: (lower(tag) ~~ '0146%'::text)
  Total runtime: 19.550 ms
 (3 rows)
-
-
-
-TEST VARIANT WITH text_pattern_ops
-
 
 # EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
                                                       QUERY PLAN                                                       
@@ -444,4 +388,52 @@ TEST VARIANT WITH text_pattern_ops
 
 \end{lstlisting}
 
-Код для копирования: https://gist.github.com/972713
+\subsection{Поиск дубликатов индексов}
+Запрос находит несколько индексы, созданые на одинаковый набор столбцов (индексы эквавалентны, а значит бесполезны).
+
+\begin{lstlisting}[label=lst:snippets15,title=snippets/duplicate\_indexes.sql]
+SELECT pg_size_pretty(sum(pg_relation_size(idx))::bigint) AS size,
+       (array_agg(idx))[1] AS idx1, (array_agg(idx))[2] AS idx2,
+       (array_agg(idx))[3] AS idx3, (array_agg(idx))[4] AS idx4
+FROM (
+    SELECT indexrelid::regclass AS idx, (indrelid::text ||E'\n'|| indclass::text ||E'\n'|| indkey::text ||E'\n'||
+                                         coalesce(indexprs::text,'')||E'\n' || coalesce(indpred::text,'')) AS KEY
+    FROM pg_index) sub
+GROUP BY KEY HAVING count(*)>1
+ORDER BY sum(pg_relation_size(idx)) DESC;
+\end{lstlisting}
+
+\subsection{Размер и статистика использования индексов}
+
+\begin{lstlisting}[label=lst:snippets16,title=snippets/indexes\_statustic.sql]
+SELECT
+    t.tablename,
+    indexname,
+    c.reltuples AS num_rows,
+    pg_size_pretty(pg_relation_size(quote_ident(t.tablename)::text)) AS table_size,
+    pg_size_pretty(pg_relation_size(quote_ident(indexrelname)::text)) AS index_size,
+    CASE WHEN x.is_unique = 1  THEN 'Y'
+       ELSE 'N'
+    END AS UNIQUE,
+    idx_scan AS number_of_scans,
+    idx_tup_read AS tuples_read,
+    idx_tup_fetch AS tuples_fetched
+FROM pg_tables t
+LEFT OUTER JOIN pg_class c ON t.tablename=c.relname
+LEFT OUTER JOIN
+       (SELECT indrelid,
+           max(CAST(indisunique AS integer)) AS is_unique
+       FROM pg_index
+       GROUP BY indrelid) x
+       ON c.oid = x.indrelid
+LEFT OUTER JOIN
+    ( SELECT c.relname AS ctablename, ipg.relname AS indexname, x.indnatts AS number_of_columns, idx_scan, idx_tup_read, idx_tup_fetch,indexrelname FROM pg_index x
+           JOIN pg_class c ON c.oid = x.indrelid
+           JOIN pg_class ipg ON ipg.oid = x.indexrelid
+           JOIN pg_stat_all_indexes psai ON x.indexrelid = psai.indexrelid )
+    AS foo
+    ON t.tablename = foo.ctablename
+WHERE t.schemaname='public'
+ORDER BY 1,2;
+\end{lstlisting}
+
