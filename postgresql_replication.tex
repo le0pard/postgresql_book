@@ -54,15 +54,15 @@
 Для репликации PostgreSQL существует несколько решений, как закрытых, так и свободных. 
 Закрытые системы репликации не будут рассматриваться в этой книге (ну, сами понимаете). Вот список свободных решений:
 \begin{itemize}
-\item \textbf{Slony-I}\footnote{http://www.slony.info/}~--- асинхронная Master-Slave репликация, 
+\item \href{http://www.slony.info/}{Slony-I}~--- асинхронная Master-Slave репликация, 
 поддерживает каскады(cascading) и отказоустойчивость(failover). 
 Slony-I использует триггеры PostgreSQL для привязки к событиям INSERT/ DELETE/UPDATE и хранимые 
 процедуры для выполнения действий. 
 
-\item \textbf{PGCluster}\footnote{http://pgfoundry.org/projects/pgcluster/}~--- синхронная Multi-Master репликация. 
+\item \href{http://pgfoundry.org/projects/pgcluster/}{PGCluster}~--- синхронная Multi-Master репликация. 
 Проект на мой взгляд мертв, поскольку уже год не обновлялся.
 
-\item \textbf{pgpool-I/II}\footnote{http://pgpool.projects.postgresql.org/}~--- это замечательный инструмент для 
+\item \href{http://pgpool.projects.postgresql.org/}{pgpool-I/II}~--- это замечательный инструмент для 
 PostgreSQL (лучше сразу работать с II версией). Позволяет делать:
 \begin{itemize}
 \item репликацию (в том числе, с автоматическим переключением на резервный stand-by сервер);
@@ -73,18 +73,18 @@ PostgreSQL (лучше сразу работать с II версией). Поз
 \item разбиение запросов для параллельного выполнения над большими объемами данных.
 \end{itemize}
 
-\item \textbf{Bucardo}\footnote{http://bucardo.org/}~--- асинхронная репликация, которая поддерживает Multi-Master и Master-Slave режимы, 
+\item \href{http://bucardo.org/}{Bucardo}~--- асинхронная репликация, которая поддерживает Multi-Master и Master-Slave режимы, 
 а также несколько видов синхронизации и обработки конфликтов. 
 
-\item \textbf{Londiste}\footnote{http://skytools.projects.postgresql.org/doc/londiste.ref.html}~--- асинхронная Master-Slave 
+\item \href{http://skytools.projects.postgresql.org/doc/londiste.ref.html}{Londiste}~--- асинхронная Master-Slave 
 репликация. Входит в состав Skytools\footnote{http://pgfoundry.org/projects/skytools/}. Проще в использовании, чем Slony-I.
 
-\item \textbf{Mammoth Replicator}\footnote{http://www.commandprompt.com/products/mammothreplicator/}~--- асинхронная 
+\item \href{http://www.commandprompt.com/products/mammothreplicator/}{Mammoth Replicator}~--- асинхронная 
 Multi-Master репликация. 
 
-\item \textbf{Postgres-R}\footnote{http://www.postgres-r.org/}~--- асинхронная Multi-Master репликация.
+\item \href{http://www.postgres-r.org/}{Postgres-R}~--- асинхронная Multi-Master репликация.
 
-\item \textbf{RubyRep}\footnote{http://www.rubyrep.org/}~--- написанная на Ruby, асинхронная Multi-Master 
+\item \href{http://www.rubyrep.org/}{RubyRep}~--- написанная на Ruby, асинхронная Multi-Master 
 репликация, которая поддерживает PostgreSQL и MySQL.
 \end{itemize}
 

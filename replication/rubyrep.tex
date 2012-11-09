@@ -24,7 +24,7 @@ RubyRep поддерживает два типа установки: через 
 
 Предварительно должна быть установлена Java (версия 1.6).
 \begin{enumerate}
- \item Загрузите последнюю версию JRuby rubyrep c Rubyforge\footnote{http://rubyforge.org/frs/?group\_id=7932, выберите ZIP}.
+ \item Загрузите последнюю версию JRuby rubyrep c Rubyforge.
  \item Распакуйте
  \item Готово
 \end{enumerate}
@@ -112,7 +112,7 @@ rubyrep sync -c myrubyrep.conf dept /^e/
 \end{lstlisting}
 
 Настройки политики синхронизации позволяют указывать как решать конфликты синхронизации. 
-Более подробно можно почитать в документации http://www.rubyrep.org/configuration.html. 
+Более подробно можно почитать в \href{http://www.rubyrep.org/configuration.html}{документации}. 
 
 \subsubsection{Репликация}
 Для запуска репликации достаточно выполнить:
@@ -123,7 +123,7 @@ rubyrep replicate -c myrubyrep.conf
 Данная команда установить репликацию (если она не была установлена) на базы данных и запустит её.
 Чтобы остановить репликацию, достаточно просто убить процесс. Даже если репликация остановлена, 
 все изменения будут обработаны триггерами rubyrep. После перезагрузки, все изменения 
-будут автоматически востановлены.
+будут автоматически восстановлены.
 
 Для удаления репликации достаточно выполнить:
 \begin{lstlisting}[label=lst:rubyrep11,caption=Репликация]
@@ -132,7 +132,7 @@ rubyrep uninstall -c myrubyrep.conf
 
 \subsection{Устранение неисправностей}
 \subsubsection{Ошибка при запуске репликации}
-При зепуске rubyrep через Ruby может возникнуть подобная ошибка:
+При запуске rubyrep через Ruby может возникнуть подобная ошибка:
 \begin{lstlisting}[label=lst:rubyrep12,caption=Устранение неисправностей]
 $rubyrep replicate -c myrubyrep.conf 
 Verifying RubyRep tables
