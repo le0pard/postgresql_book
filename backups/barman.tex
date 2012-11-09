@@ -3,7 +3,255 @@
 
 Barman, как и WAL-E, позволяет создать систему для бэкапа и восстановления PostgreSQL на основе непрерывного резервного копирования. Barman использует для хранения бэкапов отдельный сервер, который может собирать бэкапы как с одного, так и с нескольких PostgreSQL баз данных.
 
-\subsubsection{Установка}
+\subsubsection{Установка и настройка}
 
+Рассмотрим простом случай с одним экземпляром PostgreSQL (один сервер) и пусть его хост будет <<pghost>>. Наша задача~--- автоматизировать сбор и хранение бэкапов этой базы на другом сервере (его хость будет <<brhost>>). Для взаимодействия эти два сервера должны быть полность открыты по SSH (доступ без пароля, по ключам). Для этого можно использовать authorized\_keys файл.
 
+\begin{lstlisting}[label=lst:barman1,caption=Проверка подключения по SSH]
+# Проверка подключения с сервера PostgreSQL (pghost)
+ssh barman@brhost
+# Проверка подключения с сервера бэкапов (brhost)
+ssh postgres@pghost
+\end{lstlisting}
 
+Далее нужно установить на сервере для бэкапов barman. Сам barman написан на python и имеет пару зависимостей: python 2.6+, rsync >= 3.0.4 и python библиотеки (argh, psycopg2, python-dateutil < 2.0 (для python 3.0 не нужен), distribute). На Ubuntu все зависимости можно поставить одной командой:
+
+\begin{lstlisting}[label=lst:barman2,caption=Установка зависимостей barman]
+aptitude install python-dev python-argh python-psycopg2 python-dateutil rsync python-setuptools
+\end{lstlisting}
+
+Далее нужно установить barman:
+
+\begin{lstlisting}[label=lst:barman3,caption=Установка barman]
+# tar -xzf barman-1.1.1.tar.gz
+# cd barman-1.1.1/
+# python setup.py build
+# sudo python setup.py install
+\end{lstlisting}
+
+Теперь перейдем к серверу с PostgreSQL. Для того, что бы barman мог подключатся к базе данных без проблем, нам нужно выставить настройки доступа в конфигах PostgreSQL:
+
+\begin{lstlisting}[label=lst:barman4,caption=Отредактировать в postgresql.conf]
+listen_adress = '*'
+\end{lstlisting}
+
+\begin{lstlisting}[label=lst:barman5,caption=Добавить в pg\_hba.conf]
+host  all  all  brhost/32  trust
+\end{lstlisting}
+
+После этих изменений нужно перегрузить PostgreSQL. Теперь можем проверить с сервера бэкапов подключение к PostgreSQL:
+
+\begin{lstlisting}[label=lst:barman6,caption=Проверка подключения к базе]
+$ psql -c 'SELECT version()' -U postgres -h pghost
+                                                  version                                                   
+------------------------------------------------------------------------------------------------------------
+ PostgreSQL 9.2.1 on x86_64-unknown-linux-gnu, compiled by gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2, 64-bit
+(1 row)
+\end{lstlisting}
+
+Далее создадим папку на сервере с бэкапами для хранения этих самых бэкапов:
+
+\begin{lstlisting}[label=lst:barman7,caption=Папка для хранения бэкапов]
+# sudo mkdir -p /srv/barman    
+# sudo chown barman:barman /srv/barman
+\end{lstlisting}
+
+Для настройки barman создадим /etc/barman.conf:
+
+\begin{lstlisting}[label=lst:barman8,caption=barman.conf]
+[barman]
+; Main directory
+barman_home = /srv/barman
+
+; Log location
+log_file = /var/log/barman/barman.log
+
+; Default compression level: possible values are None (default), bzip2, gzip or custom
+compression = gzip
+
+; 'main' PostgreSQL Server configuration
+[main]
+; Human readable description
+description =  "Main PostgreSQL Database"
+
+; SSH options
+ssh_command = ssh postgres@pghost
+
+; PostgreSQL connection string
+conninfo = host=pghost user=postgres
+\end{lstlisting}
+
+Секция <<main>> (так мы назвали для barman наш PostgreSQL севрер) содержит настроки для подключения к PostgreSQL серверу и базе. Проверим настройки:
+
+\begin{lstlisting}[label=lst:barman9,caption=Проверка barman настроек]
+# barman show-server main
+Server main:
+	active: true
+	description: Main PostgreSQL Database
+	ssh_command: ssh postgres@pghost
+	conninfo: host=pghost user=postgres
+	backup_directory: /srv/barman/main
+	basebackups_directory: /srv/barman/main/base
+	wals_directory: /srv/barman/main/wals
+	incoming_wals_directory: /srv/barman/main/incoming
+	lock_file: /srv/barman/main/main.lock
+	compression: gzip
+	custom_compression_filter: None
+	custom_decompression_filter: None
+	retention_policy: None
+	wal_retention_policy: None
+	pre_backup_script: None
+	post_backup_script: None
+	current_xlog: None
+	last_shipped_wal: None
+	archive_command: None
+	server_txt_version: 9.2.1
+	data_directory: /var/lib/postgresql/9.2/main
+	archive_mode: off
+	config_file: /etc/postgresql/9.2/main/postgresql.conf
+	hba_file: /etc/postgresql/9.2/main/pg_hba.conf
+	ident_file: /etc/postgresql/9.2/main/pg_ident.conf
+
+# barman check main
+Server main:
+	ssh: OK
+	PostgreSQL: OK
+	archive_mode: FAILED (please set it to 'on')
+	archive_command: FAILED (please set it accordingly to documentation)
+	directories: OK
+	compression settings: OK
+\end{lstlisting}
+
+Все хорошо, вот только PostgreSQL не настроен. Для этого на сервере с PostgreSQL отредактируем конфиг базы:
+
+\begin{lstlisting}[label=lst:barman10,caption=Настройка PostgreSQL]
+wal_level = hot_standby # archive для PostgreSQL < 9.0
+archive_mode = on
+archive_command = 'rsync -a %p barman@brhost:INCOMING_WALS_DIRECTORY/%f'
+\end{lstlisting}
+
+где <<INCOMING\_WALS\_DIRECTORY>>~--- директория для складывания WAL-логов. Её можно узнать из вывода команды <<barman show-server main>>(смотри листинг~\ref{lst:barman9}, тут указано  <</srv/barman/main/incoming>>). После изменения настроек нужно перегрузить PostgreSQL. Теперь проверим статус на сервере бэкапов:
+
+\begin{lstlisting}[label=lst:barman11,caption=Проверка]
+# barman check main
+Server main:
+	ssh: OK
+	PostgreSQL: OK
+	archive_mode: OK
+	archive_command: OK
+	directories: OK
+	compression settings: OK
+\end{lstlisting}
+
+Все готово. Для добавления нового сервера процедуру потребуется повторить, а в barman.conf добавить новый сервер.
+
+\subsubsection{Работа}
+
+Получение списка серверов:
+
+\begin{lstlisting}[label=lst:barman12,caption=Список серверов]
+# barman list-server
+main - Main PostgreSQL Database
+\end{lstlisting}
+
+Запуск создания резервной копии PostgreSQL (сервер указывается последним параметром):
+
+\begin{lstlisting}[label=lst:barman13,caption=Создание бэкапа]
+# barman backup main
+Starting backup for server main in /srv/barman/main/base/20121109T090806
+Backup start at xlog location: 0/3000020 (000000010000000000000003, 00000020)
+Copying files.
+Copy done.
+Asking PostgreSQL server to finalize the backup.
+Backup end at xlog location: 0/30000D8 (000000010000000000000003, 000000D8)
+Backup completed
+\end{lstlisting}
+
+Такую задачу лучше выполнять раз в сутки (добавить в cron). 
+
+Посмотреть список бэкапов для указаной базы:
+
+\begin{lstlisting}[label=lst:barman14,caption=Список бэкапов]
+# barman list-backup main
+main 20121110T091608 - Fri Nov 10 09:20:58 2012 - Size: 1.0 GiB - WAL Size: 446.0 KiB
+main 20121109T090806 - Fri Nov  9 09:08:10 2012 - Size: 23.0 MiB - WAL Size: 477.0 MiB
+\end{lstlisting}
+
+Более подробная информация о выбраной резервной копии:
+
+\begin{lstlisting}[label=lst:barman15,caption=Информация о выбраной резервной копии]
+# barman show-backup main 20121110T091608
+Backup 20121109T091608:
+  Server Name       : main
+  Status:           : DONE
+  PostgreSQL Version: 90201
+  PGDATA directory  : /var/lib/postgresql/9.2/main
+
+  Base backup information:
+    Disk usage      : 1.0 GiB
+    Timeline        : 1
+    Begin WAL       : 00000001000000000000008C
+    End WAL         : 000000010000000000000092
+    WAL number      : 7
+    Begin time      : 2012-11-10 09:16:08.856884
+    End time        : 2012-11-10 09:20:58.478531
+    Begin Offset    : 32
+    End Offset      : 3576096
+    Begin XLOG      : 0/8C000020
+    End XLOG        : 0/92369120
+
+  WAL information:
+    No of files     : 1
+    Disk usage      : 446.0 KiB
+    Last available  : 000000010000000000000093
+
+  Catalog information:
+    Previous Backup : 20121109T090806
+    Next Backup     : - (this is the latest base backup)
+\end{lstlisting}
+
+Также можно сжимать WAL-логи, которые накапливаются в каталогах командой <<cron>>:
+
+\begin{lstlisting}[label=lst:barman16,caption=Архивирование WAL-логов]
+# barman cron
+Processing xlog segments for main
+	000000010000000000000001
+	000000010000000000000002
+	000000010000000000000003
+	000000010000000000000003.00000020.backup
+	000000010000000000000004
+	000000010000000000000005
+	000000010000000000000006
+\end{lstlisting}
+
+Эту команду требуется добавлять в cron. Частота выполнения данной команды зависит от того, как много WAL-логов накапливается (чем больше файлов - тем дольше она выполняется). Barman может сжимать WAL-логи через gzip, bzip2 или другой компрессор данных (команды для сжатия и распаковки задаются через custom\_compression\_filter и custom\_decompression\_filter соответственно).
+
+Для восстановления базы из бэкапа используется команда <<recover>>:
+
+\begin{lstlisting}[label=lst:barman17,caption=Восстановление базы]
+# barman recover --remote-ssh-command "ssh postgres@pghost" main 20121109T090806 /var/lib/postgresql/9.2/main
+Starting remote restore for server main using backup 20121109T090806 
+Destination directory: /var/lib/postgresql/9.2/main
+Copying the base backup.
+Copying required wal segments.
+The archive_command was set to 'false' to prevent data losses.
+
+Your PostgreSQL server has been successfully prepared for recovery!
+
+Please review network and archive related settings in the PostgreSQL
+configuration file before starting the just recovered instance.
+
+WARNING: Before starting up the recovered PostgreSQL server,
+please review also the settings of the following configuration
+options as they might interfere with your current recovery attempt:
+
+    data_directory = '/var/lib/postgresql/9.1/main'		# use data in another directory
+    external_pid_file = '/var/run/postgresql/9.1-main.pid'		# write an extra PID file
+    hba_file = '/etc/postgresql/9.1/main/pg_hba.conf'	# host-based authentication file
+    ident_file = '/etc/postgresql/9.1/main/pg_ident.conf'	# ident configuration file
+\end{lstlisting}
+
+Barman может восстановить базу из резервной копии на удаленном сервере через SSH (для этого есть опция <<remote-ssh-command>>). Также barman может восстановить базу используя PITR\footnote{http://en.wikipedia.org/wiki/Point-in-time\_recovery}: для этого используются опции <<target-time>> (указывается время) или <<target-xid>> (id транзакции).
+
+\subsubsection{Заключение}
+Barman помогает автоматизировать сбор и хранение резервных копий PostgreSQL данных на отдельном сервере. Утилита проста, удобена, позволяет хранить и очень удобно управлять бэкапами нескольких PostgreSQL серверов.
