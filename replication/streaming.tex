@@ -120,7 +120,17 @@ archive_command = 'cp %p /path_to/archive/%f'
 В данном случае в директорию <</path\_to/archive/>>.
 \end{itemize}
 
-После изменения параметров перегружаем postgresql сервер. Теперь перейдем к slavedb.
+По-умолчанию репликация асинхронная. В версии 9.1 добавили параметр <<synchronous\_standby\_names>>, который включает синхронную репликацию. В данные параметр передается <<application\_name>>, который используется на слейвах в recovery.conf:
+
+\begin{lstlisting}[label=lst:streaming91,caption=recovery.conf для синхронной репликации на слейве]
+restore_command = 'cp /tmp/%f %p'               # e.g. 'cp /mnt/server/archivedir/%f %p'
+standby_mode = on
+primary_conninfo = 'host=localhost port=59121 user=replication password=replication application_name=newcluster'            # e.g. 'host=localhost port=5432'
+trigger_file = '/tmp/trig_f_newcluster'
+\end{lstlisting}
+
+
+После изменения параметров перегружаем PostgreSQL сервер. Теперь перейдем к slavedb.
 
 \subsubsection{Настройка слейва}
 Для начала нам потребуется создать на slavedb точную копию masterdb. Перенесем данные с помощью <<Онлайн бекапа>>.
@@ -210,6 +220,27 @@ $ psql -c "select pg_last_xlog_replay_location()" -h192.168.0.20 (slavedb)
 (1 row)
 \end{lstlisting}
 
+Начиная с версии 9.1 добавили дополнительные view для просмотра состояния репликации. Теперь master знает все состояния slaves:
+
+\begin{lstlisting}[label=lst:streaming151,caption=Состояние слейвов]
+# SELECT * from pg_stat_replication ;
+  procpid | usesysid |   usename   | application_name | client_addr | client_hostname | client_port |        backend_start         |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+ ---------+----------+-------------+------------------+-------------+-----------------+-------------+------------------------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
+    17135 |    16671 | replication | newcluster       | 127.0.0.1   |                 |       43745 | 2011-05-22 18:13:04.19283+02 | streaming | 1/30008750    | 1/30008750     | 1/30008750     | 1/30008750      |             1 | sync
+\end{lstlisting}
+
+Также с версии 9.1 добавили view pg\_stat\_database\_conflicts, с помощью которой на слейв базах можно просмотреть сколько запросов было отменено и по каким причинам:
+
+\begin{lstlisting}[label=lst:streaming152,caption=Состояние слейва]
+# SELECT * from pg_stat_database_conflicts ;
+  datid |  datname  | confl_tablespace | confl_lock | confl_snapshot | confl_bufferpin | confl_deadlock 
+ -------+-----------+------------------+------------+----------------+-----------------+----------------
+      1 | template1 |                0 |          0 |              0 |               0 |              0
+  11979 | template0 |                0 |          0 |              0 |               0 |              0
+  11987 | postgres  |                0 |          0 |              0 |               0 |              0
+  16384 | marc      |                0 |          0 |              1 |               0 |              0
+\end{lstlisting}
+
 Еще проверить работу репликации можно с помощью утилиты ps:
 \begin{lstlisting}[label=lst:streaming16,caption=Тестирование репликации]
 [masterdb] $ ps -ef | grep sender
@@ -247,7 +278,7 @@ test_db=# select * from test3;
 Достаточно создать триггер-файл (trigger\_file) на слейве, который становится мастером.
 
 \subsubsection{Остановка репликации на слейве}
-Создать триггер-файл (trigger\_file) на слейве.
+Создать триггер-файл (trigger\_file) на слейве. Также с версии 9.1 добавили команды pg\_xlog\_replay\_pause() и pg\_xlog\_replay\_resume() для остановки и возобновления репликации.
 
 \subsubsection{Перезапуск репликации после сбоя}
 Повторяем операции из раздела <<Настройка слейва>>. Хочется заметить, что мастер при этом не нуждается в остановке при выполнении данной задачи.
