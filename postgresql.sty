@@ -23,13 +23,20 @@
 
 \graphicspath{{images/}{schemes/}{software/}}
 
+\sloppy
+
 %\renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\rmdefault}{ftm}
 
-\renewcommand{\lstlistingname}{Код}
-\renewcommand{\figurename}{Рис.}
-
-\sloppy
+\renewcommand\lstlistingname{Код}
+\renewcommand\figurename{Рис.}
+\renewcommand\contentsname{Содержание}
+\addto\captionsenglish{
+  \renewcommand{\contentsname}%
+    {Содержание}%
+  \renewcommand{\figurename}%
+    {Рис.}%
+}
 
 \definecolor{lineno}{rgb}{0.5,0.5,0.5}
 \definecolor{code}{rgb}{0,0.1,0.6}
