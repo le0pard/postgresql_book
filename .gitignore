@@ -1,0 +1,16 @@
+.sass-cache
+*.aux
+*.backup
+*.log
+*.idx
+*.out
+*.snm
+*.sty~
+*.tex~
+*.toc
+postgresql.pdf
+.DS_Store
+postgresql.synctex.gz
+latex/*
+.vagrant
+Vagrantfile

@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require File.expand_path("app.rb", File.dirname(__FILE__))
+
+Vegas::Runner.new(PgBookServer, 'book_server')
