@@ -107,10 +107,15 @@ class PgBookServer < Sinatra::Application
     read_relative_file '..', filename
   end
   
-  get '/*' do
+  get '/' do
     content_type 'text/html'
     erb :"index.html"
     #read_relative_file 'public', 'index.html'
+  end
+  
+  get '/release' do
+    content_type 'text/html'
+    read_relative_file '..', 'index.html'
   end
 
   def read_relative_file(*args)
