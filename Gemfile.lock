@@ -40,6 +40,8 @@ GEM
       sass (>= 3.1)
     haml (3.1.7)
     hike (1.2.1)
+    html_compressor (0.0.3)
+      POpen4 (>= 0.1.4)
     i18n (0.6.1)
     libnotify (0.8.0)
       ffi (>= 1.0.11)
@@ -110,6 +112,7 @@ DEPENDENCIES
   guard-rake
   guard-sass
   haml
+  html_compressor
   libnotify
   rb-fsevent (~> 0.9.1)
   rb-inotify

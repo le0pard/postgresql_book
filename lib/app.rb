@@ -10,6 +10,7 @@ require 'uglifier'
 require 'execjs'
 require 'base64'
 require 'rack/utils'
+require 'html_compressor'
 require 'vegas'
 require 'zurb-foundation'
 
@@ -89,6 +90,7 @@ class PgBookServer < Sinatra::Application
     sprockets.append_path File.join(compass_gem_root, 'frameworks', 'compass', 'stylesheets')
     sprockets.append_path File.join(compass_gem_root, 'frameworks', 'blueprint', 'stylesheets')
     sprockets.append_path File.join(foundation_gem_root, 'scss')
+    sprockets.append_path File.join(foundation_gem_root, 'vendor', 'assets', 'javascripts')
     sprockets.append_path File.join(root, '..', 'assets', 'javascripts')
     
     sprockets.css_compressor = YUI::CssCompressor.new

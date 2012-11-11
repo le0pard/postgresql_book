@@ -55,7 +55,9 @@ namespace :assets do
       # HTML
       outpath   = File.join(File.dirname(__FILE__))
       # html files
-      File.open(File.join(outpath, 'index.html'), 'w') {|f| f.write(erb('index.html')) }
+      html_compressor = HtmlCompressor::HtmlCompressor.new
+      html_body = html_compressor.compress(erb('index.html'))
+      File.open(File.join(outpath, 'index.html'), 'w') {|f| f.write(html_body) }
       puts "successfully compiled html assets"
     rescue
       puts "failed compile html assets"
