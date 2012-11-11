@@ -3,3 +3,82 @@
 
 HStore~-- расширение, которое реализует тип данных для хранения ключ/значение в пределах одного значения в PostgreSQL (например в одном текстовом поле). Это может быть полезно в различных ситуациях, таких как строки с многими атрибутами, которые редко вибираются, или полу-структурированные данные. Ключи и значения являются простыми текстовыми строками.
 
+\subsection{Пример использования}
+Для начала активируем расширение:
+\begin{lstlisting}[label=lst:hstore1,caption=Активация hstore]
+# CREATE EXTENSION hstore;
+\end{lstlisting}
+
+Проверим работу расширения:
+\begin{lstlisting}[label=lst:hstore2,caption=Проверка hstore]
+# SELECT 'a=>1,a=>2'::hstore;
+  hstore  
+----------
+ "a"=>"1"
+(1 row)
+\end{lstlisting}
+
+Как видно на листинге~\ref{lst:hstore2} ключи в hstore уникальны. Создадим тоблицу и заполним её данными:
+
+\begin{lstlisting}[label=lst:hstore3,caption=Проверка hstore]
+CREATE TABLE products (
+   id serial PRIMARY KEY,
+   name varchar,
+   attributes hstore
+);   
+INSERT INTO products (name, attributes)
+VALUES (
+  'Geek Love: A Novel',
+  'author    => "Katherine Dunn",
+  pages     => 368,
+  category  => fiction'
+),
+(
+ 'Leica M9',
+ 'manufacturer  => Leica,
+  type          => camera,
+  megapixels    => 18,
+  sensor        => "full-frame 35mm"'
+),
+( 'MacBook Air 11',
+ 'manufacturer  => Apple,
+  type          => computer,
+  ram           => 4GB,
+  storage       => 256GB,
+  processor     => "1.8 ghz Intel i7 duel core",
+  weight        => 2.38lbs'
+);
+\end{lstlisting}
+
+Теперь можно производить поиск по ключу:
+\begin{lstlisting}[label=lst:hstore4,caption=Поиск по ключу]
+# SELECT name, attributes->'pages' as page FROM products WHERE attributes ? 'pages';
+        name        | page 
+--------------------+------
+ Geek Love: A Novel | 368
+(1 row)
+\end{lstlisting}
+
+Или по значению ключа:
+\begin{lstlisting}[label=lst:hstore5,caption=Поиск по значению ключа]
+# SELECT name, attributes->'manufacturer' as manufacturer FROM products WHERE attributes->'type' = 'computer';
+       name      | manufacturer 
+ ----------------+--------------
+  MacBook Air 11 | Apple
+ (1 row)
+\end{lstlisting}
+
+Создание индексов:
+\begin{lstlisting}[label=lst:hstore6,caption=Индексы]
+CREATE INDEX products_hstore_index ON products USING GIST (attributes);
+CREATE INDEX products_hstore_index ON products USING GIN (attributes);
+\end{lstlisting}
+
+Можно также cоздавать индекс на ключ:
+\begin{lstlisting}[label=lst:hstore7,caption=Индекс на ключ]
+CREATE INDEX product_manufacturer 
+   ON products ((products.attributes->'manufacturer'));
+\end{lstlisting}
+
+\subsection{Заключение}
+HStore~--- расширение для удобного и индексируемого хранения слабоструктурированых данных в PostgreSQL.
