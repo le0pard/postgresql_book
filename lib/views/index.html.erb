@@ -37,124 +37,94 @@
 </head>
 
 <body>
-  <div class="row">
-    <div class="twelve columns">
+  <!-- Header Content -->
+  <div class="top-block"> 
+    <div class="row">
+      <div class="twelve columns centered book-title">
+        <h1>Работа с PostgreSQL</h1>
+        <h2>настройка и масштабирование</h2>
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-block">
+    <div class="row">
 
-      <!-- Header Content -->
-        <div class="row">
-          <div class="twelve columns centered book-title">
-            <h2>Работа с PostgreSQL: настройка и масштабирование</h2>
-          </div>
+      <div class="five columns">
+        <img class="poster" src="public/images/cover.jpg" alt="Работа с PostgreSQL: настройка и масштабирование"><br />
+      </div>
+
+      <div class="seven columns">
+
+        <div class="lead-text">
+          <p>Перед вами справочное пособие по настройке и масштабированию PostgreSQL. В книге иследуются вопросы по настройки производительности PostgreSQL, репликации и кластеризации. Изобилие реальных примеров позволит как начинающим, так и опытным разработчикам быстро разобратся с особенностями масштабирования PostgreSQL для своих приложений.</p>
         </div>
 
         <div class="row">
-
-          <div class="five columns">
-            <img class="poster" src="public/images/cover.jpg" alt="Работа с PostgreSQL: настройка и масштабирование"><br />
+          <div class="six mobile-two columns">           
+            <a href="https://github.com/downloads/le0pard/postgresql_book/postgresql-v3.pdf" class="large button download-button">Скачать PDF</a>
           </div>
-
-          <div class="seven columns">
-
-            <div class="panel">
-              <p>Перед Вами справочное пособие по настройке и масштабированию PostgreSQL. В книге иследуются вопросы по настройки производительности PostgreSQL, репликации и кластеризации. Изобилие реальных примеров позволит как начинающим, так и опытным разработчикам быстро разобратся с особенностями масштабирования PostgreSQL для своих приложений.</p>
-            </div>
-
-            <div class="row">
-                <div class="six mobile-two columns">
-                  <div class="panel">
-                    <a href="https://github.com/downloads/le0pard/postgresql_book/postgresql-v3.pdf" class="large button radius download-button">Скачать Pdf</a>
-                  </div>
-                </div>
-
-                <div class="six mobile-two columns">
-                  <div class="panel">
-                    <a href="/html" class="large button radius download-button">Читать HTML</a>
-                  </div>
-                </div>
-            </div>
-            
-            <div class="panel hide-for-small">
-              <h5>Что нового в 3 издании?</h5>
-              <ul class="square">
-                <li>Польза команды CLUSTER</li>
-                <li>Анализ запросов и сбор статистики:
-                  <ul>
-                    <li>pgBadger</li>
-                    <li>pg_stat_statements</li>
-                  </ul>
-                </li>
-                <li>Шардинг:
-                  <ul>
-                    <li>Postgres-XC</li>
-                  </ul>
-                </li>
-                <li>Расширения:
-                  <ul>
-                    <li>HStore</li>
-                    <li>DBlink</li>
-                    <li>Ltree</li>
-                    <li>Fuzzystrmatch</li>
-                    <li>Smlar</li>
-                    <li>PLV8</li>
-                  </ul>
-                </li>
-                <li>Резервное копирование:
-                  <ul>
-                    <li>WAL-E</li>
-                    <li>Barman</li>
-                  </ul>
-                </li>
-                <li>Обновленна информация по встроеной репликации для новых версий</li>
-                <li>Разные мелочи (исправлены ошибки и прочее)</li>
-              </ul>
-            </div>
-
+          <div class="six mobile-two columns">
+            <a href="/html" class="large button download-button">Читать HTML</a>
           </div>
-
         </div>
 
-      <!-- End Header Content -->
-
-
-      <!-- Footer -->
-
-        <footer class="row">
-          <div class="twelve columns">
-            <hr />
-            <div class="row">
-
-              <div class="three columns">
-                  <p>&copy; Alexey Vasiliev aka leopard <br />2010-2012</p>
-              </div>
-
-              <div class="nine columns">
-                  <ul class="link-list right">
-                    <li>
-                      <!-- AddThis Button BEGIN -->
-                      <div class="addthis_toolbox addthis_default_style ">
-                        <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-                        <a class="addthis_button_tweet"></a>
-                        <a class="addthis_button_google_plusone" g:plusone:size="medium"></a> 
-                      </div>
-                      <!-- AddThis Button END -->
-                    </li>
-                    <li><a href="https://twitter.com/leopard_me">Twitter</a></li>
-                    <li><a href="http://leopard.in.ua/">Блог</a></li>
-                    <li><a href="https://github.com/le0pard/postgresql_book">Книга на Github</a></li>
-                    <li>
-                      <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>
-                    </li>
-                  </ul>
-              </div>
-
-            </div>
+        <div class="hide-for-small">
+          <h5>Что нового в 3 издании?</h5>
+          <ul class="">
+            <li>Польза команды CLUSTER</li>
+            <li>Анализ запросов и сбор статистики: pgBadger, pg_stat_statements</li>
+            <li>Шардинг: Postgres-XC</li>
+            <li>Расширения: HStore, DBlink, Ltree, Fuzzystrmatch, Smlar, PLV8</li>
+            <li>Резервное копирование: WAL-E, Barman</li>
+            <li>Обновленна информация по встроеной репликации для новых версий</li>
+            <li>Разные мелочи (исправлены ошибки и прочее)</li>
+          </ul>
         </div>
-      </footer>
 
-      <!-- End Footer -->
+      </div>
 
     </div>
   </div>
+  <!-- End Header Content -->
+
+
+  <!-- Footer -->
+
+  <footer class="row">
+    <div class="twelve columns">
+      <hr />
+      <div class="row">
+
+        <div class="four columns">
+          <ul class="link-list">
+            <li><a href="https://twitter.com/leopard_me">Twitter</a></li>
+            <li><a href="http://leopard.in.ua/">Блог</a></li>
+            <li><a href="https://github.com/le0pard/postgresql_book">Книга на Github</a></li>
+            <li>
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>
+            </li>
+          </ul>
+        </div>
+        <div class="four columns">
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style ">
+            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+            <a class="addthis_button_tweet"></a>
+            <a class="addthis_button_google_plusone" g:plusone:size="medium"></a> 
+          </div>
+          <!-- AddThis Button END -->
+        </div>
+        <div class="four columns">
+            <p class="right">&copy; Alexey Vasiliev aka leopard <br />2010-2012</p>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
   
   <!-- share scripts -->
   <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
