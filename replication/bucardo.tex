@@ -17,7 +17,7 @@ perl Makefile.PL
 make && make test && sudo make install
 \end{lstlisting}
 
-Теперь ставим сам Bucardo. Скачиваем\footnote{http://bucardo.org/wiki/Bucardo\#Obtaining\_Bucardo} его и инсталируем:
+Теперь ставим сам Bucardo. Скачиваем\footnote{http://bucardo.org/wiki/Bucardo\#Obtaining\_Bucardo} его и инсталлируем:
 \begin{lstlisting}[label=lst:bucardo3,caption=Установка]
 tar xvfz Bucardo-4.4.0.tar.gz
 cd Bucardo-4.4.0
@@ -58,7 +58,7 @@ Current connection settings:
 \end{lstlisting}
 
 Когда вы измените требуемые настройки и подтвердите установку, Bucardo создаст пользователя bucardo и базу данных bucardo.
-Данный пользователь должен иметь право логинится через Unix socket, поэтому лучше заранее дать ему такие права в pg\_hda.conf.
+Данный пользователь должен иметь право логиниться через Unix socket, поэтому лучше заранее дать ему такие права в pg\_hda.conf.
 
 \subsubsection{Настройка баз данных}
 Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo. 
@@ -70,8 +70,7 @@ bucardo_ctl add all sequences herd=all_tables
 \end{lstlisting}
 
 Первой командой мы указали базу данных и дали ей имя master (для того, что в реальной жизни master\_db и slave\_db 
-имеют одинаковое название и их нужно Bucardo отличать). Второй и третей командой мы указали реплицыровать все 
-таблицы и последовательности, обьеденив их в групу all\_tables.
+имеют одинаковое название и их нужно Bucardo отличать). Второй и третьей командой мы указали реплицировать все таблицы и последовательности, объеденив их в группу all\_tables.
 
 Дальше добавляем slave\_db:
 \begin{lstlisting}[label=lst:bucardo8,caption=Настройка баз данных]
@@ -86,7 +85,7 @@ bucardo_ctl add db slave_db name=replica port=6543 host=slave_host
 bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
 \end{lstlisting}
 
-Данной командой мы установим Bucardo тригеры в PostgreSQL. А теперь по параметрам:
+Данной командой мы установим Bucardo триггеры в PostgreSQL. А теперь по параметрам:
 \begin{itemize}
 \item \textbf{type}
 

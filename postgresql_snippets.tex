@@ -107,8 +107,8 @@ ANALYZE foo;
 (1 row)
 \end{lstlisting}
 
-\subsection{Узнать значение по-умолчанию у поля в таблице}
-Данный метод позволяет узнать значение по-умолчанию у поля в таблице (заданое через DEFAULT).
+\subsection{Узнать значение по умолчанию у поля в таблице}
+Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданое через DEFAULT).
 
 \begin{lstlisting}[label=lst:snippets6,title=snippets/default\_value.sql]
 CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
@@ -123,7 +123,7 @@ $$ LANGUAGE sql IMMUTABLE;
 \end{lstlisting}
 
 Пример:
-\begin{lstlisting}[label=lst:snippets7,caption=Узнать значение по-умолчанию у поля в таблице. Пример]
+\begin{lstlisting}[label=lst:snippets7,caption=Узнать значение по умолчанию у поля в таблице. Пример]
 # SELECT ret_def('schema','table','column');
 
 SELECT ret_def('public','image_files','id');

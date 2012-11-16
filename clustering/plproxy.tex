@@ -42,7 +42,7 @@ sudo aptitude install postgresql-8.4-plproxy
 Для корректной работы pl/proxy рекомендуется использовать количество нод равное степеням двойки. 
 База данных будет называтся plproxytest, а таблица в ней~--- users. Начнем!
 
-Для начала настроим node1 и node2. Команды написаные нижу нужно выполнять на каждом ноде.
+Для начала настроим node1 и node2. Команды написанные ниже нужно выполнять на каждой ноде.
 
 Создадим базу данных plproxytest(если её ещё нет):
 \begin{lstlisting}[language=SQL,label=lst:plproxy2,caption=Настройка]
@@ -84,7 +84,7 @@ CREATE DATABASE plproxytest
        ENCODING = 'UTF8';
 \end{lstlisting}
 
-Теперь надо укзать серверу что эта база данных управляется с помощью pl/proxy:
+Теперь надо указать серверу что эта база данных управляется с помощью pl/proxy:
 \begin{lstlisting}[language=SQL,label=lst:plproxy6,caption=Настройка]
 CREATE OR REPLACE FUNCTION public.plproxy_call_handler()
   RETURNS language_handler AS
@@ -98,9 +98,7 @@ CREATE LANGUAGE plproxy HANDLER plproxy_call_handler;
 CREATE LANGUAGE plpgsql;
 \end{lstlisting}
 
-Также, для того что бы сервер знал где и какие ноды него есть надо создать 
-3 сервисные функции которые pl/proxy будет использовать в своей работе. 
-Первая функция~--- конфиг для кластера баз данных. Тут указывается параметры через kay-value:
+Также, для того что бы сервер знал где и какие ноды у него есть, надо создать 3 сервисные функции, которые pl/proxy будет использовать в своей работе. Первая функция~--- конфиг для кластера баз данных. Тут указываются параметры через key-value:
 \begin{lstlisting}[language=SQL,label=lst:plproxy7,caption=Настройка]
 CREATE OR REPLACE FUNCTION public.get_cluster_config
 (IN cluster_name text,   OUT "key" text, OUT val text)
@@ -121,7 +119,7 @@ ALTER FUNCTION public.get_cluster_config(text)
 OWNER TO postgres;  
 \end{lstlisting}
 
-Вторая важная функция код которой надо будет подправить. В ней надо будет указать DSN нод:
+Вторая важная функция, код которой надо будет подправить. В ней надо будет указать DSN нод:
 \begin{lstlisting}[language=SQL,label=lst:plproxy8,caption=Настройка]
 CREATE OR REPLACE FUNCTION 
 public.get_cluster_partitions(cluster_name text)
@@ -162,7 +160,7 @@ ALTER FUNCTION public.get_cluster_version(text)
 OWNER TO postgres;
 \end{lstlisting}
 
-Ну и собственно самая главная функция которая будет вызываться уже непосредственно в приложении:
+Ну и собственно самая главная функция, которая будет вызываться уже непосредственно в приложении:
 \begin{lstlisting}[language=SQL,label=lst:plproxy10,caption=Настройка]
 CREATE OR REPLACE FUNCTION 
 public.insert_user(i_username text, i_emailaddress text)
@@ -208,7 +206,7 @@ OWNER TO postgres;
 select plproxy.get_user_email('Steve');
 \end{lstlisting}
 
-Если потом подключится к каждой ноде отдельно, то можно четко увидеть, что данные users разбросаны по таблицам каждой ноды.
+Если потом подключиться к каждой ноде отдельно, то можно четко увидеть, что данные users разбросаны по таблицам каждой ноды.
 
 \subsection{Все ли так просто?}
 Как видно на тестовом примере ничего сложного в работе с pl/proxy нет. 
@@ -219,7 +217,7 @@ select plproxy.get_user_email('Steve');
 Этот вопрос был задан и на конференции Highload++ 2008, на что Аско Ойя ответил что соответствующие средства 
 уже реализованы внутри самого Skype, но ещё не достаточно готовы для того что бы отдавать их на суд сообществу opensource.
 
-Второй проблема которая не дай бог коснётся вас при разработке такого рода системы, это проблема перераспределения данных 
+Второй проблема, которая не дай бог коснётся вас при разработке такого рода системы, это проблема перераспределения данных 
 в тот момент когда нам захочется добавить ещё нод в кластер.
-Планировать эту масштабную операцию прийдётся очень тщательно, подготовив все сервера заранее, 
+Планировать эту масштабную операцию придётся очень тщательно, подготовив все сервера заранее, 
 занеся данные и потом в один момент подменив код функции get\_cluster\_partitions.
