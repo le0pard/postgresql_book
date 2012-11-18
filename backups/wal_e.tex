@@ -68,7 +68,7 @@ archive_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-push %p'
 archive_timeout = 60
 \end{lstlisting}
 
-Лучше указать полный путь к WAL-E (можно узнать командой <<which wal-e>>), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидить что то подобно:
+Лучше указать полный путь к WAL-E (можно узнать командой <<which wal-e>>), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидать что то подобно:
 
 \begin{lstlisting}[label=lst:wal-e8,caption=Логи PostgreSQL]
 2012-11-07 14:52:19 UTC LOG:  database system was shut down at 2012-11-07 14:51:40 UTC
@@ -163,7 +163,7 @@ $ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000
 $ envdir /etc/wal-e.d/env wal-e delete --confirm everything
 \end{lstlisting}
 
-Без опции <<confirm>> команды будут запускатся и показывать, что будет удаляться, но фактического удаления не будет производится (dry run).
+Без опции <<confirm>> команды будут запускаться и показывать, что будет удаляться, но фактического удаления не будет производиться (dry run).
 
 \subsubsection{Заключение}
 WAL-E помогает автоматизировать сбор резервных копий с PostgreSQL и хранить их в достаточно дешевом и надежном хранилище~--- Amazon S3.

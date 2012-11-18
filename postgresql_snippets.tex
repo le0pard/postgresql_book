@@ -108,7 +108,7 @@ ANALYZE foo;
 \end{lstlisting}
 
 \subsection{Узнать значение по умолчанию у поля в таблице}
-Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданое через DEFAULT).
+Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).
 
 \begin{lstlisting}[label=lst:snippets6,title=snippets/default\_value.sql]
 CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
@@ -389,7 +389,7 @@ prefix_test=# select count(*) from invalid_tags;
 \end{lstlisting}
 
 \subsection{Поиск дубликатов индексов}
-Запрос находит несколько индексы, созданые на одинаковый набор столбцов (индексы эквавалентны, а значит бесполезны).
+Запрос находит несколько индексы, созданные на одинаковый набор столбцов (индексы эквивалентны, а значит бесполезны).
 
 \begin{lstlisting}[label=lst:snippets15,title=snippets/duplicate\_indexes.sql]
 SELECT pg_size_pretty(sum(pg_relation_size(idx))::bigint) AS size,
