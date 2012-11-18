@@ -186,7 +186,7 @@ SELECT reltuples FROM pg_class WHERE relname = 'foo';
 
 \subsubsection{Медленный DISTINCT}
 Текущая реализация DISTINCT для больших таблиц очень медленна. Но возможно использовать GROUP BY взамен DISTINCT. 
-GROUP BY может использовать агрегирующий хэш, что значительно быстрее, чем DISTINCT.
+GROUP BY может использовать агрегирующий хэш, что значительно быстрее, чем DISTINCT (актуально до версии 8.4 и ниже).
 
 \begin{lstlisting}[language=SQL,label=lst:sql_performance3,caption=DISTINCT]
 postgres=# select count(*) from (select distinct i from g) a;
