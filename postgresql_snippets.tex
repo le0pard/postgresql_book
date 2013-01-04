@@ -389,7 +389,7 @@ prefix_test=# select count(*) from invalid_tags;
 \end{lstlisting}
 
 \subsection{Поиск дубликатов индексов}
-Запрос находит несколько индексы, созданные на одинаковый набор столбцов (индексы эквивалентны, а значит бесполезны).
+Запрос находит индексы, созданные на одинаковый набор столбцов (индексы эквивалентны, а значит бесполезны).
 
 \begin{lstlisting}[label=lst:snippets15,title=snippets/duplicate\_indexes.sql]
 SELECT pg_size_pretty(sum(pg_relation_size(idx))::bigint) AS size,
