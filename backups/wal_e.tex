@@ -24,7 +24,7 @@ sudo python setup.py install
 После успешной установки можно начать работать с WAL-E. 
 
 \subsubsection{Настройка и работа}
-Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>> (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базу данный в S3:
+Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>> (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базы данных в S3:
 
 \begin{lstlisting}[label=lst:wal-e3,caption=Загрузка бэкапа всей базы данных в S3]
 AWS_SECRET_ACCESS_KEY=... wal-e                     \
@@ -33,7 +33,7 @@ AWS_SECRET_ACCESS_KEY=... wal-e                     \
   backup-push /var/lib/postgresql/9.2/main
 \end{lstlisting}
 
-Где <<s3-prefix>>~--- урл, который содержит имя S3 бакета (bucket) и путь к папке, куда следует складывать резервные копии. Команда для загрузки WAL-логов на S3:
+Где <<s3-prefix>>~--- URL, который содержит имя S3 бакета (bucket) и путь к папке, куда следует складывать резервные копии. Команда для загрузки WAL-логов на S3:
 
 \begin{lstlisting}[label=lst:wal-e4,caption=Загрузка WAL-логов на S3]
 AWS_SECRET_ACCESS_KEY=... wal-e                     \
@@ -68,7 +68,7 @@ archive_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-push %p'
 archive_timeout = 60
 \end{lstlisting}
 
-Лучше указать полный путь к WAL-E (можно узнать командой <<which wal-e>>), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидать что то подобно:
+Лучше указать полный путь к WAL-E (можно узнать командой <<which wal-e>>), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидеть что-то подобное:
 
 \begin{lstlisting}[label=lst:wal-e8,caption=Логи PostgreSQL]
 2012-11-07 14:52:19 UTC LOG:  database system was shut down at 2012-11-07 14:51:40 UTC
@@ -89,9 +89,9 @@ archive_timeout = 60
         DETAIL: Archiving to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo" complete at 2466.67KiB/s. 
 \end{lstlisting}
 
-Если похожего не видно в логах, тогда нужно смотреть что за ошибка появляется и исправлять её.
+Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её.
 
-Для того, что бы бэкапить всю базу достаточно выполнить данную команду:
+Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:
 
 \begin{lstlisting}[label=lst:wal-e9,caption=Загрузка бэкапа всей базы данных в S3]
 $ envdir /etc/wal-e.d/env wal-e backup-push /var/lib/postgresql/9.2/main
@@ -123,7 +123,7 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
   \label{fig:wal-e3}
 \end{figure}
 
-Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через lzop\footnote{http://en.wikipedia.org/wiki/Lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтения с жесткого диска бэкапы отправляются через mbuffer (опцией <<cluster-read-rate-limit>> можно ограничить скорость чтения, если это требуется).
+Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через lzop\footnote{http://en.wikipedia.org/wiki/Lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтение с жесткого диска бэкапы отправляются через mbuffer (опцией <<cluster-read-rate-limit>> можно ограничить скорость чтения, если это требуется).
 
 Теперь перейдем к восстановлению данных. Для восстановления базы из резервной копии используется <<backup-fetch>> команда:
 
