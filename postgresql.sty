@@ -1,3 +1,14 @@
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \ifnum\pdfoutput=1
+    \pdftrue
+  \else
+    \pdffalse
+  \fi
+\fi
+
 \ProvidesPackage{postgresql}
 \RequirePackage{cmap}
 \RequirePackage{graphicx}
@@ -18,8 +29,11 @@
 \RequirePackage[colorlinks=true]{hyperref}
 \RequirePackage{perpage} %the perpage package
 \RequirePackage{wrapfig}
-\RequirePackage{pdfpages} % cover image
 \RequirePackage{lmodern}
+
+\ifpdf
+\RequirePackage{pdfpages} % cover image
+\fi
 
 \graphicspath{{images/}{schemes/}{software/}}
 
