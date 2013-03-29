@@ -8,7 +8,7 @@
 
 ## Генерация Epub
 
-    pandoc -t epub3 -s postgresql.tex -o postgresql.epub --epub-cover-image=images/cover.jpg
+    pandoc -t epub3 -s postgresql.tex -o postgresql.epub --epub-cover-image=images/cover.jpg --epub-chapter-level=3
 
 ## Mobi
 
