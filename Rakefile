@@ -44,7 +44,7 @@ namespace :assets do
       puts "failed compile css assets"
     end
   end
-  
+
   desc 'compile html assets'
   task :compile_html do
     begin

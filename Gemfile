@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-ruby "1.9.3" # gem install bundler --pre
+ruby "2.0.0" # gem install bundler --pre
 
 gem 'guard'
 gem 'guard-coffeescript'
 gem 'guard-sass'
 gem 'guard-rake'
 gem 'therubyracer'
-gem "actionpack"
-gem "activesupport"
+gem "actionpack", '>= 3.2.13'
+gem "activesupport", '>= 3.2.13'
 gem 'sinatra'
 gem 'sprockets'
 gem 'sprockets-sass'
@@ -20,7 +20,8 @@ gem 'tilt'
 gem 'execjs'
 gem 'compass'
 gem 'vegas'
-gem 'zurb-foundation'
+gem 'erubis'
+gem 'zurb-foundation', '3.2.5'
 
 # notify
 group :linux_development do
