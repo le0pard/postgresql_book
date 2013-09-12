@@ -12,5 +12,6 @@ postgresql.pdf
 .DS_Store
 postgresql.synctex.gz
 latex/*
+.sass-cache
 .vagrant
 Vagrantfile
