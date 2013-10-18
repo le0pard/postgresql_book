@@ -25,7 +25,7 @@ $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 \begin{lstlisting}[label=lst:plv8js2,caption=Скорость расчета числа Фибоначчи на plpgsql]
 SELECT n, psqlfib(n) FROM generate_series(0,30,5) as n;
- n  | psqlfib 
+ n  | psqlfib
 ----+---------
   0 |       0
   5 |       5
@@ -57,7 +57,7 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;
 
 \begin{lstlisting}[label=lst:plv8js4,caption=Скорость расчета числа Фибоначчи на plv8]
 SELECT n, fib(n) FROM generate_series(0,30,5) as n;
- n  |  fib   
+ n  |  fib
 ----+--------
   0 |      0
   5 |      5
@@ -90,7 +90,7 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;
 
 \begin{lstlisting}[label=lst:plv8js6,caption=Скорость расчета числа Фибоначчи на plv8]
 SELECT n, fib1(n) FROM generate_series(0,30,5) as n;
- n  |  fib1  
+ n  |  fib1
 ----+--------
   0 |      0
   5 |      5
@@ -118,32 +118,32 @@ Time: 0,766 ms
 Для хранения данных многие документоориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и т.д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON. Такой тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и DOMAIN:
 
 \begin{lstlisting}[label=lst:plv8js7,caption=Создание типа JSON]
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 valid_json(json text)
 RETURNS BOOLEAN AS $$
-  try { 
-    JSON.parse(json); return true; 
-  } catch(e) { 
+  try {
+    JSON.parse(json); return true;
+  } catch(e) {
     return false;
   }
 $$ LANGUAGE plv8 IMMUTABLE STRICT;
 
-CREATE DOMAIN json AS TEXT 
+CREATE DOMAIN json AS TEXT
 CHECK(valid_json(VALUE));
 \end{lstlisting}
 
 Функция <<valid\_json>> используется для проверки JSON данных. Пример использования:
 
 \begin{lstlisting}[label=lst:plv8js8,caption=Проверка JSON]
-$ INSERT INTO members 
+$ INSERT INTO members
 VALUES('not good json');
-ERROR:  value for domain json 
+ERROR:  value for domain json
 violates check constraint "json_check"
-$ INSERT INTO members 
+$ INSERT INTO members
 VALUES('{"good": "json", "is": true}');
 INSERT 0 1
 $ select * from members;
-	    profile            
+	    profile
 ------------------------------
   {"good": "json", "is": true}
 (1 row)
@@ -154,7 +154,7 @@ $ select * from members;
 \begin{lstlisting}[label=lst:plv8js9,caption=Таблица с JSON полем]
 $ CREATE TABLE members ( id SERIAL, profile json );
 $ SELECT count(*) FROM members;
-  count  
+  count
 ---------
  1000000
 (1 row)
@@ -237,7 +237,7 @@ $ SELECT mustache(
   'hello {{#things}}{{.}} {{/things}}:) {{#data}}{{key}}{{/data}}',
   '{"things": ["world", "from", "postgresql"], "data": {"key": "and me"}}'
 );
-		mustache                
+		mustache
 ---------------------------------------
   hello world from postgresql :) and me
 (1 row)

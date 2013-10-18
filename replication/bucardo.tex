@@ -1,6 +1,6 @@
 \section{Bucardo}
 \subsection{Введение}
-Bucardo~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl. 
+Bucardo~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl.
 Система очень гибкая, поддерживает несколько видов синхронизации и обработки конфликтов.
 
 \subsection{Установка}
@@ -61,7 +61,7 @@ Current connection settings:
 Данный пользователь должен иметь право логиниться через Unix socket, поэтому лучше заранее дать ему такие права в pg\_hda.conf.
 
 \subsubsection{Настройка баз данных}
-Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo. 
+Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo.
 Пусть у нас будет master\_db и slave\_db. Сначала настроим мастер:
 \begin{lstlisting}[label=lst:bucardo7,caption=Настройка баз данных]
 bucardo_ctl add db master_db name=master
@@ -69,7 +69,7 @@ bucardo_ctl add all tables herd=all_tables
 bucardo_ctl add all sequences herd=all_tables
 \end{lstlisting}
 
-Первой командой мы указали базу данных и дали ей имя master (для того, что в реальной жизни master\_db и slave\_db 
+Первой командой мы указали базу данных и дали ей имя master (для того, что в реальной жизни master\_db и slave\_db
 имеют одинаковое название и их нужно Bucardo отличать). Второй и третьей командой мы указали реплицировать все таблицы и последовательности, объеденив их в группу all\_tables.
 
 Дальше добавляем slave\_db:
@@ -93,9 +93,9 @@ bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
 \begin{itemize}
 \item \textbf{Fullcopy}. Полное копирование.
 \item \textbf{Pushdelta}. Master-slave репликация.
-\item \textbf{Swap}. Master-master репликация. 
+\item \textbf{Swap}. Master-master репликация.
 Для работы в таком режиме потребуется указать как Bucardo должен решать конфликты синхронизации.
-Для этого в таблице <<goat>> (в которой находятся таблицы и последовательности) нужно в <<standard\_conflict>> 
+Для этого в таблице <<goat>> (в которой находятся таблицы и последовательности) нужно в <<standard\_conflict>>
 поле поставить значение (это значение может быть разным для разных таблиц и последовательностей):
 \begin{itemize}
 \item source~--- при конфликте мы копируем данные с source (master\_db в нашем случае).

@@ -119,13 +119,13 @@ test=# CREATE EXTENSION smlar;
 CREATE EXTENSION
 
 test=# SELECT smlar('{1,4,6}'::int[], '{5,4,6}'::int[]);
-  smlar  
+  smlar
 ----------
  0.666667
 (1 row)
 
 test=# SELECT smlar('{1,4,6}'::int[], '{5,4,6}'::int[], 'N.i / sqrt(N.a * N.b)' );
-  smlar  
+  smlar
 ----------
  0.666667
 (1 row)
@@ -211,7 +211,7 @@ CREATE INDEX image_array_gist ON images USING GIST(image_array _int4_sml_ops);
 
 \begin{lstlisting}[label=lst:smlar10,caption=Поиск дубликатов]
 test=# SELECT count(*) from images;
-  count 
+  count
 ---------
  1000000
 (1 row)
@@ -231,7 +231,7 @@ test=# EXPLAIN ANALYZE SELECT count(*) FROM images WHERE images.image_array % '{
 Дополнительно можем добавить сортировку по самым похожим изображениям:
 
 \begin{lstlisting}[label=lst:smlar11,caption=Добавляем сортировку по сходству картинок]
-test=# EXPLAIN ANALYZE SELECT smlar(images.image_array, '{1010259,...,2424252}'::int[]) as similarity FROM images WHERE images.image_array % '{1010259,1011253, ...,2423253,2424252}'::int[] ORDER BY similarity DESC; 
+test=# EXPLAIN ANALYZE SELECT smlar(images.image_array, '{1010259,...,2424252}'::int[]) as similarity FROM images WHERE images.image_array % '{1010259,1011253, ...,2423253,2424252}'::int[] ORDER BY similarity DESC;
 
 
  Sort  (cost=4020.94..4023.41 rows=986 width=924) (actual time=2888.472..2901.977 rows=200000 loops=1)

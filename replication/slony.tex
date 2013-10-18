@@ -1,17 +1,17 @@
 \section{Slony-I}
 \subsection{Введение}
-Slony это система репликации реального времени, позволяющая организовать синхронизацию нескольких серверов 
-PostgreSQL по сети. Slony использует триггеры Postgre для привязки к событиям INSERT/ DELETE/UPDATE и 
+Slony это система репликации реального времени, позволяющая организовать синхронизацию нескольких серверов
+PostgreSQL по сети. Slony использует триггеры Postgre для привязки к событиям INSERT/ DELETE/UPDATE и
 хранимые процедуры для выполнения действий.
 
-Система Slony с точки зрения администратора состоит из двух главных компонент: репликационного демона slony и 
-административной консоли slonik. Администрирование системы сводится к общению со slonik-ом, демон slon только 
-следит за собственно процессом репликации. А админ следит за тем, чтобы slon висел там, где ему положено. 
+Система Slony с точки зрения администратора состоит из двух главных компонент: репликационного демона slony и
+административной консоли slonik. Администрирование системы сводится к общению со slonik-ом, демон slon только
+следит за собственно процессом репликации. А админ следит за тем, чтобы slon висел там, где ему положено.
 
 \subsubsection{О slonik-e}
-Все команды slonik принимает на свой stdin. До начала выполнения скрипт slonik-a проверяется на соответствие синтаксису, 
-если обнаруживаются ошибки, скрипт не выполняется, так что можно не волноваться если slonik сообщает о syntax error, 
-ничего страшного не произошло. И он ещё ничего не сделал. Скорее всего. 
+Все команды slonik принимает на свой stdin. До начала выполнения скрипт slonik-a проверяется на соответствие синтаксису,
+если обнаруживаются ошибки, скрипт не выполняется, так что можно не волноваться если slonik сообщает о syntax error,
+ничего страшного не произошло. И он ещё ничего не сделал. Скорее всего.
 
 \subsection{Установка}
 Установка на Ubuntu производится простой командой:
@@ -21,7 +21,7 @@ sudo aptitude install slony1-bin
 
 \subsection{Настройка}
 \label{sec:slonyI}
-Рассмотрим теперь установку на гипотетическую базу данных customers 
+Рассмотрим теперь установку на гипотетическую базу данных customers
 (названия узлов, кластеров и таблиц являются вымышленными).
 
 Наши данные
@@ -33,7 +33,7 @@ sudo aptitude install slony1-bin
 \end{itemize}
 
 \subsubsection{Подготовка master-сервера}
-Для начала нам нужно создать пользователя Postgres, под которым будет действовать Slony. 
+Для начала нам нужно создать пользователя Postgres, под которым будет действовать Slony.
 По умолчанию, и отдавая должное системе, этого пользователя обычно называют slony.
 \begin{lstlisting}[label=lst:slony2,caption=Подготовка master-сервера]
 pgsql@customers_master$ createuser -a -d slony
@@ -41,24 +41,24 @@ pgsql@customers_master$ psql -d template1 -c "alter \
 user slony with password 'slony_user_password';"
 \end{lstlisting}
 
-Также на каждом из узлов лучше завести системного пользователя slony, чтобы запускать от его имени 
-репликационного демона slon. В дальнейшем подразумевается, что он (и пользователь и slon) есть на 
-каждом из узлов кластера. 
+Также на каждом из узлов лучше завести системного пользователя slony, чтобы запускать от его имени
+репликационного демона slon. В дальнейшем подразумевается, что он (и пользователь и slon) есть на
+каждом из узлов кластера.
 
 \subsubsection{Подготовка одного slave-сервера}
-Здесь я рассматриваю, что серверы кластера соединены посредством сети Internet (как в моём случае), необходимо 
-чтобы с каждого из ведомых серверов можно было установить соединение с PostgreSQL на мастер-хосте, и наоборот. 
+Здесь я рассматриваю, что серверы кластера соединены посредством сети Internet (как в моём случае), необходимо
+чтобы с каждого из ведомых серверов можно было установить соединение с PostgreSQL на мастер-хосте, и наоборот.
 То есть, команда:
 \begin{lstlisting}[label=lst:slony3,caption=Подготовка одного slave-сервера]
 anyuser@customers_slave$ psql -d customers \
 -h customers_master.com -U slony
 \end{lstlisting}
 
-должна подключать нас к мастер-серверу (после ввода пароля, желательно). Если что-то не так, возможно требуется 
+должна подключать нас к мастер-серверу (после ввода пароля, желательно). Если что-то не так, возможно требуется
 поковыряться в настройках firewall-a, или файле pg\_hba.conf, который лежит в \$PGDATA.
 
-Теперь устанавливаем на slave-хост сервер PostgreSQL. Следующего обычно не требуется, сразу после установки Postgres 
-<<up and ready>>, но в случае каких-то ошибок можно начать <<с чистого листа>>, выполнив следующие команды 
+Теперь устанавливаем на slave-хост сервер PostgreSQL. Следующего обычно не требуется, сразу после установки Postgres
+<<up and ready>>, но в случае каких-то ошибок можно начать <<с чистого листа>>, выполнив следующие команды
 (предварительно сохранив конфигурационные файлы и остановив postmaster):
 \begin{lstlisting}[label=lst:slony4,caption=Подготовка одного slave-сервера]
 pgsql@customers_slave$ rm -rf $PGDATA
@@ -78,14 +78,14 @@ pgsql@customers_slave$ psql -d template1 -c "alter \
 user customers_owner with password 'customers_owner_password';"
 \end{lstlisting}
 
-Эти две команды можно запускать с customers\_master, к командной строке в этом случае нужно добавить 
+Эти две команды можно запускать с customers\_master, к командной строке в этом случае нужно добавить
 <<-h customers\_slave>>, чтобы все операции выполнялись на slave.
 
 На slave, как и на master, также нужно установить Slony.
 
 \subsubsection{Инициализация БД и plpgsql на slave}
 
-Следующие команды выполняются от пользователя slony. Скорее всего для выполнения каждой из них потребуется 
+Следующие команды выполняются от пользователя slony. Скорее всего для выполнения каждой из них потребуется
 ввести пароль (slony\_user\_password). Итак:
 \begin{lstlisting}[label=lst:slony6,caption=Инициализация БД и plpgsql на slave]
 slony@customers_master$ createdb -O customers_owner \
@@ -94,11 +94,11 @@ slony@customers_master$ createlang -d customers \
 -h customers_slave.com plpgsql
 \end{lstlisting}
 
-Внимание! Все таблицы, которые будут добавлены в replication set должны иметь primary key. 
-Если какая-то из таблиц не удовлетворяет этому условию, задержитесь на этом шаге и дайте каждой таблице primary key 
+Внимание! Все таблицы, которые будут добавлены в replication set должны иметь primary key.
+Если какая-то из таблиц не удовлетворяет этому условию, задержитесь на этом шаге и дайте каждой таблице primary key
 командой ALTER TABLE ADD PRIMARY KEY.
 
-Если столбца который мог бы стать primary key не находится, добавьте новый столбец типа serial (ALTER TABLE ADD COLUMN), 
+Если столбца который мог бы стать primary key не находится, добавьте новый столбец типа serial (ALTER TABLE ADD COLUMN),
 и заполните его значениями. Настоятельно НЕ рекомендую использовать <<table add key>> slonik-a.
 
 Продолжаем.
@@ -110,9 +110,9 @@ psql -U slony -h customers_slave.com customers
 
 pg\_dump -s сдампит только структуру нашей БД.
 
-pg\_dump -s customers должен пускать без пароля, а вот для psql -U slony -h customers\_slave.com 
-customers придётся набрать пароль (slony\_user\_pass). Важно: я подразумеваю что сейчас на мастер-хосте 
-ещё не установлен Slony (речь не про make install), то есть в БД нет таблиц sl\_*, триггеров и прочего. 
+pg\_dump -s customers должен пускать без пароля, а вот для psql -U slony -h customers\_slave.com
+customers придётся набрать пароль (slony\_user\_pass). Важно: я подразумеваю что сейчас на мастер-хосте
+ещё не установлен Slony (речь не про make install), то есть в БД нет таблиц sl\_*, триггеров и прочего.
 Если есть, то возможно два варианта:
 \begin{itemize}
 \item добавляется узел в уже функционирующую систему репликации (читайте раздел 5)
@@ -120,20 +120,20 @@ customers придётся набрать пароль (slony\_user\_pass). Ва
 \begin{lstlisting}[label=lst:slony8,caption=Инициализация БД и plpgsql на slave]
 slonik <<EOF
 cluster name = customers_slave;
-node Y admin conninfo = 'dbname=customers host=customers_master.com 
+node Y admin conninfo = 'dbname=customers host=customers_master.com
 port=5432 user=slony password=slony_user_pass';
 uninstall node (id = Y);
 echo 'okay';
 EOF
 \end{lstlisting}
-Y~--- число. Любое. Важно: если это действительно ошибка, cluster name может иметь какой-то другое значение, например T1 
+Y~--- число. Любое. Важно: если это действительно ошибка, cluster name может иметь какой-то другое значение, например T1
 (default). Нужно его выяснить и сделать uninstall.
 
-Если структура уже перенесена (и это действительно ошибка), сделайте uninstall с обоих узлов (с master и slave). 
+Если структура уже перенесена (и это действительно ошибка), сделайте uninstall с обоих узлов (с master и slave).
 \end{itemize}
 
 \subsubsection{Инициализация кластера}
-Если Сейчас мы имеем два сервера PgSQL которые свободно <<видят>> друг друга по сети, 
+Если Сейчас мы имеем два сервера PgSQL которые свободно <<видят>> друг друга по сети,
 на одном из них находится мастер-база с данными, на другом~--- только структура.
 
 На мастер-хосте запускаем такой скрипт:
@@ -155,38 +155,38 @@ SLONY_USER=slony
 
 slonik <<EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 port=$PORT1 
+node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 port=$PORT1
 user=slony password=slony_user_password';
-node 2 admin conninfo = 'dbname=$DBNAME2 host=$HOST2 
+node 2 admin conninfo = 'dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password';
-init cluster ( id = 1, comment = 'Customers DB 
+init cluster ( id = 1, comment = 'Customers DB
 replication cluster' );
 
 echo 'Create set';
 
-create set ( id = 1, origin = 1, comment = 'Customers 
+create set ( id = 1, origin = 1, comment = 'Customers
 DB replication set' );
 
 echo 'Adding tables to the subscription set';
 
 echo ' Adding table public.customers_sales...';
-set add table ( set id = 1, origin = 1, id = 4, full qualified 
+set add table ( set id = 1, origin = 1, id = 4, full qualified
 name = 'public.customers_sales', comment = 'Table public.customers_sales' );
 echo ' done';
 
 echo ' Adding table public.customers_something...';
-set add table ( set id = 1, origin = 1, id = 5, full qualified 
-name = 'public.customers_something, 
+set add table ( set id = 1, origin = 1, id = 5, full qualified
+name = 'public.customers_something,
 comment = 'Table public.customers_something );
 echo ' done';
 
 echo 'done adding';
 store node ( id = 2, comment = 'Node 2, $HOST2' );
 echo 'stored node';
-store path ( server = 1, client = 2, conninfo = 'dbname=$DBNAME1 host=$HOST1 
+store path ( server = 1, client = 2, conninfo = 'dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_password' );
 echo 'stored path';
-store path ( server = 2, client = 1, conninfo = 'dbname=$DBNAME2 host=$HOST2 
+store path ( server = 2, client = 1, conninfo = 'dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password' );
 
 store listen ( origin = 1, provider = 1, receiver = 2 );
@@ -194,14 +194,14 @@ store listen ( origin = 2, provider = 2, receiver = 1 );
 EOF
 \end{lstlisting}
 
-Здесь мы инициализируем кластер, создаём репликационный набор, включаем в него две таблицы. 
-Важно: нужно перечислить все таблицы, которые нужно реплицировать, id таблицы в наборе должен быть уникальным, 
+Здесь мы инициализируем кластер, создаём репликационный набор, включаем в него две таблицы.
+Важно: нужно перечислить все таблицы, которые нужно реплицировать, id таблицы в наборе должен быть уникальным,
 таблицы должны иметь primary key.
 
 Важно: replication set запоминается раз и навсегда. Чтобы добавить узел в схему репликации не нужно заново инициализировать set.
 
-Важно: если в набор добавляется или удаляется таблица нужно переподписать все узлы. 
-То есть сделать unsubscribe и subscribe заново. 
+Важно: если в набор добавляется или удаляется таблица нужно переподписать все узлы.
+То есть сделать unsubscribe и subscribe заново.
 
 \subsubsection{Подписываем slave-узел на replication set}
 Скрипт:
@@ -223,9 +223,9 @@ SLONY_USER=slony
 
 slonik <<EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_password';
-node 2 admin conninfo = 'dbname=$DBNAME2 host=$HOST2 
+node 2 admin conninfo = 'dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password';
 
 echo'subscribing';
@@ -247,25 +247,25 @@ slony@customers_slave$ slon customers_rep \
 "dbname=customers user=slony"
 \end{lstlisting}
 
-Сейчас слоны обменяются сообщениями и начнут передачу данных. Начальное наполнение происходит с помощью COPY, 
+Сейчас слоны обменяются сообщениями и начнут передачу данных. Начальное наполнение происходит с помощью COPY,
 slave DB на это время полностью блокируется.
 
-В среднем время актуализации данных на slave-системе составляет до 10-ти секунд. 
-slon успешно обходит проблемы со связью и подключением к БД, и вообще требует к 
-себе достаточно мало внимания. 
+В среднем время актуализации данных на slave-системе составляет до 10-ти секунд.
+slon успешно обходит проблемы со связью и подключением к БД, и вообще требует к
+себе достаточно мало внимания.
 
 \subsection{Общие задачи}
 \subsubsection{Добавление ещё одного узла в работающую схему репликации}
 Выполнить~\ref{sec:slonyI}.1 и выполнить~\ref{sec:slonyI}.2.
 
-Новый узел имеет id = 3. Находится на хосте customers\_slave3.com, <<видит>> мастер-сервер по сети и 
-мастер может подключиться к его PgSQL. 
+Новый узел имеет id = 3. Находится на хосте customers\_slave3.com, <<видит>> мастер-сервер по сети и
+мастер может подключиться к его PgSQL.
 
 после дублирования структуры (п~\ref{sec:slonyI}.2) делаем следующее:
 \begin{lstlisting}[label=lst:slony13,caption=Общие задачи]
 slonik <<EOF
 cluster name = customers_slave;
-node 3 admin conninfo = 'dbname=customers host=customers_slave3.com 
+node 3 admin conninfo = 'dbname=customers host=customers_slave3.com
 port=5432 user=slony password=slony_user_pass';
 uninstall node (id = 3);
 echo 'okay';
@@ -293,19 +293,19 @@ SLONY_USER=slony
 
 slonik <<EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_pass';
-node 3 admin conninfo = 'dbname=$DBNAME3 
+node 3 admin conninfo = 'dbname=$DBNAME3
 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass';
 
 echo 'done adding';
 
 store node ( id = 3, comment = 'Node 3, $HOST3' );
 echo 'sored node';
-store path ( server = 1, client = 3, conninfo = 'dbname=$DBNAME1 
+store path ( server = 1, client = 3, conninfo = 'dbname=$DBNAME1
 host=$HOST1 port=$PORT1 user=slony password=slony_user_pass' );
 echo 'stored path';
-store path ( server = 3, client = 1, conninfo = 'dbname=$DBNAME3 
+store path ( server = 3, client = 1, conninfo = 'dbname=$DBNAME3
 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass' );
 
 echo 'again';
@@ -334,9 +334,9 @@ SLONY_USER=slony
 
 slonik <<EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = 'dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_pass';
-node 3 admin conninfo = 'dbname=$DBNAME3 host=$HOST3 
+node 3 admin conninfo = 'dbname=$DBNAME3 host=$HOST3
 port=$PORT2 user=slony password=slony_user_pass';
 
 echo'subscribing';
@@ -351,30 +351,30 @@ slony@customers_slave3$ slon customers_rep \
 "dbname=customers user=slony"
 \end{lstlisting}
 
-Репликация должна начаться как обычно. 
+Репликация должна начаться как обычно.
 
 \subsection{Устранение неисправностей}
 \subsubsection{Ошибка при добавлении узла в систему репликации}
-Периодически, при добавлении новой машины в кластер возникает следующая ошибка: на новой ноде всё начинает 
+Периодически, при добавлении новой машины в кластер возникает следующая ошибка: на новой ноде всё начинает
 жужжать и работать, имеющиеся же отваливаются с примерно следующей диагностикой:
 \begin{lstlisting}[label=lst:slony17,caption=Устранение неисправностей]
 %slon customers_rep "dbname=customers user=slony_user"
 CONFIG main: slon version 1.0.5 starting up
 CONFIG main: local node id = 3
 CONFIG main: loading current cluster configuration
-CONFIG storeNode: no_id=1 no_comment='CustomersDB 
+CONFIG storeNode: no_id=1 no_comment='CustomersDB
 replication cluster'
-CONFIG storeNode: no_id=2 no_comment='Node 2, 
+CONFIG storeNode: no_id=2 no_comment='Node 2,
 node2.example.com'
-CONFIG storeNode: no_id=4 no_comment='Node 4, 
+CONFIG storeNode: no_id=4 no_comment='Node 4,
 node4.example.com'
-CONFIG storePath: pa_server=1 pa_client=3 
-pa_conninfo="dbname=customers 
-host=mainhost.com port=5432 user=slony_user 
+CONFIG storePath: pa_server=1 pa_client=3
+pa_conninfo="dbname=customers
+host=mainhost.com port=5432 user=slony_user
 password=slony_user_pass" pa_connretry=10
-CONFIG storeListen: li_origin=1 li_receiver=3 
+CONFIG storeListen: li_origin=1 li_receiver=3
 li_provider=1
-CONFIG storeSet: set_id=1 set_origin=1 
+CONFIG storeSet: set_id=1 set_origin=1
 set_comment='CustomersDB replication set'
 WARN remoteWorker_wakeup: node 1 - no worker thread
 CONFIG storeSubscribe: sub_set=1 sub_provider=1 sub_forward='f'
@@ -385,82 +385,82 @@ CONFIG main: configuration complete - starting threads
 CONFIG enableNode: no_id=1
 CONFIG enableNode: no_id=2
 CONFIG enableNode: no_id=4
-ERROR remoteWorkerThread_1: "begin transaction; set 
-transaction isolation level 
-serializable; lock table "_customers_rep".sl_config_lock; select 
-"_customers_rep".enableSubscription(1, 1, 4); 
-notify "_customers_rep_Event"; notify "_customers_rep_Confirm"; 
-insert into "_customers_rep".sl_event (ev_origin, ev_seqno, 
-ev_timestamp, ev_minxid, ev_maxxid, ev_xip, 
-ev_type , ev_data1, ev_data2, ev_data3, ev_data4 ) values 
-('1', '219440', 
-'2005-05-05 18:52:42.708351', '52501283', '52501292', 
-'''52501283''', 'ENABLE_SUBSCRIPTION', 
+ERROR remoteWorkerThread_1: "begin transaction; set
+transaction isolation level
+serializable; lock table "_customers_rep".sl_config_lock; select
+"_customers_rep".enableSubscription(1, 1, 4);
+notify "_customers_rep_Event"; notify "_customers_rep_Confirm";
+insert into "_customers_rep".sl_event (ev_origin, ev_seqno,
+ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
+ev_type , ev_data1, ev_data2, ev_data3, ev_data4 ) values
+('1', '219440',
+'2005-05-05 18:52:42.708351', '52501283', '52501292',
+'''52501283''', 'ENABLE_SUBSCRIPTION',
 '1', '1', '4', 'f'); insert into "_customers_rep".
-sl_confirm (con_origin, con_received, 
-con_seqno, con_timestamp) values (1, 3, '219440', 
-CURRENT_TIMESTAMP); commit transaction;" 
-PGRES_FATAL_ERROR ERROR: insert or update on table 
-"sl_subscribe" violates foreign key 
+sl_confirm (con_origin, con_received,
+con_seqno, con_timestamp) values (1, 3, '219440',
+CURRENT_TIMESTAMP); commit transaction;"
+PGRES_FATAL_ERROR ERROR: insert or update on table
+"sl_subscribe" violates foreign key
 constraint "sl_subscribe-sl_path-ref"
-DETAIL: Key (sub_provider,sub_receiver)=(1,4) 
+DETAIL: Key (sub_provider,sub_receiver)=(1,4)
 is not present in table "sl_path".
-INFO remoteListenThread_1: disconnecting from 
-'dbname=customers host=mainhost.com 
+INFO remoteListenThread_1: disconnecting from
+'dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_pass'
 %
 \end{lstlisting}
 
 
-Это означает что в служебной таблице \_<имя кластера>.sl\_path;, например 
-\_customers\_rep.sl\_path на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, 
+Это означает что в служебной таблице \_<имя кластера>.sl\_path;, например
+\_customers\_rep.sl\_path на уже имеющихся узлах отсутствует информация о новом узле. В данном случае,
 id нового узла 4, пара (1,4) в sl\_path отсутствует.
 
 Видимо, это баг Slony. Как избежать этого и последующих ручных вмешательств пока не ясно.
 
-Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос 
+Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос
 (добавить путь, в данном случае (1,4)):
 \begin{lstlisting}[label=lst:slony18,caption=Устранение неисправностей]
 slony_user@masterhost$ psql -d customers -h _every_one_of_slaves -U slony
-customers=# insert into _customers_rep.sl_path 
-values ('1','4','dbname=customers host=mainhost.com 
+customers=# insert into _customers_rep.sl_path
+values ('1','4','dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_password,'10');
 \end{lstlisting}
 
-Если возникают затруднения, да и вообще для расширения кругозора можно посмотреть на служебные таблицы 
-и их содержимое. Они не видны обычно и находятся в рамках пространства имён \_<имя кластера>, 
-например \_customers\_rep. 
+Если возникают затруднения, да и вообще для расширения кругозора можно посмотреть на служебные таблицы
+и их содержимое. Они не видны обычно и находятся в рамках пространства имён \_<имя кластера>,
+например \_customers\_rep.
 
 \subsubsection{Что делать если репликация со временем начинает тормозить}
-В процессе эксплуатации наблюдаю как со временем растёт нагрузка на master-сервере, в списке активных бекендов~--- 
+В процессе эксплуатации наблюдаю как со временем растёт нагрузка на master-сервере, в списке активных бекендов~---
 постоянные SELECT-ы со слейвов. В pg\_stat\_activity видим примерно такие запросы:
 \begin{lstlisting}[label=lst:slony19,caption=Устранение неисправностей]
-select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip, 
-ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, ev_data6, 
-ev_data7, ev_data8 from "_customers_rep".sl_event e where 
-(e.ev_origin = '2' and e.ev_seqno > '336996') or 
-(e.ev_origin = '3' and e.ev_seqno > '1712871') or 
-(e.ev_origin = '4' and e.ev_seqno > '721285') or 
-(e.ev_origin = '5' and e.ev_seqno > '807715') or 
-(e.ev_origin = '1' and e.ev_seqno > '3544763') or 
-(e.ev_origin = '6' and e.ev_seqno > '2529445') or 
-(e.ev_origin = '7' and e.ev_seqno > '2512532') or 
-(e.ev_origin = '8' and e.ev_seqno > '2500418') or 
-(e.ev_origin = '10' and e.ev_seqno > '1692318') 
+select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
+ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, ev_data6,
+ev_data7, ev_data8 from "_customers_rep".sl_event e where
+(e.ev_origin = '2' and e.ev_seqno > '336996') or
+(e.ev_origin = '3' and e.ev_seqno > '1712871') or
+(e.ev_origin = '4' and e.ev_seqno > '721285') or
+(e.ev_origin = '5' and e.ev_seqno > '807715') or
+(e.ev_origin = '1' and e.ev_seqno > '3544763') or
+(e.ev_origin = '6' and e.ev_seqno > '2529445') or
+(e.ev_origin = '7' and e.ev_seqno > '2512532') or
+(e.ev_origin = '8' and e.ev_seqno > '2500418') or
+(e.ev_origin = '10' and e.ev_seqno > '1692318')
 order by e.ev_origin, e.ev_seqno;
 \end{lstlisting}
 
 Не забываем что \_customers\_rep~--- имя схемы из примера, у вас будет другое имя.
 
-Таблица sl\_event почему-то разрастается со временем, замедляя выполнение этих 
+Таблица sl\_event почему-то разрастается со временем, замедляя выполнение этих
 запросов до неприемлемого времени. Удаляем ненужные записи:
 \begin{lstlisting}[label=lst:slony20,caption=Устранение неисправностей]
-delete from _customers_rep.sl_event where 
+delete from _customers_rep.sl_event where
 ev_timestamp<NOW()-'1 DAY'::interval;
 \end{lstlisting}
 
-Производительность должна вернуться к изначальным значениям. 
-Возможно имеет смысл почистить таблицы \_customers\_rep.sl\_log\_* где 
-вместо звёздочки подставляются натуральные числа, по-видимому по 
-количеству репликационных сетов, так что \_customers\_rep.sl\_log\_1 
-точно должна существовать. 
+Производительность должна вернуться к изначальным значениям.
+Возможно имеет смысл почистить таблицы \_customers\_rep.sl\_log\_* где
+вместо звёздочки подставляются натуральные числа, по-видимому по
+количеству репликационных сетов, так что \_customers\_rep.sl\_log\_1
+точно должна существовать.

@@ -7,10 +7,10 @@
 \end{epigraphs}
 
 \section{Введение}
-Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью, 
-красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с 
-которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения 
-мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска по Интернету. 
+Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью,
+красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с
+которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения
+мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска по Интернету.
 
 \section{Советы}
 
@@ -29,7 +29,7 @@ SELECT nspname || '.' || relname AS "relation",
 
 Пример вывода:
 \begin{lstlisting}[label=lst:snippets2,caption=Поиск самых больших объектов в БД. Пример вывода]
-        relation        |    size    
+        relation        |    size
 ------------------------+------------
  public.accounts        | 326 MB
  public.accounts_pkey   | 44 MB
@@ -57,7 +57,7 @@ SELECT nspname || '.' || relname AS "relation",
 
 Пример вывода:
 \begin{lstlisting}[label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывода]
-            relation            | total_size 
+            relation            | total_size
 --------------------------------+------------
  public.actions                 | 4249 MB
  public.product_history_records | 197 MB
@@ -68,7 +68,7 @@ SELECT nspname || '.' || relname AS "relation",
 \end{lstlisting}
 
 \subsection{<<Средний>> count}
-Данный метод позволяет узнать приблизительное количество записей в таблице. 
+Данный метод позволяет узнать приблизительное количество записей в таблице.
 Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
 
 \begin{lstlisting}[label=lst:snippets5,title=snippets/count\_estimate.sql]
@@ -82,7 +82,7 @@ BEGIN
         rows := substring(rec."QUERY PLAN" FROM ' rows=([[:digit:]]+)');
         EXIT WHEN rows IS NOT NULL;
     END LOOP;
- 
+
     RETURN rows;
 END;
 $$ LANGUAGE plpgsql VOLATILE STRICT;
@@ -95,13 +95,13 @@ INSERT INTO foo SELECT random() FROM generate_series(1, 1000);
 ANALYZE foo;
 
 # SELECT count(*) FROM foo WHERE r < 0.1;
- count 
+ count
 -------
     92
 (1 row)
 
 # SELECT count_estimate('SELECT * FROM foo WHERE r < 0.1');
- count_estimate 
+ count_estimate
 ----------------
              94
 (1 row)
@@ -112,9 +112,9 @@ ANALYZE foo;
 
 \begin{lstlisting}[label=lst:snippets6,title=snippets/default\_value.sql]
 CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
-SELECT 
+SELECT
   COLUMNS.column_default::text
-FROM 
+FROM
   information_schema.COLUMNS
   WHERE table_name = $2
   AND table_schema = $1
@@ -127,15 +127,15 @@ $$ LANGUAGE sql IMMUTABLE;
 # SELECT ret_def('schema','table','column');
 
 SELECT ret_def('public','image_files','id');
-                 ret_def                 
+                 ret_def
 -----------------------------------------
  nextval('image_files_id_seq'::regclass)
 (1 row)
 
 SELECT ret_def('public','schema_migrations','version');
- ret_def 
+ ret_def
 ---------
- 
+
 (1 row)
 \end{lstlisting}
 
@@ -153,25 +153,25 @@ $$ LANGUAGE 'sql' VOLATILE;
 Пример:
 \begin{lstlisting}[label=lst:snippets9,caption=Случайное число из диапазона. Пример]
 SELECT random(1,10)::int, random(1,10);
- random |      random      
+ random |      random
 --------+------------------
       6 | 5.11675184825435
 (1 row)
 
 SELECT random(1,10)::int, random(1,10);
- random |      random      
+ random |      random
 --------+------------------
       7 | 1.37060070643201
 (1 row)
 \end{lstlisting}
 
 \subsection{Алгоритм Луна}
-Алгоритм Луна или формула Луна\footnote{http://en.wikipedia.org/wiki/Luhn\_algorithm}~--- алгоритм вычисления контрольной цифры, получивший широкую популярность. 
-Он используется, в частности, при первичной проверке номеров банковских пластиковых карт, номеров социального 
-страхования в США и Канаде. Алгоритм был разработан сотрудником компании <<IBM>> Хансом Петером Луном и 
+Алгоритм Луна или формула Луна\footnote{http://en.wikipedia.org/wiki/Luhn\_algorithm}~--- алгоритм вычисления контрольной цифры, получивший широкую популярность.
+Он используется, в частности, при первичной проверке номеров банковских пластиковых карт, номеров социального
+страхования в США и Канаде. Алгоритм был разработан сотрудником компании <<IBM>> Хансом Петером Луном и
 запатентован в 1960 году.
 
-Контрольные цифры вообще и алгоритм Луна в частности предназначены для защиты от случайных ошибок, 
+Контрольные цифры вообще и алгоритм Луна в частности предназначены для защиты от случайных ошибок,
 а не преднамеренных искажений данных.
 
 Алгоритм Луна реализован на чистом SQL. Обратите внимание, что эта реализация является чисто арифметической.
@@ -202,11 +202,11 @@ FROM
          AS doubled_digit
          FROM generate_series(0, CEIL(LOG( $1 ))::INTEGER - 1) AS n
 ) AS doubled_digits;
- 
+
 $$ LANGUAGE 'SQL'
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_verify(int8) IS 'Return true iff the last digit of the
 input is a correct check digit for the rest of the input according to Luhn''s
 algorithm.';
@@ -227,11 +227,11 @@ FROM (SELECT
          AS doubled_digit
          FROM generate_series(0, CEIL(LOG($1))::INTEGER - 1) AS n
 ) AS doubled_digits;
- 
+
 $$ LANGUAGE 'SQL'
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_generate_checkdigit(int8) IS 'For the input
 value, generate a check digit according to Luhn''s algorithm';
 CREATE OR REPLACE FUNCTION luhn_generate(int8) RETURNS int8 AS $$
@@ -239,7 +239,7 @@ SELECT 10 * $1 + luhn_generate_checkdigit($1);
 $$ LANGUAGE 'SQL'
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_generate(int8) IS 'Append a check digit generated
 according to Luhn''s algorithm to the input value. The input value must be no
 greater than (maxbigint/10).';
@@ -248,7 +248,7 @@ SELECT $1 / 10;
 $$ LANGUAGE 'SQL'
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_strip(int8) IS 'Strip the least significant digit from
 the input value. Intended for use when stripping the check digit from a number
 including a Luhn''s algorithm check digit.';
@@ -257,13 +257,13 @@ including a Luhn''s algorithm check digit.';
 Пример:
 \begin{lstlisting}[label=lst:snippets11,caption=Алгоритм Луна. Пример]
 Select luhn_verify(49927398716);
- luhn_verify 
+ luhn_verify
 -------------
  t
 (1 row)
 
 Select luhn_verify(49927398714);
- luhn_verify 
+ luhn_verify
 -------------
  f
 (1 row)
@@ -271,14 +271,14 @@ Select luhn_verify(49927398714);
 \end{lstlisting}
 
 \subsection{Выборка и сортировка по данному набору данных}
-Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать 
+Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать
 данные в том же порядке, в котором передан набор данных. Например:
 
 Дан набор: (2,6,4,10,25,7,9)
 Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
 
 \begin{lstlisting}[label=lst:snippets12,title=snippets/order\_like\_in.sql]
-SELECT foo.* FROM foo                                           
+SELECT foo.* FROM foo
 JOIN (SELECT id.val, row_number() over() FROM (VALUES(3),(2),(6),(1),(4)) AS
 id(val)) AS id
 ON (foo.catalog_id = id.val) ORDER BY row_number;
@@ -293,21 +293,21 @@ foo~-- таблица, из которой идет выборка
 foo.catalog\_id~--- поле, по которому ищем набор данных (замена foo.catalog\_id IN(3,2,6,1,4))
 
 \subsection{Quine~--- запрос который выводит сам себя}
-Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), 
-которая выдаёт на выходе точную копию своего исходного текста. 
+Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования),
+которая выдаёт на выходе точную копию своего исходного текста.
 
 \begin{lstlisting}[label=lst:snippets13,title=snippets/quine.sql]
-select a || ' from (select ' || quote_literal(a) || b || ', ' || quote_literal(b) || '::text as b) as quine' from 
-(select 'select a || '' from (select '' || quote_literal(a) || b || '', '' || quote_literal(b) || ''::text as b) as 
+select a || ' from (select ' || quote_literal(a) || b || ', ' || quote_literal(b) || '::text as b) as quine' from
+(select 'select a || '' from (select '' || quote_literal(a) || b || '', '' || quote_literal(b) || ''::text as b) as
 quine'''::text as a, '::text as a'::text as b) as quine;
 \end{lstlisting}
 
 \subsection{Ускоряем LIKE}
-Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым LIKE <<some\%>>, 
-где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице 
+Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым LIKE <<some\%>>,
+где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице
 (например таблица тегов) такой запрос будет работать очень медленно.
 
-Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать text\_pattern\_ops 
+Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать text\_pattern\_ops
 (или varchar\_pattern\_ops если у поле varchar).
 
 \begin{lstlisting}[label=lst:snippets14,title=snippets/speed\_like.sql]
@@ -316,7 +316,7 @@ prefix_test(#  tag    text primary key,
 prefix_test(#  name      text not null,
 prefix_test(#  shortname text,
 prefix_test(#  status    char default 'S',
-prefix_test(# 
+prefix_test(#
 prefix_test(#  check( status in ('S', 'R') )
 prefix_test(# );
 NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "tags_pkey" for table "tags"
@@ -329,7 +329,7 @@ prefix_test(#  tag    text primary key,
 prefix_test(#  name      text not null,
 prefix_test(#  shortname text,
 prefix_test(#  status    char default 'S',
-prefix_test(# 
+prefix_test(#
 prefix_test(#  check( status in ('S', 'R') )
 prefix_test(# );
 NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "invalid_tags_pkey" for table "invalid_tags"
@@ -338,19 +338,19 @@ CREATE TABLE
 
 
 prefix_test=# select count(*) from tags;
- count 
+ count
 -------
  11966
 (1 row)
 
 prefix_test=# select count(*) from invalid_tags;
- count 
+ count
 -------
  11966
 (1 row)
 
 # EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower('0146%');
-                                                 QUERY PLAN                                                 
+                                                 QUERY PLAN
 ------------------------------------------------------------------------------------------------------------
  Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.359..20.695 rows=1 loops=1)
    Filter: (lower(tag) ~~ '0146%'::text)
@@ -358,7 +358,7 @@ prefix_test=# select count(*) from invalid_tags;
 (3 rows)
 
 # EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower('0146%');
-                                                 QUERY PLAN                                                 
+                                                 QUERY PLAN
 ------------------------------------------------------------------------------------------------------------
  Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.549..19.503 rows=1 loops=1)
    Filter: (lower(tag) ~~ '0146%'::text)
@@ -366,7 +366,7 @@ prefix_test=# select count(*) from invalid_tags;
 (3 rows)
 
 # EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
-                                                      QUERY PLAN                                                       
+                                                      QUERY PLAN
 -----------------------------------------------------------------------------------------------------------------------
  Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.054..0.057 rows=1 loops=1)
    Filter: (lower(tag) ~~ '0146%'::text)
@@ -376,7 +376,7 @@ prefix_test=# select count(*) from invalid_tags;
 (5 rows)
 
 # EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
-                                                      QUERY PLAN                                                       
+                                                      QUERY PLAN
 -----------------------------------------------------------------------------------------------------------------------
  Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.025..0.025 rows=1 loops=1)
    Filter: (lower(tag) ~~ '0146%'::text)

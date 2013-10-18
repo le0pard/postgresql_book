@@ -12,7 +12,7 @@ HStore~-- расширение, которое реализует тип дан�
 Проверим работу расширения:
 \begin{lstlisting}[label=lst:hstore2,caption=Проверка hstore]
 # SELECT 'a=>1,a=>2'::hstore;
-  hstore  
+  hstore
 ----------
  "a"=>"1"
 (1 row)
@@ -25,7 +25,7 @@ CREATE TABLE products (
    id serial PRIMARY KEY,
    name varchar,
    attributes hstore
-);   
+);
 INSERT INTO products (name, attributes)
 VALUES (
   'Geek Love: A Novel',
@@ -53,7 +53,7 @@ VALUES (
 Теперь можно производить поиск по ключу:
 \begin{lstlisting}[label=lst:hstore4,caption=Поиск по ключу]
 # SELECT name, attributes->'pages' as page FROM products WHERE attributes ? 'pages';
-        name        | page 
+        name        | page
 --------------------+------
  Geek Love: A Novel | 368
 (1 row)
@@ -62,7 +62,7 @@ VALUES (
 Или по значению ключа:
 \begin{lstlisting}[label=lst:hstore5,caption=Поиск по значению ключа]
 # SELECT name, attributes->'manufacturer' as manufacturer FROM products WHERE attributes->'type' = 'computer';
-       name      | manufacturer 
+       name      | manufacturer
  ----------------+--------------
   MacBook Air 11 | Apple
  (1 row)
@@ -76,7 +76,7 @@ CREATE INDEX products_hstore_index ON products USING GIN (attributes);
 
 Можно также cоздавать индекс на ключ:
 \begin{lstlisting}[label=lst:hstore7,caption=Индекс на ключ]
-CREATE INDEX product_manufacturer 
+CREATE INDEX product_manufacturer
    ON products ((products.attributes->'manufacturer'));
 \end{lstlisting}
 

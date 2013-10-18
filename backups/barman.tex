@@ -43,7 +43,7 @@ host  all  all  brhost/32  trust
 
 \begin{lstlisting}[label=lst:barman6,caption=Проверка подключения к базе]
 $ psql -c 'SELECT version()' -U postgres -h pghost
-                                                  version                                                   
+                                                  version
 ------------------------------------------------------------------------------------------------------------
  PostgreSQL 9.2.1 on x86_64-unknown-linux-gnu, compiled by gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2, 64-bit
 (1 row)
@@ -52,7 +52,7 @@ $ psql -c 'SELECT version()' -U postgres -h pghost
 Далее создадим папку на сервере с бэкапами для хранения этих самых бэкапов:
 
 \begin{lstlisting}[label=lst:barman7,caption=Папка для хранения бэкапов]
-# sudo mkdir -p /srv/barman    
+# sudo mkdir -p /srv/barman
 # sudo chown barman:barman /srv/barman
 \end{lstlisting}
 
@@ -167,7 +167,7 @@ Backup end at xlog location: 0/30000D8 (000000010000000000000003, 000000D8)
 Backup completed
 \end{lstlisting}
 
-Такую задачу лучше выполнять раз в сутки (добавить в cron). 
+Такую задачу лучше выполнять раз в сутки (добавить в cron).
 
 Посмотреть список бэкапов для указаной базы:
 
@@ -230,7 +230,7 @@ Processing xlog segments for main
 
 \begin{lstlisting}[label=lst:barman17,caption=Восстановление базы]
 # barman recover --remote-ssh-command "ssh postgres@pghost" main 20121109T090806 /var/lib/postgresql/9.2/main
-Starting remote restore for server main using backup 20121109T090806 
+Starting remote restore for server main using backup 20121109T090806
 Destination directory: /var/lib/postgresql/9.2/main
 Copying the base backup.
 Copying required wal segments.

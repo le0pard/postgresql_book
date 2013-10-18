@@ -1,7 +1,7 @@
 \section{RubyRep}
 \subsection{Введение}
-RubyRep представляет собой движок для организации асинхронной репликации, написанный на языке ruby. 
-Основные принципы: простота использования и не зависит от БД. 
+RubyRep представляет собой движок для организации асинхронной репликации, написанный на языке ruby.
+Основные принципы: простота использования и не зависит от БД.
 Поддерживает как master-master, так и master-slave репликацию, может работать с PostgreSQL и MySQL.
 Отличительными особенностями решения являются:
 \begin{itemize}
@@ -11,13 +11,13 @@ RubyRep представляет собой движок для организа
 К недостаткам можно отнести:
 \begin{itemize}
 \item работа только с двумя базами данных для MySQL
-\item медленная работа синхронизации 
+\item медленная работа синхронизации
 \item при больших объемах данных <<ест>> процессор и память
 \end{itemize}
 
 
 \subsection{Установка}
-RubyRep поддерживает два типа установки: через стандартный Ruby или JRuby. 
+RubyRep поддерживает два типа установки: через стандартный Ruby или JRuby.
 Рекомендую ставить JRuby вариант~--- производительность будет выше.
 
 \textbf{Установка JRuby версии}
@@ -34,7 +34,7 @@ RubyRep поддерживает два типа установки: через 
 \item Установить Ruby, Rubygems.
 \item Установить драйвера базы данных.
 
-Для Mysql: 
+Для Mysql:
 \begin{lstlisting}[label=lst:rubyrep1,caption=Установка]
 sudo gem install mysql
 \end{lstlisting}
@@ -68,7 +68,7 @@ config.left = {
 :password => 'tiger',
 :host     => '172.16.1.1'
 }
- 
+
 config.right = {
 :adapter  => 'postgresql',
 :database => 'SCOTT',
@@ -76,7 +76,7 @@ config.right = {
 :password => 'tiger',
 :host     => '172.16.1.2'
 }
- 
+
 config.include_tables 'dept'
 config.include_tables /^e/ # regexp matches all tables starting with e
 # config.include_tables /./ # regexp matches all tables
@@ -111,8 +111,8 @@ rubyrep sync -c myrubyrep.conf
 rubyrep sync -c myrubyrep.conf dept /^e/
 \end{lstlisting}
 
-Настройки политики синхронизации позволяют указывать как решать конфликты синхронизации. 
-Более подробно можно почитать в \href{http://www.rubyrep.org/configuration.html}{документации}. 
+Настройки политики синхронизации позволяют указывать как решать конфликты синхронизации.
+Более подробно можно почитать в \href{http://www.rubyrep.org/configuration.html}{документации}.
 
 \subsubsection{Репликация}
 Для запуска репликации достаточно выполнить:
@@ -121,8 +121,8 @@ rubyrep replicate -c myrubyrep.conf
 \end{lstlisting}
 
 Данная команда установить репликацию (если она не была установлена) на базы данных и запустит её.
-Чтобы остановить репликацию, достаточно просто убить процесс. Даже если репликация остановлена, 
-все изменения будут обработаны триггерами rubyrep. После перезагрузки, все изменения 
+Чтобы остановить репликацию, достаточно просто убить процесс. Даже если репликация остановлена,
+все изменения будут обработаны триггерами rubyrep. После перезагрузки, все изменения
 будут автоматически восстановлены.
 
 Для удаления репликации достаточно выполнить:
@@ -134,7 +134,7 @@ rubyrep uninstall -c myrubyrep.conf
 \subsubsection{Ошибка при запуске репликации}
 При запуске rubyrep через Ruby может возникнуть подобная ошибка:
 \begin{lstlisting}[label=lst:rubyrep12,caption=Устранение неисправностей]
-$rubyrep replicate -c myrubyrep.conf 
+$rubyrep replicate -c myrubyrep.conf
 Verifying RubyRep tables
 Checking for and removing rubyrep triggers from unconfigured tables
 Verifying rubyrep triggers of configured tables
@@ -151,7 +151,7 @@ Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual join(0xb758cfac)
 replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
 +++ ./replication_runner.rb 2010-07-16 17:38:03.000000000 -0400
 @@ -2,6 +2,12 @@
- 
+
  require 'optparse'
  require 'thread'
 +require 'monitor'
@@ -160,18 +160,18 @@ replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
 + alias lock mon_enter
 + alias unlock mon_exit
 +end
- 
+
  module RR
    # This class implements the functionality of the 'replicate' command.
 @@ -94,7 +100,7 @@
-     # Initializes the waiter thread used for replication pauses 
+     # Initializes the waiter thread used for replication pauses
      # and processing
      # the process TERM signal.
      def init_waiter
 - @termination_mutex = Mutex.new
 + @termination_mutex = Monitor.new
        @termination_mutex.lock
-       @waiter_thread ||= Thread.new {@termination_mutex.lock; 
+       @waiter_thread ||= Thread.new {@termination_mutex.lock;
          self.termination_requested = true}
        %w(TERM INT).each do |signal|
 \end{lstlisting}

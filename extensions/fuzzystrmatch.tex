@@ -7,25 +7,25 @@ Fuzzystrmatch предоставляет несколько функций дл�
 # CREATE EXTENSION fuzzystrmatch;
 CREATE EXTENSION
 # SELECT soundex('hello world!');
- soundex 
+ soundex
 ---------
  H464
 (1 row)
 
 # SELECT soundex('Anne'), soundex('Ann'), difference('Anne', 'Ann');
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | A500    |          4
 (1 row)
 
 # SELECT soundex('Anne'), soundex('Andrew'), difference('Anne', 'Andrew');
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | A536    |          2
 (1 row)
 
 # SELECT soundex('Anne'), soundex('Margaret'), difference('Anne', 'Margaret');
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | M626    |          0
 (1 row)
@@ -35,14 +35,14 @@ CREATE TABLE
 # INSERT INTO s VALUES ('john'), ('joan'), ('wobbly'), ('jack');
 INSERT 0 4
 # SELECT * FROM s WHERE soundex(nm) = soundex('john');
-  nm  
+  nm
 ------
  john
  joan
 (2 rows)
- 
+
 # SELECT * FROM s WHERE difference(s.nm, 'john') > 2;
-  nm  
+  nm
 ------
  john
  joan
@@ -87,13 +87,13 @@ test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
  KM
 (1 row)
 # SELECT dmetaphone('postgresql');
- dmetaphone 
+ dmetaphone
 ------------
  PSTK
 (1 row)
 
 # SELECT dmetaphone_alt('postgresql');
- dmetaphone_alt 
+ dmetaphone_alt
 ----------------
  PSTK
 (1 row)
