@@ -1,24 +1,21 @@
 \subsection{WAL-E}
-\textbf{Ссылка}: \href{https://github.com/heroku/WAL-E}{github.com/heroku/WAL-E}
+\textbf{Ссылка}: \href{https://github.com/wal-e/wal-e}{github.com/wal-e/wal-e}
 
-WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в S3 и управления использованием pg\_start\_backup и pg\_stop\_backup. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
+WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием pg\_start\_backup и pg\_stop\_backup. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
 
 \subsubsection{Установка}
 
-У WAL-E есть пару зависимостей: lzop, psql, mbuffer, python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
+У WAL-E есть пару зависимостей: lzop, psql, pv (в старых версиях используется mbuffer), python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0, azure). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
 
 \begin{lstlisting}[label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
 # PostgreSQL уже установлен
-aptitude install git-core python-dev python-setuptools build-essential libevent-dev lzop mbuffer daemontools daemontools-run
+aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
 \end{lstlisting}
 
 Теперь установим WAL-E:
 
 \begin{lstlisting}[label=lst:wal-e2,caption=Установка WAL-E]
-git clone git://github.com/heroku/WAL-E.git
-cd WAL-E
-python setup.py build
-sudo python setup.py install
+pip install https://github.com/wal-e/wal-e/archive/v0.7a1.tar.gz
 \end{lstlisting}
 
 После успешной установки можно начать работать с WAL-E.
@@ -161,6 +158,8 @@ restore_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch "%f" "
 $ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000000A6_03626144
 # удаления всех бэкапов
 $ envdir /etc/wal-e.d/env wal-e delete --confirm everything
+# удалить все старше последних 20 бэкапов
+$ envdir /etc/wal-e.d/env wal-e delete --confirm retain 20
 \end{lstlisting}
 
 Без опции <<confirm>> команды будут запускаться и показывать, что будет удаляться, но фактического удаления не будет производиться (dry run).
