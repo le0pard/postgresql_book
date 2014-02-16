@@ -1,6 +1,4 @@
-# PostgreSQL книга
-
-
+# Работа с PostgreSQL: настройка и масштабирование [postgresql.leopard.in.ua](http://postgresql.leopard.in.ua/)
 
 ## Генерация HTML
 
