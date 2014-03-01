@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "2.0.0" # gem install bundler --pre
+ruby "2.1.1" # gem install bundler --pre
 
 gem 'guard'
 gem 'guard-coffeescript'
@@ -22,13 +22,3 @@ gem 'compass'
 gem 'vegas'
 gem 'erubis'
 gem 'zurb-foundation', '3.2.5'
-
-# notify
-group :linux_development do
-  gem "rb-inotify"
-  gem 'rb-fsevent', '~> 0.9.1'
-  gem "libnotify"
-end
-group :mac_development do
-  gem "growl"
-end
