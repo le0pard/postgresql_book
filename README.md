@@ -13,7 +13,7 @@
 пока это не умеет (https://github.com/jgm/pandoc/issues/84). Например,
 c помощью vim:
 
-    vim -e - $(find -name "*.tex") << EOF
+    vim -e - $(find . -name "*.tex") << EOF
     :bufdo %s/<</\\=nr2char("0x00ab")/ge | %s/>>/\\=nr2char("0x00bb")/ge | update
     EOF
 
