@@ -2,7 +2,7 @@
 
 ## Генерация HTML
 
-    htlatex postgresql.tex "postgresql.cfg,xhtml,mathml" "" "-d/Users/leo/Documents/postgresql_book/html/"
+    pandoc -s -S --toc --latexmathml --highlight-style pygments -t html5 -s postgresql.tex -o index.html
 
 ## Генерация Epub
 
