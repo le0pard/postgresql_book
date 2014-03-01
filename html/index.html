@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Работа с PostgreSQL: настройка и масштабирование</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
-<div id="header">
+<header>
 <h1 class="title">Работа с PostgreSQL: настройка и масштабирование</h1>
 <h3 class="date">Creative Commons Attribution-Noncommercial 4.0 International<br />2010–2014</h3>
-</div>
-<div id="TOC">
+</header>
+<nav id="TOC">
 <ul>
 <li><a href="#введение">Введение</a></li>
 <li><a href="#настройка-производительности">Настройка производительности</a><ul>
@@ -234,7 +237,7 @@
 </ul></li>
 </ul></li>
 </ul>
-</div>
+</nav>
 <h1 id="введение">Введение</h1>
 <p>Данная книга не дает ответы на все вопросы по работе с PostgreSQL. Главное её задание — показать возможности PostgreSQL, методики настройки и масштабируемости этой СУБД. В любом случае, выбор метода решения поставленной задачи остается за разработчиком или администратором СУБД.</p>
 <h1 id="настройка-производительности">Настройка производительности</h1>
@@ -3613,28 +3616,28 @@ Time: 0.837 ms</code></pre>
 <p>Любой объект может быть описан как список характеристик. Например, статья в блоге может быть описана тегами, продукт в интернет-магазине может быть описан размером, весом, цветом и т.д. Это означает, что для каждого объекта можно создать цифровую подпись — массив чисел, описывающих объект (отпечатки пальцев<a href="#fn24" class="footnoteRef" id="fnref24"><sup>24</sup></a>, n-grams<a href="#fn25" class="footnoteRef" id="fnref25"><sup>25</sup></a>). То есть нужно создать массив из цифр для описания каждого объекта. Что делать дальше?</p>
 <h3 id="расчет-похожести">Расчет похожести</h3>
 <p>Есть несколько методов вычисления похожести сигнатур объектов. Прежде всего, легенда для расчетов:</p>
-<p><span class="math"><em>N</em><sub><em>a</em></sub></span>, <span class="math"><em>N</em><sub><em>b</em></sub></span> — количество уникальных элементов в массивах</p>
-<p><span class="math"><em>N</em><sub><em>u</em></sub></span> — количество уникальных элементов при объединении массивов</p>
-<p><span class="math"><em>N</em><sub><em>i</em></sub></span> — количество уникальных элементов при пересечение массивов</p>
+<p><span class="LaTeX">$N_a$</span>, <span class="LaTeX">$N_b$</span> — количество уникальных элементов в массивах</p>
+<p><span class="LaTeX">$N_u$</span> — количество уникальных элементов при объединении массивов</p>
+<p><span class="LaTeX">$N_i$</span> — количество уникальных элементов при пересечение массивов</p>
 <p>Один из простейших расчетов похожести двух объектов - количество уникальных элементов при пересечение массивов делить на количество уникальных элементов в двух массивах:</p>
-<p><br /><span class="math">$$\label{eq:smlar1}
- S(A,B) = \frac{N_{i}}{(N_{a}+N_{b})}$$</span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar1}
+ S(A,B) = \frac{N_{i}}{(N_{a}+N_{b})}$$</span></p>
 <p>или проще</p>
-<p><br /><span class="math">$$\label{eq:smlar2}
- S(A,B) = \frac{N_{i}}{N_{u}}$$</span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar2}
+ S(A,B) = \frac{N_{i}}{N_{u}}$$</span></p>
 <p>Преимущества:</p>
 <ul>
 <li><p>Легко понять</p></li>
-<li><p>Скорость расчета: <span class="math"><em>N</em> * log<em>N</em></span></p></li>
-<li><p>Хорошо работает на похожих и больших <span class="math"><em>N</em><sub><em>a</em></sub></span> и <span class="math"><em>N</em><sub><em>b</em></sub></span></p></li>
+<li><p>Скорость расчета: <span class="LaTeX">$N * \log{N}$</span></p></li>
+<li><p>Хорошо работает на похожих и больших <span class="LaTeX">$N_a$</span> и <span class="LaTeX">$N_b$</span></p></li>
 </ul>
 <p>Также похожесть можно рассчитана по формуле косинусов<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a>:</p>
-<p><br /><span class="math">$$\label{eq:smlar3}
- S(A,B) = \frac{N_{i}}{\sqrt{N_{a}*N_{b}}}$$</span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar3}
+ S(A,B) = \frac{N_{i}}{\sqrt{N_{a}*N_{b}}}$$</span></p>
 <p>Преимущества:</p>
 <ul>
-<li><p>Скорость расчета: <span class="math"><em>N</em> * log<em>N</em></span></p></li>
-<li><p>Отлично работает на больших <span class="math"><em>N</em></span></p></li>
+<li><p>Скорость расчета: <span class="LaTeX">$N * \log{N}$</span></p></li>
+<li><p>Отлично работает на больших <span class="LaTeX">$N$</span></p></li>
 </ul>
 <p>Но у обоих этих методов есть общие проблемы:</p>
 <ul>
@@ -3643,13 +3646,14 @@ Time: 0.837 ms</code></pre>
 <li><p>Спамеры и недобросовестные пользователи. Один «залетевший дятел» разрушит цивилизацию - алгоритм перестанет работать на Вас.</p></li>
 </ul>
 <p>Для избежания этих проблем можно воспользоваться TF/IDF<a href="#fn27" class="footnoteRef" id="fnref27"><sup>27</sup></a> метрикой:</p>
-<p><br /><span class="math">$$\label{eq:smlar4}
- S(A,B) = \frac{\sum_{i &lt; N_{a}, j &lt; N_{b}, A_{i} = B_{j}}TF_{i} * TF_{j}}{\sqrt{\sum_{i &lt; N_{a}}TF_{i}^{2} * \sum_{j &lt; N_{b}}TF_{j}^{2}}}$$</span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar4}
+ S(A,B) = \frac{\sum_{i &lt; N_{a}, j &lt; N_{b}, A_{i} = B_{j}}TF_{i} * TF_{j}}{\sqrt{\sum_{i &lt; N_{a}}TF_{i}^{2} * \sum_{j &lt; N_{b}}TF_{j}^{2}}}$$</span></p>
 <p>где инвертированный вес элемента в коллекции:</p>
-<p><br /><span class="math">$$\label{eq:smlar5}
- IDF_{element} = \log{(\frac{N_{objects}}{N_{objects\ with\ element}} + 1)}$$</span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar5}
+ IDF_{element} = \log{(\frac{N_{objects}}{N_{objects\ with\ element}} + 1)}$$</span></p>
 <p>и вес элемента в массиве:</p>
-<p><br /><span class="math"><em>T</em><em>F</em><sub><em>e</em><em>l</em><em>e</em><em>m</em><em>e</em><em>n</em><em>t</em></sub> = <em>I</em><em>D</em><em>F</em><sub><em>e</em><em>l</em><em>e</em><em>m</em><em>e</em><em>n</em><em>t</em></sub> * <em>N</em><sub><em>o</em><em>c</em><em>c</em><em>u</em><em>r</em><em>r</em><em>e</em><em>n</em><em>c</em><em>e</em><em>s</em></sub></span><br /></p>
+<p><span class="LaTeX">$$\label{eq:smlar6}
+ TF_{element} = IDF_{element} * N_{occurrences}$$</span></p>
 <p>Не пугайтесь! Все эти алгоритмы встроены в smlar расширение, учить (или даже глубоко понимать) их не нужно. Главное понимать, что для TF/IDF метрики требуются вспомогательная таблица для хранения данных, по сравнению с другими простыми метриками.</p>
 <h3 id="smlar-1">Smlar</h3>
 <p>Перейдем к практике. Олег Бартунов и Теодор Сигаев разработали PostgreSQL расширение smlar, которое предоставляет несколько методов для расчета похожести массивов (все встроенные типы данных поддерживаются) и оператор для расчета похожести с поддержкой индекса на базе GIST и GIN. Для начала установим это расширение (PostgreSQL уже должен быть установлен):</p>
@@ -3707,7 +3711,7 @@ smlar.stattable = &#39;stat&#39; # Имя таблицы для хранения
 <p>[fig:smlar1]</p>
 <ul>
 <li><p>Создаем пиксельную матрицу к изображению (изменения размера изображения к требуемоему размеру пиксельной матрице), например 15X15 пикселей(Рис. [fig:smlar1]).</p></li>
-<li><p>Рассчитаем интенсивность каждого пикселя (интенсивность вычисляется по формуле <span class="math">$0.299 * \textup{красный} + 0.587 * \textup{зеленый} + 0.114 * \textup{синий}$</span>). Интенсивность поможет нам находить похожие изображения, не обращая внимание на используемые цвета в них.</p></li>
+<li><p>Рассчитаем интенсивность каждого пикселя (интенсивность вычисляется по формуле <span class="LaTeX">$0.299 * \textup{красный} + 0.587 * \textup{зеленый} + 0.114 * \textup{синий}$</span>). Интенсивность поможет нам находить похожие изображения, не обращая внимание на используемые цвета в них.</p></li>
 <li><p>Узнаем отношение интенсивности каждого пикселя к среднему значению интенсивности по всей матрице(Рис. [fig:smlar2]).</p></li>
 <li><p>Генерируем уникальное число для каждой ячейки (отношение интенсивности + координаты ячейки).</p></li>
 <li><p>Сигнатура для картинки готова.</p></li>
@@ -4637,7 +4641,7 @@ ORDER BY 1,2;</code></pre>
 <p><em>Streaming Replication</em>. http://wiki.postgresql.org/wiki/Streaming_Replication</p>
 <p>Den Golotyuk <em>Шардинг, партиционирование, репликация - зачем и когда?</em> http://highload.com.ua/index.php/2009/05/06/шардинг-партиционирование-репликац/</p>
 <p><em>Postgres-XC — A PostgreSQL Clustering Solution</em> http://www.linuxforu.com/2012/01/postgres-xc-database-clustering-solution/</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>под которым понимаются старые версии изменённых/удалённых записей<a href="#fnref1">↩</a></p></li>
@@ -4673,6 +4677,6 @@ ORDER BY 1,2;</code></pre>
 <li id="fn31"><p>http://en.wikipedia.org/wiki/Point-in-time_recovery<a href="#fnref31">↩</a></p></li>
 <li id="fn32"><p>http://en.wikipedia.org/wiki/Luhn_algorithm<a href="#fnref32">↩</a></p></li>
 </ol>
-</div>
+</section>
 </body>
 </html>
