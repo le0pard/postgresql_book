@@ -10,7 +10,7 @@
 <body>
 <div id="header">
 <h1 class="title">Работа с PostgreSQL: настройка и масштабирование</h1>
-<h3 class="date">Creative Commons Attribution-NonCommercial 4.0 International<br />2010–2014</h3>
+<h3 class="date">Creative Commons Attribution-Noncommercial 4.0 International<br />2010–2014</h3>
 </div>
 <div id="TOC">
 <ul>
@@ -274,6 +274,7 @@
 <li><p>В версии 9.0 «асинхронная репликация из коробки», VACUUM/VACUUM FULL стали быстрее, расширены хранимые процедуры.</p></li>
 <li><p>В версии 9.1 «синхронная репликация из коробки», нелогируемые таблицы (очень быстрые на запись, но при падении БД данные могут пропасть), новые типы индексов, наследование таблиц в запросах теперь может вернуться многозначительно отсортированные результаты, позволяющие оптимизации MIN/MAX.</p></li>
 <li><p>В версии 9.2 «каскадная репликация из коробки», сканирование по индексу, JSON тип данных, типы данных на диапазоны, сортировка в памяти улучшена на 25%, ускорена команда COPY.</p></li>
+<li><p>В версии 9.3 materialized view, доступные на запись внешние таблицы, переход с использования SysV shared memory на POSIX shared memory и mmap, cокращено время распространения реплик, а также значительно ускорена передача управления от запасного сервера к первичному, увеличена производительность и улучшена система блокировок для внешних ключей.</p></li>
 </ul>
 <p>Следует также отметить, что большая часть изложенного в статье материала относится к версии сервера не ниже 8.4.</p>
 <h3 id="стоит-ли-доверять-тестам-производительности">Стоит ли доверять тестам производительности</h3>
@@ -537,10 +538,10 @@
 <p>Также возможен «дедуктивный» подход, при котором сначала создаётся большое количество индексов, а затем неиспользуемые индексы удаляются.</p>
 <h4 id="возможности-индексов-в-postgresql">Возможности индексов в PostgreSQL</h4>
 <p><strong>Функциональные индексы</strong> Вы можете построить индекс не только по полю/нескольким полям таблицы, но и по выражению, зависящему от полей. Пусть, например, в вашей таблице foo есть поле foo_name, и выборки часто делаются по условию «первая буква foo_name = ’буква’, в любом регистре». Вы можете создать индекс</p>
-<pre><code>CREATE INDEX foo_name_first_idx 
+<pre><code>CREATE INDEX foo_name_first_idx
 ON foo ((lower(substr(foo_name, 1, 1))));</code></pre>
 <p>и запрос вида</p>
-<pre><code>SELECT * FROM foo 
+<pre><code>SELECT * FROM foo
 WHERE lower(substr(foo_name, 1, 1)) = &#39;ы&#39;;</code></pre>
 <p>будет его использовать.</p>
 <p><strong>Частичные индексы (partial indexes)</strong> Под частичным индексом понимается индекс с предикатом WHERE. Пусть, например, у вас есть в базе таблица scheta с параметром uplocheno типа boolean. Записей, где uplocheno = false меньше, чем записей с uplocheno = true, а запросы по ним выполняются значительно чаще. Вы можете создать индекс</p>
@@ -574,7 +575,7 @@ WHERE NOT uplocheno;</code></pre>
 <h4 id="медленный-distinct">Медленный DISTINCT</h4>
 <p>Текущая реализация DISTINCT для больших таблиц очень медленна. Но возможно использовать GROUP BY взамен DISTINCT. GROUP BY может использовать агрегирующий хэш, что значительно быстрее, чем DISTINCT (актуально до версии 8.4 и ниже).</p>
 <pre><code>postgres=# select count(*) from (select distinct i from g) a;
- count 
+ count
 -------
  19125
 (1 row)
@@ -583,14 +584,14 @@ Time: 580,553 ms
 
 
 postgres=# select count(*) from (select distinct i from g) a;
- count 
+ count
 -------
  19125
 (1 row)
 
 Time: 36,281 ms</code></pre>
 <pre><code>postgres=# select count(*) from (select i from g group by i) a;
- count 
+ count
 -------
  19125
 (1 row)
@@ -599,7 +600,7 @@ Time: 26,562 ms
 
 
 postgres=# select count(*) from (select i from g group by i) a;
- count 
+ count
 -------
  19125
 (1 row)
@@ -695,11 +696,11 @@ query       | SELECT pg_stat_statements_reset();
 calls       | 1
 total_time  | 0.102
 rows        | 1
-hit_percent | </code></pre>
+hit_percent |</code></pre>
 <p>Для сброса статистики есть команда pg_stat_statements_reset:</p>
 <pre><code># SELECT pg_stat_statements_reset();
 -[ RECORD 1 ]------------+-
-pg_stat_statements_reset | 
+pg_stat_statements_reset |
 
 # SELECT query, calls, total_time, rows, 100.0 * shared_blks_hit /
                nullif(shared_blks_hit + shared_blks_read, 0) AS hit_percent
@@ -709,7 +710,7 @@ query       | SELECT pg_stat_statements_reset();
 calls       | 1
 total_time  | 0.175
 rows        | 1
-hit_percent | </code></pre>
+hit_percent |</code></pre>
 <p>Хочется сразу отметить, что расширение только с версии PostgreSQL 9.2 contrib нормализирует SQL запросы. В версиях 9.1 и ниже SQL запросы сохраняются как есть, а значит «select * from table where id = 3» и «select * from table where id = 21» буду разными записями, что почти бесполезно для сбора полезной статистики.</p>
 <h2 id="заключение">Заключение</h2>
 <p>К счастью, PostgreSQL не требует особо сложной настройки. В большинстве случаев вполне достаточно будет увеличить объём выделенной памяти, настроить периодическое поддержание базы в порядке и проверить наличие необходимых индексов. Более сложные вопросы можно обсудить в специализированном списке рассылки.</p>
@@ -806,12 +807,12 @@ INSERT INTO my_logs (user_id,logdate, data, some_state) VALUES(2, &#39;2010-11-1
 INSERT INTO my_logs (user_id,logdate, data, some_state) VALUES(1, &#39;2010-12-15&#39;, &#39;15.12.2010 data3&#39;, 1);</code></pre>
 <p>Теперь проверим где они хранятся:</p>
 <pre><code>partitioning_test=# SELECT * FROM ONLY my_logs;
- id | user_id | logdate | data | some_state 
+ id | user_id | logdate | data | some_state
 ----+---------+---------+------+------------
 (0 rows)</code></pre>
 <p>Как видим в «мастер» таблицу данные не попали — она чиста. Теперь проверим а есть ли вообще данные:</p>
 <pre><code>partitioning_test=# SELECT * FROM my_logs;
- id | user_id |       logdate       |       data       | some_state 
+ id | user_id |       logdate       |       data       | some_state
 ----+---------+---------------------+------------------+------------
   1 |       1 | 2010-10-30 00:00:00 | 30.10.2010 data  |          1
   2 |       2 | 2010-11-10 00:00:00 | 10.11.2010 data2 |          1
@@ -819,25 +820,25 @@ INSERT INTO my_logs (user_id,logdate, data, some_state) VALUES(1, &#39;2010-12-1
 (3 rows)</code></pre>
 <p>Данные при этом выводятся без проблем. Проверим партиции, правильно ли хранятся данные:</p>
 <pre><code>partitioning_test=# Select * from my_logs2010m10;
- id | user_id |       logdate       |      data       | some_state 
+ id | user_id |       logdate       |      data       | some_state
 ----+---------+---------------------+-----------------+------------
   1 |       1 | 2010-10-30 00:00:00 | 30.10.2010 data |          1
 (1 row)
 
 partitioning_test=# Select * from my_logs2010m11;
- id | user_id |       logdate       |       data       | some_state 
+ id | user_id |       logdate       |       data       | some_state
 ----+---------+---------------------+------------------+------------
   2 |       2 | 2010-11-10 00:00:00 | 10.11.2010 data2 |          1
 (1 row)</code></pre>
 <p>Отлично! Данные хранятся на требуемых нам партициях. При этом запросы к таблице «my_logs» менять не нужно:</p>
 <pre><code>partitioning_test=# SELECT * FROM my_logs WHERE user_id = 2;
- id | user_id |       logdate       |       data       | some_state 
+ id | user_id |       logdate       |       data       | some_state
 ----+---------+---------------------+------------------+------------
   2 |       2 | 2010-11-10 00:00:00 | 10.11.2010 data2 |          1
 (1 row)
 
 partitioning_test=# SELECT * FROM my_logs WHERE data LIKE &#39;%0.1%&#39;;
- id | user_id |       logdate       |       data       | some_state 
+ id | user_id |       logdate       |       data       | some_state
 ----+---------+---------------------+------------------+------------
   1 |       1 | 2010-10-30 00:00:00 | 30.10.2010 data  |          1
   2 |       2 | 2010-11-10 00:00:00 | 10.11.2010 data2 |          1
@@ -846,14 +847,14 @@ partitioning_test=# SELECT * FROM my_logs WHERE data LIKE &#39;%0.1%&#39;;
 <p>Обычно при работе с партиционированием старые партиции перестают получать данные и остаются неизменными. Это дает огромное преимущество над работой с данными через партиции. Например, нам нужно удалить старые логи за 2008 год, 10 месяц. Нам достаточно выполнить:</p>
 <pre><code>DROP TABLE my_logs2008m10;</code></pre>
 <p>поскольку «DROP TABLE» работает гораздо быстрее, чем удаление миллионов записей индивидуально через «DELETE». Другой вариант, который более предпочтителен, просто удалить партицию из партиционирования, тем самым оставив данные в СУБД, но уже не доступные через «мастер» таблицу:</p>
-<pre><code>ALTER TABLE my_logs2008m10 NO INHERIT my_logs; </code></pre>
+<pre><code>ALTER TABLE my_logs2008m10 NO INHERIT my_logs;</code></pre>
 <p>Это удобно, если мы хотим эти данные потом перенести в другое хранилище или просто сохранить.</p>
 <h3 id="важность-constraint_exclusion-для-партиционирования">Важность «constraint_exclusion» для партиционирования</h3>
 <p>Параметр «constraint_exclusion» отвечает за оптимизацию запросов, что повышает производительность для партиционированых таблиц. Например, выполним простой запрос:</p>
 <pre><code>partitioning_test=# SET constraint_exclusion = off;
 partitioning_test=# EXPLAIN SELECT * FROM my_logs WHERE logdate &gt; &#39;2010-12-01&#39;;
 
-                                            QUERY PLAN                                             
+                                            QUERY PLAN
 ---------------------------------------------------------------------------------------------------
  Result  (cost=6.81..104.66 rows=1650 width=52)
    -&gt;  Append  (cost=6.81..104.66 rows=1650 width=52)
@@ -882,7 +883,7 @@ partitioning_test=# EXPLAIN SELECT * FROM my_logs WHERE logdate &gt; &#39;2010-1
 <pre><code>partitioning_test=# SET constraint_exclusion = on;
 SET
 partitioning_test=# EXPLAIN SELECT * FROM my_logs WHERE logdate &gt; &#39;2010-12-01&#39;;
-                                            QUERY PLAN                                             
+                                            QUERY PLAN
 ---------------------------------------------------------------------------------------------------
  Result  (cost=6.81..41.87 rows=660 width=52)
    -&gt;  Append  (cost=6.81..41.87 rows=660 width=52)
@@ -955,7 +956,7 @@ $sudo useradd -m -g userssh -d /home/userssh -s /bin/bash \
 <p>Генерим RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:</p>
 <pre><code>postgres@localhost ~ $ ssh-keygen -t rsa -P &quot;&quot;
 Generating public/private rsa key pair.
-Enter file in which to save the key (/var/lib/postgresql/.ssh/id_rsa): 
+Enter file in which to save the key (/var/lib/postgresql/.ssh/id_rsa):
 Created directory &#39;/var/lib/postgresql/.ssh&#39;.
 Your identification has been saved in /var/lib/postgresql/.ssh/id_rsa.
 Your public key has been saved in /var/lib/postgresql/.ssh/id_rsa.pub.
@@ -1012,11 +1013,11 @@ trigger_file = &#39;/tmp/trig_f_newcluster&#39;</code></pre>
 <h4 id="настройка-слейва">Настройка слейва</h4>
 <p>Для начала нам потребуется создать на slavedb точную копию masterdb. Перенесем данные с помощью «Онлайн бекапа».</p>
 <p>Для начала зайдем на masterdb сервер. Выполним в консоли:</p>
-<pre><code>psql -c &quot;SELECT pg_start_backup(&#39;label&#39;, true)&quot; </code></pre>
+<pre><code>psql -c &quot;SELECT pg_start_backup(&#39;label&#39;, true)&quot;</code></pre>
 <p>Теперь нам нужно перенести данные с мастера на слейв. Выполняем на мастере:</p>
 <pre><code>rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid \
 --exclude postmaster.opts --exclude pg_log --exclude pg_xlog \
---exclude recovery.conf master_db_datadir/ slavedb_host:slave_db_datadir/ </code></pre>
+--exclude recovery.conf master_db_datadir/ slavedb_host:slave_db_datadir/</code></pre>
 <p>где</p>
 <ul>
 <li><p>«master_db_datadir» — директория с postgresql данными на masterdb</p></li>
@@ -1058,30 +1059,30 @@ restore_command = &#39;scp masterdb_host:/path_to/archive/%f &quot;%p&quot;&#39;
 <h4 id="тестирование-репликации">Тестирование репликации</h4>
 <p>Теперь мы можем посмотреть отставание слейвов от мастера с помощью таких команд:</p>
 <pre><code>$ psql -c &quot;SELECT pg_current_xlog_location()&quot; -h192.168.0.10 (masterdb)
- pg_current_xlog_location 
+ pg_current_xlog_location
 --------------------------
  0/2000000
 (1 row)
 
 $ psql -c &quot;select pg_last_xlog_receive_location()&quot; -h192.168.0.20 (slavedb)
- pg_last_xlog_receive_location 
+ pg_last_xlog_receive_location
 -------------------------------
  0/2000000
 (1 row)
 
 $ psql -c &quot;select pg_last_xlog_replay_location()&quot; -h192.168.0.20 (slavedb)
- pg_last_xlog_replay_location 
+ pg_last_xlog_replay_location
 ------------------------------
  0/2000000
 (1 row)</code></pre>
 <p>Начиная с версии 9.1 добавили дополнительные view для просмотра состояния репликации. Теперь master знает все состояния slaves:</p>
 <pre><code># SELECT * from pg_stat_replication ;
-  procpid | usesysid |   usename   | application_name | client_addr | client_hostname | client_port |        backend_start         |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+  procpid | usesysid |   usename   | application_name | client_addr | client_hostname | client_port |        backend_start         |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state
  ---------+----------+-------------+------------------+-------------+-----------------+-------------+------------------------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
     17135 |    16671 | replication | newcluster       | 127.0.0.1   |                 |       43745 | 2011-05-22 18:13:04.19283+02 | streaming | 1/30008750    | 1/30008750     | 1/30008750     | 1/30008750      |             1 | sync</code></pre>
 <p>Также с версии 9.1 добавили view pg_stat_database_conflicts, с помощью которой на слейв базах можно просмотреть сколько запросов было отменено и по каким причинам:</p>
 <pre><code># SELECT * from pg_stat_database_conflicts ;
-  datid |  datname  | confl_tablespace | confl_lock | confl_snapshot | confl_bufferpin | confl_deadlock 
+  datid |  datname  | confl_tablespace | confl_lock | confl_snapshot | confl_bufferpin | confl_deadlock
  -------+-----------+------------------+------------+----------------+-----------------+----------------
       1 | template1 |                0 |          0 |              0 |               0 |              0
   11979 | template0 |                0 |          0 |              0 |               0 |              0
@@ -1104,7 +1105,7 @@ test_db=#</code></pre>
 <p>Теперь проверим на слейве:</p>
 <pre><code>$psql test_db
 test_db=# select * from test3;
- id | name  
+ id | name
 ----+-------
   1 | test1
 (1 row)</code></pre>
@@ -1181,7 +1182,7 @@ psql -U slony -h customers_slave.com customers</code></pre>
 <li><p>это ошибка :-) Тогда до переноса структуры на slave выполните следующее:</p>
 <pre><code>slonik «EOF
 cluster name = customers_slave;
-node Y admin conninfo = &#39;dbname=customers host=customers_master.com 
+node Y admin conninfo = &#39;dbname=customers host=customers_master.com
 port=5432 user=slony password=slony_user_pass&#39;;
 uninstall node (id = Y);
 echo &#39;okay&#39;;
@@ -1209,38 +1210,38 @@ SLONY_USER=slony
 
 slonik «EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1 port=$PORT1 
+node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1 port=$PORT1
 user=slony password=slony_user_password&#39;;
-node 2 admin conninfo = &#39;dbname=$DBNAME2 host=$HOST2 
+node 2 admin conninfo = &#39;dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password&#39;;
-init cluster ( id = 1, comment = &#39;Customers DB 
+init cluster ( id = 1, comment = &#39;Customers DB
 replication cluster&#39; );
 
 echo &#39;Create set&#39;;
 
-create set ( id = 1, origin = 1, comment = &#39;Customers 
+create set ( id = 1, origin = 1, comment = &#39;Customers
 DB replication set&#39; );
 
 echo &#39;Adding tables to the subscription set&#39;;
 
 echo &#39; Adding table public.customers_sales...&#39;;
-set add table ( set id = 1, origin = 1, id = 4, full qualified 
+set add table ( set id = 1, origin = 1, id = 4, full qualified
 name = &#39;public.customers_sales&#39;, comment = &#39;Table public.customers_sales&#39; );
 echo &#39; done&#39;;
 
 echo &#39; Adding table public.customers_something...&#39;;
-set add table ( set id = 1, origin = 1, id = 5, full qualified 
-name = &#39;public.customers_something, 
+set add table ( set id = 1, origin = 1, id = 5, full qualified
+name = &#39;public.customers_something,
 comment = &#39;Table public.customers_something );
 echo &#39; done&#39;;
 
 echo &#39;done adding&#39;;
 store node ( id = 2, comment = &#39;Node 2, $HOST2&#39; );
 echo &#39;stored node&#39;;
-store path ( server = 1, client = 2, conninfo = &#39;dbname=$DBNAME1 host=$HOST1 
+store path ( server = 1, client = 2, conninfo = &#39;dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_password&#39; );
 echo &#39;stored path&#39;;
-store path ( server = 2, client = 1, conninfo = &#39;dbname=$DBNAME2 host=$HOST2 
+store path ( server = 2, client = 1, conninfo = &#39;dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password&#39; );
 
 store listen ( origin = 1, provider = 1, receiver = 2 );
@@ -1268,9 +1269,9 @@ SLONY_USER=slony
 
 slonik «EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_password&#39;;
-node 2 admin conninfo = &#39;dbname=$DBNAME2 host=$HOST2 
+node 2 admin conninfo = &#39;dbname=$DBNAME2 host=$HOST2
 port=$PORT2 user=slony password=slony_user_password&#39;;
 
 echo&#39;subscribing&#39;;
@@ -1293,7 +1294,7 @@ EOF</code></pre>
 <p>после дублирования структуры (п [sec:slonyI].2) делаем следующее:</p>
 <pre><code>slonik «EOF
 cluster name = customers_slave;
-node 3 admin conninfo = &#39;dbname=customers host=customers_slave3.com 
+node 3 admin conninfo = &#39;dbname=customers host=customers_slave3.com
 port=5432 user=slony password=slony_user_pass&#39;;
 uninstall node (id = 3);
 echo &#39;okay&#39;;
@@ -1317,19 +1318,19 @@ SLONY_USER=slony
 
 slonik «EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_pass&#39;;
-node 3 admin conninfo = &#39;dbname=$DBNAME3 
+node 3 admin conninfo = &#39;dbname=$DBNAME3
 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass&#39;;
 
 echo &#39;done adding&#39;;
 
 store node ( id = 3, comment = &#39;Node 3, $HOST3&#39; );
 echo &#39;sored node&#39;;
-store path ( server = 1, client = 3, conninfo = &#39;dbname=$DBNAME1 
+store path ( server = 1, client = 3, conninfo = &#39;dbname=$DBNAME1
 host=$HOST1 port=$PORT1 user=slony password=slony_user_pass&#39; );
 echo &#39;stored path&#39;;
-store path ( server = 3, client = 1, conninfo = &#39;dbname=$DBNAME3 
+store path ( server = 3, client = 1, conninfo = &#39;dbname=$DBNAME3
 host=$HOST3 port=$PORT2 user=slony password=slony_user_pass&#39; );
 
 echo &#39;again&#39;;
@@ -1355,9 +1356,9 @@ SLONY_USER=slony
 
 slonik «EOF
 cluster name = $CLUSTER;
-node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1 
+node 1 admin conninfo = &#39;dbname=$DBNAME1 host=$HOST1
 port=$PORT1 user=slony password=slony_user_pass&#39;;
-node 3 admin conninfo = &#39;dbname=$DBNAME3 host=$HOST3 
+node 3 admin conninfo = &#39;dbname=$DBNAME3 host=$HOST3
 port=$PORT2 user=slony password=slony_user_pass&#39;;
 
 echo&#39;subscribing&#39;;
@@ -1375,19 +1376,19 @@ EOF</code></pre>
 CONFIG main: slon version 1.0.5 starting up
 CONFIG main: local node id = 3
 CONFIG main: loading current cluster configuration
-CONFIG storeNode: no_id=1 no_comment=&#39;CustomersDB 
+CONFIG storeNode: no_id=1 no_comment=&#39;CustomersDB
 replication cluster&#39;
-CONFIG storeNode: no_id=2 no_comment=&#39;Node 2, 
+CONFIG storeNode: no_id=2 no_comment=&#39;Node 2,
 node2.example.com&#39;
-CONFIG storeNode: no_id=4 no_comment=&#39;Node 4, 
+CONFIG storeNode: no_id=4 no_comment=&#39;Node 4,
 node4.example.com&#39;
-CONFIG storePath: pa_server=1 pa_client=3 
-pa_conninfo=&quot;dbname=customers 
-host=mainhost.com port=5432 user=slony_user 
+CONFIG storePath: pa_server=1 pa_client=3
+pa_conninfo=&quot;dbname=customers
+host=mainhost.com port=5432 user=slony_user
 password=slony_user_pass&quot; pa_connretry=10
-CONFIG storeListen: li_origin=1 li_receiver=3 
+CONFIG storeListen: li_origin=1 li_receiver=3
 li_provider=1
-CONFIG storeSet: set_id=1 set_origin=1 
+CONFIG storeSet: set_id=1 set_origin=1
 set_comment=&#39;CustomersDB replication set&#39;
 WARN remoteWorker_wakeup: node 1 - no worker thread
 CONFIG storeSubscribe: sub_set=1 sub_provider=1 sub_forward=&#39;f&#39;
@@ -1398,56 +1399,56 @@ CONFIG main: configuration complete - starting threads
 CONFIG enableNode: no_id=1
 CONFIG enableNode: no_id=2
 CONFIG enableNode: no_id=4
-ERROR remoteWorkerThread_1: &quot;begin transaction; set 
-transaction isolation level 
-serializable; lock table &quot;_customers_rep&quot;.sl_config_lock; select 
-&quot;_customers_rep&quot;.enableSubscription(1, 1, 4); 
-notify &quot;_customers_rep_Event&quot;; notify &quot;_customers_rep_Confirm&quot;; 
-insert into &quot;_customers_rep&quot;.sl_event (ev_origin, ev_seqno, 
-ev_timestamp, ev_minxid, ev_maxxid, ev_xip, 
-ev_type , ev_data1, ev_data2, ev_data3, ev_data4 ) values 
-(&#39;1&#39;, &#39;219440&#39;, 
-&#39;2005-05-05 18:52:42.708351&#39;, &#39;52501283&#39;, &#39;52501292&#39;, 
-&#39;&#39;&#39;52501283&#39;&#39;&#39;, &#39;ENABLE_SUBSCRIPTION&#39;, 
+ERROR remoteWorkerThread_1: &quot;begin transaction; set
+transaction isolation level
+serializable; lock table &quot;_customers_rep&quot;.sl_config_lock; select
+&quot;_customers_rep&quot;.enableSubscription(1, 1, 4);
+notify &quot;_customers_rep_Event&quot;; notify &quot;_customers_rep_Confirm&quot;;
+insert into &quot;_customers_rep&quot;.sl_event (ev_origin, ev_seqno,
+ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
+ev_type , ev_data1, ev_data2, ev_data3, ev_data4 ) values
+(&#39;1&#39;, &#39;219440&#39;,
+&#39;2005-05-05 18:52:42.708351&#39;, &#39;52501283&#39;, &#39;52501292&#39;,
+&#39;&#39;&#39;52501283&#39;&#39;&#39;, &#39;ENABLE_SUBSCRIPTION&#39;,
 &#39;1&#39;, &#39;1&#39;, &#39;4&#39;, &#39;f&#39;); insert into &quot;_customers_rep&quot;.
-sl_confirm (con_origin, con_received, 
-con_seqno, con_timestamp) values (1, 3, &#39;219440&#39;, 
-CURRENT_TIMESTAMP); commit transaction;&quot; 
-PGRES_FATAL_ERROR ERROR: insert or update on table 
-&quot;sl_subscribe&quot; violates foreign key 
+sl_confirm (con_origin, con_received,
+con_seqno, con_timestamp) values (1, 3, &#39;219440&#39;,
+CURRENT_TIMESTAMP); commit transaction;&quot;
+PGRES_FATAL_ERROR ERROR: insert or update on table
+&quot;sl_subscribe&quot; violates foreign key
 constraint &quot;sl_subscribe-sl_path-ref&quot;
-DETAIL: Key (sub_provider,sub_receiver)=(1,4) 
+DETAIL: Key (sub_provider,sub_receiver)=(1,4)
 is not present in table &quot;sl_path&quot;.
-INFO remoteListenThread_1: disconnecting from 
-&#39;dbname=customers host=mainhost.com 
+INFO remoteListenThread_1: disconnecting from
+&#39;dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_pass&#39;
 %</code></pre>
 <p>Это означает что в служебной таблице _&lt;имя кластера&gt;.sl_path;, например _customers_rep.sl_path на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, id нового узла 4, пара (1,4) в sl_path отсутствует.</p>
 <p>Видимо, это баг Slony. Как избежать этого и последующих ручных вмешательств пока не ясно.</p>
 <p>Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос (добавить путь, в данном случае (1,4)):</p>
 <pre><code>slony_user@masterhost$ psql -d customers -h _every_one_of_slaves -U slony
-customers=# insert into _customers_rep.sl_path 
-values (&#39;1&#39;,&#39;4&#39;,&#39;dbname=customers host=mainhost.com 
+customers=# insert into _customers_rep.sl_path
+values (&#39;1&#39;,&#39;4&#39;,&#39;dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_password,&#39;10&#39;);</code></pre>
 <p>Если возникают затруднения, да и вообще для расширения кругозора можно посмотреть на служебные таблицы и их содержимое. Они не видны обычно и находятся в рамках пространства имён _&lt;имя кластера&gt;, например _customers_rep.</p>
 <h4 id="что-делать-если-репликация-со-временем-начинает-тормозить">Что делать если репликация со временем начинает тормозить</h4>
 <p>В процессе эксплуатации наблюдаю как со временем растёт нагрузка на master-сервере, в списке активных бекендов — постоянные SELECT-ы со слейвов. В pg_stat_activity видим примерно такие запросы:</p>
-<pre><code>select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip, 
-ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, ev_data6, 
-ev_data7, ev_data8 from &quot;_customers_rep&quot;.sl_event e where 
-(e.ev_origin = &#39;2&#39; and e.ev_seqno &gt; &#39;336996&#39;) or 
-(e.ev_origin = &#39;3&#39; and e.ev_seqno &gt; &#39;1712871&#39;) or 
-(e.ev_origin = &#39;4&#39; and e.ev_seqno &gt; &#39;721285&#39;) or 
-(e.ev_origin = &#39;5&#39; and e.ev_seqno &gt; &#39;807715&#39;) or 
-(e.ev_origin = &#39;1&#39; and e.ev_seqno &gt; &#39;3544763&#39;) or 
-(e.ev_origin = &#39;6&#39; and e.ev_seqno &gt; &#39;2529445&#39;) or 
-(e.ev_origin = &#39;7&#39; and e.ev_seqno &gt; &#39;2512532&#39;) or 
-(e.ev_origin = &#39;8&#39; and e.ev_seqno &gt; &#39;2500418&#39;) or 
-(e.ev_origin = &#39;10&#39; and e.ev_seqno &gt; &#39;1692318&#39;) 
+<pre><code>select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
+ev_type, ev_data1, ev_data2, ev_data3, ev_data4, ev_data5, ev_data6,
+ev_data7, ev_data8 from &quot;_customers_rep&quot;.sl_event e where
+(e.ev_origin = &#39;2&#39; and e.ev_seqno &gt; &#39;336996&#39;) or
+(e.ev_origin = &#39;3&#39; and e.ev_seqno &gt; &#39;1712871&#39;) or
+(e.ev_origin = &#39;4&#39; and e.ev_seqno &gt; &#39;721285&#39;) or
+(e.ev_origin = &#39;5&#39; and e.ev_seqno &gt; &#39;807715&#39;) or
+(e.ev_origin = &#39;1&#39; and e.ev_seqno &gt; &#39;3544763&#39;) or
+(e.ev_origin = &#39;6&#39; and e.ev_seqno &gt; &#39;2529445&#39;) or
+(e.ev_origin = &#39;7&#39; and e.ev_seqno &gt; &#39;2512532&#39;) or
+(e.ev_origin = &#39;8&#39; and e.ev_seqno &gt; &#39;2500418&#39;) or
+(e.ev_origin = &#39;10&#39; and e.ev_seqno &gt; &#39;1692318&#39;)
 order by e.ev_origin, e.ev_seqno;</code></pre>
 <p>Не забываем что _customers_rep — имя схемы из примера, у вас будет другое имя.</p>
 <p>Таблица sl_event почему-то разрастается со временем, замедляя выполнение этих запросов до неприемлемого времени. Удаляем ненужные записи:</p>
-<pre><code>delete from _customers_rep.sl_event where 
+<pre><code>delete from _customers_rep.sl_event where
 ev_timestamp&lt;NOW()-&#39;1 DAY&#39;::interval;</code></pre>
 <p>Производительность должна вернуться к изначальным значениям. Возможно имеет смысл почистить таблицы _customers_rep.sl_log_ где вместо звёздочки подставляются натуральные числа, по-видимому по количеству репликационных сетов, так что _customers_rep.sl_log_1 точно должна существовать.</p>
 <h2 id="sec:londiste">Londiste</h2>
@@ -1472,20 +1473,20 @@ ev_timestamp&lt;NOW()-&#39;1 DAY&#39;::interval;</code></pre>
 $tar zxvf skytools-2.1.11.tar.gz
 $cd skytools-2.1.11/
 # это для сборки deb пакета
-$sudo aptitude install build-essential autoconf \ 
-automake autotools-dev dh-make \ 
+$sudo aptitude install build-essential autoconf \
+automake autotools-dev dh-make \
 debhelper devscripts fakeroot xutils lintian pbuilder \
 python-dev yada
 # ставим пакет исходников для postgresql 8.4.x
 $sudo aptitude install postgresql-server-dev-8.4
 # python-psycopg нужен для работы Londiste
 $sudo aptitude install python-psycopg2
-# данной командой я собираю deb пакет для 
+# данной командой я собираю deb пакет для
 # postgresql 8.4.x (для 8.3.x например будет &quot;make deb83&quot;)
 $sudo make deb84
 $cd ../
 # ставим skytools
-$dpkg -i skytools-modules-8.4_2.1.11_i386.deb 
+$dpkg -i skytools-modules-8.4_2.1.11_i386.deb
 skytools_2.1.11_i386.deb</code></pre>
 <p>Для других систем можно собрать Skytools командами</p>
 <pre><code>./configure
@@ -1508,14 +1509,14 @@ Skytools version 2.1.11</code></pre>
 <pre><code># название
 job_name = db1-ticker
 
-# мастер база данных 
-db = dbname=P host=host1 
+# мастер база данных
+db = dbname=P host=host1
 
-# Задержка между запусками обслуживания 
+# Задержка между запусками обслуживания
 # (ротация очередей и т.п.) в секундах
 maint_delay = 600
 
-# Задержка между проверками наличия активности 
+# Задержка между проверками наличия активности
 # (новых пакетов данных) в секундах
 loop_delay = 0.1
 
@@ -1542,10 +1543,10 @@ provider_db = dbname=db1 port=5432 host=host1
 # слейв база данных
 subscriber_db = dbname=db1 host=host2
 
-# Это будет использоваться в качестве 
+# Это будет использоваться в качестве
 # SQL-идентификатора, т.ч. не используйте
 # точки и пробелы.
-# ВАЖНО! Если есть живая репликация на другой слейв, 
+# ВАЖНО! Если есть живая репликация на другой слейв,
 # именуем очередь так-же
 pgq_queue_name = db1-londiste-queue
 
@@ -1786,7 +1787,7 @@ config.left = {
 :password =&gt; &#39;tiger&#39;,
 :host     =&gt; &#39;172.16.1.1&#39;
 }
- 
+
 config.right = {
 :adapter  =&gt; &#39;postgresql&#39;,
 :database =&gt; &#39;SCOTT&#39;,
@@ -1794,7 +1795,7 @@ config.right = {
 :password =&gt; &#39;tiger&#39;,
 :host     =&gt; &#39;172.16.1.2&#39;
 }
- 
+
 config.include_tables &#39;dept&#39;
 config.include_tables /^e/ # regexp matches all tables starting with e
 # config.include_tables /./ # regexp matches all tables
@@ -1822,7 +1823,7 @@ emp 100% .........................   1</code></pre>
 <h3 id="устранение-неисправностей-2">Устранение неисправностей</h3>
 <h4 id="ошибка-при-запуске-репликации">Ошибка при запуске репликации</h4>
 <p>При запуске rubyrep через Ruby может возникнуть подобная ошибка:</p>
-<pre><code>$rubyrep replicate -c myrubyrep.conf 
+<pre><code>$rubyrep replicate -c myrubyrep.conf
 Verifying RubyRep tables
 Checking for and removing rubyrep triggers from unconfigured tables
 Verifying rubyrep triggers of configured tables
@@ -1836,7 +1837,7 @@ Exception caught: Thread#join: deadlock 0xb76ee1ac - mutual join(0xb758cfac)</co
 replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
 +++ ./replication_runner.rb 2010-07-16 17:38:03.000000000 -0400
 @@ -2,6 +2,12 @@
- 
+
  require &#39;optparse&#39;
  require &#39;thread&#39;
 +require &#39;monitor&#39;
@@ -1845,18 +1846,18 @@ replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
 + alias lock mon_enter
 + alias unlock mon_exit
 +end
- 
+
  module RR
    # This class implements the functionality of the &#39;replicate&#39; command.
 @@ -94,7 +100,7 @@
-     # Initializes the waiter thread used for replication pauses 
+     # Initializes the waiter thread used for replication pauses
      # and processing
      # the process TERM signal.
      def init_waiter
 - @termination_mutex = Mutex.new
 + @termination_mutex = Monitor.new
        @termination_mutex.lock
-       @waiter_thread ||= Thread.new {@termination_mutex.lock; 
+       @waiter_thread ||= Thread.new {@termination_mutex.lock;
          self.termination_requested = true}
        %w(TERM INT).each do |signal|</code></pre></li>
 </ol>
@@ -1922,7 +1923,7 @@ replication_runner.rb 2010-07-16 15:17:16.000000000 -0400
   WITH (OIDS=FALSE);
 ALTER TABLE public.users OWNER TO postgres;</code></pre>
 <p>Теперь создадим функцию для добавления данных в таблицу users:</p>
-<pre><code>CREATE OR REPLACE FUNCTION public.insert_user(i_username text, 
+<pre><code>CREATE OR REPLACE FUNCTION public.insert_user(i_username text,
 i_emailaddress   text)
 RETURNS integer AS
 $BODY$
@@ -1942,7 +1943,7 @@ ALTER FUNCTION public.insert_user(text, text) OWNER TO postgres;</code></pre>
 &#39;$libdir/plproxy&#39;, &#39;plproxy_call_handler&#39;
   LANGUAGE &#39;c&#39; VOLATILE
 COST 1;
-ALTER FUNCTION public.plproxy_call_handler() 
+ALTER FUNCTION public.plproxy_call_handler()
 OWNER TO postgres;
 -- language
 CREATE LANGUAGE plproxy HANDLER plproxy_call_handler;
@@ -1963,10 +1964,10 @@ $BODY$
   LANGUAGE &#39;plpgsql&#39; VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION public.get_cluster_config(text) 
-OWNER TO postgres;  </code></pre>
+ALTER FUNCTION public.get_cluster_config(text)
+OWNER TO postgres;</code></pre>
 <p>Вторая важная функция, код которой надо будет подправить. В ней надо будет указать DSN нод:</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 public.get_cluster_partitions(cluster_name text)
   RETURNS SETOF text AS
 $BODY$
@@ -1982,10 +1983,10 @@ $BODY$
   LANGUAGE &#39;plpgsql&#39; VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION public.get_cluster_partitions(text) 
+ALTER FUNCTION public.get_cluster_partitions(text)
 OWNER TO postgres;</code></pre>
 <p>И последняя:</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 public.get_cluster_version(cluster_name text)
   RETURNS integer AS
 $BODY$
@@ -1998,10 +1999,10 @@ END;
 $BODY$
   LANGUAGE &#39;plpgsql&#39; VOLATILE
   COST 100;
-ALTER FUNCTION public.get_cluster_version(text) 
+ALTER FUNCTION public.get_cluster_version(text)
 OWNER TO postgres;</code></pre>
 <p>Ну и собственно самая главная функция, которая будет вызываться уже непосредственно в приложении:</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 public.insert_user(i_username text, i_emailaddress text)
   RETURNS integer AS
 $BODY$
@@ -2010,26 +2011,26 @@ $BODY$
 $BODY$
   LANGUAGE &#39;plproxy&#39; VOLATILE
   COST 100;
-ALTER FUNCTION public.insert_user(text, text) 
+ALTER FUNCTION public.insert_user(text, text)
 OWNER TO postgres;</code></pre>
 <p>Все готово. Подключаемся к серверу proxy и заносим данные в базу:</p>
 <pre><code>SELECT insert_user(&#39;Sven&#39;,&#39;sven@somewhere.com&#39;);
 SELECT insert_user(&#39;Marko&#39;, &#39;marko@somewhere.com&#39;);
 SELECT insert_user(&#39;Steve&#39;,&#39;steve@somewhere.com&#39;);</code></pre>
 <p>Пробуем извлечь данные. Для этого напишем новую серверную функцию:</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 public.get_user_email(i_username text)
  RETURNS SETOF text AS
 $BODY$
  CLUSTER &#39;usercluster&#39;;
  RUN ON hashtext(i_username) ;
- SELECT email FROM public.users 
+ SELECT email FROM public.users
  WHERE username = i_username;
 $BODY$
  LANGUAGE &#39;plproxy&#39; VOLATILE
  COST 100
  ROWS 1000;
-ALTER FUNCTION public.get_user_email(text) 
+ALTER FUNCTION public.get_user_email(text)
 OWNER TO postgres;</code></pre>
 <p>И попробуем её вызвать:</p>
 <pre><code>select plproxy.get_user_email(&#39;Steve&#39;);</code></pre>
@@ -2065,16 +2066,16 @@ OWNER TO postgres;</code></pre>
 </ol>
 <h3 id="таблицы-и-запросы-к-ним">Таблицы и запросы к ним</h3>
 <p>После установки работа с Postgres-XC ведется как с обыкновенным PostgreSQL. Подключаться для работы с данными нужно только к координаторам (по умолчанию координатор работает на порту 5432). Для начала создадим распределенные таблицы.</p>
-<pre><code>CREATE TABLE 
-users_with_hash (id SERIAL, type INT, ...) 
+<pre><code>CREATE TABLE
+users_with_hash (id SERIAL, type INT, ...)
 DISTRIBUTE by HASH(id) TO NODE dn1, dn2;
 
-CREATE TABLE 
-users_with_modulo (id SERIAL, type INT, ...) 
+CREATE TABLE
+users_with_modulo (id SERIAL, type INT, ...)
 DISTRIBUTE by MODULO(id) TO NODE dn1, dn2;
 
-CREATE TABLE 
-users_with_rrobin (id SERIAL, type INT, ...) 
+CREATE TABLE
+users_with_rrobin (id SERIAL, type INT, ...)
 DISTRIBUTE by ROUND ROBIN TO NODE dn1, dn2;</code></pre>
 <p>На листинге [lst:postgres-xc2] создано 3 распределенные таблицы:</p>
 <ol>
@@ -2082,7 +2083,7 @@ DISTRIBUTE by ROUND ROBIN TO NODE dn1, dn2;</code></pre>
 <pre><code># координатор
 $ psql
 # SELECT id, type from users_with_hash ORDER BY id;
- id   | type  
+ id   | type
 -------+-------
      1 |   946
      2 |   153
@@ -2103,7 +2104,7 @@ $ psql
 # первый обработчик данных
 $ psql -p15432
 # SELECT id, type from users_with_hash ORDER BY id;
-  id  | type  
+  id  | type
 ------+-------
     1 |   946
     2 |   153
@@ -2116,9 +2117,9 @@ $ psql -p15432
    15 |   324
 
 # второй обработчик данных
-$ psql -p15433 
+$ psql -p15433
 # SELECT id, type from users_with_hash ORDER BY id;
- id   | type  
+ id   | type
 -------+-------
      3 |   484
      4 |   422
@@ -2130,7 +2131,7 @@ $ psql -p15433
 <pre><code># координатор
 $ psql
 # SELECT id, type from users_with_modulo ORDER BY id;
- id   | type  
+ id   | type
 -------+-------
      1 |   883
      2 |   719
@@ -2151,7 +2152,7 @@ $ psql
 # первый обработчик данных
 $ psql -p15432
 # SELECT id, type from users_with_modulo ORDER BY id;
-  id   | type  
+  id   | type
 -------+-------
      2 |   719
      4 |   638
@@ -2162,9 +2163,9 @@ $ psql -p15432
     14 |   476
 
 # второй обработчик данных
-$ psql -p15433 
+$ psql -p15433
 # SELECT id, type from users_with_modulo ORDER BY id;
-  id  | type  
+  id  | type
 ------+-------
     1 |   883
     3 |    29
@@ -2178,7 +2179,7 @@ $ psql -p15433
 <pre><code># координатор
 $ psql
 # SELECT id, type from users_with_rrobin ORDER BY id;
- id   | type  
+ id   | type
 -------+-------
      1 |   890
      2 |   198
@@ -2199,7 +2200,7 @@ $ psql
 # первый обработчик данных
 $ psql -p15432
 # SELECT id, type from users_with_rrobin ORDER BY id;
-  id   | type  
+  id   | type
 -------+-------
      2 |   198
      4 |   446
@@ -2210,9 +2211,9 @@ $ psql -p15432
     14 |   240
 
 # второй обработчик данных
-$ psql -p15433 
+$ psql -p15433
 # SELECT id, type from users_with_rrobin ORDER BY id;
-  id  | type  
+  id  | type
 ------+-------
     1 |   890
     3 |   815
@@ -2224,12 +2225,12 @@ $ psql -p15433
    15 |   733</code></pre></li>
 </ol>
 <p>Теперь создадим реплицированную таблицу:</p>
-<pre><code>CREATE TABLE 
-users_replicated (id SERIAL, type INT, ...) 
+<pre><code>CREATE TABLE
+users_replicated (id SERIAL, type INT, ...)
 DISTRIBUTE by REPLICATION TO NODE dn1, dn2;</code></pre>
 <p>Естественно данные идентичны на всех обработчиках данных:</p>
 <pre><code># SELECT id, type from users_replicated  ORDER BY id;
-  id   | type  
+  id   | type
 -------+-------
      1 |    75
      2 |   262
@@ -2248,7 +2249,7 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;</code></pre>
     15 |    58</code></pre>
 <p>Рассмотрим как выполняются запросы для таблиц. Выберем все записи из распределенной таблицы:</p>
 <pre><code># EXPLAIN VERBOSE SELECT * from users_with_modulo ORDER BY id;
-                                      QUERY PLAN                                      
+                                      QUERY PLAN
 --------------------------------------------------------------------------------------
  Sort  (cost=49.83..52.33 rows=1000 width=8)
    Output: id, type
@@ -2263,7 +2264,7 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;</code></pre>
 <p>Как видно на листинге [lst:postgres-xc6] координатор собирает данные из обработчиков данных, а потом собирает их вместе.</p>
 <p>Подсчет суммы с группировкой по полю из распределенной таблицы:</p>
 <pre><code># EXPLAIN VERBOSE SELECT sum(id) from users_with_modulo GROUP BY type;
-                                                                      QUERY PLAN                                                                      
+                                                                      QUERY PLAN
 ------------------------------------------------------------------------------------------------------------------------------------------------------
  HashAggregate  (cost=5.00..5.01 rows=1 width=8)
    Output: pg_catalog.sum((sum(users_with_modulo.id))), users_with_modulo.type
@@ -2272,11 +2273,11 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;</code></pre>
          -&gt;  Data Node Scan on &quot;__REMOTE_GROUP_QUERY__&quot;  (cost=0.00..0.00 rows=1000 width=8)
                Output: sum(users_with_modulo.id), users_with_modulo.type
                Node/s: dn1, dn2
-               Remote query: SELECT sum(group_1.id), group_1.type  FROM (SELECT id, type FROM ONLY users_with_modulo WHERE true) group_1 GROUP BY 2  
+               Remote query: SELECT sum(group_1.id), group_1.type  FROM (SELECT id, type FROM ONLY users_with_modulo WHERE true) group_1 GROUP BY 2
 (8 rows)</code></pre>
 <p>JOIN между и с участием реплицированных таблиц, а также JOIN между распределенными по одному и тому же полю в таблицах будет выполняются на обработчиках данных. Но JOIN с участием распределенных таблиц по другим ключам будут выполнены на координаторе и скорее всего это будет медленно (листинг [lst:postgres-xc8]).</p>
 <pre><code># EXPLAIN VERBOSE SELECT * from users_with_modulo, users_with_hash WHERE users_with_modulo.id = users_with_hash.id;
-                                            QUERY PLAN                                            
+                                            QUERY PLAN
 --------------------------------------------------------------------------------------------------
  Nested Loop  (cost=0.00..0.01 rows=1 width=16)
    Output: users_with_modulo.id, users_with_modulo.type, users_with_hash.id, users_with_hash.type
@@ -2292,7 +2293,7 @@ DISTRIBUTE by REPLICATION TO NODE dn1, dn2;</code></pre>
 (11 rows)</code></pre>
 <p>Пример выборки данных из реплицированной таблицы:</p>
 <pre><code># EXPLAIN VERBOSE SELECT * from users_replicated;
-                                 QUERY PLAN                                 
+                                 QUERY PLAN
 ----------------------------------------------------------------------------
  Data Node Scan on &quot;__REMOTE_FQS_QUERY__&quot;  (cost=0.00..0.00 rows=0 width=0)
    Output: users_replicated.id, users_replicated.type
@@ -2431,7 +2432,7 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH</code></pre>
 &lt;property&gt;
   &lt;name&gt;hadoopdb.config.file&lt;/name&gt;
   &lt;value&gt;HadoopDB.xml&lt;/value&gt;
-  &lt;description&gt;The name of the HadoopDB 
+  &lt;description&gt;The name of the HadoopDB
   cluster configuration file&lt;/description&gt;
 &lt;/property&gt;
 &lt;/configuration&gt;</code></pre>
@@ -2441,7 +2442,7 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH</code></pre>
   &lt;name&gt;mapred.job.tracker&lt;/name&gt;
   &lt;value&gt;localhost:54310&lt;/value&gt;
   &lt;description&gt;
-    The host and port that the 
+    The host and port that the
     MapReduce job tracker runs at.
   &lt;/description&gt;
 &lt;/property&gt;
@@ -2458,7 +2459,7 @@ export PATH=$HIVE_PATH:$HADOOP_PATH:$PATH</code></pre>
 &lt;/configuration&gt;</code></pre>
 <p>Теперь необходимо отформатировать Namenode:</p>
 <pre><code>$ hadoop namenode -format
-10/05/07 14:24:12 INFO namenode.NameNode: STARTUP_MSG: 
+10/05/07 14:24:12 INFO namenode.NameNode: STARTUP_MSG:
 /************************************************************
 STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = hadoop1/127.0.1.1
@@ -2468,19 +2469,19 @@ STARTUP_MSG:   build = https://svn.apache.org/repos
 /asf/hadoop/common/branches/branch-0.20 -r
 911707; compiled by &#39;chrisdo&#39; on Fri Feb 19 08:07:34 UTC 2010
 ************************************************************/
-10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+10/05/07 14:24:12 INFO namenode.FSNamesystem:
 fsOwner=hadoop,hadoop
-10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+10/05/07 14:24:12 INFO namenode.FSNamesystem:
 supergroup=supergroup
-10/05/07 14:24:12 INFO namenode.FSNamesystem: 
+10/05/07 14:24:12 INFO namenode.FSNamesystem:
 isPermissionEnabled=true
-10/05/07 14:24:12 INFO common.Storage: 
+10/05/07 14:24:12 INFO common.Storage:
 Image file of size 96 saved in 0 seconds.
-10/05/07 14:24:12 INFO common.Storage: 
+10/05/07 14:24:12 INFO common.Storage:
 Storage directory /opt/hadoop-data/tmp-base/dfs/name has been
 successfully formatted.
-10/05/07 14:24:12 INFO namenode.NameNode: 
-SHUTDOWN_MSG: 
+10/05/07 14:24:12 INFO namenode.NameNode:
+SHUTDOWN_MSG:
 /************************************************************
 SHUTDOWN_MSG: Shutting down NameNode at hadoop1/127.0.1.1
 ************************************************************/</code></pre>
@@ -2488,11 +2489,11 @@ SHUTDOWN_MSG: Shutting down NameNode at hadoop1/127.0.1.1
 <pre><code>$ start-all.sh
 starting namenode, logging to /opt/hadoop/bin/..
 /logs/hadoop-hadoop-namenode-hadoop1.out
-localhost: starting datanode, logging to 
+localhost: starting datanode, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-datanode-hadoop1.out
 localhost: starting secondarynamenode, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-secondarynamenode-hadoop1.out
-starting jobtracker, logging to 
+starting jobtracker, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-jobtracker-hadoop1.out
 localhost: starting tasktracker, logging to
 /opt/hadoop/bin/../logs/hadoop-hadoop-tasktracker-hadoop1.out</code></pre>
@@ -2514,7 +2515,7 @@ sudo chown -R hadoop:hadoop hive</code></pre>
 <pre><code>$ hive
 Hive history file=/tmp/hadoop/
 hive_job_log_hadoop_201005081717_1990651345.txt
-hive&gt; 
+hive&gt;
 
 hive&gt; quit;</code></pre>
 <h4 id="тестирование-1">Тестирование</h4>
@@ -2542,12 +2543,12 @@ system(&quot;$HADOOP_COMMAND fs -rmr $BASE_OUTPUT_DIR&quot;);
 foreach my $target (keys %files) {
 my $output_dir = $BASE_OUTPUT_DIR.&quot;/SortGrep$target&quot;;
 my $num_of_maps = $files{$target};
-my $num_of_records = ($target eq &quot;535MB&quot; ? 
+my $num_of_records = ($target eq &quot;535MB&quot; ?
 $NUM_OF_RECORDS_535MB : $NUM_OF_RECORDS_1TB);
 print &quot;Generating $num_of_maps files in &#39;$output_dir&#39;\n&quot;;
 
 ##
-## EXEC: hadoop jar teragen.jar 10000000000 
+## EXEC: hadoop jar teragen.jar 10000000000
 ## /data/SortGrep/ XYZ 108299 100
 ##
 my @args = ( $num_of_records,
@@ -2625,14 +2626,14 @@ INFO: SELECT key1, field FROM grep WHERE field LIKE &#39;%%wo%%&#39;;
 14.08.2010 19:08:48 org.apache.hadoop.metrics.jvm.JvmMetrics init
 INFO: Initializing JVM Metrics with processName=JobTracker, sessionId=
 14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient configureCommandLineOptions
-WARNING: Use GenericOptionsParser for parsing the arguments. 
+WARNING: Use GenericOptionsParser for parsing the arguments.
 Applications should implement Tool for the same.
 14.08.2010 19:08:48 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
 INFO: Running job: job_local_0001
 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
 INFO: Data locality failed for leo-pgsql
 14.08.2010 19:08:48 edu.yale.cs.hadoopdb.connector.AbstractDBRecordReader getConnection
-INFO: Task from leo-pgsql is connecting to chunk 0 on host localhost with 
+INFO: Task from leo-pgsql is connecting to chunk 0 on host localhost with
 db url jdbc:postgresql://localhost:5434/grep0
 14.08.2010 19:08:48 org.apache.hadoop.mapred.MapTask runOldMapper
 INFO: numReduceTasks: 0
@@ -2643,13 +2644,13 @@ INFO: Rows retrieved = 3
 14.08.2010 19:08:48 org.apache.hadoop.mapred.Task done
 INFO: Task:attempt_local_0001_m_000000_0 is done. And is in the process of commiting
 14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
-INFO: 
+INFO:
 14.08.2010 19:08:48 org.apache.hadoop.mapred.Task commit
 INFO: Task attempt_local_0001_m_000000_0 is allowed to commit now
 14.08.2010 19:08:48 org.apache.hadoop.mapred.FileOutputCommitter commitTask
 INFO: Saved output of task &#39;attempt_local_0001_m_000000_0&#39; to file:/home/leo/padraig
 14.08.2010 19:08:48 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
-INFO: 
+INFO:
 14.08.2010 19:08:48 org.apache.hadoop.mapred.Task sendDone
 INFO: Task &#39;attempt_local_0001_m_000000_0&#39; done.
 14.08.2010 19:08:49 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
@@ -2675,7 +2676,7 @@ INFO:     Map input bytes=3
 14.08.2010 19:08:49 org.apache.hadoop.mapred.Counters log
 INFO:     Map output records=3
 14.08.2010 19:08:49 edu.yale.cs.hadoopdb.exec.DBJobBase run
-INFO: 
+INFO:
 JOB TIME : 1828 ms.</code></pre>
 <p>Результат сохранен в HDFS, в папке padraig:</p>
 <pre><code>$ cd padraig
@@ -2722,13 +2723,13 @@ INFO: Rows retrieved = 4
 01.11.2010 23:14:47 org.apache.hadoop.mapred.Task done
 INFO: Task:attempt_local_0001_m_000000_0 is done. And is in the process of commiting
 01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
-INFO: 
+INFO:
 01.11.2010 23:14:47 org.apache.hadoop.mapred.Task commit
 INFO: Task attempt_local_0001_m_000000_0 is allowed to commit now
 01.11.2010 23:14:47 org.apache.hadoop.mapred.FileOutputCommitter commitTask
 INFO: Saved output of task &#39;attempt_local_0001_m_000000_0&#39; to file:/home/hadoop/padraig
 01.11.2010 23:14:47 org.apache.hadoop.mapred.LocalJobRunner$Job statusUpdate
-INFO: 
+INFO:
 01.11.2010 23:14:47 org.apache.hadoop.mapred.Task sendDone
 INFO: Task &#39;attempt_local_0001_m_000000_0&#39; done.
 01.11.2010 23:14:47 org.apache.hadoop.mapred.JobClient monitorAndPrintJob
@@ -2754,7 +2755,7 @@ INFO:     Map input bytes=4
 01.11.2010 23:14:47 org.apache.hadoop.mapred.Counters log
 INFO:     Map output records=4
 01.11.2010 23:14:47 edu.yale.cs.hadoopdb.exec.DBJobBase run
-INFO: 
+INFO:
 JOB TIME : 2332 ms.</code></pre>
 <p>Как паттерн поиска я задал «May». В логах можно увидеть как производится поиск. На выходе получаем:</p>
 <pre><code>$ cd padraig
@@ -2929,11 +2930,11 @@ USE_PGXS=1 make -C contrib/dblink install</code></pre>
     dbname text, -- имя базы данных
     schema_name text, -- имя схемы
     table_name text, -- имя таблицы
-    col_name text NOT NULL CHECK (col_name = ANY (col_list)), 
+    col_name text NOT NULL CHECK (col_name = ANY (col_list)),
     -- столбец ключ для распределения данных
     col_list text[] NOT NULL, -- список имен столбцов
     type_list text[] NOT NULL, -- список типов столбцов
-    dist_def_func text NOT NULL, 
+    dist_def_func text NOT NULL,
     -- имя функции распределения данных
     PRIMARY KEY (dbname, schema_name, table_name)
 );</code></pre>
@@ -2966,14 +2967,14 @@ USE_PGXS=1 make -C contrib/dblink install</code></pre>
     &#39;accounts&#39;,
     &#39;aid&#39;,
     ARRAY[&#39;aid&#39;, &#39;bid&#39;, &#39;abalance&#39;, &#39;filler&#39;],
-    ARRAY[&#39;integer&#39;, &#39;integer&#39;, &#39;integer&#39;, 
+    ARRAY[&#39;integer&#39;, &#39;integer&#39;, &#39;integer&#39;,
     &#39;character(84)&#39;],
     &#39;pgpool_catalog.dist_def_accounts&#39;
 );</code></pre>
 <p>Теперь мы должны создать функцию распределения данных для таблицы accounts. Заметим, что вы можете использовать одну и ту же функцию для разных таблиц. Также вы можете создавать функции с использованием языков отличных от SQL (например, PL/pgSQL, PL/Tcl, и т.д.).</p>
 <p>Таблица accounts в момент инициализации данных хранит значение масштабного коэффициента равное 3, значения столбца aid от 1 до 300000. Функция создана таким образом что данные равномерно распределяются по трем узлам базы данных.</p>
 <p>Следующая SQL-функция будет возвращать число узлов базы данных.</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 pgpool_catalog.dist_def_branches(anyelement)
 RETURNS integer AS $$
     SELECT CASE WHEN $1 &gt; 0 AND $1 &lt;= 1 THEN 0
@@ -3027,7 +3028,7 @@ INSERT INTO pgpool_catalog.replicate_def VALUES (
 <pre><code>#! /bin/sh
 # Failover command for streming replication.
 # This script assumes that DB node 0 is primary, and 1 is standby.
-# 
+#
 # If standby goes down, does nothing. If primary goes down, create a
 # trigger file so that standby take over primary node.
 #
@@ -3248,9 +3249,9 @@ pgmemcache (2.0.4) unstable; urgency=low
 <p>&amp; Возвращает статистику по всем серверам memcached.<br /></p>
 <p>Посмотрим работу в СУБД данных функций. Для начала получим информацию по memcached серверах:</p>
 <pre><code>pgmemcache=# SELECT memcache_stats();
-      memcache_stats       
+      memcache_stats
 ---------------------------
- 
+
  Server: 127.0.0.1 (11211)
  pid: 1116
  uptime: 70
@@ -3274,59 +3275,59 @@ pgmemcache (2.0.4) unstable; urgency=low
  bytes_written: 782
  limit_maxbytes: 67108864
  threads: 4
- 
+
 (1 row)</code></pre>
 <p>Теперь сохраним данные в memcached и попробуем их забрать:</p>
 <pre><code>pgmemcache=# SELECT memcache_add(&#39;some_key&#39;, &#39;test_value&#39;);
- memcache_add 
+ memcache_add
 --------------
  t
 (1 row)
 
 pgmemcache=# SELECT memcache_get(&#39;some_key&#39;);
- memcache_get 
+ memcache_get
 --------------
  test_value
 (1 row)</code></pre>
 <p>Можно также проверить работу счетчиков в memcached (данный функционал может пригодиться для создания последовательностей):</p>
 <pre><code>pgmemcache=# SELECT memcache_add(&#39;some_seq&#39;, &#39;10&#39;);
- memcache_add 
+ memcache_add
 --------------
  t
 (1 row)
 
 pgmemcache=# SELECT memcache_incr(&#39;some_seq&#39;);
- memcache_incr 
+ memcache_incr
 ---------------
             11
 (1 row)
 
 pgmemcache=# SELECT memcache_incr(&#39;some_seq&#39;);
- memcache_incr 
+ memcache_incr
 ---------------
             12
 (1 row)
 
 pgmemcache=# SELECT memcache_incr(&#39;some_seq&#39;, 10);
- memcache_incr 
+ memcache_incr
 ---------------
             22
 (1 row)
 
 pgmemcache=# SELECT memcache_decr(&#39;some_seq&#39;);
- memcache_decr 
+ memcache_decr
 ---------------
             21
 (1 row)
 
 pgmemcache=# SELECT memcache_decr(&#39;some_seq&#39;);
- memcache_decr 
+ memcache_decr
 ---------------
             20
 (1 row)
 
 pgmemcache=# SELECT memcache_decr(&#39;some_seq&#39;, 6);
- memcache_decr 
+ memcache_decr
 ---------------
             14
 (1 row)</code></pre>
@@ -3374,7 +3375,7 @@ END;$$ LANGUAGE &#39;plpgsql&#39;;</code></pre>
 <pre><code># CREATE EXTENSION hstore;</code></pre>
 <p>Проверим работу расширения:</p>
 <pre><code># SELECT &#39;a=&gt;1,a=&gt;2&#39;::hstore;
-  hstore  
+  hstore
 ----------
  &quot;a&quot;=&gt;&quot;1&quot;
 (1 row)</code></pre>
@@ -3383,7 +3384,7 @@ END;$$ LANGUAGE &#39;plpgsql&#39;;</code></pre>
    id serial PRIMARY KEY,
    name varchar,
    attributes hstore
-);   
+);
 INSERT INTO products (name, attributes)
 VALUES (
   &#39;Geek Love: A Novel&#39;,
@@ -3408,13 +3409,13 @@ VALUES (
 );</code></pre>
 <p>Теперь можно производить поиск по ключу:</p>
 <pre><code># SELECT name, attributes-&gt;&#39;pages&#39; as page FROM products WHERE attributes ? &#39;pages&#39;;
-        name        | page 
+        name        | page
 --------------------+------
  Geek Love: A Novel | 368
 (1 row)</code></pre>
 <p>Или по значению ключа:</p>
 <pre><code># SELECT name, attributes-&gt;&#39;manufacturer&#39; as manufacturer FROM products WHERE attributes-&gt;&#39;type&#39; = &#39;computer&#39;;
-       name      | manufacturer 
+       name      | manufacturer
  ----------------+--------------
   MacBook Air 11 | Apple
  (1 row)</code></pre>
@@ -3422,7 +3423,7 @@ VALUES (
 <pre><code>CREATE INDEX products_hstore_index ON products USING GIST (attributes);
 CREATE INDEX products_hstore_index ON products USING GIN (attributes);</code></pre>
 <p>Можно также cоздавать индекс на ключ:</p>
-<pre><code>CREATE INDEX product_manufacturer 
+<pre><code>CREATE INDEX product_manufacturer
    ON products ((products.attributes-&gt;&#39;manufacturer&#39;));</code></pre>
 <h3 id="заключение-8">Заключение</h3>
 <p>HStore — расширение для удобного и индексируемого хранения слабоструктурированых данных в PostgreSQL.</p>
@@ -3443,7 +3444,7 @@ psqlfib(n int) RETURNS int AS $$
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;</code></pre>
 <p>Замерим скорость её работы:</p>
 <pre><code>SELECT n, psqlfib(n) FROM generate_series(0,30,5) as n;
- n  | psqlfib 
+ n  | psqlfib
 ----+---------
   0 |       0
   5 |       5
@@ -3467,7 +3468,7 @@ fib(n int) RETURNS int as $$
 $$ LANGUAGE plv8 IMMUTABLE STRICT;</code></pre>
 <p>Замерим скорость работы:</p>
 <pre><code>SELECT n, fib(n) FROM generate_series(0,30,5) as n;
- n  |  fib   
+ n  |  fib
 ----+--------
   0 |      0
   5 |      5
@@ -3492,7 +3493,7 @@ fib1(n int) RETURNS int as $$
 $$ LANGUAGE plv8 IMMUTABLE STRICT;</code></pre>
 <p>Замерим скорость работы:</p>
 <pre><code>SELECT n, fib1(n) FROM generate_series(0,30,5) as n;
- n  |  fib1  
+ n  |  fib1
 ----+--------
   0 |      0
   5 |      5
@@ -3512,35 +3513,35 @@ Time: 0,766 ms</code></pre>
 <li><p>все данные (ключ и значение по ключу) это строка</p></li>
 </ul>
 <p>Для хранения данных многие документоориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и т.д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON. Такой тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и DOMAIN:</p>
-<pre><code>CREATE OR REPLACE FUNCTION 
+<pre><code>CREATE OR REPLACE FUNCTION
 valid_json(json text)
 RETURNS BOOLEAN AS $$
-  try { 
-    JSON.parse(json); return true; 
-  } catch(e) { 
+  try {
+    JSON.parse(json); return true;
+  } catch(e) {
     return false;
   }
 $$ LANGUAGE plv8 IMMUTABLE STRICT;
 
-CREATE DOMAIN json AS TEXT 
+CREATE DOMAIN json AS TEXT
 CHECK(valid_json(VALUE));</code></pre>
 <p>Функция «valid_json» используется для проверки JSON данных. Пример использования:</p>
-<pre><code>$ INSERT INTO members 
+<pre><code>$ INSERT INTO members
 VALUES(&#39;not good json&#39;);
-ERROR:  value for domain json 
+ERROR:  value for domain json
 violates check constraint &quot;json_check&quot;
-$ INSERT INTO members 
+$ INSERT INTO members
 VALUES(&#39;{&quot;good&quot;: &quot;json&quot;, &quot;is&quot;: true}&#39;);
 INSERT 0 1
 $ select * from members;
-	    profile            
+	    profile
 ------------------------------
   {&quot;good&quot;: &quot;json&quot;, &quot;is&quot;: true}
 (1 row)</code></pre>
 <p>Рассмотрим пример использования JSON для хранения данных и PLV8 для их поиска. Для начала создадим таблицу и заполним её данными:</p>
 <pre><code>$ CREATE TABLE members ( id SERIAL, profile json );
 $ SELECT count(*) FROM members;
-  count  
+  count
 ---------
  1000000
 (1 row)
@@ -3595,7 +3596,7 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;</code></pre>
   &#39;hello {{#things}}{{.}} {{/things}}:) {{#data}}{{key}}{{/data}}&#39;,
   &#39;{&quot;things&quot;: [&quot;world&quot;, &quot;from&quot;, &quot;postgresql&quot;], &quot;data&quot;: {&quot;key&quot;: &quot;and me&quot;}}&#39;
 );
-		mustache                
+		mustache
 ---------------------------------------
   hello world from postgresql :) and me
 (1 row)
@@ -3668,13 +3669,13 @@ test=# CREATE EXTENSION smlar;
 CREATE EXTENSION
 
 test=# SELECT smlar(&#39;{1,4,6}&#39;::int[], &#39;{5,4,6}&#39;::int[]);
-  smlar  
+  smlar
 ----------
  0.666667
 (1 row)
 
 test=# SELECT smlar(&#39;{1,4,6}&#39;::int[], &#39;{5,4,6}&#39;::int[], &#39;N.i / sqrt(N.a * N.b)&#39; );
-  smlar  
+  smlar
 ----------
  0.666667
 (1 row)</code></pre>
@@ -3724,7 +3725,7 @@ smlar.stattable = &#39;stat&#39; # Имя таблицы для хранения
 CREATE INDEX image_array_gist ON images USING GIST(image_array _int4_sml_ops);</code></pre>
 <p>Теперь можно произвести поиск дубликатов:</p>
 <pre><code>test=# SELECT count(*) from images;
-  count 
+  count
 ---------
  1000000
 (1 row)
@@ -3739,7 +3740,7 @@ test=# EXPLAIN ANALYZE SELECT count(*) FROM images WHERE images.image_array % &#
 (5 rows)</code></pre>
 <p>где «’<span>1010259,...,2424252</span>’::int[]» — сигнатура изображения, для которой пытаемся найти похожие изображения. С помощью «smlar.threshold» управляем % похожести картинок (при каком проценте они будут попадать в выборку).</p>
 <p>Дополнительно можем добавить сортировку по самым похожим изображениям:</p>
-<pre><code>test=# EXPLAIN ANALYZE SELECT smlar(images.image_array, &#39;{1010259,...,2424252}&#39;::int[]) as similarity FROM images WHERE images.image_array % &#39;{1010259,1011253, ...,2423253,2424252}&#39;::int[] ORDER BY similarity DESC; 
+<pre><code>test=# EXPLAIN ANALYZE SELECT smlar(images.image_array, &#39;{1010259,...,2424252}&#39;::int[]) as similarity FROM images WHERE images.image_array % &#39;{1010259,1011253, ...,2423253,2424252}&#39;::int[] ORDER BY similarity DESC;
 
 
  Sort  (cost=4020.94..4023.41 rows=986 width=924) (actual time=2888.472..2901.977 rows=200000 loops=1)
@@ -3764,25 +3765,25 @@ test=# EXPLAIN ANALYZE SELECT count(*) FROM images WHERE images.image_array % &#
 <pre><code># CREATE EXTENSION fuzzystrmatch;
 CREATE EXTENSION
 # SELECT soundex(&#39;hello world!&#39;);
- soundex 
+ soundex
 ---------
  H464
 (1 row)
 
 # SELECT soundex(&#39;Anne&#39;), soundex(&#39;Ann&#39;), difference(&#39;Anne&#39;, &#39;Ann&#39;);
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | A500    |          4
 (1 row)
 
 # SELECT soundex(&#39;Anne&#39;), soundex(&#39;Andrew&#39;), difference(&#39;Anne&#39;, &#39;Andrew&#39;);
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | A536    |          2
 (1 row)
 
 # SELECT soundex(&#39;Anne&#39;), soundex(&#39;Margaret&#39;), difference(&#39;Anne&#39;, &#39;Margaret&#39;);
- soundex | soundex | difference 
+ soundex | soundex | difference
 ---------+---------+------------
  A500    | M626    |          0
 (1 row)
@@ -3792,14 +3793,14 @@ CREATE TABLE
 # INSERT INTO s VALUES (&#39;john&#39;), (&#39;joan&#39;), (&#39;wobbly&#39;), (&#39;jack&#39;);
 INSERT 0 4
 # SELECT * FROM s WHERE soundex(nm) = soundex(&#39;john&#39;);
-  nm  
+  nm
 ------
  john
  joan
 (2 rows)
- 
+
 # SELECT * FROM s WHERE difference(s.nm, &#39;john&#39;) &gt; 2;
-  nm  
+  nm
 ------
  john
  joan
@@ -3836,13 +3837,13 @@ test=# SELECT levenshtein_less_equal(&#39;extensive&#39;, &#39;exhaustive&#39;, 
  KM
 (1 row)
 # SELECT dmetaphone(&#39;postgresql&#39;);
- dmetaphone 
+ dmetaphone
 ------------
  PSTK
 (1 row)
 
 # SELECT dmetaphone_alt(&#39;postgresql&#39;);
- dmetaphone_alt 
+ dmetaphone_alt
 ----------------
  PSTK
 (1 row)</code></pre>
@@ -3956,17 +3957,14 @@ archive_timeout = 300 # timeout to close buffers</code></pre>
 <h2 id="утилиты-для-непрерывного-резервного-копирования">Утилиты для непрерывного резервного копирования</h2>
 <p>Непрерывное резервное копирования один из лучших спрособ для создания бэкапов и восстановления их. Нередко бэкапы сохраняются на той же файловой системе, на которой расположена база данных. Это не очень безопасно, т.к. при выходе дисковой системы сервера из строя вы можете потерять все данные (и базу, и бэкапы), или попросту столкнуться с тем, что на жестком диске закончится свободное место. Поэтому лучше, когда бэкапы складываются на отдельный сервер или в «облачное хранилище» (например S3<a href="#fn29" class="footnoteRef" id="fnref29"><sup>29</sup></a>). Чтобы не писать свой «велосипед» для автоматизации этого процесса на сегодняшний день существует набор программ, которые облегчает процесс настройки и поддержки процесса создания бэкапов на основе непрерывного резервного копирования.</p>
 <h3 id="wal-e">WAL-E</h3>
-<p><strong>Ссылка</strong>: <a href="https://github.com/heroku/WAL-E">github.com/heroku/WAL-E</a></p>
-<p>WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в S3 и управления использованием pg_start_backup и pg_stop_backup. Утилита написана на Python и разработана в компании <a href="http://www.heroku.com/">Heroku</a>, где её активно используют.</p>
+<p><strong>Ссылка</strong>: <a href="https://github.com/wal-e/wal-e">github.com/wal-e/wal-e</a></p>
+<p>WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием pg_start_backup и pg_stop_backup. Утилита написана на Python и разработана в компании <a href="http://www.heroku.com/">Heroku</a>, где её активно используют.</p>
 <h4 id="установка-8">Установка</h4>
-<p>У WAL-E есть пару зависимостей: lzop, psql, mbuffer, python 2.6+ и несколько python библиотек (gevent &gt;= 0.13, boto &gt;= 2.0). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:</p>
+<p>У WAL-E есть пару зависимостей: lzop, psql, pv (в старых версиях используется mbuffer), python 2.6+ и несколько python библиотек (gevent &gt;= 0.13, boto &gt;= 2.0, azure). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:</p>
 <pre><code># PostgreSQL уже установлен
-aptitude install git-core python-dev python-setuptools build-essential libevent-dev lzop mbuffer daemontools daemontools-run</code></pre>
+aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run</code></pre>
 <p>Теперь установим WAL-E:</p>
-<pre><code>git clone git://github.com/heroku/WAL-E.git
-cd WAL-E
-python setup.py build
-sudo python setup.py install</code></pre>
+<pre><code>pip install https://github.com/wal-e/wal-e/archive/v0.7a1.tar.gz</code></pre>
 <p>После успешной установки можно начать работать с WAL-E.</p>
 <h4 id="настройка-и-работа">Настройка и работа</h4>
 <p>Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются «Access Key ID» и «Secret Access Key» (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базы данных в S3:</p>
@@ -4000,16 +3998,16 @@ archive_timeout = 60</code></pre>
 2012-11-07T14:52:19.784+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading &quot;pg_xlog/000000010000000000000001&quot; to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000001.lzo&quot;.
 2012-11-07 14:52:19 UTC LOG:  incomplete startup packet
-2012-11-07T14:52:28.234+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file 
-        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000001.lzo&quot; complete at 21583.3KiB/s. 
+2012-11-07T14:52:28.234+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000001.lzo&quot; complete at 21583.3KiB/s.
 2012-11-07T14:52:28.341+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading &quot;pg_xlog/000000010000000000000002.00000020.backup&quot; to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.00000020.backup.lzo&quot;.
-2012-11-07T14:52:34.027+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file 
-        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.00000020.backup.lzo&quot; complete at 00KiB/s. 
+2012-11-07T14:52:34.027+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.00000020.backup.lzo&quot; complete at 00KiB/s.
 2012-11-07T14:52:34.187+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading &quot;pg_xlog/000000010000000000000002&quot; to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo&quot;.
-2012-11-07T14:52:40.232+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file 
-        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo&quot; complete at 2466.67KiB/s. </code></pre>
+2012-11-07T14:52:40.232+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+        DETAIL: Archiving to &quot;s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo&quot; complete at 2466.67KiB/s.</code></pre>
 <p>Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её.</p>
 <p>Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:</p>
 <pre><code>$ envdir /etc/wal-e.d/env wal-e backup-push /var/lib/postgresql/9.2/main
@@ -4032,7 +4030,7 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived</
 <p>Для получения списка доступных резервных копий есть команда «backup-list»:</p>
 <pre><code>$ envdir /etc/wal-e.d/env wal-e backup-list
 name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
-base_000000010000000000000008_00000032	2012-11-07T14:00:07.000Z		000000010000000000000008	00000032		
+base_000000010000000000000008_00000032	2012-11-07T14:00:07.000Z		000000010000000000000008	00000032
 base_00000001000000000000000C_00000032	2012-11-08T15:00:08.000Z		00000001000000000000000C	00000032</code></pre>
 <p>После завершения работы с основной резервной копией для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния). Для этого используется recovery.conf:</p>
 <pre><code>restore_command = &#39;envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch &quot;%f&quot; &quot;%p&quot;&#39;</code></pre>
@@ -4041,7 +4039,9 @@ base_00000001000000000000000C_00000032	2012-11-08T15:00:08.000Z		000000010000000
 <pre><code># удаления старых бэкапов старше base_00000004000002DF000000A6_03626144
 $ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000000A6_03626144
 # удаления всех бэкапов
-$ envdir /etc/wal-e.d/env wal-e delete --confirm everything</code></pre>
+$ envdir /etc/wal-e.d/env wal-e delete --confirm everything
+# удалить все старше последних 20 бэкапов
+$ envdir /etc/wal-e.d/env wal-e delete --confirm retain 20</code></pre>
 <p>Без опции «confirm» команды будут запускаться и показывать, что будет удаляться, но фактического удаления не будет производиться (dry run).</p>
 <h4 id="заключение-10">Заключение</h4>
 <p>WAL-E помогает автоматизировать сбор резервных копий с PostgreSQL и хранить их в достаточно дешевом и надежном хранилище — Amazon S3.</p>
@@ -4066,12 +4066,12 @@ ssh postgres@pghost</code></pre>
 <pre><code>host  all  all  brhost/32  trust</code></pre>
 <p>После этих изменений нужно перегрузить PostgreSQL. Теперь можем проверить с сервера бэкапов подключение к PostgreSQL:</p>
 <pre><code>$ psql -c &#39;SELECT version()&#39; -U postgres -h pghost
-                                                  version                                                   
+                                                  version
 ------------------------------------------------------------------------------------------------------------
  PostgreSQL 9.2.1 on x86_64-unknown-linux-gnu, compiled by gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2, 64-bit
 (1 row)</code></pre>
 <p>Далее создадим папку на сервере с бэкапами для хранения этих самых бэкапов:</p>
-<pre><code># sudo mkdir -p /srv/barman    
+<pre><code># sudo mkdir -p /srv/barman
 # sudo chown barman:barman /srv/barman</code></pre>
 <p>Для настройки barman создадим /etc/barman.conf:</p>
 <pre><code>; Main directory
@@ -4204,7 +4204,7 @@ Processing xlog segments for main
 <p>Эту команду требуется добавлять в cron. Частота выполнения данной команды зависит от того, как много WAL-логов накапливается (чем больше файлов - тем дольше она выполняется). Barman может сжимать WAL-логи через gzip, bzip2 или другой компрессор данных (команды для сжатия и распаковки задаются через custom_compression_filter и custom_decompression_filter соответственно).</p>
 <p>Для восстановления базы из бэкапа используется команда «recover»:</p>
 <pre><code># barman recover --remote-ssh-command &quot;ssh postgres@pghost&quot; main 20121109T090806 /var/lib/postgresql/9.2/main
-Starting remote restore for server main using backup 20121109T090806 
+Starting remote restore for server main using backup 20121109T090806
 Destination directory: /var/lib/postgresql/9.2/main
 Copying the base backup.
 Copying required wal segments.
@@ -4296,7 +4296,7 @@ options as they might interfere with your current recovery attempt:
   ORDER BY pg_relation_size(C.oid) DESC
   LIMIT 20;</code></pre>
 <p>Пример вывода:</p>
-<pre><code>relation        |    size    
+<pre><code>relation        |    size
 ------------------------+------------
  public.accounts        | 326 MB
  public.accounts_pkey   | 44 MB
@@ -4317,7 +4317,7 @@ options as they might interfere with your current recovery attempt:
   ORDER BY pg_total_relation_size(C.oid) DESC
   LIMIT 20;</code></pre>
 <p>Пример вывода:</p>
-<pre><code>relation            | total_size 
+<pre><code>relation            | total_size
 --------------------------------+------------
  public.actions                 | 4249 MB
  public.product_history_records | 197 MB
@@ -4337,7 +4337,7 @@ BEGIN
         rows := substring(rec.&quot;QUERY PLAN&quot; FROM &#39; rows=([[:digit:]]+)&#39;);
         EXIT WHEN rows IS NOT NULL;
     END LOOP;
- 
+
     RETURN rows;
 END;
 $$ LANGUAGE plpgsql VOLATILE STRICT;</code></pre>
@@ -4347,22 +4347,22 @@ INSERT INTO foo SELECT random() FROM generate_series(1, 1000);
 ANALYZE foo;
 
 # SELECT count(*) FROM foo WHERE r &lt; 0.1;
- count 
+ count
 -------
     92
 (1 row)
 
 # SELECT count_estimate(&#39;SELECT * FROM foo WHERE r &lt; 0.1&#39;);
- count_estimate 
+ count_estimate
 ----------------
              94
 (1 row)</code></pre>
 <h3 id="узнать-значение-по-умолчанию-у-поля-в-таблице">Узнать значение по умолчанию у поля в таблице</h3>
 <p>Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).</p>
 <pre><code>CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
-SELECT 
+SELECT
   COLUMNS.column_default::text
-FROM 
+FROM
   information_schema.COLUMNS
   WHERE table_name = $2
   AND table_schema = $1
@@ -4372,15 +4372,15 @@ $$ LANGUAGE sql IMMUTABLE;</code></pre>
 <pre><code># SELECT ret_def(&#39;schema&#39;,&#39;table&#39;,&#39;column&#39;);
 
 SELECT ret_def(&#39;public&#39;,&#39;image_files&#39;,&#39;id&#39;);
-                 ret_def                 
+                 ret_def
 -----------------------------------------
  nextval(&#39;image_files_id_seq&#39;::regclass)
 (1 row)
 
 SELECT ret_def(&#39;public&#39;,&#39;schema_migrations&#39;,&#39;version&#39;);
- ret_def 
+ ret_def
 ---------
- 
+
 (1 row)</code></pre>
 <h3 id="случайное-число-из-диапазона">Случайное число из диапазона</h3>
 <p>Данный метод позволяет взять случайное число из указаного диапазона (целое или с плавающей запятой).</p>
@@ -4391,13 +4391,13 @@ $$
 $$ LANGUAGE &#39;sql&#39; VOLATILE;</code></pre>
 <p>Пример:</p>
 <pre><code>SELECT random(1,10)::int, random(1,10);
- random |      random      
+ random |      random
 --------+------------------
       6 | 5.11675184825435
 (1 row)
 
 SELECT random(1,10)::int, random(1,10);
- random |      random      
+ random |      random
 --------+------------------
       7 | 1.37060070643201
 (1 row)</code></pre>
@@ -4430,11 +4430,11 @@ FROM
          AS doubled_digit
          FROM generate_series(0, CEIL(LOG( $1 ))::INTEGER - 1) AS n
 ) AS doubled_digits;
- 
+
 $$ LANGUAGE &#39;SQL&#39;
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_verify(int8) IS &#39;Return true iff the last digit of the
 input is a correct check digit for the rest of the input according to Luhn&#39;&#39;s
 algorithm.&#39;;
@@ -4455,11 +4455,11 @@ FROM (SELECT
          AS doubled_digit
          FROM generate_series(0, CEIL(LOG($1))::INTEGER - 1) AS n
 ) AS doubled_digits;
- 
+
 $$ LANGUAGE &#39;SQL&#39;
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_generate_checkdigit(int8) IS &#39;For the input
 value, generate a check digit according to Luhn&#39;&#39;s algorithm&#39;;
 CREATE OR REPLACE FUNCTION luhn_generate(int8) RETURNS int8 AS $$
@@ -4467,7 +4467,7 @@ SELECT 10 * $1 + luhn_generate_checkdigit($1);
 $$ LANGUAGE &#39;SQL&#39;
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_generate(int8) IS &#39;Append a check digit generated
 according to Luhn&#39;&#39;s algorithm to the input value. The input value must be no
 greater than (maxbigint/10).&#39;;
@@ -4476,26 +4476,26 @@ SELECT $1 / 10;
 $$ LANGUAGE &#39;SQL&#39;
 IMMUTABLE
 STRICT;
- 
+
 COMMENT ON FUNCTION luhn_strip(int8) IS &#39;Strip the least significant digit from
 the input value. Intended for use when stripping the check digit from a number
 including a Luhn&#39;&#39;s algorithm check digit.&#39;;</code></pre>
 <p>Пример:</p>
 <pre><code>Select luhn_verify(49927398716);
- luhn_verify 
+ luhn_verify
 -------------
  t
 (1 row)
 
 Select luhn_verify(49927398714);
- luhn_verify 
+ luhn_verify
 -------------
  f
 (1 row)</code></pre>
 <h3 id="выборка-и-сортировка-по-данному-набору-данных">Выборка и сортировка по данному набору данных</h3>
 <p>Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать данные в том же порядке, в котором передан набор данных. Например:</p>
 <p>Дан набор: (2,6,4,10,25,7,9) Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4</p>
-<pre><code>SELECT foo.* FROM foo                                           
+<pre><code>SELECT foo.* FROM foo
 JOIN (SELECT id.val, row_number() over() FROM (VALUES(3),(2),(6),(1),(4)) AS
 id(val)) AS id
 ON (foo.catalog_id = id.val) ORDER BY row_number;</code></pre>
@@ -4505,8 +4505,8 @@ ON (foo.catalog_id = id.val) ORDER BY row_number;</code></pre>
 <p>foo.catalog_id — поле, по которому ищем набор данных (замена foo.catalog_id IN(3,2,6,1,4))</p>
 <h3 id="quine-запрос-который-выводит-сам-себя">Quine — запрос который выводит сам себя</h3>
 <p>Куайн, квайн (англ. quine) — компьютерная программа (частный случай метапрограммирования), которая выдаёт на выходе точную копию своего исходного текста.</p>
-<pre><code>select a || &#39; from (select &#39; || quote_literal(a) || b || &#39;, &#39; || quote_literal(b) || &#39;::text as b) as quine&#39; from 
-(select &#39;select a || &#39;&#39; from (select &#39;&#39; || quote_literal(a) || b || &#39;&#39;, &#39;&#39; || quote_literal(b) || &#39;&#39;::text as b) as 
+<pre><code>select a || &#39; from (select &#39; || quote_literal(a) || b || &#39;, &#39; || quote_literal(b) || &#39;::text as b) as quine&#39; from
+(select &#39;select a || &#39;&#39; from (select &#39;&#39; || quote_literal(a) || b || &#39;&#39;, &#39;&#39; || quote_literal(b) || &#39;&#39;::text as b) as
 quine&#39;&#39;&#39;::text as a, &#39;::text as a&#39;::text as b) as quine;</code></pre>
 <h3 id="ускоряем-like">Ускоряем LIKE</h3>
 <p>Автокомплит — очень популярная фишка в web системах. Реализуется это простым LIKE «some%», где «some» — то, что пользователь успел ввести. Проблема в том, что и в огромной таблице (например таблица тегов) такой запрос будет работать очень медленно.</p>
@@ -4516,7 +4516,7 @@ prefix_test(#  tag    text primary key,
 prefix_test(#  name      text not null,
 prefix_test(#  shortname text,
 prefix_test(#  status    char default &#39;S&#39;,
-prefix_test(# 
+prefix_test(#
 prefix_test(#  check( status in (&#39;S&#39;, &#39;R&#39;) )
 prefix_test(# );
 NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index &quot;tags_pkey&quot; for table &quot;tags&quot;
@@ -4529,7 +4529,7 @@ prefix_test(#  tag    text primary key,
 prefix_test(#  name      text not null,
 prefix_test(#  shortname text,
 prefix_test(#  status    char default &#39;S&#39;,
-prefix_test(# 
+prefix_test(#
 prefix_test(#  check( status in (&#39;S&#39;, &#39;R&#39;) )
 prefix_test(# );
 NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index &quot;invalid_tags_pkey&quot; for table &quot;invalid_tags&quot;
@@ -4538,19 +4538,19 @@ CREATE TABLE
 
 
 prefix_test=# select count(*) from tags;
- count 
+ count
 -------
  11966
 (1 row)
 
 prefix_test=# select count(*) from invalid_tags;
- count 
+ count
 -------
  11966
 (1 row)
 
 # EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower(&#39;0146%&#39;);
-                                                 QUERY PLAN                                                 
+                                                 QUERY PLAN
 ------------------------------------------------------------------------------------------------------------
  Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.359..20.695 rows=1 loops=1)
    Filter: (lower(tag) ~~ &#39;0146%&#39;::text)
@@ -4558,7 +4558,7 @@ prefix_test=# select count(*) from invalid_tags;
 (3 rows)
 
 # EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower(&#39;0146%&#39;);
-                                                 QUERY PLAN                                                 
+                                                 QUERY PLAN
 ------------------------------------------------------------------------------------------------------------
  Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.549..19.503 rows=1 loops=1)
    Filter: (lower(tag) ~~ &#39;0146%&#39;::text)
@@ -4566,7 +4566,7 @@ prefix_test=# select count(*) from invalid_tags;
 (3 rows)
 
 # EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower(&#39;0146%&#39;);
-                                                      QUERY PLAN                                                       
+                                                      QUERY PLAN
 -----------------------------------------------------------------------------------------------------------------------
  Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.054..0.057 rows=1 loops=1)
    Filter: (lower(tag) ~~ &#39;0146%&#39;::text)
@@ -4576,7 +4576,7 @@ prefix_test=# select count(*) from invalid_tags;
 (5 rows)
 
 # EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower(&#39;0146%&#39;);
-                                                      QUERY PLAN                                                       
+                                                      QUERY PLAN
 -----------------------------------------------------------------------------------------------------------------------
  Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.025..0.025 rows=1 loops=1)
    Filter: (lower(tag) ~~ &#39;0146%&#39;::text)
