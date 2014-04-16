@@ -1,24 +1,22 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
-ruby "2.1.1" # gem install bundler --pre
-
-gem 'guard'
-gem 'guard-coffeescript'
-gem 'guard-sass'
-gem 'guard-rake'
-gem 'therubyracer'
-gem "actionpack", '>= 3.2.13'
-gem "activesupport", '>= 3.2.13'
-gem 'sinatra'
-gem 'sprockets'
-gem 'sprockets-sass'
-gem 'yui-compressor'
-gem 'uglifier'
-gem 'html_compressor'
-gem 'haml'
-gem 'tilt'
-gem 'execjs'
+gem 'middleman'
+# EXTENSIONS
+gem 'middleman-favicon-maker', '>= 3.5' # Generate favicon files in various sizes from a base image
+gem 'middleman-minify-html' # min html
+gem 'middleman-deploy' # Deploy site
+# css
+gem 'sprockets', '>= 2.8.0'
+gem 'sass'
 gem 'compass'
-gem 'vegas'
+# UTILS
+gem 'oily_png'     # faster PNG
+gem 'therubyracer' # faster ExecJS
+gem 'oj'           # faster JSON
+gem 'redcarpet'    # faster ExecJS
+gem 'builder'      # XML builder
 gem 'erubis'
-gem 'zurb-foundation', '3.2.5'
+gem 'multi_json'
+gem 'nokogiri'
+gem 'mini_magick'
+gem 'tzinfo'
