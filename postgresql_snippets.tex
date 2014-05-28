@@ -7,25 +7,17 @@
 \end{epigraphs}
 
 \section{Введение}
-Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью, 
-красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с 
-которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения 
-мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска в интернете. 
+Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью,
+красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с
+которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения
+мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска в интернете.
 
 \section{Советы}
 
 \subsection{Размер объектов в базе данных}
 Данный запрос показывает размер объектов в базе данных (например, таблиц и индексов).
 
-\begin{lstlisting}[label=lst:snippets1,title=snippets/biggest\_relations.sql]
-SELECT nspname || '.' || relname AS "relation",
-    pg_size_pretty(pg_relation_size(C.oid)) AS "size"
-  FROM pg_class C
-  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
-  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
-  ORDER BY pg_relation_size(C.oid) DESC
-  LIMIT 20;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets1,title=snippets/biggest\_relations.sql]{codes/snippets/biggest_relations.sql}
 
 Пример вывода:
 \begin{lstlisting}[label=lst:snippets2,caption=Поиск самых больших объектов в БД. Пример вывода]
@@ -43,17 +35,7 @@ SELECT nspname || '.' || relname AS "relation",
 \subsection{Размер самых больших таблиц}
 Данный запрос показывает размер самых больших таблиц в базе данных.
 
-\begin{lstlisting}[label=lst:snippets3,title=snippets/biggest\_tables.sql]
-SELECT nspname || '.' || relname AS "relation",
-    pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
-  FROM pg_class C
-  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
-  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
-    AND C.relkind <> 'i'
-    AND nspname !~ '^pg_toast'
-  ORDER BY pg_total_relation_size(C.oid) DESC
-  LIMIT 20;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets3,title=snippets/biggest\_tables.sql]{codes/snippets/biggest_tables.sql}
 
 Пример вывода:
 \begin{lstlisting}[label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывода]
@@ -71,22 +53,7 @@ SELECT nspname || '.' || relname AS "relation",
 Данный метод позволяет узнать приблизительное количество записей в таблице.
 Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
 
-\begin{lstlisting}[label=lst:snippets5,title=snippets/count\_estimate.sql]
-CREATE LANGUAGE plpgsql;
-CREATE FUNCTION count_estimate(query text) RETURNS integer AS $$
-DECLARE
-    rec   record;
-    rows  integer;
-BEGIN
-    FOR rec IN EXECUTE 'EXPLAIN ' || query LOOP
-        rows := substring(rec."QUERY PLAN" FROM ' rows=([[:digit:]]+)');
-        EXIT WHEN rows IS NOT NULL;
-    END LOOP;
-
-    RETURN rows;
-END;
-$$ LANGUAGE plpgsql VOLATILE STRICT;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets5,title=snippets/count\_estimate.sql]{codes/snippets/count_estimate.sql}
 
 Пример:
 \begin{lstlisting}[label=lst:snippets51,caption=<<Средний>> count. Пример]
@@ -110,17 +77,7 @@ ANALYZE foo;
 \subsection{Узнать значение по умолчанию у поля в таблице}
 Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).
 
-\begin{lstlisting}[label=lst:snippets6,title=snippets/default\_value.sql]
-CREATE OR REPLACE FUNCTION ret_def(text,text,text) RETURNS text AS $$
-SELECT
-  COLUMNS.column_default::text
-FROM
-  information_schema.COLUMNS
-  WHERE table_name = $2
-  AND table_schema = $1
-  AND column_name = $3
-$$ LANGUAGE sql IMMUTABLE;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets6,title=snippets/default\_value.sql]{codes/snippets/default_value.sql}
 
 Пример:
 \begin{lstlisting}[label=lst:snippets7,caption=Узнать значение по умолчанию у поля в таблице. Пример]
@@ -142,13 +99,7 @@ SELECT ret_def('public','schema_migrations','version');
 \subsection{Случайное число из диапазона}
 Данный метод позволяет взять случайное число из указаного диапазона (целое или с плавающей запятой).
 
-\begin{lstlisting}[label=lst:snippets8,title=snippets/random\_from\_range.sql]
-CREATE OR REPLACE FUNCTION random(numeric, numeric)
-RETURNS numeric AS
-$$
-   SELECT ($1 + ($2 - $1) * random())::numeric;
-$$ LANGUAGE 'sql' VOLATILE;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets8,title=snippets/random\_from\_range.sql]{codes/snippets/random_from_range.sql}
 
 Пример:
 \begin{lstlisting}[label=lst:snippets9,caption=Случайное число из диапазона. Пример]
@@ -176,83 +127,7 @@ SELECT random(1,10)::int, random(1,10);
 
 Алгоритм Луна реализован на чистом SQL. Обратите внимание, что эта реализация является чисто арифметической.
 
-\begin{lstlisting}[label=lst:snippets10,title=snippets/luhn\_algorithm.sql]
-CREATE OR REPLACE FUNCTION luhn_verify(int8) RETURNS BOOLEAN AS $$
--- Take the sum of the
--- doubled digits and the even-numbered undoubled digits, and see if
--- the sum is evenly divisible by zero.
-SELECT
-         -- Doubled digits might in turn be two digits. In that case,
-         -- we must add each digit individually rather than adding the
-         -- doubled digit value to the sum. Ie if the original digit was
-         -- `6' the doubled result was `12' and we must add `1+2' to the
-         -- sum rather than `12'.
-         MOD(SUM(doubled_digit / INT8 '10' + doubled_digit % INT8 '10'), 10) = 0
-FROM
--- Double odd-numbered digits (counting left with
--- least significant as zero). If the doubled digits end up
--- having values
--- > 10 (ie they're two digits), add their digits together.
-(SELECT
-         -- Extract digit `n' counting left from least significant
-         -- as zero
-         MOD( ( $1::int8 / (10^n)::int8 ), 10::int8)
-         -- Double odd-numbered digits
-         * (MOD(n,2) + 1)
-         AS doubled_digit
-         FROM generate_series(0, CEIL(LOG( $1 ))::INTEGER - 1) AS n
-) AS doubled_digits;
-
-$$ LANGUAGE 'SQL'
-IMMUTABLE
-STRICT;
-
-COMMENT ON FUNCTION luhn_verify(int8) IS 'Return true iff the last digit of the
-input is a correct check digit for the rest of the input according to Luhn''s
-algorithm.';
-CREATE OR REPLACE FUNCTION luhn_generate_checkdigit(int8) RETURNS int8 AS $$
-SELECT
-     -- Add the digits, doubling even-numbered digits (counting left
-     -- with least-significant as zero). Subtract the remainder of
-     -- dividing the sum by 10 from 10, and take the remainder
-     -- of dividing that by 10 in turn.
-     ((INT8 '10' - SUM(doubled_digit / INT8 '10' + doubled_digit % INT8 '10') %
-                       INT8 '10') % INT8 '10')::INT8
-FROM (SELECT
-         -- Extract digit `n' counting left from least significant\
-         -- as zero
-         MOD( ($1::int8 / (10^n)::int8), 10::int8 )
-         -- double even-numbered digits
-         * (2 - MOD(n,2))
-         AS doubled_digit
-         FROM generate_series(0, CEIL(LOG($1))::INTEGER - 1) AS n
-) AS doubled_digits;
-
-$$ LANGUAGE 'SQL'
-IMMUTABLE
-STRICT;
-
-COMMENT ON FUNCTION luhn_generate_checkdigit(int8) IS 'For the input
-value, generate a check digit according to Luhn''s algorithm';
-CREATE OR REPLACE FUNCTION luhn_generate(int8) RETURNS int8 AS $$
-SELECT 10 * $1 + luhn_generate_checkdigit($1);
-$$ LANGUAGE 'SQL'
-IMMUTABLE
-STRICT;
-
-COMMENT ON FUNCTION luhn_generate(int8) IS 'Append a check digit generated
-according to Luhn''s algorithm to the input value. The input value must be no
-greater than (maxbigint/10).';
-CREATE OR REPLACE FUNCTION luhn_strip(int8) RETURNS int8 AS $$
-SELECT $1 / 10;
-$$ LANGUAGE 'SQL'
-IMMUTABLE
-STRICT;
-
-COMMENT ON FUNCTION luhn_strip(int8) IS 'Strip the least significant digit from
-the input value. Intended for use when stripping the check digit from a number
-including a Luhn''s algorithm check digit.';
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets10,title=snippets/luhn\_algorithm.sql]{codes/snippets/luhn_algorithm.sql}
 
 Пример:
 \begin{lstlisting}[label=lst:snippets11,caption=Алгоритм Луна. Пример]
@@ -277,12 +152,7 @@ Select luhn_verify(49927398714);
 Дан набор: (2,6,4,10,25,7,9)
 Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
 
-\begin{lstlisting}[label=lst:snippets12,title=snippets/order\_like\_in.sql]
-SELECT foo.* FROM foo
-JOIN (SELECT id.val, row_number() over() FROM (VALUES(3),(2),(6),(1),(4)) AS
-id(val)) AS id
-ON (foo.catalog_id = id.val) ORDER BY row_number;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets12,title=snippets/order\_like\_in.sql]{codes/snippets/order_like_in.sql}
 
 где
 
@@ -296,11 +166,7 @@ foo.catalog\_id~--- поле, по которому ищем набор данн
 Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования),
 которая выдаёт на выходе точную копию своего исходного текста.
 
-\begin{lstlisting}[label=lst:snippets13,title=snippets/quine.sql]
-select a || ' from (select ' || quote_literal(a) || b || ', ' || quote_literal(b) || '::text as b) as quine' from
-(select 'select a || '' from (select '' || quote_literal(a) || b || '', '' || quote_literal(b) || ''::text as b) as
-quine'''::text as a, '::text as a'::text as b) as quine;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets13,title=snippets/quine.sql]{codes/snippets/quine.sql}
 
 \subsection{Ускоряем LIKE}
 Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым LIKE <<some\%>>,
@@ -310,130 +176,23 @@ quine'''::text as a, '::text as a'::text as b) as quine;
 Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать text\_pattern\_ops
 (или varchar\_pattern\_ops если у поле varchar).
 
-\begin{lstlisting}[label=lst:snippets14,title=snippets/speed\_like.sql]
-prefix_test=# create table tags (
-prefix_test(#  tag    text primary key,
-prefix_test(#  name      text not null,
-prefix_test(#  shortname text,
-prefix_test(#  status    char default 'S',
-prefix_test(#
-prefix_test(#  check( status in ('S', 'R') )
-prefix_test(# );
-NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "tags_pkey" for table "tags"
-CREATE TABLE
-prefix_test=# CREATE INDEX i_tag ON tags USING btree(lower(tag)  text_pattern_ops);
-CREATE INDEX
-
-prefix_test=# create table invalid_tags (
-prefix_test(#  tag    text primary key,
-prefix_test(#  name      text not null,
-prefix_test(#  shortname text,
-prefix_test(#  status    char default 'S',
-prefix_test(#
-prefix_test(#  check( status in ('S', 'R') )
-prefix_test(# );
-NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "invalid_tags_pkey" for table "invalid_tags"
-CREATE TABLE
-
-
-
-prefix_test=# select count(*) from tags;
- count
--------
- 11966
-(1 row)
-
-prefix_test=# select count(*) from invalid_tags;
- count
--------
- 11966
-(1 row)
-
-# EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower('0146%');
-                                                 QUERY PLAN
-------------------------------------------------------------------------------------------------------------
- Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.359..20.695 rows=1 loops=1)
-   Filter: (lower(tag) ~~ '0146%'::text)
- Total runtime: 20.803 ms
-(3 rows)
-
-# EXPLAIN ANALYZE select * from invalid_tags where lower(tag) LIKE lower('0146%');
-                                                 QUERY PLAN
-------------------------------------------------------------------------------------------------------------
- Seq Scan on invalid_tags  (cost=0.00..265.49 rows=60 width=26) (actual time=0.549..19.503 rows=1 loops=1)
-   Filter: (lower(tag) ~~ '0146%'::text)
- Total runtime: 19.550 ms
-(3 rows)
-
-# EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
-                                                      QUERY PLAN
------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.054..0.057 rows=1 loops=1)
-   Filter: (lower(tag) ~~ '0146%'::text)
-   ->  Bitmap Index Scan on i_tag (cost=0.00..5.46 rows=120 width=0) (actual time=0.032..0.032 rows=1 loops=1)
-         Index Cond: ((lower(tag) ~>=~ '0146'::text) AND (lower(tag) ~<~ '0147'::text))
- Total runtime: 0.119 ms
-(5 rows)
-
-# EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
-                                                      QUERY PLAN
------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.025..0.025 rows=1 loops=1)
-   Filter: (lower(tag) ~~ '0146%'::text)
-   ->  Bitmap Index Scan on i_tag (cost=0.00..5.46 rows=120 width=0) (actual time=0.016..0.016 rows=1 loops=1)
-         Index Cond: ((lower(tag) ~>=~ '0146'::text) AND (lower(tag) ~<~ '0147'::text))
- Total runtime: 0.050 ms
-(5 rows)
-
-
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets14,title=snippets/speed\_like.sql]{codes/snippets/speed_like.sql}
 
 \subsection{Поиск дубликатов индексов}
 Запрос находит индексы, созданные на одинаковый набор столбцов (такие индексы эквивалентны, а значит бесполезны).
 
-\begin{lstlisting}[label=lst:snippets15,title=snippets/duplicate\_indexes.sql]
-SELECT pg_size_pretty(sum(pg_relation_size(idx))::bigint) AS size,
-       (array_agg(idx))[1] AS idx1, (array_agg(idx))[2] AS idx2,
-       (array_agg(idx))[3] AS idx3, (array_agg(idx))[4] AS idx4
-FROM (
-    SELECT indexrelid::regclass AS idx, (indrelid::text ||E'\n'|| indclass::text ||E'\n'|| indkey::text ||E'\n'||
-                                         coalesce(indexprs::text,'')||E'\n' || coalesce(indpred::text,'')) AS KEY
-    FROM pg_index) sub
-GROUP BY KEY HAVING count(*)>1
-ORDER BY sum(pg_relation_size(idx)) DESC;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets15,title=snippets/duplicate\_indexes.sql]{codes/snippets/duplicate_indexes.sql}
 
 \subsection{Размер и статистика использования индексов}
 
-\begin{lstlisting}[label=lst:snippets16,title=snippets/indexes\_statustic.sql]
-SELECT
-    t.tablename,
-    indexname,
-    c.reltuples AS num_rows,
-    pg_size_pretty(pg_relation_size(quote_ident(t.tablename)::text)) AS table_size,
-    pg_size_pretty(pg_relation_size(quote_ident(indexrelname)::text)) AS index_size,
-    CASE WHEN x.is_unique = 1  THEN 'Y'
-       ELSE 'N'
-    END AS UNIQUE,
-    idx_scan AS number_of_scans,
-    idx_tup_read AS tuples_read,
-    idx_tup_fetch AS tuples_fetched
-FROM pg_tables t
-LEFT OUTER JOIN pg_class c ON t.tablename=c.relname
-LEFT OUTER JOIN
-       (SELECT indrelid,
-           max(CAST(indisunique AS integer)) AS is_unique
-       FROM pg_index
-       GROUP BY indrelid) x
-       ON c.oid = x.indrelid
-LEFT OUTER JOIN
-    ( SELECT c.relname AS ctablename, ipg.relname AS indexname, x.indnatts AS number_of_columns, idx_scan, idx_tup_read, idx_tup_fetch,indexrelname FROM pg_index x
-           JOIN pg_class c ON c.oid = x.indrelid
-           JOIN pg_class ipg ON ipg.oid = x.indexrelid
-           JOIN pg_stat_all_indexes psai ON x.indexrelid = psai.indexrelid )
-    AS foo
-    ON t.tablename = foo.ctablename
-WHERE t.schemaname='public'
-ORDER BY 1,2;
-\end{lstlisting}
+\lstinputlisting[label=lst:snippets16,title=snippets/indexes\_statustic.sql]{codes/snippets/indexes_statustic.sql}
 
+\subsection{Размер и статистика использования индексов}
+
+\lstinputlisting[label=lst:snippets16,title=snippets/indexes\_statustic.sql]{codes/snippets/indexes_statustic.sql}
+
+\subsection{Размер и статистика использования индексов}
+
+Запрос, который показывает <<приблизительный>> bloat (раздутие) таблиц и индексов в базе:
+
+\lstinputlisting[label=lst:snippets17,title=snippets/bloating.sql]{codes/snippets/bloating.sql}
