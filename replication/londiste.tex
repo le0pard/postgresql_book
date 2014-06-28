@@ -35,40 +35,40 @@ sudo aptitude install skytools
 На момент написания статьи последняя версия была 2.1.11. Итак, начнем:
 
 \begin{lstlisting}[label=lst:londiste2,caption=Установка]
-$wget http://pgfoundry.org/frs/download.php/2561/skytools-2.1.11.tar.gz
-$tar zxvf skytools-2.1.11.tar.gz
-$cd skytools-2.1.11/
+$ wget http://pgfoundry.org/frs/download.php/2561/skytools-2.1.11.tar.gz
+$ tar zxvf skytools-2.1.11.tar.gz
+$ cd skytools-2.1.11/
 # это для сборки deb пакета
-$sudo aptitude install build-essential autoconf \
+$ sudo aptitude install build-essential autoconf \
 automake autotools-dev dh-make \
 debhelper devscripts fakeroot xutils lintian pbuilder \
 python-dev yada
 # ставим пакет исходников для postgresql 8.4.x
-$sudo aptitude install postgresql-server-dev-8.4
+$ sudo aptitude install postgresql-server-dev-8.4
 # python-psycopg нужен для работы Londiste
-$sudo aptitude install python-psycopg2
+$ sudo aptitude install python-psycopg2
 # данной командой я собираю deb пакет для
 # postgresql 8.4.x (для 8.3.x например будет "make deb83")
-$sudo make deb84
-$cd ../
+$ sudo make deb84
+$ cd ../
 # ставим skytools
-$dpkg -i skytools-modules-8.4_2.1.11_i386.deb
+$ dpkg -i skytools-modules-8.4_2.1.11_i386.deb
 skytools_2.1.11_i386.deb
 \end{lstlisting}
 
 Для других систем можно собрать Skytools командами
 
 \begin{lstlisting}[label=lst:londiste3,caption=Установка]
-./configure
-make
-make install
+$ $./configure
+$ make
+$ make install
 \end{lstlisting}
 
 Дальше проверим, что все у нас правильно установилось
 \begin{lstlisting}[label=lst:londiste4,caption=Установка]
-$londiste.py -V
+$ londiste.py -V
 Skytools version 2.1.11
-$pgqadm.py -V
+$ pgqadm.py -V
 Skytools version 2.1.11
 \end{lstlisting}
 

@@ -6,29 +6,29 @@ Bucardo~--- асинхронная master-master или master-slave репли�
 \subsection{Установка}
 Установку будем проводить на Ubuntu Server. Сначала нам нужно установить DBIx::Safe Perl модуль.
 \begin{lstlisting}[label=lst:bucardo1,caption=Установка]
-sudo aptitude install libdbix-safe-perl
+$ sudo aptitude install libdbix-safe-perl
 \end{lstlisting}
 
 Для других систем можно поставить из исходников\footnote{http://search.cpan.org/CPAN/authors/id/T/TU/TURNSTEP/}:
 \begin{lstlisting}[label=lst:bucardo2,caption=Установка]
-tar xvfz DBIx-Safe-1.2.5.tar.gz
-cd DBIx-Safe-1.2.5
-perl Makefile.PL
-make && make test && sudo make install
+$ tar xvfz DBIx-Safe-1.2.5.tar.gz
+$ cd DBIx-Safe-1.2.5
+$ perl Makefile.PL
+$ make && make test && sudo make install
 \end{lstlisting}
 
 Теперь ставим сам Bucardo. Скачиваем\footnote{http://bucardo.org/wiki/Bucardo\#Obtaining\_Bucardo} его и инсталлируем:
 \begin{lstlisting}[label=lst:bucardo3,caption=Установка]
-tar xvfz Bucardo-4.4.0.tar.gz
-cd Bucardo-4.4.0
-perl Makefile.PL
-make
-sudo make install
+$ tar xvfz Bucardo-4.4.0.tar.gz
+$ cd Bucardo-4.4.0
+$ perl Makefile.PL
+$ make
+$ sudo make install
 \end{lstlisting}
 
 Для работы Bucardo потребуется установить поддержку pl/perlu языка PostgreSQL.
 \begin{lstlisting}[label=lst:bucardo4,caption=Установка]
-sudo aptitude install postgresql-plperl-8.4
+$ sudo aptitude install postgresql-plperl-8.4
 \end{lstlisting}
 
 Можем приступать к настройке.
@@ -37,7 +37,7 @@ sudo aptitude install postgresql-plperl-8.4
 \subsubsection{Инициализация Bucardo}
 Запускаем установку командой:
 \begin{lstlisting}[label=lst:bucardo5,caption=Инициализация Bucardo]
-bucardo_ctl install
+$ bucardo_ctl install
 \end{lstlisting}
 
 Bucardo покажет настройки подключения к PostgreSQL, которые можно будет изменить:
@@ -64,9 +64,9 @@ Current connection settings:
 Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo.
 Пусть у нас будет master\_db и slave\_db. Сначала настроим мастер:
 \begin{lstlisting}[label=lst:bucardo7,caption=Настройка баз данных]
-bucardo_ctl add db master_db name=master
-bucardo_ctl add all tables herd=all_tables
-bucardo_ctl add all sequences herd=all_tables
+$ bucardo_ctl add db master_db name=master
+$ bucardo_ctl add all tables herd=all_tables
+$ bucardo_ctl add all sequences herd=all_tables
 \end{lstlisting}
 
 Первой командой мы указали базу данных и дали ей имя master (для того, что в реальной жизни master\_db и slave\_db
@@ -74,7 +74,7 @@ bucardo_ctl add all sequences herd=all_tables
 
 Дальше добавляем slave\_db:
 \begin{lstlisting}[label=lst:bucardo8,caption=Настройка баз данных]
-bucardo_ctl add db slave_db name=replica port=6543 host=slave_host
+$ bucardo_ctl add db slave_db name=replica port=6543 host=slave_host
 \end{lstlisting}
 
 Мы назвали replica базу данных в Bucardo.
@@ -82,7 +82,7 @@ bucardo_ctl add db slave_db name=replica port=6543 host=slave_host
 \subsubsection{Настройка синхронизации}
 Теперь нам нужно настроить синхронизацию между этими базами данных. Делается это командой (master-slave):
 \begin{lstlisting}[label=lst:bucardo9,caption=Настройка синхронизации]
-bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
+$ bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
 \end{lstlisting}
 
 Данной командой мы установим Bucardo триггеры в PostgreSQL. А теперь по параметрам:
@@ -118,18 +118,18 @@ bucardo_ctl add sync delta type=pushdelta source=all_tables targetdb=replica
 
 Для master-master:
 \begin{lstlisting}[label=lst:bucardo10,caption=Настройка синхронизации]
-bucardo_ctl add sync delta type=swap source=all_tables targetdb=replica
+$ bucardo_ctl add sync delta type=swap source=all_tables targetdb=replica
 \end{lstlisting}
 
 \subsubsection{Запуск/Остановка репликации}
 Запуск репликации:
 \begin{lstlisting}[label=lst:bucardo11,caption=Запуск репликации]
-bucardo_ctl start
+$ bucardo_ctl start
 \end{lstlisting}
 
 Остановка репликации:
 \begin{lstlisting}[label=lst:bucardo12,caption=Остановка репликации]
-bucardo_ctl stop
+$ bucardo_ctl stop
 \end{lstlisting}
 
 \subsection{Общие задачи}
@@ -137,22 +137,22 @@ bucardo_ctl stop
 \subsubsection{Просмотр значений конфигурации}
 Просто используя эту команду:
 \begin{lstlisting}[label=lst:bucardo13,caption=Просмотр значений конфигурации]
-bucardo_ctl show all
+$ bucardo_ctl show all
 \end{lstlisting}
 
 \subsubsection{Изменения значений конфигурации}
 \begin{lstlisting}[label=lst:bucardo14,caption=Изменения значений конфигурациии]
-bucardo_ctl set name=value
+$ bucardo_ctl set name=value
 \end{lstlisting}
 
 Например:
 \begin{lstlisting}[label=lst:bucardo15,caption=Изменения значений конфигурации]
-bucardo_ctl set syslog_facility=LOG_LOCAL3
+$ bucardo_ctl set syslog_facility=LOG_LOCAL3
 \end{lstlisting}
 
 \subsubsection{Перегрузка конфигурации}
 \begin{lstlisting}[label=lst:bucardo16,caption=Перегрузка конфигурации]
-bucardo_ctl reload_config
+$ bucardo_ctl reload_config
 \end{lstlisting}
 
 Более полный список команд~--- \href{http://bucardo.org/wiki/Bucardo\_ctl}{bucardo.org/wiki/Bucardo\_ctl}
