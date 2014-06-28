@@ -1,5 +1,6 @@
 \section{Londiste}
 \label{sec:londiste}
+
 \subsection{Введение}
 Londiste представляет собой движок для организации репликации, написанный на языке python.
 Основные принципы: надежность и простота использования. Из-за этого данное решение имеет меньше функциональности,
@@ -11,12 +12,7 @@ Londiste представляет собой движок для организ�
 \item начальное копирование ничего не блокирует
 \item возможность двухстороннего сравнения таблиц
 \item простота установки
-\end{itemize}
-
-К недостаткам можно отнести:
-\begin{itemize}
-\item отсутствие поддержки каскадной репликации, отказоустойчивости(failover) и переключение между
-серверами (switchover) (все это обещают к \href{http://skytools.projects.postgresql.org/skytools-3.0/doc/skytools3.html}{3 версии реализовать})
+\item поддержка стриминг репликации
 \end{itemize}
 
 
@@ -28,136 +24,166 @@ Londiste представляет собой движок для организ�
 Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет. На таких системах, как Debian или Ubuntu skytools
 можно найти в репозитории пакетов и поставить одной командой:
 \begin{lstlisting}[label=lst:londiste1,caption=Установка]
-sudo aptitude install skytools
+% sudo aptitude install skytools
 \end{lstlisting}
 
-Но все же лучше скачать самую последнюю версию пакета с \href{http://pgfoundry.org/projects/skytools}{официального сайта}.
-На момент написания статьи последняя версия была 2.1.11. Итак, начнем:
+Но системных пакетах может содержатся версия 2.x, которая не поддерживает каскадную репликацию, отказоустойчивость(failover) и переключение между серверами (switchover). По этой причине я не буду её рассматривать. Скачать самую последнюю версию пакета можно с \href{http://pgfoundry.org/projects/skytools}{официального сайта}.
+На момент написания главы последняя версия была 3.2. Итак, начнем:
 
 \begin{lstlisting}[label=lst:londiste2,caption=Установка]
-$ wget http://pgfoundry.org/frs/download.php/2561/skytools-2.1.11.tar.gz
-$ tar zxvf skytools-2.1.11.tar.gz
-$ cd skytools-2.1.11/
-# это для сборки deb пакета
+$ wget http://pgfoundry.org/frs/download.php/3622/skytools-3.2.tar.gz
+$ tar zxvf skytools-3.2.tar.gz
+$ cd skytools-3.2/
+# пакеты для сборки deb
 $ sudo aptitude install build-essential autoconf \
 automake autotools-dev dh-make \
 debhelper devscripts fakeroot xutils lintian pbuilder \
-python-dev yada
-# ставим пакет исходников для postgresql 8.4.x
-$ sudo aptitude install postgresql-server-dev-8.4
+python-all-dev python-support xmlto asciidoc \
+libevent-dev libpq-dev libtool
 # python-psycopg нужен для работы Londiste
-$ sudo aptitude install python-psycopg2
-# данной командой я собираю deb пакет для
-# postgresql 8.4.x (для 8.3.x например будет "make deb83")
-$ sudo make deb84
+$ sudo aptitude install python-psycopg2 postgresql-server-dev-all
+# данной командой собираем deb пакет
+$ make deb
 $ cd ../
 # ставим skytools
-$ dpkg -i skytools-modules-8.4_2.1.11_i386.deb
-skytools_2.1.11_i386.deb
+$ dpkg -i python-pgq3_3.2_amd64.deb python-skytools3_3.2_amd64.deb \
+skytools3_3.2_amd64.deb postgresql-9.3-pgq3_3.2_amd64.deb \
+skytools3-ticker_3.2_amd64.deb skytools3-walmgr_3.2_amd64.deb
 \end{lstlisting}
 
-Для других систем можно собрать Skytools командами
+Для других систем можно собрать Skytools командами:
 
 \begin{lstlisting}[label=lst:londiste3,caption=Установка]
-$ $./configure
+$ ./configure
 $ make
 $ make install
 \end{lstlisting}
 
 Дальше проверим, что все у нас правильно установилось
 \begin{lstlisting}[label=lst:londiste4,caption=Установка]
-$ londiste.py -V
-Skytools version 2.1.11
-$ pgqadm.py -V
-Skytools version 2.1.11
+$ londiste3 -V
+londiste3, Skytools version 3.2
+$ pgqd -V
+bad switch: usage: pgq-ticker [switches] config.file
+Switches:
+  -v        Increase verbosity
+  -q        No output to console
+  -d        Daemonize
+  -h        Show help
+  -V        Show version
+ --ini      Show sample config file
+  -s        Stop - send SIGINT to running process
+  -k        Kill - send SIGTERM to running process
+  -r        Reload - send SIGHUP to running process
 \end{lstlisting}
 
 Если у Вас похожий вывод, значит все установлено правильно и можно приступать к настройке.
 
 
 \subsection{Настройка}
+
 Обозначения:
 \begin{itemize}
-\item host1~--- мастер;
-\item host2~--- слейв;
+  \item master-host~--- мастер база данных;
+  \item slave1-host, slave2-host~--- слейв базы данных;
+  \item l3simple - название реплицируемой базы данных;
 \end{itemize}
 
-
-\subsubsection{Настройка ticker-а}
-Londiste требуется ticker для работы с мастер базой данных, который может быть запущен и на другой машине.
-Но, конечно, лучше его запускать на той же, где и мастер база данных. Для этого мы настраиваем специальный
-конфиг для ticker-а (пусть конфиг будет у нас /etc/skytools/db1-ticker.ini):
-\begin{lstlisting}[label=lst:londiste5,caption=Настройка ticker-а]
-[pgqadm]
-# название
-job_name = db1-ticker
-
-# мастер база данных
-db = dbname=P host=host1
-
-# Задержка между запусками обслуживания
-# (ротация очередей и т.п.) в секундах
-maint_delay = 600
+\subsubsection{Создаём конфигурацию репликатора}
+Для начала создадим конфигурационный файл для master базы
+(пусть конфиг будет у нас /etc/skytools/master-londiste.ini):
+\begin{lstlisting}[label=lst:londiste-replica1,caption=Создаём конфигурацию репликатора]
+[londiste3]
+job_name = master_l3simple
+db = dbname=l3simple
+queue_name = replika
+logfile = /var/log/skytools/master_l3simple.log
+pidfile = /var/pid/skytools/master_l3simple.pid
 
 # Задержка между проверками наличия активности
 # (новых пакетов данных) в секундах
-loop_delay = 0.1
-
-# log и pid демона
-logfile = /var/log/%(job_name)s.log
-pidfile = /var/pid/%(job_name)s.pid
+loop_delay = 0.5
 \end{lstlisting}
 
-Теперь необходимо инсталлировать служебный код (SQL) и запустить ticker как демона для базы данных.
-Делается это с помощью утилиты pgqadm.py следующими командами:
-\begin{lstlisting}[label=lst:londiste6,caption=Настройка ticker-а]
-pgqadm.py /etc/skytools/db1-ticker.ini install
-pgqadm.py /etc/skytools/db1-ticker.ini ticker -d
+Инициализируем Londiste для master базы:
+
+\begin{lstlisting}[label=lst:londiste-replica2,caption=Инициализируем Londiste]
+$ londiste3 /etc/skytools/master-londiste.ini create-root master-node "dbname=l3simple host=127.0.0.1"
+INFO plpgsql is installed
+INFO Installing pgq
+INFO   Reading from /usr/share/skytools3/pgq.sql
+INFO pgq.get_batch_cursor is installed
+INFO Installing pgq_ext
+INFO   Reading from /usr/share/skytools3/pgq_ext.sql
+INFO Installing pgq_node
+INFO   Reading from /usr/share/skytools3/pgq_node.sql
+INFO Installing londiste
+INFO   Reading from /usr/share/skytools3/londiste.sql
+INFO londiste.global_add_table is installed
+INFO Initializing node
+INFO Location registered
+INFO Node "master-node" initialized for queue "replika" with type "root"
+INFO Done
 \end{lstlisting}
 
-Проверим, что в логах (/var/log/skytools/db1-tickers.log) всё нормально. На данном этапе там должны быть редкие записи (раз в минуту).
+master-server~--- это имя провайдера (мастера базы).
 
-Если нам потребуется остановить ticker, мы можем воспользоваться этой командой:
-\begin{lstlisting}[label=lst:londiste7,caption=Настройка ticker-а]
-pgqadm.py /etc/skytools/db1-ticker.ini ticker -s
+Теперь можем запустить демон:
+
+\begin{lstlisting}[label=lst:londiste-replica3,caption=Запускаем демон для master базы]
+$ londiste3 -d /etc/skytools/master-londiste.ini worker
+$ tail -f /var/log/skytools/master_l3simple.log
+INFO {standby: 1}
+INFO {standby: 1}
 \end{lstlisting}
-или если потребуется <<убить>> ticker:
-\begin{lstlisting}[label=lst:londiste8,caption=Настройка ticker-а]
-pgqadm.py /etc/skytools/db1-ticker.ini ticker -k
+
+Если нужно перегрузить ticker (например, изменили конфиг), то можно воспользоватся параметром <<-r>>:
+
+\begin{lstlisting}[label=lst:londiste-replica4,caption=Перегрузка ticker]
+$ londiste3 /etc/skytools/master-londiste.ini -r
 \end{lstlisting}
+
+Для остановки ticker есть параметр <<-s>>:
+\begin{lstlisting}[label=lst:londiste-replica5,caption=Остановка ticker]
+$ londiste3 /etc/skytools/master-londiste.ini -s
+\end{lstlisting}
+
+или если потребуется <<убить>> (kill -9) демон:
+\begin{lstlisting}[label=lst:londiste-replica6,caption=Остановка ticker]
+$ londiste3 /etc/skytools/master-londiste.ini -k
+\end{lstlisting}
+
+Для автоматизации этого процесса skytools3 имеет встроенный демон, который подымает все воркеры из директории /etc/skytools/. Сама конфигурация демона находится в /etc/skytools.ini. Что бы запустить ticker достаточно выполнить:
+
+\begin{lstlisting}[label=lst:londiste-replica7,caption=Демон для ticker]
+$ /etc/init.d/skytools3 start
+INFO Starting master_l3simple
+\end{lstlisting}
+
+Перейдем к slave базе.
+
 
 \subsubsection{Восстанавливаем схему базы}
 Londiste не умеет переносить изменения структуры базы данных.
-Поэтому на всех slave базах данных перед репликацией должна быть создана такая же структура БД, что и на мастере.
+Поэтому на всех slave базах перед репликацией должна быть создана такая же структура БД, что и на мастере. Пример копирования структуры базы:
 
-\subsubsection{Создаём конфигурацию репликатора}
-Для каждой из реплицируемых баз создадим конфигурационные файлы
-(пусть конфиг будет у нас /etc/skytools/db1-londiste.ini):
-\begin{lstlisting}[label=lst:londiste9,caption=Создаём конфигурацию репликатора]
-[londiste]
-# название
-job_name = db1-londiste
-
-# мастер база данных
-provider_db = dbname=db1 port=5432 host=host1
-# слейв база данных
-subscriber_db = dbname=db1 host=host2
-
-# Это будет использоваться в качестве
-# SQL-идентификатора, т.ч. не используйте
-# точки и пробелы.
-# ВАЖНО! Если есть живая репликация на другой слейв,
-# именуем очередь так-же
-pgq_queue_name = db1-londiste-queue
-
-# log и pid демона
-logfile = /var/log/%(job_name)s.log
-pidfile = /var/run/%(job_name)s.pid
-
-# рзмер лога
-log_size = 5242880
-log_count = 3
+\begin{lstlisting}[label=lst:londiste-schema1,caption=Копирования структуры базы]
+$ pg_dump -s l3simple | psql -h slave1-host -U postgres l3simple
+$ pg_dump -s l3simple | psql -h slave2-host -U postgres l3simple
 \end{lstlisting}
+
+Подключение должно быть <<trust>> между master и slave базами данных.
+
+
+
+
+
+
+
+
+
+
+
 
 \subsubsection{Устанавливаем Londiste в базы на мастере и слейве}
 Теперь необходимо установить служебный SQL для каждой из созданных в предыдущем
@@ -223,7 +249,7 @@ less /var/log/db1-londiste.log
 \end{lstlisting}
 
 Если всё хорошо, смотрим состояние репликации. Данные уже синхронизированы для
-тех таблиц, где статус отображается как "ok".
+тех таблиц, где статус отображается как <<ok>>.
 \begin{lstlisting}[label=lst:londiste18,caption=Проверка]
 londiste.py /etc/skytools/db1-londiste.ini subscriber tables
 
