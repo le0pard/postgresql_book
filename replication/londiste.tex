@@ -89,7 +89,7 @@ Switches:
 Обозначения:
 \begin{itemize}
   \item master-host~--- мастер база данных;
-  \item slave1-host, slave2-host~--- слейв базы данных;
+  \item slave1-host, slave2-host, slave3-host, slave4-host~--- слейв базы данных;
   \item l3simple - название реплицируемой базы данных;
 \end{itemize}
 
@@ -308,7 +308,7 @@ master-node (root)
   \item z - количество таблиц в состоянии ignored (table not replicated locally), у master должно быть 0, а у slave базах это количество таблиц, которые не добавлены для репликации с мастера (т.е. master отдает на репликацию эту таблицу, но slave их просто не забирает);
 \end{itemize}
 
-Через небольшой интервал времени все таблици синхронизировались:
+Через небольшой интервал времени все таблици должны синхронизироватся:
 
 \begin{lstlisting}[label=lst:londiste-replica16,caption=Статус кластера]
 $ londiste3 /etc/skytools/master-londiste.ini status
@@ -361,7 +361,169 @@ INFO {count: 36, duration: 0.0157, idle: 2.0191}
 
 \subsubsection{Каскадная репликация}
 
-TODO
+Каскадная репликация позволяет реплицировать данные с одного слейва на другой. Создадим конфиг для второго slave (пусть конфиг будет у нас /etc/skytools/slave2-londiste.ini):
+
+\begin{lstlisting}[label=lst:londiste-cascade1,caption=Конфиг для slave2]
+[londiste3]
+job_name = slave2_l3simple
+db = dbname=l3simple host=slave2-host
+queue_name = replika
+logfile = /var/log/skytools/slave2_l3simple.log
+pidfile = /var/pid/skytools/slave2_l3simple.pid
+
+# Задержка между проверками наличия активности
+# (новых пакетов данных) в секундах
+loop_delay = 0.5
+\end{lstlisting}
+
+Для создания slave, от которого можно реплицировать другие базы данных используется команда <<create-branch>> вместо <<create-leaf>>:
+
+\begin{lstlisting}[label=lst:londiste-cascade2,caption=Инициализируем slave2]
+$ psql -hslave2-host -d postgres -c "CREATE DATABASE l3simple;"
+$ pg_dump -s -npublic l3simple | psql -hslave2-host l3simple
+$ londiste3 /etc/skytools/slave2-londiste.ini create-branch slave2-node "dbname=l3simple host=slave2-host" --provider="dbname=l3simple host=master-host"
+INFO plpgsql is installed
+INFO Installing pgq
+INFO   Reading from /usr/share/skytools3/pgq.sql
+INFO pgq.get_batch_cursor is installed
+INFO Installing pgq_ext
+INFO   Reading from /usr/share/skytools3/pgq_ext.sql
+INFO Installing pgq_node
+INFO   Reading from /usr/share/skytools3/pgq_node.sql
+INFO Installing londiste
+INFO   Reading from /usr/share/skytools3/londiste.sql
+INFO londiste.global_add_table is installed
+INFO Initializing node
+INFO Location registered
+INFO Location registered
+INFO Subscriber registered: slave2-node
+INFO Location registered
+INFO Location registered
+INFO Location registered
+INFO Node "slave2-node" initialized for queue "replika" with type "branch"
+INFO Done
+\end{lstlisting}
+
+Далее добавляем все таблици и последовательности:
+
+\begin{lstlisting}[label=lst:londiste-cascade3,caption=Инициализируем slave2]
+$ londiste3 /etc/skytools/slave2-londiste.ini add-table --all
+$ londiste3 /etc/skytools/slave2-londiste.ini add-seq --all
+\end{lstlisting}
+
+И запускаем новый демон:
+
+\begin{lstlisting}[label=lst:londiste-cascade4,caption=Инициализируем slave2]
+$ /etc/init.d/skytools3 start
+INFO Starting master_l3simple
+INFO Starting slave1_l3simple
+INFO Starting slave2_l3simple
+INFO Starting pgqd
+LOG Starting pgqd 3.2
+\end{lstlisting}
+
+Повторим вышеперечисленные операции для slave3 и slave4, только поменяем provider для них:
+
+\begin{lstlisting}[label=lst:londiste-cascade5,caption=Инициализируем slave3 и slave4]
+$ londiste3 /etc/skytools/slave3-londiste.ini create-branch slave3-node "dbname=l3simple host=slave3-host" --provider="dbname=l3simple host=slave2-host"
+$ londiste3 /etc/skytools/slave4-londiste.ini create-branch slave4-node "dbname=l3simple host=slave4-host" --provider="dbname=l3simple host=slave3-host"
+\end{lstlisting}
+
+В результате получаем такую картину с кластером:
+
+\begin{lstlisting}[label=lst:londiste-cascade6,caption=Кластер с каскадной репликацией]
+$ londiste3 /etc/skytools/slave4-londiste.ini status
+Queue: replika   Local node: slave4-node
+
+master-node (root)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave1-node (leaf)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave2-node (branch)
+     |                             Tables: 4/0/0
+     |                             Lag: 9s, Tick: 49
+     +--: slave3-node (branch)
+        |                          Tables: 4/0/0
+        |                          Lag: 9s, Tick: 49
+        +--: slave4-node (branch)
+                                   Tables: 4/0/0
+                                   Lag: 9s, Tick: 49
+\end{lstlisting}
+
+Londiste позволяет <<на лету>> изменять топологию кластера. Например, изменим <<provider>> для slave4:
+
+\begin{lstlisting}[label=lst:londiste-cascade7,caption=Изменяем топологию]
+$ londiste3 /etc/skytools/slave4-londiste.ini change-provider --provider="dbname=l3simple host=slave2-host"
+$ londiste3 /etc/skytools/slave4-londiste.ini status
+Queue: replika   Local node: slave4-node
+
+master-node (root)
+  |                                Tables: 4/0/0
+  |                                Lag: 12s, Tick: 56
+  +--: slave1-node (leaf)
+  |                                Tables: 4/0/0
+  |                                Lag: 12s, Tick: 56
+  +--: slave2-node (branch)
+     |                             Tables: 4/0/0
+     |                             Lag: 12s, Tick: 56
+     +--: slave3-node (branch)
+     |                             Tables: 4/0/0
+     |                             Lag: 12s, Tick: 56
+     +--: slave4-node (branch)
+                                   Tables: 4/0/0
+                                   Lag: 12s, Tick: 56
+\end{lstlisting}
+
+Также топологию можно менять с сторони репликатора через команду <<takeover>>:
+
+\begin{lstlisting}[label=lst:londiste-cascade8,caption=Изменяем топологию]
+$ londiste3 /etc/skytools/slave3-londiste.ini takeover slave4-node
+$ londiste3 /etc/skytools/slave4-londiste.ini status
+Queue: replika   Local node: slave4-node
+
+master-node (root)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave1-node (leaf)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave2-node (branch)
+     |                             Tables: 4/0/0
+     |                             Lag: 9s, Tick: 49
+     +--: slave3-node (branch)
+        |                          Tables: 4/0/0
+        |                          Lag: 9s, Tick: 49
+        +--: slave4-node (branch)
+                                   Tables: 4/0/0
+                                   Lag: 9s, Tick: 49
+\end{lstlisting}
+
+Через команду <<drop-node>> можно удалить slave из кластера:
+
+\begin{lstlisting}[label=lst:londiste-cascade9,caption=Удаляем ноду]
+$ londiste3 /etc/skytools/slave4-londiste.ini drop-node slave4-node
+$ londiste3 /etc/skytools/slave3-londiste.ini status
+Queue: replika   Local node: slave3-node
+
+master-node (root)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave1-node (leaf)
+  |                                Tables: 4/0/0
+  |                                Lag: 9s, Tick: 49
+  +--: slave2-node (branch)
+     |                             Tables: 4/0/0
+     |                             Lag: 9s, Tick: 49
+     +--: slave3-node (branch)
+                                   Tables: 4/0/0
+                                   Lag: 9s, Tick: 49
+\end{lstlisting}
+
+Команда <<tag-dead>> может использоваться, что бы указать slave как не живой (прекратить на него репликацию), а через команду <<tag-alive>> его можно вернуть в кластер.
+
+
 
 
 \subsection{Общие задачи}
