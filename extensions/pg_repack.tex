@@ -21,21 +21,22 @@
 
 Выполнить команду CLUSTER всех кластерных таблиц и VACUUM FULL для всех не кластерных таблиц в test базе данных:
 
-\begin{lstlisting}[label=lst:pgrepack1]
+\begin{lstlisting}[language=Bash,label=lst:pgrepack1]
 $ pg_repack test
 \end{lstlisting}
 
 Выполните команду VACUUM FULL на foo и bar таблицах в test базе данных (кластеризация таблиц игнорируется):
 
-\begin{lstlisting}[label=lst:pgrepack2]
+\begin{lstlisting}[language=Bash,label=lst:pgrepack2]
 $ pg_repack --no-order --table foo --table bar test
 \end{lstlisting}
 
 Переместить все индексы таблицы foo в неймспейс tbs:
 
-\begin{lstlisting}[label=lst:pgrepack3]
+\begin{lstlisting}[language=Bash,label=lst:pgrepack3]
 $ pg_repack -d test --table foo --only-indexes --tablespace tbs
 \end{lstlisting}
 
 \subsection{Заключение}
+
 Pg\_repack~--- расширение, которое может помочь в больбе с <<table bloat>> в PostgreSQL <<на лету>>.
