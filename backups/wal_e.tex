@@ -1,38 +1,39 @@
 \subsection{WAL-E}
 \textbf{Ссылка}: \href{https://github.com/wal-e/wal-e}{github.com/wal-e/wal-e}
 
-WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием pg\_start\_backup и pg\_stop\_backup. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
+WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием \lstinline!pg_start_backup! и \lstinline!pg_stop_backup!. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
 
 \subsubsection{Установка}
 
 У WAL-E есть пару зависимостей: lzop, psql, pv (в старых версиях используется mbuffer), python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0, azure). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
 
-\begin{lstlisting}[label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
+\begin{lstlisting}[language=Bash,label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
 # PostgreSQL уже установлен
-aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
+$ aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
 \end{lstlisting}
 
 Теперь установим WAL-E:
 
-\begin{lstlisting}[label=lst:wal-e2,caption=Установка WAL-E]
-pip install https://github.com/wal-e/wal-e/archive/v0.7a1.tar.gz
+\begin{lstlisting}[language=Bash,label=lst:wal-e2,caption=Установка WAL-E]
+$ pip install https://github.com/wal-e/wal-e/archive/v0.7a1.tar.gz
 \end{lstlisting}
 
 После успешной установки можно начать работать с WAL-E.
 
 \subsubsection{Настройка и работа}
+
 Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>> (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базы данных в S3:
 
-\begin{lstlisting}[label=lst:wal-e3,caption=Загрузка бэкапа всей базы данных в S3]
+\begin{lstlisting}[language=Bash,label=lst:wal-e3,caption=Загрузка бэкапа всей базы данных в S3]
 AWS_SECRET_ACCESS_KEY=... wal-e                     \
   -k AWS_ACCESS_KEY_ID                                \
   --s3-prefix=s3://some-bucket/directory/or/whatever  \
   backup-push /var/lib/postgresql/9.2/main
 \end{lstlisting}
 
-Где <<s3-prefix>>~--- URL, который содержит имя S3 бакета (bucket) и путь к папке, куда следует складывать резервные копии. Команда для загрузки WAL-логов на S3:
+Где \lstinline!s3-prefix!~--- URL, который содержит имя S3 бакета (bucket) и путь к папке, куда следует складывать резервные копии. Команда для загрузки WAL-логов на S3:
 
-\begin{lstlisting}[label=lst:wal-e4,caption=Загрузка WAL-логов на S3]
+\begin{lstlisting}[language=Bash,label=lst:wal-e4,caption=Загрузка WAL-логов на S3]
 AWS_SECRET_ACCESS_KEY=... wal-e                     \
   -k AWS_ACCESS_KEY_ID                                \
   --s3-prefix=s3://some-bucket/directory/or/whatever  \
@@ -41,7 +42,7 @@ AWS_SECRET_ACCESS_KEY=... wal-e                     \
 
 Для управления этими переменными окружения можно использовать команду envdir (идет в поставке с daemontools). Для этого создадим envdir каталог:
 
-\begin{lstlisting}[label=lst:wal-e5,caption=WAL-E с envdir]
+\begin{lstlisting}[language=Bash,label=lst:wal-e5,caption=WAL-E с envdir]
 $ mkdir -p /etc/wal-e.d/env
 $ echo "secret-key" > /etc/wal-e.d/env/AWS_SECRET_ACCESS_KEY
 $ echo "access-key" > /etc/wal-e.d/env/AWS_ACCESS_KEY_ID
@@ -51,23 +52,23 @@ $ chown -R root:postgres /etc/wal-e.d
 
 После создания данного каталога появляется возможность запускать WAL-E команды гораздо проще и с меньшим риском случайного использования некорректных значений:
 
-\begin{lstlisting}[label=lst:wal-e6,caption=WAL-E с envdir]
+\begin{lstlisting}[language=Bash,label=lst:wal-e6,caption=WAL-E с envdir]
 $ envdir /etc/wal-e.d/env wal-e backup-push ...
 $ envdir /etc/wal-e.d/env wal-e wal-push ...
 \end{lstlisting}
 
 Теперь настроим PostgreSQL для сбрасывания WAL-логов в S3 c помощью WAL-E. Отредактируем postgresql.conf:
 
-\begin{lstlisting}[label=lst:wal-e7,caption=Настройка PostgreSQL]
+\begin{lstlisting}[language=Bash,label=lst:wal-e7,caption=Настройка PostgreSQL]
 wal_level = hot_standby # или archive, если PostgreSQL < 9.0
 archive_mode = on
 archive_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-push %p'
 archive_timeout = 60
 \end{lstlisting}
 
-Лучше указать полный путь к WAL-E (можно узнать командой <<which wal-e>>), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидеть что-то подобное:
+Лучше указать полный путь к WAL-E (можно узнать командой \lstinline!which wal-e!), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидеть что-то подобное:
 
-\begin{lstlisting}[label=lst:wal-e8,caption=Логи PostgreSQL]
+\begin{lstlisting}[language=Bash,label=lst:wal-e8,caption=Логи PostgreSQL]
 2012-11-07 14:52:19 UTC LOG:  database system was shut down at 2012-11-07 14:51:40 UTC
 2012-11-07 14:52:19 UTC LOG:  database system is ready to accept connections
 2012-11-07 14:52:19 UTC LOG:  autovacuum launcher started
@@ -90,7 +91,7 @@ archive_timeout = 60
 
 Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:
 
-\begin{lstlisting}[label=lst:wal-e9,caption=Загрузка бэкапа всей базы данных в S3]
+\begin{lstlisting}[language=Bash,label=lst:wal-e9,caption=Загрузка бэкапа всей базы данных в S3]
 $ envdir /etc/wal-e.d/env wal-e backup-push /var/lib/postgresql/9.2/main
 2012-11-07T14:49:26.174+00 pid=7493 wal_e.operator.s3_operator INFO     MSG: start upload postgres version metadata
         DETAIL: Uploading to s3://cleverdb-pg-backups/pg/basebackups_005/base_000000010000000000000006_00000032/extended_version.txt.
@@ -120,23 +121,23 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
   \label{fig:wal-e3}
 \end{figure}
 
-Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через lzop\footnote{http://en.wikipedia.org/wiki/Lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтение с жесткого диска бэкапы отправляются через mbuffer (опцией <<cluster-read-rate-limit>> можно ограничить скорость чтения, если это требуется).
+Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через \href{http://en.wikipedia.org/wiki/Lzop}{lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтение с жесткого диска бэкапы отправляются через pv утилиту (опцией \lstinline!cluster-read-rate-limit! можно ограничить скорость чтения, если это требуется).
 
-Теперь перейдем к восстановлению данных. Для восстановления базы из резервной копии используется <<backup-fetch>> команда:
+Теперь перейдем к восстановлению данных. Для восстановления базы из резервной копии используется \lstinline!backup-fetch! команда:
 
-\begin{lstlisting}[label=lst:wal-e10,caption=Восстановление бэкапа базы из S3]
+\begin{lstlisting}[language=Bash,label=lst:wal-e10,caption=Восстановление бэкапа базы из S3]
 $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main LATEST"
 \end{lstlisting}
 
-Где <<LATEST>> означает восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен). Для восстановления из более поздней резервной копии:
+Где \lstinline!LATEST! означает восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен). Для восстановления из более поздней резервной копии:
 
-\begin{lstlisting}[label=lst:wal-e11,caption=Восстановление из поздней резервной копии]
+\begin{lstlisting}[language=Bash,label=lst:wal-e11,caption=Восстановление из поздней резервной копии]
 $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main base_LONGWALNUMBER_POSITION_NUMBER"
 \end{lstlisting}
 
-Для получения списка доступных резервных копий есть команда <<backup-list>>:
+Для получения списка доступных резервных копий есть команда \lstinline!backup-list!:
 
-\begin{lstlisting}[label=lst:wal-e12,caption=Список резервных копий]
+\begin{lstlisting}[language=Bash,label=lst:wal-e12,caption=Список резервных копий]
 $ envdir /etc/wal-e.d/env wal-e backup-list
 name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
 base_000000010000000000000008_00000032	2012-11-07T14:00:07.000Z		000000010000000000000008	00000032
@@ -145,15 +146,15 @@ base_00000001000000000000000C_00000032	2012-11-08T15:00:08.000Z		000000010000000
 
 После завершения работы с основной резервной копией для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния). Для этого используется recovery.conf:
 
-\begin{lstlisting}[label=lst:wal-e13,caption=recovery.conf]
+\begin{lstlisting}[language=Bash,label=lst:wal-e13,caption=recovery.conf]
 restore_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch "%f" "%p"'
 \end{lstlisting}
 
 После создания этого файла нужно запустить PostgreSQL. Через небольшой интервал времени база станет полностью восстановленной.
 
-Для удаления старых резервных копий (или вообще всех) используется команда <<delete>>:
+Для удаления старых резервных копий (или вообще всех) используется команда \lstinline!delete!:
 
-\begin{lstlisting}[label=lst:wal-e14,caption=Удаление резервных копий]
+\begin{lstlisting}[language=Bash,label=lst:wal-e14,caption=Удаление резервных копий]
 # удаления старых бэкапов старше base_00000004000002DF000000A6_03626144
 $ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000000A6_03626144
 # удаления всех бэкапов
@@ -162,7 +163,8 @@ $ envdir /etc/wal-e.d/env wal-e delete --confirm everything
 $ envdir /etc/wal-e.d/env wal-e delete --confirm retain 20
 \end{lstlisting}
 
-Без опции <<confirm>> команды будут запускаться и показывать, что будет удаляться, но фактического удаления не будет производиться (dry run).
+Без опции \lstinline!confirm! команды будут запускаться и показывать, что будет удаляться, но фактического удаления не будет производиться (dry run).
 
 \subsubsection{Заключение}
+
 WAL-E помогает автоматизировать сбор резервных копий с PostgreSQL и хранить их в достаточно дешевом и надежном хранилище~--- Amazon S3.
