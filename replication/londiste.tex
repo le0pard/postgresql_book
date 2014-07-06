@@ -368,7 +368,7 @@ pidfile = /var/pid/skytools/slave2_l3simple.pid
 loop_delay = 0.5
 \end{lstlisting}
 
-Для создания slave, от которого можно реплицировать другие базы данных используется команда <<create-branch>> вместо <<create-leaf>>:
+Для создания slave, от которого можно реплицировать другие базы данных используется команда <<create-branch>> вместо <<create-leaf>> (root, корень - master нода, предоставляет информацию для репликации; branch, ветка - нода с копией данных, с которой можно реплицировать; leaf, лист - нода с копией данными, но реплицировать с нее уже не возможно):
 
 \begin{lstlisting}[label=lst:londiste-cascade2,caption=Инициализируем slave2]
 $ psql -hslave2-host -d postgres -c "CREATE DATABASE l3simple;"
