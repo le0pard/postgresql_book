@@ -52,13 +52,13 @@ $ sudo aptitude install libdbd-pg-perl libboolean-perl
 
 Запускаем установку командой:
 
-\begin{lstlisting}[label=lst:bucardo5,caption=Инициализация Bucardo]
+\begin{lstlisting}[language=Bash,label=lst:bucardo5,caption=Инициализация Bucardo]
 $ bucardo install
 \end{lstlisting}
 
 Bucardo покажет настройки подключения к PostgreSQL, которые можно будет изменить:
 
-\begin{lstlisting}[label=lst:bucardo6,caption=Инициализация Bucardo]
+\begin{lstlisting}[language=Bash,label=lst:bucardo6,caption=Инициализация Bucardo]
 This will install the bucardo database into an existing Postgres cluster.
 Postgres must have been compiled with Perl support,
 and you must connect as a superuser
@@ -109,7 +109,7 @@ Added database "master_db"
 
 Дальше добавляем \lstinline!slave_db!:
 
-\begin{lstlisting}[label=lst:bucardo8,caption=Настройка баз данных]
+\begin{lstlisting}[language=Bash,label=lst:bucardo8,caption=Настройка баз данных]
 $ bucardo add db slave_db dbname=simple_database port=5432 host=slave_host
 \end{lstlisting}
 
@@ -117,7 +117,7 @@ $ bucardo add db slave_db dbname=simple_database port=5432 host=slave_host
 
 Теперь нам нужно настроить синхронизацию между этими базами данных. Делается это командой \lstinline!sync!:
 
-\begin{lstlisting}[label=lst:bucardo9,caption=Настройка репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo9,caption=Настройка репликации]
 $ bucardo add sync delta dbs=master_db:source,slave_db:target conflict_strategy=bucardo_latest tables=all
 Added sync "delta"
 Created a new relgroup named "delta"
@@ -149,19 +149,19 @@ Created a new dbgroup named "delta"
 
 Для master-master репликации:
 
-\begin{lstlisting}[label=lst:bucardo10,caption=Настройка репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo10,caption=Настройка репликации]
 $ bucardo add sync delta dbs=master_db:source,slave_db:source conflict_strategy=bucardo_latest tables=all
 \end{lstlisting}
 
 Пример для создания master-master и master-slave репликации:
 
-\begin{lstlisting}[label=lst:bucardo-master-slave1,caption=Настройка репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo-master-slave1,caption=Настройка репликации]
 $ bucardo add sync delta dbs=master_db1:source,master_db2:source,slave_db1:target,slave_db2:target conflict_strategy=bucardo_latest tables=all
 \end{lstlisting}
 
 Проверка состояния репликации:
 
-\begin{lstlisting}[label=lst:bucardo-master-slave2,caption=Проверка состояния репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo-master-slave2,caption=Проверка состояния репликации]
 $ bucardo status
 PID of Bucardo MCP: 12122
  Name    State    Last good    Time     Last I/D    Last bad    Time
@@ -173,13 +173,13 @@ PID of Bucardo MCP: 12122
 
 Запуск репликации:
 
-\begin{lstlisting}[label=lst:bucardo11,caption=Запуск репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo11,caption=Запуск репликации]
 $ bucardo start
 \end{lstlisting}
 
 Остановка репликации:
 
-\begin{lstlisting}[label=lst:bucardo12,caption=Остановка репликации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo12,caption=Остановка репликации]
 $ bucardo stop
 \end{lstlisting}
 
@@ -187,24 +187,26 @@ $ bucardo stop
 
 \subsubsection{Просмотр значений конфигурации}
 
-\begin{lstlisting}[label=lst:bucardo13,caption=Просмотр значений конфигурации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo13,caption=Просмотр значений конфигурации]
 $ bucardo show all
 \end{lstlisting}
 
 \subsubsection{Изменения значений конфигурации}
 
-\begin{lstlisting}[label=lst:bucardo14,caption=Изменения значений конфигурациии]
+\begin{lstlisting}[language=Bash,label=lst:bucardo14,caption=Изменения значений конфигурациии]
 $ bucardo set name=value
 \end{lstlisting}
 
 Например:
 
-\begin{lstlisting}[label=lst:bucardo15,caption=Изменения значений конфигурации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo15,caption=Изменения значений конфигурации]
 $ bucardo_ctl set syslog_facility=LOG_LOCAL3
 \end{lstlisting}
 
 \subsubsection{Перегрузка конфигурации}
 
-\begin{lstlisting}[label=lst:bucardo16,caption=Перегрузка конфигурации]
+\begin{lstlisting}[language=Bash,label=lst:bucardo16,caption=Перегрузка конфигурации]
 $ bucardo reload_config
 \end{lstlisting}
+
+Более подробную информацию можно найти \href{http://bucardo.org/}{официальном сайте}.
