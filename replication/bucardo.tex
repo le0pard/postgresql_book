@@ -1,5 +1,7 @@
 \section{Bucardo}
+
 \subsection{Введение}
+
 Bucardo~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl. Система очень гибкая, поддерживает несколько видов синхронизации и обработки конфликтов.
 
 \subsection{Установка}
@@ -210,3 +212,86 @@ $ bucardo reload_config
 \end{lstlisting}
 
 Более подробную информацию можно найти на \href{http://bucardo.org/}{официальном сайте}.
+
+
+\subsection{Репликация в другие типы баз данных}
+
+Начиная с версии 5.0 Bucardo поддерживает репликацию в другие источники данных: drizzle, mongo, mysql, oracle, redis и sqlite (тип базы задается при использовании команды \lstinline!bucardo add db! через ключ <<type>>, который по умолчанию postgres). Давайте рассмотрим пример с redis. Для начала потребуется установить redis адаптер для Perl (для других баз устанавливаются соответствующие):
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis1,caption=Установка redis]
+$ aptitude install libredis-perl
+\end{lstlisting}
+
+Далее зарегистрируем redis базу в Bucardo:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis2,caption=Добавление redis базы]
+$ bucardo add db R dbname=simple_database type=redis
+Added database "R"
+\end{lstlisting}
+
+Создадим группу баз данных под названием \lstinline!pg_to_redis!:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis3,caption=Группа баз данных]
+$ bucardo add dbgroup pg_to_redis master_db:source slave_db:source R:target
+Created dbgroup "pg_to_redis"
+Added database "master_db" to dbgroup "pg_to_redis" as source
+Added database "slave_db" to dbgroup "pg_to_redis" as source
+Added database "R" to dbgroup "pg_to_redis" as target
+\end{lstlisting}
+
+И создадим репликацию:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis4,caption=Установка sync]
+$ bucardo add sync pg_to_redis_sync tables=all dbs=pg_to_redis status=active
+Added sync "pg_to_redis_sync"
+  Added table "public.pgbench_accounts"
+  Added table "public.pgbench_branches"
+  Added table "public.pgbench_history"
+  Added table "public.pgbench_tellers"
+\end{lstlisting}
+
+После перезапуска Bucardo данные с PostgreSQL таблиц начнуть реплицироватся в Redis:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis5,caption=Репликация в redis]
+$ pgbench -T 10 -c 5 simple_database
+$ redis-cli monitor
+"HMSET" "pgbench_history:6" "bid" "2" "aid" "36291" "delta" "3716" "mtime" "2014-07-11 14:59:38.454824" "hid" "4331"
+"HMSET" "pgbench_history:2" "bid" "1" "aid" "65179" "delta" "2436" "mtime" "2014-07-11 14:59:38.500896" "hid" "4332"
+"HMSET" "pgbench_history:14" "bid" "2" "aid" "153001" "delta" "-264" "mtime" "2014-07-11 14:59:38.472706" "hid" "4333"
+"HMSET" "pgbench_history:15" "bid" "1" "aid" "195747" "delta" "-1671" "mtime" "2014-07-11 14:59:38.509839" "hid" "4334"
+"HMSET" "pgbench_history:3" "bid" "2" "aid" "147650" "delta" "3237" "mtime" "2014-07-11 14:59:38.489878" "hid" "4335"
+"HMSET" "pgbench_history:15" "bid" "1" "aid" "39521" "delta" "-2125" "mtime" "2014-07-11 14:59:38.526317" "hid" "4336"
+"HMSET" "pgbench_history:14" "bid" "2" "aid" "60105" "delta" "2555" "mtime" "2014-07-11 14:59:38.616935" "hid" "4337"
+"HMSET" "pgbench_history:15" "bid" "2" "aid" "186655" "delta" "930" "mtime" "2014-07-11 14:59:38.541296" "hid" "4338"
+"HMSET" "pgbench_history:15" "bid" "1" "aid" "101406" "delta" "668" "mtime" "2014-07-11 14:59:38.560971" "hid" "4339"
+"HMSET" "pgbench_history:15" "bid" "2" "aid" "126329" "delta" "-4236" "mtime" "2014-07-11 14:59:38.5907" "hid" "4340"
+"DEL" "pgbench_tellers:20"
+\end{lstlisting}
+
+Данные в Redis хранятся в виде хешей:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis6,caption=Данные в redis]
+$ redis-cli "HGETALL" "pgbench_history:15"
+ 1) "bid"
+ 2) "2"
+ 3) "aid"
+ 4) "126329"
+ 5) "delta"
+ 6) "-4236"
+ 7) "mtime"
+ 8) "2014-07-11 14:59:38.5907"
+ 9) "hid"
+10) "4340"
+\end{lstlisting}
+
+Также можно проверить состояние репликации:
+
+\begin{lstlisting}[language=Bash,label=lst:bucardo-redis6,caption=Установка redis]
+$ bucardo status
+PID of Bucardo MCP: 4655
+ Name               State    Last good    Time     Last I/D    Last bad    Time
+==================+========+============+========+===========+===========+========
+ delta            | Good   | 14:59:39   | 8m 15s | 0/0       | none      |
+ pg_to_redis_sync | Good   | 14:59:40   | 8m 14s | 646/2546  | 14:59:39  | 8m 15s
+\end{lstlisting}
+
