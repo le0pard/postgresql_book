@@ -15,7 +15,7 @@ RubyRep представляет собой движок для организа
   \item работа только с двумя базами данных для MySQL;
   \item медленная работа синхронизации;
   \item при больших объемах данных <<ест>> процессор и память;
-  \item проект заброшен;
+  \item проект не развивается и не поддерживается;
 \end{itemize}
 
 
@@ -25,7 +25,7 @@ RubyRep поддерживает два типа установки: через 
 
 \textbf{Установка JRuby версии}
 
-Предварительно должна быть установлена Java (версия 1.6).
+Предварительно должна быть установлена Java.
 
 \begin{enumerate}
  \item загрузите последнюю версию JRuby rubyrep c Rubyforge;
@@ -67,27 +67,27 @@ $ rubyrep generate myrubyrep.conf
 
 Команда generate создала пример конфигурации в файл myrubyrep.conf:
 
-\begin{lstlisting}[label=lst:rubyrep5,caption=Настройка]
+\begin{lstlisting}[language=Ruby,label=lst:rubyrep5,caption=Настройка]
 RR::Initializer::run do |config|
-config.left = {
-:adapter  => 'postgresql', # or 'mysql'
-:database => 'SCOTT',
-:username => 'scott',
-:password => 'tiger',
-:host     => '172.16.1.1'
-}
+  config.left = {
+    :adapter  => 'postgresql', # or 'mysql'
+    :database => 'SCOTT',
+    :username => 'scott',
+    :password => 'tiger',
+    :host     => '172.16.1.1'
+  }
 
-config.right = {
-:adapter  => 'postgresql',
-:database => 'SCOTT',
-:username => 'scott',
-:password => 'tiger',
-:host     => '172.16.1.2'
-}
+  config.right = {
+    :adapter  => 'postgresql',
+    :database => 'SCOTT',
+    :username => 'scott',
+    :password => 'tiger',
+    :host     => '172.16.1.2'
+  }
 
-config.include_tables 'dept'
-config.include_tables /^e/ # regexp matches all tables starting with e
-# config.include_tables /./ # regexp matches all tables
+  config.include_tables 'dept'
+  config.include_tables /^e/ # regexp matches all tables starting with e
+  # config.include_tables /./ # regexp matches all tables
 end
 \end{lstlisting}
 
@@ -119,6 +119,7 @@ $ rubyrep sync -c myrubyrep.conf
 \end{lstlisting}
 
 Также можно указать только какие таблицы в базах данных синхронизировать:
+
 \begin{lstlisting}[label=lst:rubyrep9,caption=Синхронизация баз данных]
 $ rubyrep sync -c myrubyrep.conf dept /^e/
 \end{lstlisting}
