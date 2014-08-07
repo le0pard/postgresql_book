@@ -17,7 +17,7 @@
 
 Для этого достаточно выполнить в консоли:
 
-\begin{lstlisting}[label=lst:pgcache1,caption=Установка из исходников]
+\begin{lstlisting}[language=Bash,label=lst:pgcache1,caption=Установка из исходников]
 $ make
 $ sudo make install
 \end{lstlisting}
@@ -26,18 +26,18 @@ $ sudo make install
 
 Если у Вас на серверах стоит Debian или Ubuntu, то удобнее создать deb пакет нужной программы и распостранать его через собственный репозиторий на все сервера с PostgreSQL:
 
-\begin{lstlisting}[label=lst:pgcache2,caption=Создание и установка deb пакета]
-$ sudo apt-get install libmemcached-dev postgresql-server-dev-8.4 libpq-dev devscripts yada flex bison
-$ make deb84
+\begin{lstlisting}[language=Bash,label=lst:pgcache2,caption=Создание и установка deb пакета]
+$ sudo apt-get install libmemcached-dev postgresql-server-dev-9.2 libpq-dev devscripts yada flex bison
+$ make deb92
 # устанавливаем deb пакет
-$ sudo dpkg -i ../postgresql-pgmemcache-8.4*.deb
+$ sudo dpkg -i ../postgresql-pgmemcache-9.2*.deb
 \end{lstlisting}
 
 Для версии 2.0.4 утилита yada выдавала ошибку при создании deb пакета со следующим текстом:
 
 \begin{lstlisting}[label=lst:pgcache3,caption=Создание и установка deb пакета]
 Cannot recognize source name in 'debian/changelog' at /usr/bin/yada line 145, <CHANGELOG> line 1.
-make: *** [deb84] Ошибка 9
+make: *** [deb92] Ошибка 9
 \end{lstlisting}
 
 Для устранения этой ошибки потребуется удалить первую строчку текста в <<debian/changelog>> в каталоге, котором происходит сборка:
@@ -58,12 +58,13 @@ pgmemcache (2.0.4) unstable; urgency=low
 
 После успешной установки Pgmemcache потребуется добавить во все базы данных (на которых вы хотите использовать Pgmemcache) функции для работы с этой библиотекой:
 
-\begin{lstlisting}[label=lst:pgcache5,caption=Настройка]
+\begin{lstlisting}[language=SQL,label=lst:pgcache5,caption=Настройка]
 % psql [mydbname] [pguser]
-[mydbname]=# BEGIN;
-[mydbname]=# \i /usr/local/postgresql/share/contrib/pgmemcache.sql
-# для Debian: \i /usr/share/postgresql/8.4/contrib/pgmemcache.sql
-[mydbname]=# COMMIT;
+[mydbname]=# CREATE EXTENSION pgmemcache;
+# или
+# BEGIN;
+# \i /usr/share/postgresql/9.2/contrib/pgmemcache.sql
+# COMMIT;
 \end{lstlisting}
 
 Теперь можно добавлять сервера memcached через \lstinline!memcache_server_add! и работать с кэшем. Но есть одно но. Все сервера memcached придется задавать при каждом новом подключении к PostgreSQL. Это ограничение можно обойти, если настроить параметры в postgresql.conf файле:
@@ -204,7 +205,7 @@ stats = memcache\_stats()
 
 Посмотрим работу в СУБД данных функций. Для начала получим информацию по memcached серверах:
 
-\begin{lstlisting}[label=lst:pgcache8,caption=Проверка memcache\_stats]
+\begin{lstlisting}[language=SQL,label=lst:pgcache8,caption=Проверка memcache\_stats]
 pgmemcache=# SELECT memcache_stats();
       memcache_stats
 ---------------------------
@@ -238,7 +239,7 @@ pgmemcache=# SELECT memcache_stats();
 
 Теперь сохраним данные в memcached и попробуем их забрать:
 
-\begin{lstlisting}[label=lst:pgcache9,caption=Проверка]
+\begin{lstlisting}[language=SQL,label=lst:pgcache9,caption=Проверка]
 pgmemcache=# SELECT memcache_add('some_key', 'test_value');
  memcache_add
 --------------
@@ -255,7 +256,7 @@ pgmemcache=# SELECT memcache_get('some_key');
 
 Можно также проверить работу счетчиков в memcached (данный функционал может пригодиться для создания последовательностей):
 
-\begin{lstlisting}[label=lst:pgcache10,caption=Проверка]
+\begin{lstlisting}[language=SQL,label=lst:pgcache10,caption=Проверка]
 pgmemcache=# SELECT memcache_add('some_seq', '10');
  memcache_add
 --------------
@@ -304,7 +305,7 @@ pgmemcache=# SELECT memcache_decr('some_seq', 6);
 
 Например, наше приложение кэширует зашифрованые пароли пользователей в memcached (для более быстрого доступа), и нам требуется обновлять информацию в кэше, если она изменяется в СУБД. Создаем функцию:
 
-\begin{lstlisting}[label=lst:pgcache11,caption=Функция для обновления данных в кэше]
+\begin{lstlisting}[language=SQL,label=lst:pgcache11,caption=Функция для обновления данных в кэше]
 CREATE OR REPLACE FUNCTION auth_passwd_upd() RETURNS TRIGGER AS $$
 	BEGIN
 	IF OLD.passwd != NEW.passwd THEN
@@ -323,7 +324,7 @@ CREATE TRIGGER auth_passwd_upd_trg AFTER UPDATE ON passwd FOR EACH ROW EXECUTE P
 
 Но(!!!) данный пример транзакционно не безопасен~--- при отмене транзации кэш не вернется на старое значение. Поэтому лучше очищать старые данные:
 
-\begin{lstlisting}[label=lst:pgcache13,caption=Очистка ключа в кэше]
+\begin{lstlisting}[language=SQL,label=lst:pgcache13,caption=Очистка ключа в кэше]
 CREATE OR REPLACE FUNCTION auth_passwd_upd() RETURNS TRIGGER AS $$
 BEGIN
 	IF OLD.passwd != NEW.passwd THEN
@@ -335,7 +336,7 @@ END;$$ LANGUAGE 'plpgsql';
 
 Также нужен триггер на чистку кэша при удалении записи из СУБД:
 
-\begin{lstlisting}[label=lst:pgcache14,caption=Триггер]
+\begin{lstlisting}[language=SQL,label=lst:pgcache14,caption=Триггер]
 CREATE TRIGGER auth_passwd_del_trg AFTER DELETE ON passwd FOR EACH ROW EXECUTE PROCEDURE auth_passwd_upd();
 \end{lstlisting}
 
