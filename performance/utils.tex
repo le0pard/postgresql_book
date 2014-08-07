@@ -1,0 +1,162 @@
+\section{Утилиты для тюнинга PostgreSQL}
+
+\subsection{Pgtune}
+
+Для оптимизации настроек для PostgreSQL Gregory Smith создал утилиту \href{http://pgtune.projects.postgresql.org/}{pgtune} в расчёте на обеспечение максимальной производительности для заданной аппаратной конфигурации. Утилита проста в использовании и во многих Linux системах может идти в составе пакетов. Если же нет, можно просто скачать архив и распаковать. Для начала:
+
+\begin{lstlisting}[language=Bash,label=lst:pgtune_settings1,caption=Pgtune]
+$ pgtune -i $PGDATA/postgresql.conf -o $PGDATA/postgresql.conf.pgtune
+\end{lstlisting}
+
+опцией \lstinline!-i, --input-config! указываем текущий файл postgresql.conf, а \lstinline!-o, --output-config! указываем имя файла для нового postgresql.conf.
+
+Есть также дополнительные опции для настройки конфига:
+
+\begin{itemize}
+  \item \lstinline!-M, --memory! используйте этот параметр, чтобы определить общий объем системной памяти. Если не указано, pgtune будет пытаться использовать текущий объем системной памяти;
+  \item \lstinline!-T, --type! указывает тип базы данных. Опции: DW,  OLTP,  Web, Mixed, Desktop;
+  \item \lstinline!-c, --connections! указывает максимальное количество соединений. Если он не указан, то будет браться в зависимости от типа базы данных.
+\end{itemize}
+
+Существует также \href{http://pgtune.leopard.in.ua/}{онлайн версия pgtune}.
+
+Хочется сразу добавить, что pgtune не панацея для оптимизации настройки PostgreSQL. Многие настройки зависят не только от аппаратной конфигурации, но и от размера базы данных, числа соединений и сложности запросов, так что оптимально настроить базу данных возможно только учитывая все эти параметры.
+
+
+\subsection{pg\_buffercache}
+
+\href{http://www.postgresql.org/docs/current/static/pgbuffercache.html}{Pg\_buffercache}~--- расширение для PostgreSQL, которое позволяет получить представление об использовании общего буфера (\lstinline!shared_buffer!) в базе. Расширение позволяет взглянуть какие из данных кэширует база, которые активно используются в запросах. Для начала нужно установить расширение:
+
+\begin{lstlisting}[language=SQL,label=lst:pgbuffercache1,caption=pg\_buffercache]
+# CREATE EXTENSION pg_buffercache;
+\end{lstlisting}
+
+Теперь доступно \lstinline!pg_buffercache! представление, которое содержит:
+
+\begin{itemize}
+  \item \lstinline!bufferid!~--- ID блока в общем буфере;
+  \item \lstinline!relfilenode!~--- имя папки, где данные расположены;
+  \item \lstinline!reltablespace!~--- Oid таблицы;
+  \item \lstinline!reldatabase!~--- Oid базы данных;
+  \item \lstinline!relforknumber!~--- номер ответвления;
+  \item \lstinline!relblocknumber!~--- номер страницы;
+  \item \lstinline!isdirty!~--- грязная страница?;
+  \item \lstinline!usagecount!~--- количество LRU страниц.
+\end{itemize}
+
+ID блока в общем буфере (\lstinline!bufferid!) соответствует количеству используемого буфера таблицей, индексом, прочим. Общее количество доступных буферов определяется двумя вещами:
+
+\begin{itemize}
+  \item Размер буферного блока. Этот размер блока определяется опцией \lstinline!--with-blocksize! при конфигурации. Значение по умолчанию~--- 8 КБ, что достаточно в большинстве случаев, но его возможно увеличить или уменьшить в зависимости от ситуации. Для того чтобы изменить это значение, необходимо будет перекомпилировать PostgreSQL;
+  \item Размер общего буфера. Определяемой опцией \lstinline!shared_buffers! в PostgreSQL конфиге.
+\end{itemize}
+
+Например, при использовании \lstinline!shared_buffers! в 128 МБ с 8 КБ размера блока получится 16384 буферов. Представление pg\_buffercache будет иметь такое же число строк~--- 16384. С \lstinline!shared_buffers! в 256 МБ и размером блока в 1 КБ получим 262144 буферов.
+
+Для примера рассмотрим простой запрос показывающий использование буферов объектами (таблицами, индексами, прочим):
+
+\begin{lstlisting}[language=SQL,label=lst:pgbuffercache2,caption=pg\_buffercache]
+# SELECT c.relname, count(*) AS buffers
+FROM pg_buffercache b INNER JOIN pg_class c
+ON b.relfilenode = pg_relation_filenode(c.oid) AND
+b.reldatabase IN (0, (SELECT oid FROM pg_database WHERE datname = current_database()))
+GROUP BY c.relname
+ORDER BY 2 DESC
+LIMIT 10;
+
+             relname             | buffers
+---------------------------------+---------
+ pgbench_accounts                |    4082
+ pgbench_history                 |      53
+ pg_attribute                    |      23
+ pg_proc                         |      14
+ pg_operator                     |      11
+ pg_proc_oid_index               |       9
+ pg_class                        |       8
+ pg_attribute_relid_attnum_index |       7
+ pg_proc_proname_args_nsp_index  |       6
+ pg_class_oid_index              |       5
+(10 rows)
+\end{lstlisting}
+
+Этот запрос показывает объекты (таблицы и индексы) в кэше:
+
+\begin{lstlisting}[language=SQL,label=lst:pgbuffercache3,caption=pg\_buffercache]
+# SELECT c.relname, count(*) AS buffers,usagecount
+ FROM pg_class c
+ INNER JOIN pg_buffercache b
+ ON b.relfilenode = c.relfilenode
+ INNER JOIN pg_database d
+ ON (b.reldatabase = d.oid AND d.datname = current_database())
+GROUP BY c.relname,usagecount
+ORDER BY c.relname,usagecount;
+
+             relname              | buffers | usagecount
+----------------------------------+---------+------------
+ pg_rewrite                       |       3 |          1
+ pg_rewrite_rel_rulename_index    |       1 |          1
+ pg_rewrite_rel_rulename_index    |       1 |          2
+ pg_statistic                     |       1 |          1
+ pg_statistic                     |       1 |          3
+ pg_statistic                     |       2 |          5
+ pg_statistic_relid_att_inh_index |       1 |          1
+ pg_statistic_relid_att_inh_index |       3 |          5
+ pgbench_accounts                 |    4082 |          2
+ pgbench_accounts_pkey            |       1 |          1
+ pgbench_history                  |      53 |          1
+ pgbench_tellers                  |       1 |          1
+\end{lstlisting}
+
+Это запрос показывает какой процент общего буфера используют обьекты (таблицы и индексы) и на сколько процентов объекты находятся в самом кэше (буфере):
+
+\begin{lstlisting}[language=SQL,label=lst:pgbuffercache4,caption=pg\_buffercache]
+# SELECT
+ c.relname,
+ pg_size_pretty(count(*) * 8192) as buffered,
+ round(100.0 * count(*) /
+ (SELECT setting FROM pg_settings WHERE name='shared_buffers')::integer,1)
+ AS buffers_percent,
+ round(100.0 * count(*) * 8192 / pg_table_size(c.oid),1)
+ AS percent_of_relation
+FROM pg_class c
+ INNER JOIN pg_buffercache b
+ ON b.relfilenode = c.relfilenode
+ INNER JOIN pg_database d
+ ON (b.reldatabase = d.oid AND d.datname = current_database())
+GROUP BY c.oid,c.relname
+ORDER BY 3 DESC
+LIMIT 20;
+
+-[ RECORD 1 ]-------+---------------------------------
+ relname             | pgbench_accounts
+ buffered            | 32 MB
+ buffers_percent     | 24.9
+ percent_of_relation | 99.9
+-[ RECORD 2 ]-------+---------------------------------
+ relname             | pgbench_history
+ buffered            | 424 kB
+ buffers_percent     | 0.3
+ percent_of_relation | 94.6
+-[ RECORD 3 ]-------+---------------------------------
+ relname             | pg_operator
+ buffered            | 88 kB
+ buffers_percent     | 0.1
+ percent_of_relation | 61.1
+-[ RECORD 4 ]-------+---------------------------------
+ relname             | pg_opclass_oid_index
+ buffered            | 16 kB
+ buffers_percent     | 0.0
+ percent_of_relation | 100.0
+-[ RECORD 5 ]-------+---------------------------------
+ relname             | pg_statistic_relid_att_inh_index
+ buffered            | 32 kB
+ buffers_percent     | 0.0
+ percent_of_relation | 100.0
+-[ RECORD 6 ]-------+---------------------------------
+ relname             | pg_namespace
+ buffered            | 8192 bytes
+ buffers_percent     | 0.0
+ percent_of_relation | 20.0
+\end{lstlisting}
+
+Используя эти данные можно проанализировать для каких объектов не хватает памяти или какие из них потребляют большую долю общего буфера. На основе этих данных можно более правильно производить тюнинг \lstinline!shared_buffers! параметра для PostgreSQL.
