@@ -4,13 +4,16 @@
 HStore~-- расширение, которое реализует тип данных для хранения ключ/значение в пределах одного значения в PostgreSQL (например, в одном текстовом поле). Это может быть полезно в различных ситуациях, таких как строки с многими атрибутами, которые редко вибираются, или полу-структурированные данные. Ключи и значения являются простыми текстовыми строками.
 
 \subsection{Пример использования}
+
 Для начала активируем расширение:
-\begin{lstlisting}[label=lst:hstore1,caption=Активация hstore]
+
+\begin{lstlisting}[language=SQL,label=lst:hstore1,caption=Активация hstore]
 # CREATE EXTENSION hstore;
 \end{lstlisting}
 
 Проверим работу расширения:
-\begin{lstlisting}[label=lst:hstore2,caption=Проверка hstore]
+
+\begin{lstlisting}[language=SQL,label=lst:hstore2,caption=Проверка hstore]
 # SELECT 'a=>1,a=>2'::hstore;
   hstore
 ----------
@@ -20,7 +23,7 @@ HStore~-- расширение, которое реализует тип дан�
 
 Как видно на листинге~\ref{lst:hstore2} ключи в hstore уникальны. Создадим таблицу и заполним её данными:
 
-\begin{lstlisting}[label=lst:hstore3,caption=Проверка hstore]
+\begin{lstlisting}[language=SQL,label=lst:hstore3,caption=Проверка hstore]
 CREATE TABLE products (
    id serial PRIMARY KEY,
    name varchar,
@@ -51,7 +54,8 @@ VALUES (
 \end{lstlisting}
 
 Теперь можно производить поиск по ключу:
-\begin{lstlisting}[label=lst:hstore4,caption=Поиск по ключу]
+
+\begin{lstlisting}[language=SQL,label=lst:hstore4,caption=Поиск по ключу]
 # SELECT name, attributes->'pages' as page FROM products WHERE attributes ? 'pages';
         name        | page
 --------------------+------
@@ -69,15 +73,16 @@ VALUES (
 \end{lstlisting}
 
 Создание индексов:
-\begin{lstlisting}[label=lst:hstore6,caption=Индексы]
-CREATE INDEX products_hstore_index ON products USING GIST (attributes);
-CREATE INDEX products_hstore_index ON products USING GIN (attributes);
+
+\begin{lstlisting}[language=SQL,label=lst:hstore6,caption=Индексы]
+# CREATE INDEX products_hstore_index ON products USING GIST (attributes);
+# CREATE INDEX products_hstore_index ON products USING GIN (attributes);
 \end{lstlisting}
 
 Можно также cоздавать индекс на ключ:
-\begin{lstlisting}[label=lst:hstore7,caption=Индекс на ключ]
-CREATE INDEX product_manufacturer
-   ON products ((products.attributes->'manufacturer'));
+
+\begin{lstlisting}[language=SQL,label=lst:hstore7,caption=Индекс на ключ]
+# CREATE INDEX product_manufacturer ON products ((products.attributes->'manufacturer'));
 \end{lstlisting}
 
 \subsection{Заключение}

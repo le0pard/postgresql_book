@@ -69,51 +69,51 @@ $ psql -f infile postgres
 \begin{itemize}
   \item \textbf{Использовать сжатие для бэкапа.}
 
-  Можно использовать программу сжатия данных, например GZIP:
+Можно использовать программу сжатия данных, например GZIP:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups7,caption=Сжатие бэкапа PostgreSQL]
-  $ pg_dump dbname | gzip > filename.gz
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups7,caption=Сжатие бэкапа PostgreSQL]
+$ pg_dump dbname | gzip > filename.gz
+\end{lstlisting}
 
-  Восстановление:
+Восстановление:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups8,caption=Восстановление бэкапа PostgreSQL]
-  $ gunzip -c filename.gz | psql dbname
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups8,caption=Восстановление бэкапа PostgreSQL]
+$ gunzip -c filename.gz | psql dbname
+\end{lstlisting}
 
-  или
+или
 
-  \begin{lstlisting}[language=Bash,label=lst:backups9,caption=Восстановление бэкапа PostgreSQL]
-  cat filename.gz | gunzip | psql dbname
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups9,caption=Восстановление бэкапа PostgreSQL]
+cat filename.gz | gunzip | psql dbname
+\end{lstlisting}
 
-  \item \textbf{Использовать команду split.}
+\item \textbf{Использовать команду split.}
 
-  Команда split позволяет разделить вывод в файлы меньшего размера, которые являются подходящими по размеру для файловой системы. Например, бэкап делится на куски по 1 мегабайту:
+Команда split позволяет разделить вывод в файлы меньшего размера, которые являются подходящими по размеру для файловой системы. Например, бэкап делится на куски по 1 мегабайту:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups10,caption=Создание бэкапа PostgreSQL]
-  $ pg_dump dbname | split -b 1m - filename
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups10,caption=Создание бэкапа PostgreSQL]
+$ pg_dump dbname | split -b 1m - filename
+\end{lstlisting}
 
-  Восстановление:
+Восстановление:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups11,caption=Восстановление бэкапа PostgreSQL]
-  $ cat filename* | psql dbname
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups11,caption=Восстановление бэкапа PostgreSQL]
+$ cat filename* | psql dbname
+\end{lstlisting}
 
   \item \textbf{Использовать пользовательский формат дампа \lstinline!pg_dump!}
 
-  PostgreSQL построен на системе с библиотекой сжатия Zlib, поэтому пользовательский формат бэкапа будет в сжатом виде. Это похоже на метод с импользованием GZIP, но он имеет дополнительное преимущество~--- таблицы могут быть восстановлены выборочно:
+PostgreSQL построен на системе с библиотекой сжатия Zlib, поэтому пользовательский формат бэкапа будет в сжатом виде. Это похоже на метод с импользованием GZIP, но он имеет дополнительное преимущество~--- таблицы могут быть восстановлены выборочно:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups12,caption=Создание бэкапа PostgreSQL]
-  $ pg_dump -Fc dbname > filename
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups12,caption=Создание бэкапа PostgreSQL]
+$ pg_dump -Fc dbname > filename
+\end{lstlisting}
 
-  Через psql такой бэкап не восстановить, но для этого есть утилита \lstinline!pg_restore!:
+Через psql такой бэкап не восстановить, но для этого есть утилита \lstinline!pg_restore!:
 
-  \begin{lstlisting}[language=Bash,label=lst:backups13,caption=Восстановление бэкапа PostgreSQL]
-  $ pg_restore -d dbname filename
-  \end{lstlisting}
+\begin{lstlisting}[language=Bash,label=lst:backups13,caption=Восстановление бэкапа PostgreSQL]
+$ pg_restore -d dbname filename
+\end{lstlisting}
 
 \end{itemize}
 
@@ -147,7 +147,7 @@ PostgreSQL поддерживает упреждающую запись лого
 \begin{itemize}
   \item Не нужно согласовывать файлы резервной копии системы. Любая внутренняя противоречивость в резервной копии будет исправлена путем преобразования журнала (не отличается от того, что происходит во время восстановления после сбоя);
   \item Восстановление состояния сервера для определенного момента времени;
-  \item Если мы постоянно будем <<скармливать>> файлы WAL на другую машину, которая была загружена с тех же файлов резервной базы, то у нас будет находящийся всегда в актуальном состоянии резервный сервер PostgreSQL (создание сервера горячего резерва);
+  \item Если мы постоянно будем <<скармливать>> файлы WAL на другую машину, которая была загружена с тех же файлов резервной базы, то у нас будет находящийся всегда в актуальном состоянии резервный сервер PostgreSQL (создание сервера горячего резерва).
 \end{itemize}
 
 Как и бэкап файловой системы, этот метод может поддерживать только восстановление всей базы данных кластера. Кроме того, он требует много места для хранения WAL файлов.
