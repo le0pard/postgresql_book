@@ -152,11 +152,6 @@ LIMIT 20;
  buffered            | 32 kB
  buffers_percent     | 0.0
  percent_of_relation | 100.0
--[ RECORD 6 ]-------+---------------------------------
- relname             | pg_namespace
- buffered            | 8192 bytes
- buffers_percent     | 0.0
- percent_of_relation | 20.0
 \end{lstlisting}
 
 Используя эти данные можно проанализировать для каких объектов не хватает памяти или какие из них потребляют основную часть общего буфера. На основе этих данных можно более правильно делать тюнинг \lstinline!shared_buffers! параметра для PostgreSQL.
