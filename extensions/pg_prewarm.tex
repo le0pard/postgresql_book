@@ -1,4 +1,46 @@
 \section{Pg\_prewarm}
 \textbf{Лицензия}: Open Source
 
-TODO
+Модуль pg\_prewarm обеспечивает удобный способ загрузки данных обьектов (таблиц, индексов, прочего) в буферный кэш PostgreSQL или операционной системы. Данный модуль добавлен в contrib начиная с PostgreSQL 9.4.
+
+Для начала нужно установить модуль:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprewarm1]
+$ CREATE EXTENSION pg_prewarm;
+\end{lstlisting}
+
+После уставновки доступна функция \lstinline!pg_prewarm!:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprewarm2]
+$ SELECT pg_prewarm('pgbench_accounts');
+ pg_prewarm
+------------
+       4082
+(1 row)
+\end{lstlisting}
+
+Первый аргумент~--- обьект, который требуется предварительно загружать в память. Второй аргумент~--- <<режим>> загрузки в память, который может содержать такие варианты:
+
+\begin{itemize}
+  \item \lstinline!prefetch!~--- чтение файла ядром системы в асинхронном режиме (в фоновом режиме). Это позволяет положить содержимое файла в кэше ядра системы. Но этот режим не работает на всех платформах;
+  \item \lstinline!read!~--- результат похож на \lstinline!prefetch!, но делается синхронно (а значит медленнее), но работает на всех платформах;
+  \item \lstinline!buffer!~--- в этом режиме данные будут грузится в PostgreSQL \lstinline!shared_buffers!. Этот режим используется по умолчанию.
+\end{itemize}
+
+Третий аргумент называется <<fork>>. Про него не нужно беспокоиться. Возможные значения: <<main>> (используется по умолчанию), <<fsm>>, <<vm>>.
+
+Четвертый и пятый аргументы указывают диапазон страниц для загрузки данных. По умолчанию загружается весь обьект в память, но можно решить, например, загрузить только последние 1000 страниц:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprewarm3]
+$ SELECT pg_prewarm(
+    'pgbench_accounts',
+    first_block := (
+        SELECT pg_relation_size('pgbench_accounts') / current_setting('block_size')::int4 - 1000
+    )
+);
+\end{lstlisting}
+
+
+\subsection{Заключение}
+
+Pg\_prewarm~--- расширение, которое позволяет предварительно загрузить (<<подогреть>>) данные в буферной кэш PostgreSQL или операционной системы.
