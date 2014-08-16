@@ -1,0 +1,211 @@
+\section{Ltree}
+\textbf{Лицензия}: Open Source
+
+Ltree~-- расширение, которое позволяет хранить древовидные структуры в виде меток, а также предоставляет широкие возможности поиска по ним.
+
+\subsection{Почему Ltree?}
+
+\begin{itemize}
+  \item Реализация алгоритма Materialized Path (достаточно быстрый как на запись, так и на чтение);
+  \item Как правило данное решение будет быстрее, чем использовании CTE (Common Table Expressions) или рекурсивный функции (постоянно будут пересчитываться ветвления);
+  \item Встроены механизмы поиска по дереву;
+  \item Индексы (!!!).
+\end{itemize}
+
+\subsection{Пример}
+
+Для начала активируем расширение для базы данных:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree1,caption=Ltree]
+# CREATE EXTENSION ltree;
+\end{lstlisting}
+
+Далее создадим таблицу коментариев, которые будут хранится как дерево.
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree2,caption=Ltree]
+CREATE TABLE comments (user_id integer, description text, path ltree);
+INSERT INTO comments (user_id, description, path) VALUES ( 1, md5(random()::text), '0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 2, md5(random()::text), '0001.0001.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 2, md5(random()::text), '0001.0001.0001.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 1, md5(random()::text), '0001.0001.0001.0002');
+INSERT INTO comments (user_id, description, path) VALUES ( 5, md5(random()::text), '0001.0001.0001.0003');
+INSERT INTO comments (user_id, description, path) VALUES ( 6, md5(random()::text), '0001.0002');
+INSERT INTO comments (user_id, description, path) VALUES ( 6, md5(random()::text), '0001.0002.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 6, md5(random()::text), '0001.0003');
+INSERT INTO comments (user_id, description, path) VALUES ( 8, md5(random()::text), '0001.0003.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 9, md5(random()::text), '0001.0003.0002');
+INSERT INTO comments (user_id, description, path) VALUES ( 11, md5(random()::text), '0001.0003.0002.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 2, md5(random()::text), '0001.0003.0002.0002');
+INSERT INTO comments (user_id, description, path) VALUES ( 5, md5(random()::text), '0001.0003.0002.0003');
+INSERT INTO comments (user_id, description, path) VALUES ( 7, md5(random()::text), '0001.0003.0002.0002.0001');
+INSERT INTO comments (user_id, description, path) VALUES ( 20, md5(random()::text), '0001.0003.0002.0002.0002');
+INSERT INTO comments (user_id, description, path) VALUES ( 31, md5(random()::text), '0001.0003.0002.0002.0003');
+INSERT INTO comments (user_id, description, path) VALUES ( 22, md5(random()::text), '0001.0003.0002.0002.0004');
+INSERT INTO comments (user_id, description, path) VALUES ( 34, md5(random()::text), '0001.0003.0002.0002.0005');
+INSERT INTO comments (user_id, description, path) VALUES ( 22, md5(random()::text), '0001.0003.0002.0002.0006');
+\end{lstlisting}
+
+Не забываем добавить индексы:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree3,caption=Ltree]
+# CREATE INDEX path_gist_comments_idx ON comments USING GIST(path);
+# CREATE INDEX path_comments_idx ON comments USING btree(path);
+\end{lstlisting}
+
+В данном примере я создаю таблицу \lstinline!comments! с полем \lstinline!path!, которые и будет содержать полный путь к этому коментарию в дереве (я использую 4 цифры и точку для делителя узлов дерева).
+
+Для начала найдем все коментарии, у который путь начинается с <<0001.0003>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree4,caption=Ltree]
+# SELECT user_id, path FROM comments WHERE path <@ '0001.0003';
+ user_id |           path
+---------+--------------------------
+       6 | 0001.0003
+       8 | 0001.0003.0001
+       9 | 0001.0003.0002
+      11 | 0001.0003.0002.0001
+       2 | 0001.0003.0002.0002
+       5 | 0001.0003.0002.0003
+       7 | 0001.0003.0002.0002.0001
+      20 | 0001.0003.0002.0002.0002
+      31 | 0001.0003.0002.0002.0003
+      22 | 0001.0003.0002.0002.0004
+      34 | 0001.0003.0002.0002.0005
+      22 | 0001.0003.0002.0002.0006
+(12 rows)
+\end{lstlisting}
+
+И проверим как работают индексы:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree5,caption=Ltree]
+# SET enable_seqscan=false;
+SET
+# EXPLAIN ANALYZE SELECT user_id, path FROM comments WHERE path <@ '0001.0003';
+                                                            QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using path_gist_comments_idx on comments  (cost=0.00..8.29 rows=2 width=38) (actual time=0.023..0.034 rows=12 loops=1)
+   Index Cond: (path <@ '0001.0003'::ltree)
+ Total runtime: 0.076 ms
+(3 rows)
+\end{lstlisting}
+
+Данную выборку можно сделать другим запросом:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree6,caption=Ltree]
+# SELECT user_id, path FROM comments WHERE path ~ '0001.0003.*';
+user_id |           path
+---------+--------------------------
+       6 | 0001.0003
+       8 | 0001.0003.0001
+       9 | 0001.0003.0002
+      11 | 0001.0003.0002.0001
+       2 | 0001.0003.0002.0002
+       5 | 0001.0003.0002.0003
+       7 | 0001.0003.0002.0002.0001
+      20 | 0001.0003.0002.0002.0002
+      31 | 0001.0003.0002.0002.0003
+      22 | 0001.0003.0002.0002.0004
+      34 | 0001.0003.0002.0002.0005
+      22 | 0001.0003.0002.0002.0006
+(12 rows)
+\end{lstlisting}
+
+Не забываем про сортировку дерева:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree7,caption=Ltree]
+# INSERT INTO comments (user_id, description, path) VALUES ( 9, md5(random()::text), '0001.0003.0001.0001');
+# INSERT INTO comments (user_id, description, path) VALUES ( 9, md5(random()::text), '0001.0003.0001.0002');
+# INSERT INTO comments (user_id, description, path) VALUES ( 9, md5(random()::text), '0001.0003.0001.0003');
+# SELECT user_id, path FROM comments WHERE path ~ '0001.0003.*';
+user_id |           path
+---------+--------------------------
+       6 | 0001.0003
+       8 | 0001.0003.0001
+       9 | 0001.0003.0002
+      11 | 0001.0003.0002.0001
+       2 | 0001.0003.0002.0002
+       5 | 0001.0003.0002.0003
+       7 | 0001.0003.0002.0002.0001
+      20 | 0001.0003.0002.0002.0002
+      31 | 0001.0003.0002.0002.0003
+      22 | 0001.0003.0002.0002.0004
+      34 | 0001.0003.0002.0002.0005
+      22 | 0001.0003.0002.0002.0006
+       9 | 0001.0003.0001.0001
+       9 | 0001.0003.0001.0002
+       9 | 0001.0003.0001.0003
+(15 rows)
+# SELECT user_id, path FROM comments WHERE path ~ '0001.0003.*' ORDER by path;
+ user_id |           path
+---------+--------------------------
+       6 | 0001.0003
+       8 | 0001.0003.0001
+       9 | 0001.0003.0001.0001
+       9 | 0001.0003.0001.0002
+       9 | 0001.0003.0001.0003
+       9 | 0001.0003.0002
+      11 | 0001.0003.0002.0001
+       2 | 0001.0003.0002.0002
+       7 | 0001.0003.0002.0002.0001
+      20 | 0001.0003.0002.0002.0002
+      31 | 0001.0003.0002.0002.0003
+      22 | 0001.0003.0002.0002.0004
+      34 | 0001.0003.0002.0002.0005
+      22 | 0001.0003.0002.0002.0006
+       5 | 0001.0003.0002.0003
+(15 rows)
+\end{lstlisting}
+
+Для поиска можно использовать разные модификаторы. Пример использования <<или>> (\lstinline!|!):
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree8,caption=Ltree]
+# SELECT user_id, path FROM comments WHERE path ~ '0001.*{1,2}.0001|0002.*' ORDER by path;
+ user_id |           path
+---------+--------------------------
+       2 | 0001.0001.0001
+       2 | 0001.0001.0001.0001
+       1 | 0001.0001.0001.0002
+       5 | 0001.0001.0001.0003
+       6 | 0001.0002.0001
+       8 | 0001.0003.0001
+       9 | 0001.0003.0001.0001
+       9 | 0001.0003.0001.0002
+       9 | 0001.0003.0001.0003
+       9 | 0001.0003.0002
+      11 | 0001.0003.0002.0001
+       2 | 0001.0003.0002.0002
+       7 | 0001.0003.0002.0002.0001
+      20 | 0001.0003.0002.0002.0002
+      31 | 0001.0003.0002.0002.0003
+      22 | 0001.0003.0002.0002.0004
+      34 | 0001.0003.0002.0002.0005
+      22 | 0001.0003.0002.0002.0006
+       5 | 0001.0003.0002.0003
+(19 rows)
+\end{lstlisting}
+
+Например, найдем прямых потомков от <<0001.0003>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree9,caption=Ltree]
+# SELECT user_id, path FROM comments WHERE path ~ '0001.0003.*{1}' ORDER by path;
+ user_id |      path
+---------+----------------
+       8 | 0001.0003.0001
+       9 | 0001.0003.0002
+(2 rows)
+\end{lstlisting}
+
+Можно также найти родителя для потомка <<0001.0003.0002.0002.0005>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgltree10,caption=Ltree]
+# SELECT user_id, path FROM comments WHERE path = subpath('0001.0003.0002.0002.0005', 0, -1) ORDER by path;
+ user_id |        path
+---------+---------------------
+       2 | 0001.0003.0002.0002
+(1 row)
+\end{lstlisting}
+
+
+\subsection{Заключение}
+
+Ltree~--- расширение, которое позволяет хранить и удобно управлять Materialized Path в PostgreSQL.
