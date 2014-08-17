@@ -3,4 +3,283 @@
 
 \textbf{Ссылка}: \href{http://multicorn.org/}{multicorn.org}
 
-TODO
+Multicorn~--- расширение для PostgreSQL версии 9.1 или выше, которое позволяет создавать собственные FDW (Foreign Data Wrapper) используя язык программирования \href{https://www.python.org/}{Python}. Foreign Data Wrapper позволяют подключится к другим источникам данных (другая база, файловая система, REST API, прочее) в PostgreSQL и были представленны с версии 9.1.
+
+
+\subsection{Пример}
+
+Установка будет проводится на Ubuntu Linux. Для начала нужно установить требуемые зависимости:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn1,caption=Multicorn]
+$ sudo aptitude install build-essential postgresql-server-dev-9.3 python-dev python-setuptools
+\end{lstlisting}
+
+Следующим шагом установим расширение:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn2,caption=Multicorn]
+$ git clone git@github.com:Kozea/Multicorn.git
+$ cd Multicorn
+$ make && sudo make install
+\end{lstlisting}
+
+Для завершения установки активируем расширение для базы данных:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn3,caption=Multicorn]
+# CREATE EXTENSION multicorn;
+CREATE EXTENSION
+\end{lstlisting}
+
+Рассмотрим какие FDW может предоставить Multicorn.
+
+
+\subsubsection{Реляционная СУБД}
+
+Для подключения к другой реляционной СУБД Multicorn использует \href{http://www.sqlalchemy.org/}{SQLAlchemy} библиотеку. Данная библиотека поддерживает SQLite, PostgreSQL, MySQL, Oracle, MS-SQL, Firebird, Sybase, и другие базы данных. Для примера настроим подключение к MySQL. Для начала нам потребуется установить зависимости:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn-rdbms1,caption=Multicorn]
+$ sudo aptitude install python-sqlalchemy python-mysqldb
+\end{lstlisting}
+
+В MySQL базе данных <<testing>> у нас есть таблица <<companies>>:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn-rdbms2,caption=Multicorn]
+$ mysql -u root -p testing
+
+mysql> SELECT * FROM companies;
++----+---------------------+---------------------+
+| id | created_at          | updated_at          |
++----+---------------------+---------------------+
+|  1 | 2013-07-16 14:06:09 | 2013-07-16 14:06:09 |
+|  2 | 2013-07-16 14:30:00 | 2013-07-16 14:30:00 |
+|  3 | 2013-07-16 14:33:41 | 2013-07-16 14:33:41 |
+|  4 | 2013-07-16 14:38:42 | 2013-07-16 14:38:42 |
+|  5 | 2013-07-19 14:38:29 | 2013-07-19 14:38:29 |
++----+---------------------+---------------------+
+5 rows in set (0.00 sec)
+\end{lstlisting}
+
+В PostgreSQL мы должны создать сервер для Multicorn:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rdbms3,caption=Multicorn]
+# CREATE SERVER alchemy_srv foreign data wrapper multicorn options (
+    wrapper 'multicorn.sqlalchemyfdw.SqlAlchemyFdw'
+);
+CREATE SERVER
+\end{lstlisting}
+
+Теперь мы можем создать таблицу, которая будет содержать данные из MySQL таблицы <<companies>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rdbms4,caption=Multicorn]
+# CREATE FOREIGN TABLE mysql_companies (
+  id integer,
+  created_at timestamp without time zone,
+  updated_at timestamp without time zone
+) server alchemy_srv options (
+  tablename 'companies',
+  db_url 'mysql://root:password@127.0.0.1/testing'
+);
+CREATE FOREIGN TABLE
+\end{lstlisting}
+
+Основные опции:
+
+\begin{itemize}
+  \item \lstinline!db_url (string)!~--- SQLAlchemy настройки подключения к базе данных (примеры: \lstinline!mysql://<user>:<password>@<host>/<dbname>!, \lstinline!mssql: mssql://<user>:<password>@<dsname>!). Подробнее можно узнать из \href{http://docs.sqlalchemy.org/en/latest/dialects/}{SQLAlchemy документации};
+  \item \lstinline!tablename (string)!~--- имя таблицы в подключенной базе данных.
+\end{itemize}
+
+Теперь можем проверить, что все работает:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rdbms5,caption=Multicorn]
+# SELECT * FROM mysql_companies;
+ id |     created_at      |     updated_at
+----+---------------------+---------------------
+  1 | 2013-07-16 14:06:09 | 2013-07-16 14:06:09
+  2 | 2013-07-16 14:30:00 | 2013-07-16 14:30:00
+  3 | 2013-07-16 14:33:41 | 2013-07-16 14:33:41
+  4 | 2013-07-16 14:38:42 | 2013-07-16 14:38:42
+  5 | 2013-07-19 14:38:29 | 2013-07-19 14:38:29
+(5 rows)
+\end{lstlisting}
+
+
+\subsubsection{IMAP сервер}
+
+Multicorn может использоватся для получение писем по \href{https://ru.wikipedia.org/wiki/IMAP}{IMAP} протоколу. Для начала установим зависимости:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn-imap1,caption=Multicorn]
+$ sudo aptitude install python-pip
+$ sudo pip install imapclient
+\end{lstlisting}
+
+Следующим шагом мы должны создать сервер и таблицу, которая будет подключена к IMAP серверу:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-imap2,caption=Multicorn]
+# CREATE SERVER multicorn_imap FOREIGN DATA WRAPPER multicorn options ( wrapper 'multicorn.imapfdw.ImapFdw' );
+CREATE SERVER
+# CREATE FOREIGN TABLE my_inbox (
+    "Message-ID" character varying,
+    "From" character varying,
+    "Subject" character varying,
+    "payload" character varying,
+    "flags" character varying[],
+    "To" character varying) server multicorn_imap options (
+        host 'imap.gmail.com',
+        port '993',
+        payload_column 'payload',
+        flags_column 'flags',
+        ssl 'True',
+        login 'example@gmail.com',
+        password 'supersecretpassword'
+);
+CREATE FOREIGN TABLE
+\end{lstlisting}
+
+Основные опции:
+
+\begin{itemize}
+  \item \lstinline!host (string)!~--- IMAP хост;
+  \item \lstinline!port (string)!~--- IMAP порт;
+  \item \lstinline!login (string)!~--- IMAP логин;
+  \item \lstinline!password (string)!~--- IMAP пароль;
+  \item \lstinline!payload_column (string)!~--- имя поля, которое будет содержать текст письма;
+  \item \lstinline!flags_column (string)!~--- имя поля, которое будет содержать IMAP флаги письма (массив);
+  \item \lstinline!ssl (boolean)!~--- использовать SSL для подключения;
+  \item \lstinline!imap_server_charset (string)!~--- кодировка для IMAP команд. По умолчанию UTF8.
+\end{itemize}
+
+Теперь можно получить письма через таблицу <<my\_inbox>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-imap3,caption=Multicorn]
+# SELECT flags, "Subject", payload FROM my_inbox LIMIT 10;
+                flags                 |      Subject      |       payload
+--------------------------------------+-------------------+---------------------
+ {$MailFlagBit1,"\\Flagged","\\Seen"} | Test email        | Test email\r       +
+                                      |                   |
+ {"\\Seen"}                           | Test second email | Test second email\r+
+                                      |                   |
+(2 rows)
+\end{lstlisting}
+
+
+\subsubsection{RSS}
+
+Multicorn может использовать \href{http://ru.wikipedia.org/wiki/RSS}{RSS} как источник данных. Для начала установим зависимости:
+
+\begin{lstlisting}[language=Bash,label=lst:pgmulticorn-rss1,caption=Multicorn]
+$ sudo aptitude install python-lxml
+\end{lstlisting}
+
+Как и в прошлые разы, создаем сервер и таблицу для RSS ресурса:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rss2,caption=Multicorn]
+# CREATE SERVER rss_srv foreign data wrapper multicorn options (
+    wrapper 'multicorn.rssfdw.RssFdw'
+);
+CREATE SERVER
+# CREATE FOREIGN TABLE my_rss (
+    "pubDate" timestamp,
+    description character varying,
+    title character varying,
+    link character varying
+) server rss_srv options (
+    url     'http://news.yahoo.com/rss/entertainment'
+);
+CREATE FOREIGN TABLE
+\end{lstlisting}
+
+Основные опции:
+
+\begin{itemize}
+  \item \lstinline!url (string)!~--- URL RSS ленты.
+\end{itemize}
+
+Кроме того, вы должны быть уверены, что PostgreSQL база данных использовать UTF-8 кодировку (в другой кодировке вы можете получить ошибки). Результат таблицы <<my\_rss>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rss3,caption=Multicorn]
+# SELECT "pubDate", title, link from my_rss ORDER BY "pubDate" DESC LIMIT 10;
+       pubDate       |                       title                        |                                         link
+---------------------+----------------------------------------------------+--------------------------------------------------------------------------------------
+ 2013-09-28 14:11:58 | Royal Mint coins to mark Prince George christening | http://news.yahoo.com/royal-mint-coins-mark-prince-george-christening-115906242.html
+ 2013-09-28 11:47:03 | Miss Philippines wins Miss World in Indonesia      | http://news.yahoo.com/miss-philippines-wins-miss-world-indonesia-144544381.html
+ 2013-09-28 10:59:15 | Billionaire's daughter in NJ court in will dispute | http://news.yahoo.com/billionaires-daughter-nj-court-dispute-144432331.html
+ 2013-09-28 08:40:42 | Security tight at Miss World final in Indonesia    | http://news.yahoo.com/security-tight-miss-world-final-indonesia-123714041.html
+ 2013-09-28 08:17:52 | Guest lineups for the Sunday news shows            | http://news.yahoo.com/guest-lineups-sunday-news-shows-183815643.html
+ 2013-09-28 07:37:02 | Security tight at Miss World crowning in Indonesia | http://news.yahoo.com/security-tight-miss-world-crowning-indonesia-113634310.html
+ 2013-09-27 20:49:32 | Simons stamps his natural mark on Dior             | http://news.yahoo.com/simons-stamps-natural-mark-dior-223848528.html
+ 2013-09-27 19:50:30 | Jackson jury ends deliberations until Tuesday      | http://news.yahoo.com/jackson-jury-ends-deliberations-until-tuesday-235030969.html
+ 2013-09-27 19:23:40 | Eric Clapton-owned Richter painting to sell in NYC | http://news.yahoo.com/eric-clapton-owned-richter-painting-sell-nyc-201447252.html
+ 2013-09-27 19:14:15 | Report: Hollywood is less gay-friendly off-screen  | http://news.yahoo.com/report-hollywood-less-gay-friendly-off-screen-231415235.html
+(10 rows)
+\end{lstlisting}
+
+
+\subsubsection{CSV}
+
+Multicorn может использовать \href{http://ru.wikipedia.org/wiki/CSV}{CSV} файл как источник данных. Как и в прошлые разы, создаем сервер и таблицу для CSV ресурса:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-csv1,caption=Multicorn]
+# CREATE SERVER csv_srv foreign data wrapper multicorn options (
+    wrapper 'multicorn.csvfdw.CsvFdw'
+);
+CREATE SERVER
+# CREATE FOREIGN TABLE csvtest (
+       sort_order numeric,
+       common_name character varying,
+       formal_name character varying,
+       main_type character varying,
+       sub_type character varying,
+       sovereignty character varying,
+       capital character varying
+) server csv_srv options (
+       filename '/var/data/countrylist.csv',
+       skip_header '1',
+       delimiter ',');
+CREATE FOREIGN TABLE
+\end{lstlisting}
+
+Основные опции:
+
+\begin{itemize}
+  \item \lstinline!filename (string)!~--- полный путь к CSV файлу;
+  \item \lstinline!delimiter (character)!~--- разделитель в CSV файле (по умолчанию <<,>>);
+  \item \lstinline!quotechar (character)!~--- кавычки в CSV файле;
+  \item \lstinline!skip_header (integer)!~--- число строк, которые необходимо пропустить (по умолчанию 0).
+\end{itemize}
+
+Результат таблицы <<csvtest>>:
+
+\begin{lstlisting}[language=SQL,label=lst:pgmulticorn-csv2,caption=Multicorn]
+# SELECT * FROM csvtest LIMIT 10;
+sort_order |     common_name     |               formal_name               |     main_type     | sub_type | sovereignty |     capital
+------------+---------------------+-----------------------------------------+-------------------+----------+-------------+------------------
+         1 | Afghanistan         | Islamic State of Afghanistan            | Independent State |          |             | Kabul
+         2 | Albania             | Republic of Albania                     | Independent State |          |             | Tirana
+         3 | Algeria             | People's Democratic Republic of Algeria | Independent State |          |             | Algiers
+         4 | Andorra             | Principality of Andorra                 | Independent State |          |             | Andorra la Vella
+         5 | Angola              | Republic of Angola                      | Independent State |          |             | Luanda
+         6 | Antigua and Barbuda |                                         | Independent State |          |             | Saint John's
+         7 | Argentina           | Argentine Republic                      | Independent State |          |             | Buenos Aires
+         8 | Armenia             | Republic of Armenia                     | Independent State |          |             | Yerevan
+         9 | Australia           | Commonwealth of Australia               | Independent State |          |             | Canberra
+        10 | Austria             | Republic of Austria                     | Independent State |          |             | Vienna
+(10 rows)
+\end{lstlisting}
+
+
+\subsubsection{Другие FDW}
+
+Multicorn также содержать FDW для LDAP и файловой системы. LDAP FDW может использоваться для доступа к серверам по LDAP протоколу. FDW для файловой системы может быть использован для доступа к данным, хранящимся в различных файлах в файловой системе.
+
+\subsubsection{Собственный FDW}
+
+Multicorn предоставляет простой интерфейс для написания собственных FDW. Более подробную информацию вы можете найти по \href{http://multicorn.org/implementing-an-fdw/}{этой ссылке}.
+
+
+\subsection{PostgreSQL 9.3+}
+
+В PostgreSQL 9.1 и 9.2 была представленна реализация FDW только на чтение, и начиная с версии 9.3 FDW может писать в внешнии источники данных. Сейчас Multicorn не поддерживает запись данных в другие источники, но данная реализация в разработке.
+
+\subsection{Заключение}
+
+Multicorn~--- расширение для PostgreSQL, которое позволяет использовать встроенные FDW или создавать собственные на Python.
