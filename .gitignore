@@ -17,9 +17,6 @@ postgresql.synctex.gz
 .vagrant
 Vagrantfile
 
-# Ignore the build directory
-/build
-
 # Ignore cache
 /.sass-cache
 /.cache
