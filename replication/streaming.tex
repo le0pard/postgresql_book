@@ -122,11 +122,11 @@ archive_command = 'cp %p /path_to/archive/%f'
 \begin{itemize}
   \item \lstinline!wal_level = hot_standby!~--- сервер начнет писать в WAL логи так же как и при режиме <<archive>>, добавляя информацию, необходимую для восстановления транзакции (можно также поставить \lstinline!archive!, но тогда сервер не может быть слейвом при необходимости);
   \item \lstinline!max_wal_senders = 5!~--- максимальное количество слейвов;
-  \item \lstinline!wal_keep_segments = 32!~--- минимальное количество файлов c WAL сегментами в \lstinline!pg_xlog! директории.
+  \item \lstinline!wal_keep_segments = 32!~--- минимальное количество файлов c WAL сегментами в \lstinline!pg_xlog! директории;
   \item \lstinline!archive_mode = on!~--- позволяем сохранять WAL сегменты в указанное переменной \lstinline!archive_command! хранилище. В данном случае в директорию <</path/to/archive/>>.
 \end{itemize}
 
-По умолчанию репликация асинхронная. В версии 9.1 добавили параметр <<synchronous\_standby\_names>>, который включает синхронную репликацию. В данные параметр передается \lstinline!application_name!, который используется на слейвах в recovery.conf:
+По умолчанию репликация асинхронная. В версии 9.1 добавили параметр \lstinline!synchronous_standby_names!, который включает синхронную репликацию. В данные параметр передается \lstinline!application_name!, который используется на слейвах в recovery.conf:
 
 \begin{lstlisting}[label=lst:streaming91,caption=recovery.conf для синхронной репликации на слейве]
 restore_command = 'cp /mnt/server/archivedir/%f %p'               # e.g. 'cp /mnt/server/archivedir/%f %p'
@@ -210,9 +210,9 @@ restore_command = 'scp masterdb_host:/path_to/archive/%f "%p"'
 где
 
 \begin{itemize}
-  \item \lstinline!standby_mode='on'!~--- указываем серверу работать в режиме слейв
-  \item \lstinline!primary_conninfo!~--- настройки соединения слейва с мастером
-  \item \lstinline!trigger_file!~--- указываем триггер-файл, при наличии которого будет остановлена репликация.
+  \item \lstinline!standby_mode='on'!~--- указываем серверу работать в режиме слейв;
+  \item \lstinline!primary_conninfo!~--- настройки соединения слейва с мастером;
+  \item \lstinline!trigger_file!~--- указываем триггер-файл, при наличии которого будет остановлена репликация;
   \item \lstinline!restore_command!~--- команда, которой будут восстанавливаться WAL логи. В нашем случае через scp копируем с masterdb (\lstinline!masterdb_host! - хост masterdb).
 \end{itemize}
 

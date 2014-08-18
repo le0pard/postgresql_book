@@ -1,7 +1,7 @@
 \section{Fuzzystrmatch}
 \textbf{Лицензия}: Open Source
 
-Fuzzystrmatch предоставляет несколько функций для определения сходства и расстояния между строками. Функция soundex используется для согласования сходно звучащих имен путем преобразования их в одинаковый код. Функция difference преобразует две строки в soundex код, а затем сообщает количество совпадающих позиций кода. В soundex код состоит из четырех символов, поэтому результат будет от нуля до четырех: 0~--- не совпадают, 4~--- точное совпадение (таким образом, функция названа неверно~--- как название лучше подходит similarity):
+Fuzzystrmatch предоставляет несколько функций для определения сходства и расстояния между строками. Функция \lstinline!soundex! используется для согласования сходно звучащих имен путем преобразования их в одинаковый код. Функция \lstinline!difference! преобразует две строки в soundex код, а затем сообщает количество совпадающих позиций кода. В \lstinline!soundex! код состоит из четырех символов, поэтому результат будет от нуля до четырех: 0~--- не совпадают, 4~--- точное совпадение (таким образом, функция названа неверно~--- как название лучше подходит similarity):
 
 \begin{lstlisting}[language=SQL,label=lst:ext_fuzzystrmatch1,caption=soundex]
 # CREATE EXTENSION fuzzystrmatch;
@@ -50,7 +50,7 @@ INSERT 0 4
 (3 rows)
 \end{lstlisting}
 
-Функция levenshtein вычисляет \href{http://en.wikipedia.org/wiki/Levenshtein\_distance}{расстояние Левенштейна} между двумя строками. \lstinline!levenshtein_less_equal! ускоряется функцию levenshtein для маленьких значений расстояния:
+Функция \lstinline!levenshtein! вычисляет \href{http://en.wikipedia.org/wiki/Levenshtein\_distance}{расстояние Левенштейна} между двумя строками. \lstinline!levenshtein_less_equal! ускоряется функцию levenshtein для маленьких значений расстояния:
 
 \begin{lstlisting}[language=SQL,label=lst:ext_fuzzystrmatch2,caption=levenshtein]
 # SELECT levenshtein('GUMBO', 'GAMBOL');
@@ -78,7 +78,7 @@ test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
 (1 row)
 \end{lstlisting}
 
-Функция metaphone, как и soundex, построена на идее создания кода для строки: две строки, которые будут считатся похожими, будут иметь одинаковые коды. Последним параметром указывается максимальная длина metaphone кода. Функция \lstinline!dmetaphone! вычисляет два <<как звучит>> кода для строки~--- <<первичный>> и <<альтернативный>>:
+Функция \lstinline!metaphone!, как и soundex, построена на идее создания кода для строки: две строки, которые будут считатся похожими, будут иметь одинаковые коды. Последним параметром указывается максимальная длина \lstinline!metaphone! кода. Функция \lstinline!dmetaphone! вычисляет два <<как звучит>> кода для строки~--- <<первичный>> и <<альтернативный>>:
 
 \begin{lstlisting}[language=SQL,label=lst:ext_fuzzystrmatch3,caption=metaphone]
 # SELECT metaphone('GUMBO', 4);

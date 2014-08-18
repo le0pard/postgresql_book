@@ -6,7 +6,7 @@ RubyRep представляет собой движок для организа
 
 \begin{itemize}
   \item возможность двухстороннего сравнения и синхронизации баз данных;
-  \item простота установки;
+  \item простота установки.
 \end{itemize}
 
 К недостаткам можно отнести:
@@ -15,7 +15,7 @@ RubyRep представляет собой движок для организа
   \item работа только с двумя базами данных для MySQL;
   \item медленная работа синхронизации;
   \item при больших объемах данных <<ест>> процессор и память;
-  \item проект не развивается;
+  \item проект не развивается.
 \end{itemize}
 
 
@@ -129,6 +129,7 @@ $ rubyrep sync -c myrubyrep.conf dept /^e/
 \subsubsection{Репликация}
 
 Для запуска репликации достаточно выполнить:
+
 \begin{lstlisting}[label=lst:rubyrep10,caption=Репликация]
 $ rubyrep replicate -c myrubyrep.conf
 \end{lstlisting}
@@ -148,7 +149,7 @@ $ rubyrep uninstall -c myrubyrep.conf
 При запуске rubyrep через Ruby может возникнуть подобная ошибка:
 
 \begin{lstlisting}[label=lst:rubyrep12,caption=Устранение неисправностей]
-$rubyrep replicate -c myrubyrep.conf
+$ rubyrep replicate -c myrubyrep.conf
 Verifying RubyRep tables
 Checking for and removing rubyrep triggers from unconfigured tables
 Verifying rubyrep triggers of configured tables

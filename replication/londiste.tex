@@ -5,23 +5,25 @@
 Londiste представляет собой движок для организации репликации, написанный на языке python. Основные принципы: надежность и простота использования. Из-за этого данное решение имеет меньше функциональности, чем Slony-I. Londiste использует в качестве транспортного механизма очередь PgQ  (описание этого более чем интересного проекта остается за рамками данной главы, поскольку он представляет интерес скорее для низкоуровневых программистов баз данных, чем для конечных пользователей~--- администраторов СУБД PostgreSQL). Отличительными особенностями решения являются:
 
 \begin{itemize}
-  \item возможность потабличной репликации
-  \item начальное копирование ничего не блокирует
-  \item возможность двухстороннего сравнения таблиц
-  \item простота установки
+  \item возможность потабличной репликации;
+  \item начальное копирование ничего не блокирует;
+  \item возможность двухстороннего сравнения таблиц;
+  \item простота установки.
 \end{itemize}
 
 К недостаткам можно отнести:
 
 \begin{itemize}
-  \item триггерная репликация, что ухудшает производительность базы
+  \item триггерная репликация, что ухудшает производительность базы.
 \end{itemize}
 
 
 \subsection{Установка}
+
 На серверах, которые мы настраиваем рассматривается ОС Linux, а именно Ubuntu Server. Автор данной книги считает, что под другие операционные системы (кроме Windows) все мало чем будет отличаться, а держать кластера PostgreSQL под ОС Windows, по меньшей мере, неразумно.
 
 Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет. На таких системах, как Debian или Ubuntu skytools можно найти в репозитории пакетов и поставить одной командой:
+
 \begin{lstlisting}[label=lst:londiste1,caption=Установка]
 % sudo aptitude install skytools
 \end{lstlisting}
@@ -56,6 +58,7 @@ $ make install
 \end{lstlisting}
 
 Дальше проверим, что все у нас правильно установилось
+
 \begin{lstlisting}[label=lst:londiste4,caption=Установка]
 $ londiste3 -V
 londiste3, Skytools version 3.2
@@ -79,6 +82,7 @@ Switches:
 \subsection{Настройка}
 
 Обозначения:
+
 \begin{itemize}
   \item master-host~--- мастер база данных;
   \item slave1-host, slave2-host, slave3-host, slave4-host~--- слейв базы данных;
@@ -86,8 +90,9 @@ Switches:
 \end{itemize}
 
 \subsubsection{Создаём конфигурацию репликаторов}
-Для начала создадим конфигурационный файл для master базы
-(пусть конфиг будет у нас /etc/skytools/master-londiste.ini):
+
+Для начала создадим конфигурационный файл для master базы (пусть конфиг будет у нас /etc/skytools/master-londiste.ini):
+
 \begin{lstlisting}[label=lst:londiste-replica1,caption=Создаём конфигурацию репликатора]
 [londiste3]
 job_name = master_l3simple
@@ -133,18 +138,20 @@ INFO {standby: 1}
 INFO {standby: 1}
 \end{lstlisting}
 
-Если нужно перегрузить демон (например, изменили конфиг), то можно воспользоватся параметром <<-r>>:
+Если нужно перегрузить демон (например, изменили конфиг), то можно воспользоватся параметром \lstinline!-r!:
 
 \begin{lstlisting}[label=lst:londiste-replica4,caption=Перегрузка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -r
 \end{lstlisting}
 
-Для остановки демона есть параметр <<-s>>:
+Для остановки демона есть параметр \lstinline!-s!:
+
 \begin{lstlisting}[label=lst:londiste-replica5,caption=Остановка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -s
 \end{lstlisting}
 
 или если потребуется <<убить>> (kill -9) демон:
+
 \begin{lstlisting}[label=lst:londiste-replica6,caption=Остановка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -k
 \end{lstlisting}
@@ -168,6 +175,7 @@ $ psql -h slave1-host -U postgres
 Подключение должно быть <<trust>> (без паролей) между master и slave базами данных.
 
 Далее создадим конфиг для slave базы (/etc/skytools/slave1-londiste.ini):
+
 \begin{lstlisting}[label=lst:londiste-replica9,caption=Создаём конфигурацию для slave]
 [londiste3]
 job_name = slave1_l3simple
@@ -253,17 +261,14 @@ master-node      False            dbname=l3simple host=master-host
 slave1-node      False            dbname=l3simple host=slave1-host
 \end{lstlisting}
 
-Но репликация еще не запущенна: требуется добавить таблици в очередь, которые мы хотим реплицировать. Для этого используем команду <<add-table>>:
+Но репликация еще не запущенна: требуется добавить таблици в очередь, которые мы хотим реплицировать. Для этого используем команду \lstinline!add-table!:
 
 \begin{lstlisting}[label=lst:londiste-replica13,caption=Добавляем таблицы]
 $ londiste3 /etc/skytools/master-londiste.ini add-table --all
 $ londiste3 /etc/skytools/slave1-londiste.ini add-table --all --create-full
 \end{lstlisting}
 
-В данном примере используется параметр <<--all>>, который означает все таблицы,
-но вместо него вы можете перечислить список конкретных таблиц, если не хотите
-реплицировать все. Если имена таблиц отличаются на master и slave, то можно использовать <<--dest-table>> параметр при добавлении таблиц на slave базе.
-Также, если вы не перенесли струкруру таблиц заранее с master на slave базы, то это можно сделать автоматически через <<--create>> параметр (или <<--create-full>>, если нужно перенести полностью всю схему таблицы).
+В данном примере используется параметр \lstinline!--all!, который означает все таблицы, но вместо него вы можете перечислить список конкретных таблиц, если не хотите реплицировать все. Если имена таблиц отличаются на master и slave, то можно использовать \lstinline!--dest-table! параметр при добавлении таблиц на slave базе. Также, если вы не перенесли струкруру таблиц заранее с master на slave базы, то это можно сделать автоматически через \lstinline!--create! параметр (или \lstinline!--create-full!, если нужно перенести полностью всю схему таблицы).
 
 Подобным образом добавляем последовательности (sequences) для репликации:
 
@@ -272,7 +277,7 @@ $ londiste3 /etc/skytools/master-londiste.ini add-seq --all
 $ londiste3 /etc/skytools/slave1-londiste.ini add-seq --all
 \end{lstlisting}
 
-Но последовательности должны на slave базе созданы заранее (тут не поможет <<--create-full>> для таблиц). Поэтому иногда проще перенести точную копию структуры master базы на slave:
+Но последовательности должны на slave базе созданы заранее (тут не поможет \lstinline!--create-full! для таблиц). Поэтому иногда проще перенести точную копию структуры master базы на slave:
 
 \begin{lstlisting}[label=lst:londiste-replica-dump1,caption=Клонирование структуры базы]
 $ pg_dump -s -npublic l3simple | psql -hslave1-host l3simple
@@ -297,7 +302,7 @@ master-node (root)
 \begin{itemize}
   \item x - количество таблиц в состоянии <<ok>> (replicated). На master базе указывает, что она в норме, а на slave базах - таблица синхронизирована с master базой;
   \item y - количество таблиц в состоянии half (initial copy, not finnished), у master должно быть 0, а у slave базах это указывает количество таблиц в процессе копирования;
-  \item z - количество таблиц в состоянии ignored (table not replicated locally), у master должно быть 0, а у slave базах это количество таблиц, которые не добавлены для репликации с мастера (т.е. master отдает на репликацию эту таблицу, но slave их просто не забирает);
+  \item z - количество таблиц в состоянии ignored (table not replicated locally), у master должно быть 0, а у slave базах это количество таблиц, которые не добавлены для репликации с мастера (т.е. master отдает на репликацию эту таблицу, но slave их просто не забирает).
 \end{itemize}
 
 Через небольшой интервал времени все таблици должны синхронизироватся:
@@ -368,7 +373,7 @@ pidfile = /var/pid/skytools/slave2_l3simple.pid
 loop_delay = 0.5
 \end{lstlisting}
 
-Для создания slave, от которого можно реплицировать другие базы данных используется команда <<create-branch>> вместо <<create-leaf>> (root, корень - master нода, предоставляет информацию для репликации; branch, ветка - нода с копией данных, с которой можно реплицировать; leaf, лист - нода с копией данными, но реплицировать с нее уже не возможно):
+Для создания slave, от которого можно реплицировать другие базы данных используется команда \lstinline!create-branch! вместо \lstinline!create-leaf! (root, корень - master нода, предоставляет информацию для репликации; branch, ветка - нода с копией данных, с которой можно реплицировать; leaf, лист - нода с копией данными, но реплицировать с нее уже не возможно):
 
 \begin{lstlisting}[label=lst:londiste-cascade2,caption=Инициализируем slave2]
 $ psql -hslave2-host -d postgres -c "CREATE DATABASE l3simple;"
@@ -468,7 +473,7 @@ master-node (root)
                                    Lag: 12s, Tick: 56
 \end{lstlisting}
 
-Также топологию можно менять с сторони репликатора через команду <<takeover>>:
+Также топологию можно менять с сторони репликатора через команду \lstinline!takeover!:
 
 \begin{lstlisting}[label=lst:londiste-cascade8,caption=Изменяем топологию]
 $ londiste3 /etc/skytools/slave3-londiste.ini takeover slave4-node
@@ -492,7 +497,7 @@ master-node (root)
                                    Lag: 9s, Tick: 49
 \end{lstlisting}
 
-Через команду <<drop-node>> можно удалить slave из кластера:
+Через команду \lstinline!drop-node! можно удалить slave из кластера:
 
 \begin{lstlisting}[label=lst:londiste-cascade9,caption=Удаляем ноду]
 $ londiste3 /etc/skytools/slave4-londiste.ini drop-node slave4-node
@@ -513,7 +518,7 @@ master-node (root)
                                    Lag: 9s, Tick: 49
 \end{lstlisting}
 
-Команда <<tag-dead>> может использоваться, что бы указать slave как не живой (прекратить на него репликацию), а через команду <<tag-alive>> его можно вернуть в кластер.
+Команда \lstinline!tag-dead! может использоваться, что бы указать slave как не живой (прекратить на него репликацию), а через команду \lstinline!tag-alive! его можно вернуть в кластер.
 
 
 
@@ -521,7 +526,9 @@ master-node (root)
 \subsection{Общие задачи}
 
 \subsubsection{Проверка состояния слейвов}
+
 Этот запрос на мастере дает некоторую информацию о каждой очереди и слейве.
+
 \begin{lstlisting}[language=SQL,label=lst:londiste21,caption=Проверка состояния слейвов]
 # SELECT queue_name, consumer_name, lag, last_seen FROM pgq.get_consumer_info();
  queue_name |     consumer_name      |       lag       |    last_seen
@@ -531,10 +538,10 @@ master-node (root)
  replika    | .slave1-node.watermark | 00:03:37.108259 | 00:03:05.01431
 \end{lstlisting}
 
-<<lag>> столбец показывает отставание от мастера в синхронизации,
-<<last\_seen>>~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, чем 60 секунд для конфигурации по умолчанию.
+\lstinline!lag! столбец показывает отставание от мастера в синхронизации, \lstinline!last\_seen!~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, чем 60 секунд для конфигурации по умолчанию.
 
 \subsubsection{Удаление очереди всех событий из мастера}
+
 При работе с Londiste может потребоваться удалить все ваши настройки для того, чтобы начать все заново. Для PGQ, чтобы остановить накопление данных, используйте следующие API:
 
 \begin{lstlisting}[label=lst:londiste22,caption=Удаление очереди всех событий из мастера]
@@ -542,21 +549,24 @@ SELECT pgq.unregister_consumer('queue_name', 'consumer_name');
 \end{lstlisting}
 
 \subsubsection{Добавление столбца в таблицу}
+
 Добавляем в следующей последовательности:
+
 \begin{enumerate}
- \item добавить поле на все слейвы
- \item BEGIN; -- на мастере
- \item добавить поле на мастере
+ \item добавить поле на все слейвы;
+ \item BEGIN; -- на мастере;
+ \item добавить поле на мастере;
  \item COMMIT;
 \end{enumerate}
 
 \subsubsection{Удаление столбца из таблицы}
+
 \begin{enumerate}
- \item BEGIN; -- на мастере
- \item удалить поле на мастере
+ \item BEGIN; -- на мастере;
+ \item удалить поле на мастере;
  \item COMMIT;
- \item Проверить <<lag>>, когда londiste пройдет момент удаления поля
- \item удалить поле на всех слейвах
+ \item Проверить \lstinline!lag!, когда londiste пройдет момент удаления поля;
+ \item удалить поле на всех слейвах.
 \end{enumerate}
 
 Хитрость тут в том, чтобы удалить поле на слейвах только тогда, когда больше нет событий в очереди на это поле.
@@ -565,9 +575,11 @@ SELECT pgq.unregister_consumer('queue_name', 'consumer_name');
 \subsection{Устранение неисправностей}
 
 \subsubsection{Londiste пожирает процессор и lag растет}
+
 Это происходит, например, если во время сбоя админ забыл перезапустить ticker. Или когда вы сделали большой UPDATE или DELETE в одной транзакции, но теперь что бы реализовать каждое событие в этом запросе создаются транзакции на слейвах \dots
 
-Следующий запрос позволяет подсчитать, сколько событий пришло в pgq.subscription в колонках sub\_last\_tick и sub\_next\_tick.
+Следующий запрос позволяет подсчитать, сколько событий пришло в pgq.subscription в колонках \lstinline!sub_last_tick! и \lstinline!sub_next_tick!.
+
 \begin{lstlisting}[language=SQL,label=lst:londiste24,caption=Устранение неисправностей]
 SELECT count(*)
   FROM pgq.event_1,
@@ -579,6 +591,7 @@ WHERE txid_visible_in_snapshot(ev_txid, snapshots);
 \end{lstlisting}
 
 В нашем случае, это было более чем 5 миллионов и 400 тысяч событий. Чем больше событий с базы данных требуется обработать Londiste, тем больше ему требуется памяти для этого. Мы можем сообщить Londiste не загружать все события сразу. Достаточно добавить в INI конфиг PgQ ticker следующую настройку:
+
 \begin{lstlisting}[label=lst:londiste25,caption=Устранение неисправностей]
 pgq_lazy_fetch = 500
 \end{lstlisting}
