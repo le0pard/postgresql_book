@@ -1,0 +1,35 @@
+\section{Pgaudit}
+\textbf{Лицензия}: Open Source
+
+\textbf{Ссылка}: \href{https://github.com/2ndQuadrant/pgaudit}{github.com/2ndQuadrant/pgaudit}
+
+Pgaudit~--- расширение для PostgreSQL, которое позволяет собирать события из различных источников внутри PostgreSQL и записывает их в формате CSV c временной меткой, информацией о пользователе, информацию про обьект, который был затронут командой (если такое произошло) и полный текст команды. Поддерживает все DDL, DML (включая SELECT) и прочие команды. Данное расширение работает в PostgreSQL 9.3 и выше.
+
+После установки расширения нужно добавит в конфиг PostgreSQL настройки расширения:
+
+\begin{lstlisting}[language=SQL,label=lst:pgaudit1,caption=Pgaudit]
+shared_preload_libraries = 'pgaudit'
+
+pgaudit.log = 'read, write, user'
+\end{lstlisting}
+
+Далее перегрузить базу данных и установить расширение для базы:
+
+\begin{lstlisting}[language=SQL,label=lst:pgaudit2,caption=Pgaudit]
+# CREATE EXTENSION pgaudit;
+\end{lstlisting}
+
+После этого в логах можно увидеть подобный результат от pgaudit:
+
+\begin{lstlisting}[language=Bash,label=lst:pgaudit3,caption=Pgaudit]
+LOG:  [AUDIT],2014-04-30 17:13:55.202854+09,auditdb,ianb,ianb,DEFINITION,CREATE TABLE,TABLE,public.x,CREATE  TABLE  public.x (a pg_catalog.int4   , b pg_catalog.int4   )   WITH (oids=OFF)
+LOG:  [AUDIT],2014-04-30 17:14:06.548923+09,auditdb,ianb,ianb,WRITE,INSERT,TABLE,public.x,INSERT INTO x VALUES(1,1);
+LOG:  [AUDIT],2014-04-30 17:14:21.221879+09,auditdb,ianb,ianb,READ,SELECT,TABLE,public.x,SELECT * FROM x;
+LOG:  [AUDIT],2014-04-30 17:15:25.620213+09,auditdb,ianb,ianb,READ,SELECT,VIEW,public.v_x,SELECT * from v_x;
+LOG:  [AUDIT],2014-04-30 17:15:25.620262+09,auditdb,ianb,ianb,READ,SELECT,TABLE,public.x,SELECT * from v_x;
+LOG:  [AUDIT],2014-04-30 17:16:00.849868+09,auditdb,ianb,ianb,WRITE,UPDATE,TABLE,public.x,UPDATE x SET a=a+1;
+LOG:  [AUDIT],2014-04-30 17:16:18.291452+09,auditdb,ianb,ianb,ADMIN,VACUUM,,,VACUUM x;
+LOG:  [AUDIT],2014-04-30 17:18:01.08291+09,auditdb,ianb,ianb,DEFINITION,CREATE FUNCTION,FUNCTION,public.func_x(),CREATE  FUNCTION public.func_x() RETURNS  pg_catalog.int4 LANGUAGE sql  VOLATILE  CALLED ON NULL INPUT SECURITY INVOKER COST 100.000000   AS $dprs_$SELECT a FROM x LIMIT 1;$dprs_$
+\end{lstlisting}
+
+Более подробную информацию про настройку расширения можно найти в официальном \href{https://github.com/2ndQuadrant/pgaudit#configuration}{README}.
