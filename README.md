@@ -6,7 +6,7 @@
 
 ## Генерация Epub
 
-    pandoc --smart -t epub3 -s postgresql.tex -o postgresql.epub --epub-cover-image=images/cover.jpg --epub-chapter-level=3
+    pandoc --smart -t epub3 -s postgresql.tex -o postgresql.epub --epub-cover-image=cover/cover.jpg --epub-chapter-level=3
 
 Если хочется, чтобы в выводе были нормальные кавычки (`U+00ab` &laquo;,
 `U+00bb` &raquo;), нужно их сначала проставить вручную, потому что pandoc

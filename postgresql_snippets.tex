@@ -16,7 +16,7 @@
 \subsection{Размер объектов в базе данных}
 Данный запрос показывает размер объектов в базе данных (например, таблиц и индексов).
 
-\lstinputlisting[language=SQL,label=lst:snippets1,title=snippets/biggest\_relations.sql]{codes/snippets/biggest_relations.sql}
+\lstinputlisting[language=SQL,label=lst:snippets1,title=snippets/biggest\_relations.sql]{example_code/snippets/biggest_relations.sql}
 
 Пример вывода:
 
@@ -35,7 +35,7 @@
 \subsection{Размер самых больших таблиц}
 Данный запрос показывает размер самых больших таблиц в базе данных.
 
-\lstinputlisting[language=SQL,label=lst:snippets3,title=snippets/biggest\_tables.sql]{codes/snippets/biggest_tables.sql}
+\lstinputlisting[language=SQL,label=lst:snippets3,title=snippets/biggest\_tables.sql]{example_code/snippets/biggest_tables.sql}
 
 Пример вывода:
 \begin{lstlisting}[language=SQL,label=lst:snippets4,caption=Размер самых больших таблиц. Пример вывода]
@@ -52,7 +52,7 @@
 \subsection{<<Средний>> count}
 Данный метод позволяет узнать приблизительное количество записей в таблице. Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
 
-\lstinputlisting[language=SQL,label=lst:snippets5,title=snippets/count\_estimate.sql]{codes/snippets/count_estimate.sql}
+\lstinputlisting[language=SQL,label=lst:snippets5,title=snippets/count\_estimate.sql]{example_code/snippets/count_estimate.sql}
 
 Пример:
 
@@ -77,7 +77,7 @@ ANALYZE foo;
 \subsection{Узнать значение по умолчанию у поля в таблице}
 Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).
 
-\lstinputlisting[language=SQL,label=lst:snippets6,title=snippets/default\_value.sql]{codes/snippets/default_value.sql}
+\lstinputlisting[language=SQL,label=lst:snippets6,title=snippets/default\_value.sql]{example_code/snippets/default_value.sql}
 
 Пример:
 
@@ -100,7 +100,7 @@ SELECT ret_def('public','schema_migrations','version');
 \subsection{Случайное число из диапазона}
 Данный метод позволяет взять случайное число из указаного диапазона (целое или с плавающей запятой).
 
-\lstinputlisting[language=SQL,label=lst:snippets8,title=snippets/random\_from\_range.sql]{codes/snippets/random_from_range.sql}
+\lstinputlisting[language=SQL,label=lst:snippets8,title=snippets/random\_from\_range.sql]{example_code/snippets/random_from_range.sql}
 
 Пример:
 
@@ -125,7 +125,7 @@ SELECT random(1,10)::int, random(1,10);
 
 Алгоритм Луна реализован на чистом SQL. Обратите внимание, что эта реализация является чисто арифметической.
 
-\lstinputlisting[language=SQL,label=lst:snippets10,title=snippets/luhn\_algorithm.sql]{codes/snippets/luhn_algorithm.sql}
+\lstinputlisting[language=SQL,label=lst:snippets10,title=snippets/luhn\_algorithm.sql]{example_code/snippets/luhn_algorithm.sql}
 
 Пример:
 
@@ -150,7 +150,7 @@ Select luhn_verify(49927398714);
 
 Дан набор: (2,6,4,10,25,7,9). Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
 
-\lstinputlisting[language=SQL,label=lst:snippets12,title=snippets/order\_like\_in.sql]{codes/snippets/order_like_in.sql}
+\lstinputlisting[language=SQL,label=lst:snippets12,title=snippets/order\_like\_in.sql]{example_code/snippets/order_like_in.sql}
 
 где
 
@@ -163,31 +163,31 @@ Select luhn_verify(49927398714);
 \subsection{Quine~--- запрос который выводит сам себя}
 Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), которая выдаёт на выходе точную копию своего исходного текста.
 
-\lstinputlisting[language=SQL,label=lst:snippets13,title=snippets/quine.sql]{codes/snippets/quine.sql}
+\lstinputlisting[language=SQL,label=lst:snippets13,title=snippets/quine.sql]{example_code/snippets/quine.sql}
 
 \subsection{Ускоряем LIKE}
 Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым \lstinline!LIKE 'some\%'!, где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице (например таблица тегов) такой запрос будет работать очень медленно.
 
 Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать \lstinline!text_pattern_ops! (или \lstinline!varchar_pattern_ops! если у поле varchar).
 
-\lstinputlisting[language=SQL,label=lst:snippets14,title=snippets/speed\_like.sql]{codes/snippets/speed_like.sql}
+\lstinputlisting[language=SQL,label=lst:snippets14,title=snippets/speed\_like.sql]{example_code/snippets/speed_like.sql}
 
 \subsection{Поиск дубликатов индексов}
 Запрос находит индексы, созданные на одинаковый набор столбцов (такие индексы эквивалентны, а значит бесполезны).
 
-\lstinputlisting[language=SQL,label=lst:snippets15,title=snippets/duplicate\_indexes.sql]{codes/snippets/duplicate_indexes.sql}
+\lstinputlisting[language=SQL,label=lst:snippets15,title=snippets/duplicate\_indexes.sql]{example_code/snippets/duplicate_indexes.sql}
 
 \subsection{Размер и статистика использования индексов}
 
-\lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{codes/snippets/indexes_statustic.sql}
+\lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{example_code/snippets/indexes_statustic.sql}
 
 \subsection{Размер и статистика использования индексов}
 
-\lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{codes/snippets/indexes_statustic.sql}
+\lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{example_code/snippets/indexes_statustic.sql}
 
 \subsection{Размер распухания (bloat) таблиц и индексов в базе данных}
 \label{sec:snippets-bloating}
 
 Запрос, который показывает <<приблизительный>> bloat (раздутие) таблиц и индексов в базе:
 
-\lstinputlisting[language=SQL,label=lst:snippets17,title=snippets/bloating.sql]{codes/snippets/bloating.sql}
+\lstinputlisting[language=SQL,label=lst:snippets17,title=snippets/bloating.sql]{example_code/snippets/bloating.sql}
