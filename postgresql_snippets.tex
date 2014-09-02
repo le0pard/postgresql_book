@@ -14,6 +14,7 @@
 \section{Советы}
 
 \subsection{Размер объектов в базе данных}
+
 Данный запрос показывает размер объектов в базе данных (например, таблиц и индексов).
 
 \lstinputlisting[language=SQL,label=lst:snippets1,title=snippets/biggest\_relations.sql]{example_code/snippets/biggest_relations.sql}
@@ -33,6 +34,7 @@
 \end{lstlisting}
 
 \subsection{Размер самых больших таблиц}
+
 Данный запрос показывает размер самых больших таблиц в базе данных.
 
 \lstinputlisting[language=SQL,label=lst:snippets3,title=snippets/biggest\_tables.sql]{example_code/snippets/biggest_tables.sql}
@@ -50,6 +52,7 @@
 \end{lstlisting}
 
 \subsection{<<Средний>> count}
+
 Данный метод позволяет узнать приблизительное количество записей в таблице. Для огромных таблиц этот метод работает быстрее, чем обыкновенный count.
 
 \lstinputlisting[language=SQL,label=lst:snippets5,title=snippets/count\_estimate.sql]{example_code/snippets/count_estimate.sql}
@@ -75,6 +78,7 @@ ANALYZE foo;
 \end{lstlisting}
 
 \subsection{Узнать значение по умолчанию у поля в таблице}
+
 Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).
 
 \lstinputlisting[language=SQL,label=lst:snippets6,title=snippets/default\_value.sql]{example_code/snippets/default_value.sql}
@@ -98,6 +102,7 @@ SELECT ret_def('public','schema_migrations','version');
 \end{lstlisting}
 
 \subsection{Случайное число из диапазона}
+
 Данный метод позволяет взять случайное число из указаного диапазона (целое или с плавающей запятой).
 
 \lstinputlisting[language=SQL,label=lst:snippets8,title=snippets/random\_from\_range.sql]{example_code/snippets/random_from_range.sql}
@@ -119,6 +124,7 @@ SELECT random(1,10)::int, random(1,10);
 \end{lstlisting}
 
 \subsection{Алгоритм Луна}
+
 \href{http://en.wikipedia.org/wiki/Luhn\_algorithm}{Алгоритм Луна или формула Луна}~--- алгоритм вычисления контрольной цифры, получивший широкую популярность. Он используется, в частности, при первичной проверке номеров банковских пластиковых карт, номеров социального страхования в США и Канаде. Алгоритм был разработан сотрудником компании <<IBM>> Хансом Петером Луном и запатентован в 1960 году.
 
 Контрольные цифры вообще и алгоритм Луна в частности предназначены для защиты от случайных ошибок, а не преднамеренных искажений данных.
@@ -145,8 +151,8 @@ Select luhn_verify(49927398714);
 \end{lstlisting}
 
 \subsection{Выборка и сортировка по данному набору данных}
-Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать
-данные в том же порядке, в котором передан набор данных. Например:
+
+Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать данные в том же порядке, в котором передан набор данных. Например:
 
 Дан набор: (2,6,4,10,25,7,9). Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
 
@@ -161,11 +167,13 @@ Select luhn_verify(49927398714);
 \lstinline!foo.catalog_id!~--- поле, по которому ищем набор данных (замена \lstinline!foo.catalog_id IN(3,2,6,1,4)!)
 
 \subsection{Quine~--- запрос который выводит сам себя}
+
 Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), которая выдаёт на выходе точную копию своего исходного текста.
 
 \lstinputlisting[language=SQL,label=lst:snippets13,title=snippets/quine.sql]{example_code/snippets/quine.sql}
 
 \subsection{Ускоряем LIKE}
+
 Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым \lstinline!LIKE 'some\%'!, где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице (например таблица тегов) такой запрос будет работать очень медленно.
 
 Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать \lstinline!text_pattern_ops! (или \lstinline!varchar_pattern_ops! если у поле varchar).
@@ -173,13 +181,10 @@ Select luhn_verify(49927398714);
 \lstinputlisting[language=SQL,label=lst:snippets14,title=snippets/speed\_like.sql]{example_code/snippets/speed_like.sql}
 
 \subsection{Поиск дубликатов индексов}
+
 Запрос находит индексы, созданные на одинаковый набор столбцов (такие индексы эквивалентны, а значит бесполезны).
 
 \lstinputlisting[language=SQL,label=lst:snippets15,title=snippets/duplicate\_indexes.sql]{example_code/snippets/duplicate_indexes.sql}
-
-\subsection{Размер и статистика использования индексов}
-
-\lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{example_code/snippets/indexes_statustic.sql}
 
 \subsection{Размер и статистика использования индексов}
 
