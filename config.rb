@@ -69,6 +69,11 @@ set :markdown_engine, :redcarpet
 set :markdown, filter_html: false, fenced_code_blocks: true, smartypants: true
 set :encoding, 'utf-8'
 
+activate :autoprefixer do |config|
+  config.browsers = ['last 2 versions', '> 1%']
+  config.cascade  = false
+end
+
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment

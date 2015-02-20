@@ -6,6 +6,7 @@ gem 'middleman', '>= 3.3.5'
 gem 'middleman-favicon-maker', '>= 3.5' # Generate favicon files in various sizes from a base image
 gem 'middleman-minify-html' # min html
 gem 'middleman-deploy' # Deploy site
+gem 'middleman-autoprefixer', '>= 2.2.1'
 # css
 gem 'sass', '>= 3.3.0'
 gem 'compass'
@@ -13,6 +14,7 @@ gem 'compass'
 gem 'rails-assets-jquery', '2.1.3'
 gem 'rails-assets-fastclick', '1.0.3'
 gem 'foundation-rails', '>= 5.5', require: false
+gem 'autoprefixer-rails', '>= 5.1.6'
 # UTILS
 gem 'oily_png'     # faster PNG
 gem 'therubyracer' # faster ExecJS
