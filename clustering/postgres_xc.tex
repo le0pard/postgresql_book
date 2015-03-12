@@ -63,15 +63,15 @@ Postgres-XC предусматривает два способа хранени�
 \begin{lstlisting}[language=SQL,label=lst:postgres-xc2,caption=Создание распределенных таблиц]
 CREATE TABLE
 users_with_hash (id SERIAL, type INT, ...)
-DISTRIBUTE by HASH(id) TO NODE dn1, dn2;
+DISTRIBUTE by HASH(id);
 
 CREATE TABLE
 users_with_modulo (id SERIAL, type INT, ...)
-DISTRIBUTE by MODULO(id) TO NODE dn1, dn2;
+DISTRIBUTE by MODULO(id);
 
 CREATE TABLE
 users_with_rrobin (id SERIAL, type INT, ...)
-DISTRIBUTE by ROUND ROBIN TO NODE dn1, dn2;
+DISTRIBUTE by ROUND ROBIN;
 \end{lstlisting}
 
 На листинге~\ref{lst:postgres-xc2} создано 3 распределенные таблицы:
@@ -240,7 +240,7 @@ $ psql -p15433
 \begin{lstlisting}[language=SQL,label=lst:postgres-xc20,caption=Создание реплицированной таблицы]
 CREATE TABLE
 users_replicated (id SERIAL, type INT, ...)
-DISTRIBUTE by REPLICATION TO NODE dn1, dn2;
+DISTRIBUTE by REPLICATION;
 \end{lstlisting}
 
 Естественно данные идентичны на всех обработчиках данных:
