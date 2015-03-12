@@ -71,7 +71,7 @@ DISTRIBUTE by MODULO(id);
 
 CREATE TABLE
 users_with_rrobin (id SERIAL, type INT, ...)
-DISTRIBUTE by ROUND ROBIN;
+DISTRIBUTE by ROUNDROBIN;
 \end{lstlisting}
 
 На листинге~\ref{lst:postgres-xc2} создано 3 распределенные таблицы:
@@ -345,7 +345,7 @@ JOIN между и с участием реплицированных табли
 \subsection{Ограничения}
 
 \begin{enumerate}
-  \item Postgres-XC базируется на PostgreSQL 9.1 (9.2 в разработке);
+  \item Postgres-XC базируется на PostgreSQL 9.2;
   \item Нет системы репартиционирования при добавлении или удалении нод (в разработке);
   \item Нет глобальных \lstinline!UNIQUE! на распределенных таблицах;
   \item Не поддерживаются foreign keys между нодами поскольку такой ключ должен вести на данные расположенные на том же обработчике данных;
