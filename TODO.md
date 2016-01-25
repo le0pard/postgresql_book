@@ -1,3 +1,6 @@
+Fix:
+ * http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=88e982302684246e8af785e78a467ac37c76dee9
+
 Add:
 
  * http://pgloader.io/
