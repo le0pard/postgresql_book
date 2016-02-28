@@ -4,6 +4,7 @@ Fix:
 Add:
 
  * http://pgloader.io/
+ * http://2ndquadrant.com/en/resources/pglogical/
  * http://citusdata.github.io/cstore_fdw/
  * https://github.com/cyga/www_fdw
  * http://www.sai.msu.su/~megera/wiki/wildspeed
