@@ -1,5 +1,8 @@
 Fix:
- * http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=88e982302684246e8af785e78a467ac37c76dee9
+ * Postgres_XC to http://postgres-x2.github.io/
+ * move indexes to separate section (add all type of indexes + BRIN)
+ * create section with functions
+ * JSON/JSONB section
 
 Add:
 
@@ -11,3 +14,4 @@ Add:
  * https://github.com/keithf4/pg_partman
  * https://github.com/citusdata/pg_shard
  * http://greenplum.org/
+ * http://www.postgres-xl.org/
