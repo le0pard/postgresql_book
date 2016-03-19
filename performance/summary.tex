@@ -94,42 +94,6 @@ SET enable_seqscan=false;
 
 Также возможен <<дедуктивный>> подход, при котором сначала создаётся большое количество индексов, а затем неиспользуемые индексы удаляются.
 
-
-\subsubsection{Возможности индексов в PostgreSQL}
-
-\textbf{Функциональные индексы}
-
-Вы можете построить индекс не только по полю/нескольким полям таблицы, но и по выражению, зависящему от полей. Пусть, например, в вашей таблице foo есть поле \lstinline!foo_name!, и выборки часто делаются по условию <<первая буква foo\_name = 'буква', в любом регистре>>. Вы можете создать индекс
-
-\begin{lstlisting}[language=SQL,label=lst:summary-indexes1,caption=Индекс]
-CREATE INDEX foo_name_first_idx ON foo ((lower(substr(foo_name, 1, 1))));
-\end{lstlisting}
-
-и запрос вида
-
-\begin{lstlisting}[language=SQL,label=lst:summary-indexes2,caption=Запрос]
-SELECT * FROM foo WHERE lower(substr(foo_name, 1, 1)) = 'ы';
-\end{lstlisting}
-
-будет его использовать.
-
-\textbf{Частичные индексы (partial indexes)}
-
-Под частичным индексом понимается индекс с предикатом WHERE. Пусть, например, у вас есть в базе таблица scheta с параметром uplocheno типа boolean. Записей, где \lstinline!uplocheno = false! меньше, чем записей с \lstinline!uplocheno = true!, а запросы по ним выполняются значительно чаще. Вы можете создать индекс
-
-\begin{lstlisting}[language=SQL,label=lst:summary-indexes3,caption=Индекс]
-CREATE INDEX scheta_neuplocheno ON scheta (id) WHERE NOT uplocheno;
-\end{lstlisting}
-
-который будет использоваться запросом вида
-
-\begin{lstlisting}[language=SQL,label=lst:summary-indexes4,caption=Запрос]
-SELECT * FROM scheta WHERE NOT uplocheno AND ...;
-\end{lstlisting}
-
-Достоинство подхода в том, что записи, не удовлетворяющие условию WHERE, просто не попадут в индекс.
-
-
 \subsection{Перенос логики на сторону сервера}
 
 Этот пункт очевиден для опытных пользователей PostrgeSQL и предназначен для тех, кто использует или переносит на PostgreSQL приложения, написанные изначально для более примитивных СУБД.

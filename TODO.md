@@ -1,8 +1,8 @@
 Fix:
  * Postgres_XC to http://postgres-x2.github.io/
  * move indexes to separate section (add all type of indexes + BRIN)
- * create section with functions
  * JSON/JSONB section
+ * Analyze section (rank, mode, cube, grouping sets, tablespace, etc)
 
 Add:
 
