@@ -3,6 +3,7 @@ Fix:
  * move indexes to separate section (add all type of indexes + BRIN)
  * JSON/JSONB section
  * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
+ * Bloat + pg_repack
 
 Add:
 
@@ -15,3 +16,4 @@ Add:
  * https://github.com/citusdata/pg_shard
  * http://greenplum.org/
  * http://www.postgres-xl.org/
+ * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
