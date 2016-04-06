@@ -3,7 +3,7 @@ Fix:
  * move indexes to separate section (add all type of indexes + BRIN)
  * JSON/JSONB section
  * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
- * Bloat + pg_repack
+ * Bloat + pg_repack + pgcompact
 
 Add:
 
