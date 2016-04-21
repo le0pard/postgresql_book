@@ -17,3 +17,4 @@ Add:
  * http://greenplum.org/
  * http://www.postgres-xl.org/
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
+ * http://www.repmgr.org/
