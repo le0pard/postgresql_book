@@ -1,6 +1,5 @@
 Fix:
  * Postgres_XC to http://postgres-x2.github.io/
- * move indexes to separate section (add all type of indexes + BRIN)
  * JSON/JSONB section
  * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
  * Bloat + pg_repack + pgcompact
@@ -18,3 +17,4 @@ Add:
  * http://www.postgres-xl.org/
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://www.repmgr.org/
+ * http://jinchengli.me/post/postgres-query-opt/
