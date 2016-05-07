@@ -18,3 +18,4 @@ Add:
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://www.repmgr.org/
  * http://jinchengli.me/post/postgres-query-opt/
+ * https://habrahabr.ru/company/postgrespro/blog/282770/
