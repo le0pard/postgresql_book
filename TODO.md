@@ -6,6 +6,7 @@ Fix:
 
 Add:
 
+ * http://www.postgresql.org/docs/current/static/runtime-config-resource.html
  * http://pgloader.io/
  * http://2ndquadrant.com/en/resources/pglogical/
  * http://citusdata.github.io/cstore_fdw/
