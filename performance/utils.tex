@@ -15,7 +15,7 @@ $ pgtune -i $PGDATA/postgresql.conf -o $PGDATA/postgresql.conf.pgtune
 \begin{itemize}
   \item \lstinline!-M, --memory! используйте этот параметр, чтобы определить общий объем системной памяти. Если не указано, pgtune будет пытаться использовать текущий объем системной памяти;
   \item \lstinline!-T, --type! указывает тип базы данных. Опции: DW, OLTP, Web, Mixed, Desktop;
-  \item \lstinline!-c, --connections! указывает максимальное количество соединений. Если он не указан, то будет браться в зависимости от типа базы данных.
+  \item \lstinline!-c, --connections! указывает максимальное количество соединений. Если он не указан, то будет браться в зависимости от типа базы данных;
 \end{itemize}
 
 Существует также \href{http://pgtune.leopard.in.ua/}{онлайн версия pgtune}.
@@ -41,7 +41,7 @@ $ pgtune -i $PGDATA/postgresql.conf -o $PGDATA/postgresql.conf.pgtune
   \item \lstinline!relforknumber!~--- номер ответвления;
   \item \lstinline!relblocknumber!~--- номер страницы;
   \item \lstinline!isdirty!~--- грязная страница?;
-  \item \lstinline!usagecount!~--- количество LRU страниц.
+  \item \lstinline!usagecount!~--- количество LRU страниц;
 \end{itemize}
 
 ID блока в общем буфере (\lstinline!bufferid!) соответствует количеству используемого буфера таблицей, индексом, прочим. Общее количество доступных буферов определяется двумя вещами:
@@ -154,4 +154,4 @@ LIMIT 20;
  percent_of_relation | 100.0
 \end{lstlisting}
 
-Используя эти данные можно проанализировать для каких объектов не хватает памяти или какие из них потребляют основную часть общего буфера. На основе этих данных можно более правильно делать тюнинг \lstinline!shared_buffers! параметра для PostgreSQL.
+Используя эти данные можно проанализировать для каких объектов не хватает памяти или какие из них потребляют основную часть общего буфера. На основе этого можно более правильно настраивать \lstinline!shared_buffers! параметр для PostgreSQL.
