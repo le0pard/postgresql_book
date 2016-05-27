@@ -7,6 +7,7 @@ Fix:
 Add:
 
  * http://www.postgresql.org/docs/current/static/runtime-config-resource.html
+ * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
  * http://pgloader.io/
  * http://2ndquadrant.com/en/resources/pglogical/
  * http://citusdata.github.io/cstore_fdw/
