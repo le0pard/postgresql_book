@@ -24,8 +24,6 @@
 \begin{itemize}
   \item \href{http://www.slony.info/}{Slony-I}~--- асинхронная Master-Slave репликация, поддерживает каскады(cascading) и отказоустойчивость(failover). Slony-I использует триггеры PostgreSQL для привязки к событиям INSERT/DELETE/UPDATE и хранимые процедуры для выполнения действий;
 
-  \item \href{http://pgfoundry.org/projects/pgcluster/}{PGCluster}~--- синхронная Multi-Master репликация. Проект на мой взгляд мертв;
-
   \item \href{http://pgpool.projects.postgresql.org/}{Pgpool-I/II}~--- это замечательный инструмент для PostgreSQL (лучше сразу работать с II версией). Позволяет делать:
   \begin{itemize}
     \item репликацию (в том числе, с автоматическим переключением на резервный stand-by сервер);
@@ -38,14 +36,16 @@
 
   \item \href{http://bucardo.org/}{Bucardo}~--- асинхронная репликация, которая поддерживает Multi-Master и Master-Slave режимы, а также несколько видов синхронизации и обработки конфликтов;
 
-  \item \href{http://skytools.projects.postgresql.org/doc/londiste.ref.html}{Londiste}~--- асинхронная Master-Slave репликация. Входит в состав Skytools\footnote{http://pgfoundry.org/projects/skytools/}. Проще в использовании, чем Slony-I;
+  \item \href{http://skytools.projects.postgresql.org/doc/londiste.ref.html}{Londiste}~--- асинхронная Master-Slave репликация. Входит в состав \href{http://pgfoundry.org/projects/skytools/}{Skytools}. Проще в использовании, чем Slony-I;
 
   \item \href{http://www.commandprompt.com/products/mammothreplicator/}{Mammoth Replicator}~--- асинхронная Multi-Master репликация;
 
-  \item \href{http://www.postgres-r.org/}{Postgres-R}~--- асинхронная Multi-Master репликация. Проект на мой взгляд мертв;
+  \item \href{http://2ndquadrant.com/en/resources/bdr/}{BDR (Bi-Directional Replication)}~--- асинхронная Multi-Master репликация;
+
+  \item \href{http://2ndquadrant.com/en/resources/pglogical/}{Pglogical}~--- асинхронная Master-Slave репликация;
 \end{itemize}
 
-Это, конечно, не весь список свободных систем для репликации, но я думаю даже из этого есть что выбрать для PostgreSQL.
+Это, конечно, не весь список свободных систем для репликации, но даже из этого есть что выбрать для PostgreSQL.
 
 
 \input{replication/streaming}
