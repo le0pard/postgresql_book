@@ -2,33 +2,32 @@
 \label{sec:londiste}
 
 \subsection{Введение}
-Londiste представляет собой движок для организации репликации, написанный на языке python. Основные принципы: надежность и простота использования. Из-за этого данное решение имеет меньше функциональности, чем Slony-I. Londiste использует в качестве транспортного механизма очередь PgQ  (описание этого более чем интересного проекта остается за рамками данной главы, поскольку он представляет интерес скорее для низкоуровневых программистов баз данных, чем для конечных пользователей~--- администраторов СУБД PostgreSQL). Отличительными особенностями решения являются:
+
+Londiste представляет собой движок для организации репликации, написанный на языке Python. Основные принципы: надежность и простота использования. Из-за этого данное решение имеет меньше функциональности, чем Slony-I. Londiste использует в качестве транспортного механизма очередь PgQ  (описание этого более чем интересного проекта остается за рамками данной главы, поскольку он представляет интерес скорее для низкоуровневых программистов баз данных, чем для конечных пользователей~--- администраторов СУБД PostgreSQL). Отличительными особенностями решения являются:
 
 \begin{itemize}
   \item возможность потабличной репликации;
   \item начальное копирование ничего не блокирует;
   \item возможность двухстороннего сравнения таблиц;
-  \item простота установки.
+  \item простота установки;
 \end{itemize}
 
 К недостаткам можно отнести:
 
 \begin{itemize}
-  \item триггерная репликация, что ухудшает производительность базы.
+  \item триггерная репликация, что ухудшает производительность базы;
 \end{itemize}
 
 
 \subsection{Установка}
 
-На серверах, которые мы настраиваем рассматривается ОС Linux, а именно Ubuntu Server. Автор данной книги считает, что под другие операционные системы (кроме Windows) все мало чем будет отличаться, а держать кластера PostgreSQL под ОС Windows, по меньшей мере, неразумно.
-
-Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет. На таких системах, как Debian или Ubuntu skytools можно найти в репозитории пакетов и поставить одной командой:
+Установка будет проводиться на Ubuntu Server. Поскольку Londiste~--- это часть Skytools, то нам нужно ставить этот пакет:
 
 \begin{lstlisting}[label=lst:londiste1,caption=Установка]
 % sudo aptitude install skytools
 \end{lstlisting}
 
-Но в системных пакетах может содержатся версия 2.x, которая не поддерживает каскадную репликацию, отказоустойчивость(failover) и переключение между серверами (switchover). По этой причине я не буду её рассматривать. Скачать самую последнюю версию пакета можно с \href{http://pgfoundry.org/projects/skytools}{официального сайта}. На момент написания главы последняя версия была 3.2. Итак, начнем:
+В некоторых системнах пакет может содержатся версия 2.x, которая не поддерживает каскадную репликацию, отказоустойчивость(failover) и переключение между серверами (switchover). По этой причине она не будет расматриваться. Скачать самую последнюю версию пакета можно с \href{http://pgfoundry.org/projects/skytools}{официального сайта}. На момент написания главы последняя версия была 3.2. Начнем установку:
 
 \begin{lstlisting}[label=lst:londiste2,caption=Установка]
 $ wget http://pgfoundry.org/frs/download.php/3622/skytools-3.2.tar.gz
@@ -57,7 +56,7 @@ $ make
 $ make install
 \end{lstlisting}
 
-Дальше проверим, что все у нас правильно установилось
+Проверяем правильность установки:
 
 \begin{lstlisting}[label=lst:londiste4,caption=Установка]
 $ londiste3 -V
@@ -76,24 +75,22 @@ Switches:
   -r        Reload - send SIGHUP to running process
 \end{lstlisting}
 
-Если у Вас похожий вывод, значит все установлено правильно и можно приступать к настройке.
-
 
 \subsection{Настройка}
 
 Обозначения:
 
 \begin{itemize}
-  \item master-host~--- мастер база данных;
-  \item slave1-host, slave2-host, slave3-host, slave4-host~--- слейв базы данных;
-  \item l3simple - название реплицируемой базы данных;
+  \item \lstinline!master-host!~--- мастер база данных;
+  \item \lstinline!slave1-host!, \lstinline!slave2-host!, \lstinline!slave3-host!, \lstinline!slave4-host!~--- слейв базы данных;
+  \item \lstinline!l3simple!~--- название реплицируемой базы данных;
 \end{itemize}
 
-\subsubsection{Создаём конфигурацию репликаторов}
+\subsubsection{Конфигурация репликаторов}
 
-Для начала создадим конфигурационный файл для master базы (пусть конфиг будет у нас /etc/skytools/master-londiste.ini):
+Сначала создается конфигурационный файл для master базы (конфиг будет \lstinline!/etc/skytools/master-londiste.ini!):
 
-\begin{lstlisting}[label=lst:londiste-replica1,caption=Создаём конфигурацию репликатора]
+\begin{lstlisting}[label=lst:londiste-replica1,caption=Конфигурация репликаторов]
 [londiste3]
 job_name = master_l3simple
 db = dbname=l3simple
@@ -127,9 +124,9 @@ INFO Node "master-node" initialized for queue "replika" with type "root"
 INFO Done
 \end{lstlisting}
 
-master-server~--- это имя провайдера (мастера базы).
+где \lstinline!master-server!~--- это имя провайдера (мастера базы).
 
-Теперь можем запустить демон:
+Теперь запустим демон:
 
 \begin{lstlisting}[label=lst:londiste-replica3,caption=Запускаем демон для master базы]
 $ londiste3 -d /etc/skytools/master-londiste.ini worker
@@ -138,7 +135,7 @@ INFO {standby: 1}
 INFO {standby: 1}
 \end{lstlisting}
 
-Если нужно перегрузить демон (например, изменили конфиг), то можно воспользоватся параметром \lstinline!-r!:
+Если нужно перегрузить демон (например при изменении конфигурации), то можно воспользоватся параметром \lstinline!-r!:
 
 \begin{lstlisting}[label=lst:londiste-replica4,caption=Перегрузка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -r
@@ -150,22 +147,20 @@ $ londiste3 /etc/skytools/master-londiste.ini -r
 $ londiste3 /etc/skytools/master-londiste.ini -s
 \end{lstlisting}
 
-или если потребуется <<убить>> (kill -9) демон:
+или если потребуется <<убить>> (\lstinline!kill!) демон:
 
 \begin{lstlisting}[label=lst:londiste-replica6,caption=Остановка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -k
 \end{lstlisting}
 
-Для автоматизации этого процесса skytools3 имеет встроенный демон, который подымает все воркеры из директории /etc/skytools/. Сама конфигурация демона находится в /etc/skytools.ini. Что бы запустить все демоны londiste достаточно выполнить:
+Для автоматизации данного процесса skytools3 имеет встроенный демон, который запускает все воркеры из директории \lstinline!/etc/skytools/!. Сама конфигурация демона находится в \lstinline!/etc/skytools.ini!. Что бы запустить все демоны londiste достаточно выполнить:
 
 \begin{lstlisting}[label=lst:londiste-replica7,caption=Демон для ticker]
 $ /etc/init.d/skytools3 start
 INFO Starting master_l3simple
 \end{lstlisting}
 
-Перейдем к slave базе.
-
-Для начала мы должны создать базу данных:
+Перейдем к slave базе. Для начала нужно создать базу данных:
 
 \begin{lstlisting}[label=lst:londiste-replica8,caption=Копирования структуры базы]
 $ psql -h slave1-host -U postgres
@@ -174,7 +169,7 @@ $ psql -h slave1-host -U postgres
 
 Подключение должно быть <<trust>> (без паролей) между master и slave базами данных.
 
-Далее создадим конфиг для slave базы (/etc/skytools/slave1-londiste.ini):
+Далее создадим конфиг для slave базы (\lstinline!/etc/skytools/slave1-londiste.ini!):
 
 \begin{lstlisting}[label=lst:londiste-replica9,caption=Создаём конфигурацию для slave]
 [londiste3]
@@ -212,7 +207,7 @@ INFO Starting slave1_l3simple
 
 \subsubsection{Создаём конфигурацию для PgQ ticker}
 
-Londiste требуется PgQ ticker для работы с мастер базой данных, который может быть запущен и на другой машине. Но, конечно, лучше его запускать на той же, где и master база данных. Для этого мы настраиваем специальный конфиг для ticker демона (пусть конфиг будет у нас /etc/skytools/pgqd.ini):
+Londiste требуется PgQ ticker для работы с мастер базой данных, который может быть запущен и на другой машине. Но, конечно, лучше его запускать на той же, где и master база данных. Для этого мы настраиваем специальный конфиг для ticker демона (конфиг будет \lstinline!/etc/skytools/pgqd.ini!):
 
 \begin{lstlisting}[label=lst:londiste-replica13,caption=PgQ ticker конфиг]
 [pgqd]
@@ -270,7 +265,7 @@ $ londiste3 /etc/skytools/slave1-londiste.ini add-table --all --create-full
 
 В данном примере используется параметр \lstinline!--all!, который означает все таблицы, но вместо него вы можете перечислить список конкретных таблиц, если не хотите реплицировать все. Если имена таблиц отличаются на master и slave, то можно использовать \lstinline!--dest-table! параметр при добавлении таблиц на slave базе. Также, если вы не перенесли струкруру таблиц заранее с master на slave базы, то это можно сделать автоматически через \lstinline!--create! параметр (или \lstinline!--create-full!, если нужно перенести полностью всю схему таблицы).
 
-Подобным образом добавляем последовательности (sequences) для репликации:
+Подобным образом добавляем последовательности (\lstinline!sequences!) для репликации:
 
 \begin{lstlisting}[label=lst:londiste-replica14,caption=Добавляем последовательности]
 $ londiste3 /etc/skytools/master-londiste.ini add-seq --all
@@ -342,7 +337,7 @@ public.pgbench_history_hid_seq  True             33345
 
 \subsubsection{Проверка}
 
-Для этого буду использовать pgbench утилиту. Запуская добавление данных в таблицу и мониторим логи одновлеменно:
+Для проверки будем использовать \lstinline!pgbench! утилиту. Запустим добавление данных в таблицу и смотрим в логи одновлеменно:
 
 \begin{lstlisting}[label=lst:londiste-check1,caption=Проверка]
 $ pgbench -T 10 -c 5 l3simple
@@ -358,7 +353,7 @@ INFO {count: 36, duration: 0.0157, idle: 2.0191}
 
 \subsubsection{Каскадная репликация}
 
-Каскадная репликация позволяет реплицировать данные с одного слейва на другой. Создадим конфиг для второго slave (пусть конфиг будет у нас /etc/skytools/slave2-londiste.ini):
+Каскадная репликация позволяет реплицировать данные с одного слейва на другой. Создадим конфиг для второго slave (конфиг будет \lstinline!/etc/skytools/slave2-londiste.ini!):
 
 \begin{lstlisting}[label=lst:londiste-cascade1,caption=Конфиг для slave2]
 [londiste3]
@@ -527,7 +522,7 @@ master-node (root)
 
 \subsubsection{Проверка состояния слейвов}
 
-Этот запрос на мастере дает некоторую информацию о каждой очереди и слейве.
+Данный запрос на мастере дает некоторую информацию о каждой очереди и слейве:
 
 \begin{lstlisting}[language=SQL,label=lst:londiste21,caption=Проверка состояния слейвов]
 # SELECT queue_name, consumer_name, lag, last_seen FROM pgq.get_consumer_info();
@@ -538,7 +533,7 @@ master-node (root)
  replika    | .slave1-node.watermark | 00:03:37.108259 | 00:03:05.01431
 \end{lstlisting}
 
-\lstinline!lag! столбец показывает отставание от мастера в синхронизации, \lstinline!last\_seen!~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, чем 60 секунд для конфигурации по умолчанию.
+где \lstinline!lag! столбец показывает отставание от мастера в синхронизации, \lstinline!last_seen!~--- время последней запроса от слейва. Значение этого столбца не должно быть больше, чем 60 секунд для конфигурации по умолчанию.
 
 \subsubsection{Удаление очереди всех событий из мастера}
 
@@ -566,7 +561,7 @@ SELECT pgq.unregister_consumer('queue_name', 'consumer_name');
  \item удалить поле на мастере;
  \item COMMIT;
  \item Проверить \lstinline!lag!, когда londiste пройдет момент удаления поля;
- \item удалить поле на всех слейвах.
+ \item удалить поле на всех слейвах;
 \end{enumerate}
 
 Хитрость тут в том, чтобы удалить поле на слейвах только тогда, когда больше нет событий в очереди на это поле.
