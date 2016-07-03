@@ -1,13 +1,9 @@
 \section{Slony-I}
 \label{sec:slonyI}
 
-\subsection{Введение}
-
 Slony это система репликации реального времени, позволяющая организовать синхронизацию нескольких серверов PostgreSQL по сети. Slony использует триггеры PostgreSQL для привязки к событиям INSERT/DELETE/UPDATE и хранимые процедуры для выполнения действий.
 
 Система Slony с точки зрения администратора состоит из двух главных компонент: репликационного демона \lstinline!slony! и административной консоли \lstinline!slonik!. Администрирование системы сводится к общению со \lstinline!slonik!-ом, демон \lstinline!slon! только следит за собственно процессом репликации.
-
-\subsubsection{О slonik-e}
 
 Все команды slonik принимает на свой stdin. До начала выполнения скрипт slonik-a проверяется на соответствие синтаксису, если обнаруживаются ошибки, скрипт не выполняется, так что можно не волноваться если slonik сообщает о syntax error, ничего страшного не произошло. И он ещё ничего не сделал. Скорее всего.
 
@@ -22,9 +18,7 @@ $ sudo aptitude install slony1-2-bin
 \subsection{Настройка}
 \label{subsec:slonyI-settings}
 
-Рассмотрим теперь установку на гипотетическую базу данных customers (названия узлов, кластеров и таблиц являются вымышленными).
-
-Исходные данные:
+Рассмотрим установку на гипотетическую базу данных customers. Исходные данные:
 
 \begin{itemize}
   \item \lstinline!customers!~--- база данных;
@@ -36,7 +30,7 @@ $ sudo aptitude install slony1-2-bin
 \subsubsection{Подготовка master базы}
 \label{subsec:slonyI-settings-1}
 
-Для начала нам нужно создать пользователя в базе, под которым будет действовать Slony. По умолчанию, и отдавая должное системе, этого пользователя обычно называют slony.
+Для начала нужно создать пользователя в базе, под которым будет действовать Slony. По умолчанию, и отдавая должное системе, этого пользователя обычно называют slony.
 
 \begin{lstlisting}[label=lst:slony2,caption=Подготовка master-сервера]
 $ createuser -a -d slony
@@ -48,14 +42,14 @@ $ psql -d template1 -c "ALTER USER slony WITH PASSWORD 'slony_user_password';"
 \subsubsection{Подготовка slave базы}
 \label{subsec:slonyI-settings-2}
 
-Здесь я рассматриваю, что серверы кластера соединены посредством сети. Необходимо чтобы с каждого из серверов можно было установить соединение с PostgreSQL на master хосте, и наоборот. То есть, команда:
+Здесь рассматривается, что серверы кластера соединены посредством сети. Необходимо чтобы с каждого из серверов можно было установить соединение с PostgreSQL на master хосте, и наоборот. То есть, команда:
 
 \begin{lstlisting}[label=lst:slony3,caption=Подготовка одного slave-сервера]
 anyuser@customers_slave$ psql -d customers \
 -h customers_master.com -U slony
 \end{lstlisting}
 
-должна подключать нас к мастер-серверу (после ввода пароля, желательно). Если что-то не так, возможно требуется поковыряться в настройках firewall-a, или файле \lstinline!pg_hba.conf!, который лежит в \lstinline!$PGDATA!.
+должна подключать нас к мастер-серверу (после ввода пароля, желательно).
 
 Теперь устанавливаем на slave-хост сервер PostgreSQL. Следующего обычно не требуется, сразу после установки Postgres <<up and ready>>, но в случае каких-то ошибок можно начать <<с чистого листа>>, выполнив следующие команды (предварительно сохранив конфигурационные файлы и остановив postmaster):
 
@@ -68,9 +62,7 @@ pgsql@customers_slave$ psql -d template1 -c "alter \
 user slony with password 'slony_user_password';"
 \end{lstlisting}
 
-Запускаем postmaster.
-
-Внимание! Обычно требуется определённый владелец для реплицируемой БД. В этом случае необходимо создать его тоже!
+Далее запускаем postmaster. Обычно требуется определённый владелец для реплицируемой БД. В этом случае необходимо создать его тоже:
 
 \begin{lstlisting}[label=lst:slony5,caption=Подготовка одного slave-сервера]
 pgsql@customers_slave$ createuser -a -d customers_owner
@@ -84,7 +76,7 @@ user customers_owner with password 'customers_owner_password';"
 
 \subsubsection{Инициализация БД и plpgsql на slave}
 
-Следующие команды выполняются от пользователя slony. Скорее всего для выполнения каждой из них потребуется ввести пароль (\lstinline!slony_user_password!). Итак:
+Следующие команды выполняются от пользователя slony. Скорее всего для выполнения каждой из них потребуется ввести пароль (\lstinline!slony_user_password!):
 
 \begin{lstlisting}[label=lst:slony6,caption=Инициализация БД и plpgsql на slave]
 slony@customers_master$ createdb -O customers_owner \
@@ -93,11 +85,9 @@ slony@customers_master$ createlang -d customers \
 -h customers_slave.com plpgsql
 \end{lstlisting}
 
-Внимание! Все таблицы, которые будут добавлены в replication set должны иметь primary key. Если какая-то из таблиц не удовлетворяет этому условию, задержитесь на этом шаге и дайте каждой таблице primary key командой ALTER TABLE ADD PRIMARY KEY.
+Внимание! Все таблицы, которые будут добавлены в replication set должны иметь primary key. Если какая-то из таблиц не удовлетворяет этому условию, задержитесь на этом шаге и дайте каждой таблице primary key командой \lstinline!ALTER TABLE ADD PRIMARY KEY!. Если столбца который мог бы стать primary key не находится, добавьте новый столбец типа serial (\lstinline!ALTER TABLE ADD COLUMN!), и заполните его значениями. Настоятельно НЕ рекомендую использовать \lstinline!table add key! slonik-a.
 
-Если столбца который мог бы стать primary key не находится, добавьте новый столбец типа serial (ALTER TABLE ADD COLUMN), и заполните его значениями. Настоятельно НЕ рекомендую использовать <<table add key>> slonik-a.
-
-Продолжаем. Создаём таблицы и всё остальное на slave:
+Далее создаём таблицы и всё остальное на slave базе:
 
 \begin{lstlisting}[label=lst:slony7,caption=Инициализация БД и plpgsql на slave]
 slony@customers_master$ pg_dump -s customers | \
@@ -106,32 +96,12 @@ psql -U slony -h customers_slave.com customers
 
 \lstinline!pg_dump -s! сдампит только структуру нашей БД.
 
-\lstinline!pg_dump -s customers! должен пускать без пароля, а вот для \lstinline!psql -U slony -h customers_slave.com customers! придётся набрать пароль (\lstinline!slony_user_pass!). Важно: я подразумеваю что сейчас на мастер-хосте ещё не установлен Slony (речь не про \lstinline!make install!), то есть в БД нет таблиц \lstinline!sl_*!, триггеров и прочего. Если есть, то возможно два варианта:
-
-\begin{itemize}
-  \item добавляется узел в уже функционирующую систему репликации (читайте раздел 5);
-  \item это ошибка :-) Тогда до переноса структуры на slave выполните следующее:
-
-\begin{lstlisting}[label=lst:slony8,caption=Инициализация БД и plpgsql на slave]
-slonik <<EOF
-cluster name = customers_slave;
-node Y admin conninfo = 'dbname=customers host=customers_master.com
-port=5432 user=slony password=slony_user_pass';
-uninstall node (id = Y);
-echo 'okay';
-EOF
-\end{lstlisting}
-
-Y~--- число. Любое. Важно: если это действительно ошибка, cluster name может иметь какой-то другое значение, например T1 (default). Нужно его выяснить и сделать uninstall.
-
-Если структура уже перенесена (и это действительно ошибка), сделайте uninstall с обоих узлов (с master и slave).
-\end{itemize}
+\lstinline!pg_dump -s customers! должен пускать без пароля, а вот для \lstinline!psql -U slony -h customers_slave.com customers! придётся набрать пароль (\lstinline!slony_user_pass!). Важно: подразумевается что сейчас на мастер-хосте ещё не установлен Slony (речь не про \lstinline!make install!), то есть в БД нет таблиц \lstinline!sl_*!, триггеров и прочего.
 
 \subsubsection{Инициализация кластера}
 
-Если Сейчас мы имеем два сервера PgSQL которые свободно <<видят>> друг друга по сети, на одном из них находится мастер-база с данными, на другом~--- только структура.
+Сейчас мы имеем два сервера PostgreSQL которые свободно <<видят>> друг друга по сети, на одном из них находится мастер-база с данными, на другом~--- только структура базы. Далее мастер-хосте запускаем скрипт:
 
-На мастер-хосте запускаем такой скрипт:
 \begin{lstlisting}[label=lst:slony9,caption=Инициализация кластера]
 #!/bin/sh
 
@@ -189,15 +159,11 @@ store listen ( origin = 2, provider = 2, receiver = 1 );
 EOF
 \end{lstlisting}
 
-Здесь мы инициализируем кластер, создаём репликационный набор, включаем в него две таблицы. Важно: нужно перечислить все таблицы, которые нужно реплицировать, id таблицы в наборе должен быть уникальным, таблицы должны иметь primary key.
-
-Важно: replication set запоминается раз и навсегда. Чтобы добавить узел в схему репликации не нужно заново инициализировать set.
-
-Важно: если в набор добавляется или удаляется таблица нужно переподписать все узлы. То есть сделать unsubscribe и subscribe заново.
+Здесь инициализируется кластер, создается replication set, включаются в него две таблицы. Нужно перечислить все таблицы, которые нужно реплицировать. Replication set запоминается раз и навсегда. Чтобы добавить узел в схему репликации не нужно заново инициализировать set. Если в набор добавляется или удаляется таблица нужно переподписать все узлы. То есть сделать \lstinline!unsubscribe! и \lstinline!subscribe! заново.
 
 \subsubsection{Подписываем slave-узел на replication set}
 
-Скрипт:
+Далее запускаем на слейве:
 
 \begin{lstlisting}[label=lst:slony10,caption=Подписываем slave-узел на replication set]
 #!/bin/sh
@@ -244,17 +210,13 @@ slony@customers_slave$ slon customers_rep \
 "dbname=customers user=slony"
 \end{lstlisting}
 
-Сейчас слоны обменяются сообщениями и начнут передачу данных. Начальное наполнение происходит с помощью COPY, slave DB на это время полностью блокируется.
-
-В среднем время актуализации данных на slave-системе составляет до 10-ти секунд. slon успешно обходит проблемы со связью и подключением к БД, и вообще требует к себе достаточно мало внимания.
+Cлоны обменяются сообщениями и начнут передачу данных. Начальное наполнение происходит с помощью \lstinline!COPY! команды, слейв база в это время полностью блокируется.
 
 \subsection{Общие задачи}
 
 \subsubsection{Добавление ещё одного узла в работающую схему репликации}
 
-Выполнить~\ref{subsec:slonyI-settings-1} и выполнить~\ref{subsec:slonyI-settings-2}.
-
-Новый узел имеет id = 3. Находится на хосте customers\_slave3.com, <<видит>> мастер-сервер по сети и мастер может подключиться к его PgSQL. После дублирования структуры (п~\ref{subsec:slonyI-settings}.2) делаем следующее:
+Требуется выполнить \ref{subsec:slonyI-settings-1} и \ref{subsec:slonyI-settings-2} этапы. Новый узел имеет id = 3. Находится на хосте \lstinline!customers_slave3.com!, <<видит>> мастер-сервер по сети и мастер может подключиться к его PostgreSQL. После дублирования структуры (п~\ref{subsec:slonyI-settings}.2) делается следующее:
 
 \begin{lstlisting}[label=lst:slony13,caption=Общие задачи]
 slonik <<EOF
@@ -266,9 +228,7 @@ echo 'okay';
 EOF
 \end{lstlisting}
 
-Это нужно чтобы удалить схему, триггеры и процедуры, которые были сдублированы вместе с таблицами и структурой БД.
-
-Инициализировать кластер не надо. Вместо этого записываем информацию о новом узле в сети:
+Это нужно чтобы удалить схему, триггеры и процедуры, которые были сдублированы вместе с таблицами и структурой БД. Инициализировать кластер не надо. Вместо этого записываем информацию о новом узле в сети:
 
 \begin{lstlisting}[label=lst:slony14,caption=Общие задачи]
 #!/bin/sh
@@ -310,7 +270,7 @@ store listen ( origin = 3, provider = 3, receiver = 1 );
 EOF
 \end{lstlisting}
 
-Новый узел имеет id 3, потому что 2 уже есть и работает. Подписываем новый узел 3 на replication set:
+Новый узел имеет id 3, потому что 2 уже работает. Подписываем новый узел 3 на replication set:
 
 \begin{lstlisting}[label=lst:slony15,caption=Общие задачи]
 #!/bin/sh
@@ -410,12 +370,7 @@ port=5432 user=slony_user password=slony_user_pass'
 %
 \end{lstlisting}
 
-
-Это означает что в служебной таблице \lstinline!_<имя кластера>.sl_path;!, например \lstinline!_customers_rep.sl_path! на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, id нового узла 4, пара (1,4) в \lstinline!sl_path! отсутствует.
-
-Видимо, это баг Slony. Как избежать этого и последующих ручных вмешательств пока не ясно.
-
-Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос (добавить путь, в данном случае (1,4)):
+Это означает что в служебной таблице \lstinline!_<имя кластера>.sl_path;!, например \lstinline!_customers_rep.sl_path! на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, id нового узла 4, пара (1,4) в \lstinline!sl_path! отсутствует. Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос:
 
 \begin{lstlisting}[label=lst:slony18,caption=Устранение неисправностей]
 slony_user@masterhost$ psql -d customers -h _every_one_of_slaves -U slony
@@ -424,11 +379,11 @@ values ('1','4','dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_password,'10');
 \end{lstlisting}
 
-Если возникают затруднения, да и вообще для расширения кругозора можно посмотреть на служебные таблицы и их содержимое. Они не видны обычно и находятся в рамках пространства имён \lstinline!_<имя кластера>!, например \lstinline!_customers_rep!.
+Если возникают затруднения, то можно посмотреть на служебные таблицы и их содержимое. Они не видны обычно и находятся в рамках пространства имён \lstinline!_<имя кластера>!, например \lstinline!_customers_rep!.
 
 \subsubsection{Что делать если репликация со временем начинает тормозить}
 
-В процессе эксплуатации наблюдаю как со временем растёт нагрузка на master-сервере, в списке активных бекендов~--- постоянные SELECT-ы со слейвов. В \lstinline!pg_stat_activity! видим примерно такие запросы:
+В процессе эксплуатации может наблюдатся как со временем растёт нагрузка на master-сервере, в списке активных бекендов~--- постоянные SELECT-ы со слейвов. В \lstinline!pg_stat_activity! видны примерно такие запросы:
 
 \begin{lstlisting}[label=lst:slony19,caption=Устранение неисправностей]
 select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
@@ -446,9 +401,7 @@ ev_data7, ev_data8 from "_customers_rep".sl_event e where
 order by e.ev_origin, e.ev_seqno;
 \end{lstlisting}
 
-Не забываем что \lstinline!_customers_rep!~--- имя схемы из примера, у вас будет другое имя.
-
-Таблица \lstinline!sl_event! почему-то разрастается со временем, замедляя выполнение этих запросов до неприемлемого времени. Удаляем ненужные записи:
+где \lstinline!_customers_rep!~--- имя схемы из примера. Таблица \lstinline!sl_event! почему-то разрастается со временем, замедляя выполнение этих запросов до неприемлемого времени. Удаляем ненужные записи:
 
 \begin{lstlisting}[label=lst:slony20,caption=Устранение неисправностей]
 delete from _customers_rep.sl_event where
@@ -456,3 +409,4 @@ ev_timestamp<NOW()-'1 DAY'::interval;
 \end{lstlisting}
 
 Производительность должна вернуться к изначальным значениям. Возможно имеет смысл почистить таблицы \lstinline!_customers_rep.sl_log_*! где вместо звёздочки подставляются натуральные числа, по-видимому по количеству репликационных сетов, так что \lstinline!_customers_rep.sl_log_1! точно должна существовать.
+
