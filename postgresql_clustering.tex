@@ -27,8 +27,6 @@
   \item Определять имя сервера с помощью числового (буквенного) преобразования. Например, можно вычислять номер сервера, как остаток от деления на определенное число (количество серверов, между которыми Вы делите таблицу). В этом случае узкое место~--- это проблема добавления новых серверов~--- придется делать перераспределение данных между новым количеством серверов;
 \end{itemize}
 
-Для шардинга не существует решения на уровне известных платформ, т.к. это весьма специфическая для отдельно взятого приложения задача.
-
 Естественно, делая горизонтальный шардинг, Вы ограничиваете себя в возможности выборок, которые требуют пересмотра всей таблицы (например, последние посты в блогах людей будет достать невозможно, если таблица постов шардится). Такие задачи придется решать другими подходами. Например, для описанного примера, можно при появлении нового поста, заносить его ID в общий стек, размером в 100 элементом.
 
 Горизонтальный шардинг имеет одно явное преимущество~--- он бесконечно масштабируем. Для создания шардинга PostgreSQL существует несколько решений:
@@ -36,14 +34,14 @@
 \begin{itemize}
   \item \href{http://postgres-xc.sourceforge.net/}{Postgres-XC}
   \item \href{http://www.greenplum.com/products/greenplum-database}{Greenplum Database}
-  \item \href{https://github.com/citusdata/pg\_shard}{Pg\_shard}
+  \item \href{https://github.com/citusdata/citus}{Citus}
   \item \href{http://plproxy.projects.postgresql.org/doc/tutorial.html}{PL/Proxy}
   \item \href{https://launchpad.net/stado}{Stado (sequel to GridSQL)}
 \end{itemize}
 
 
 \input{clustering/plproxy}
-\input{clustering/pg_shard}
+\input{clustering/citus}
 \input{clustering/postgres_xc}
 \input{clustering/postgres_xl}
 \input{clustering/greenplum}
