@@ -21,3 +21,4 @@ Add:
  * http://jinchengli.me/post/postgres-query-opt/
  * https://habrahabr.ru/company/postgrespro/blog/282770/
  * https://edwardsamuel.wordpress.com/2016/05/24/set-up-scheduled-postgresql-backup-to-aws-s3-using-wal-e/
+ * https://github.com/michaelpq/pg_arman
