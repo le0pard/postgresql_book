@@ -117,7 +117,7 @@ $ gzip -d github_events-2015-01-01-*.gz
 # DELETE FROM github_events WHERE repo_id = 24509048;
 \end{lstlisting}
 
-Для работы \lstinline!UPDATE! и \lstinline!DELETE! запросов требуется, что бы он <<затрагивал>> в один шард. Это означает, что условие \lstinline!WHERE! должно содержать условие, что ограничит выполнение запроса на один шард по распределенному столбцу. Для обновления или удаления данных на нескольких шардах требуется использовать команду \lstinline!master_modify_multiple_shards!:
+Для работы \lstinline!UPDATE! и \lstinline!DELETE! запросов требуется, что бы он <<затрагивал>> один шард. Это означает, что условие \lstinline!WHERE! должно содержать условие, что ограничит выполнение запроса на один шард по распределенному столбцу. Для обновления или удаления данных на нескольких шардах требуется использовать команду \lstinline!master_modify_multiple_shards!:
 
 \begin{lstlisting}[language=SQL,label=lst:citus_hash6,caption=Изменение данных на нескольких шардах]
 # SELECT master_modify_multiple_shards(
