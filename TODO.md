@@ -8,11 +8,11 @@ Add:
 
  * http://www.postgresql.org/docs/current/static/runtime-config-resource.html
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
+ * https://research.neustar.biz/2013/02/04/open-source-release-postgresql-hll/
  * http://pgloader.io/
  * http://citusdata.github.io/cstore_fdw/
  * https://github.com/cyga/www_fdw
  * http://www.sai.msu.su/~megera/wiki/wildspeed
- * https://www.citusdata.com/
  * https://github.com/citusdata/pg_shard
  * http://greenplum.org/
  * http://www.postgres-xl.org/
