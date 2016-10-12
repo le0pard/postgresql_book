@@ -24,3 +24,5 @@ Add:
  * https://github.com/michaelpq/pg_arman
  * https://github.com/citusdata/pg_cron
  * https://github.com/ankane/pgslice
+ * https://madusudanan.com/blog/understanding-postgres-caching-in-depth/
+ * https://www.citusdata.com/blog/2016/10/12/count-performance/
