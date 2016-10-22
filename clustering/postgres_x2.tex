@@ -27,13 +27,7 @@ Postgres-X2~-- система для создания мульти-мастер 
 
 \subsection{Установка}
 
-Установить Postgres-X2 можно из \href{http://postgres-x2.github.io/}{исходников} или же из пакетов системы. Например в Ubuntu 14.04 можно установить postgres-x2 так:
-
-\begin{lstlisting}[language=Bash,label=lst:postgres-x21,caption=Установка Postgres-X2]
-$ sudo apt-get install postgres-xc postgres-xc-client postgres-xc-contrib postgres-xc-server-dev
-\end{lstlisting}
-
-По умолчанию он создаст один координатор и два обработчика данных.
+Установить Postgres-X2 можно из \href{http://postgres-x2.github.io/}{исходников}.
 
 \subsection{Распределение данных и масштабируемость}
 
@@ -346,12 +340,12 @@ JOIN между и с участием реплицированных табли
 
 \begin{enumerate}
   \item Postgres-X2 базируется на PostgreSQL 9.3;
-  \item Нет системы репартиционирования при добавлении или удалении нод (в разработке);
+  \item Нет системы репартиционирования при добавлении или удалении нод;
   \item Нет глобальных \lstinline!UNIQUE! на распределенных таблицах;
   \item Не поддерживаются foreign keys между нодами поскольку такой ключ должен вести на данные расположенные на том же обработчике данных;
-  \item Не поддерживаются курсоры (в разработке);
-  \item Не поддерживается \lstinline!INSERT ... RETURNING! (в разработке);
-  \item Невозможно удаление и добавление нод в кластер без полной реинициализации кластера (в разработке).
+  \item Не поддерживаются курсоры;
+  \item Не поддерживается \lstinline!INSERT ... RETURNING!;
+  \item Невозможно удаление и добавление нод в кластер без полной реинициализации кластера;
 \end{enumerate}
 
 \subsection{Заключение}
