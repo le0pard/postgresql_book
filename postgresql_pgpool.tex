@@ -32,14 +32,10 @@ Pgpool-II может управлять множеством серверов Po
 
 \end{itemize}
 
-Pgpool-II общается по протоколу бэкенда и фронтенда PostgreSQL и располагается между ними. Таким образом, приложение базы данных (фронтенд) считает что pgpool-II~--- настоящий сервер PostgreSQL, а сервер (бэкенд) видит pgpool-II как одного из своих клиентов. Поскольку pgpool-II прозрачен как для сервера, так и для клиента, существующие приложения, работающие с базой данных, могут использоваться с pgpool-II практически без изменений в исходном коде.
-
-Оригинал руководства доступен по адресу \href{http://pgpool.projects.pgfoundry.org/pgpool-II/doc/tutorial-en.html}{pgpool.projects.pgfoundry.org}.
-
+Pgpool-II общается по протоколу бэкенда и фронтенда PostgreSQL и располагается между ними. Таким образом, приложение базы данных считает что pgpool-II~--- настоящий сервер PostgreSQL, а сервер видит pgpool-II как одного из своих клиентов. Поскольку pgpool-II прозрачен как для сервера, так и для клиента, существующие приложения, работающие с базой данных, могут использоваться с pgpool-II практически без изменений в исходном коде.
 
 
 \section{Установка и настройка}
-\label{sec:pgpool-II-begin}
 
 Во многих Linux системах pgpool-II может находиться в репозитории пакетов. Для Ubuntu Linux, например, достаточно будет выполнить:
 
@@ -49,13 +45,13 @@ $ sudo aptitude install pgpool2
 
 \subsection{Настройка}
 
-Параметры конфигурации pgpool-II хранятся в файле \lstinline!pgpool.conf!. Формат файла: одна пара \lstinline!параметр = значение! в строке. При установке pgpool-II автоматически создается файл \lstinline!pgpool.conf.sample!.
+Параметры конфигурации pgpool-II хранятся в файле \lstinline!pgpool.conf!. Формат файла: одна пара \lstinline!параметр = значение! в строке. При установке pgpool-II автоматически создается файл \lstinline!pgpool.conf.sample!:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool4,caption=Файлы конфигурации]
 $ cp /usr/local/etc/pgpool.conf.sample /usr/local/etc/pgpool.conf
 \end{lstlisting}
 
-Pgpool-II принимает соединения только с \lstinline!localhost! на порт 9999. Если вы хотите принимать соединения с других хостов, установите для параметра \lstinline!listen_addresses! значение <<*>>.
+Pgpool-II принимает соединения только с \lstinline!localhost! на порт 9999. Если требуется принимать соединения с других хостов, установите для параметра \lstinline!listen_addresses! значение <<*>>.
 
 \begin{lstlisting}[label=lst:pgpool5,caption=Файлы конфигурации]
 listen_addresses = 'localhost'
@@ -67,26 +63,20 @@ port = 9999
 
 \subsection{Настройка команд PCP}
 
-У pgpool-II есть PCP интерфейс для административных целей (получить информацию об узлах базы данных, остановить pgpool-II, прочее). Чтобы использовать команды PCP, необходима идентификация пользователя. Эта идентификация отличается от идентификации пользователей в PostgreSQL. Имя пользователя и пароль нужно указывать в файле \lstinline!pcp.conf!. В этом файле имя пользователя и пароль указываются как пара значений, разделенных двоеточием (:). Одна пара в строке. Пароли зашифрованы в формате хэша md5.
+У pgpool-II есть PCP интерфейс для административных целей (получить информацию об узлах базы данных, остановить pgpool-II, прочее). Чтобы использовать команды PCP, необходима идентификация пользователя. Эта идентификация отличается от идентификации пользователей в PostgreSQL. Имя пользователя и пароль нужно указывать в файле \lstinline!pcp.conf!. В этом файле имя пользователя и пароль указываются как пара значений, разделенных двоеточием (:). Одна пара в строке, пароли зашифрованы в формате хэша md5:
 
 \begin{lstlisting}[label=lst:pgpool6,caption=Настройка команд PCP]
 postgres:e8a48653851e28c69d0506508fb27fc5
 \end{lstlisting}
 
-При установке pgpool-II автоматически создается файл \lstinline!pcp.conf.sample!.
-
-\begin{lstlisting}[language=Bash,label=lst:pgpool7,caption=Настройка команд PCP]
-$ cp /usr/local/etc/pcp.conf.sample /usr/local/etc/pcp.conf
-\end{lstlisting}
-
-Для того чтобы зашифровать пароль в формате md5 хэша используется команда \lstinline!pg_md5!, которая устанавливается как один из исполняемых файлов pgpool-II. \lstinline!pg_md5! принимает текст в параметре командной строки и отображает текст его md5 хэша.
+Для того чтобы зашифровать пароль в формате md5 хэша используется команда \lstinline!pg_md5!, которая устанавливается как один из исполняемых файлов pgpool-II. \lstinline!pg_md5! принимает текст в параметре командной строки и отображает md5 хэш как результат.
 
 \begin{lstlisting}[label=lst:pgpool8,caption=Настройка команд PCP]
 $ /usr/bin/pg_md5 postgres
 e8a48653851e28c69d0506508fb27fc5
 \end{lstlisting}
 
-Команды PCP выполняются по сети, так что в файле \lstinline!pgpool.conf! должен быть указан номер порта в параметре \lstinline!pcp_port!.
+Команды PCP выполняются по сети, так что в файле \lstinline!pgpool.conf! должен быть указан номер порта в параметре \lstinline!pcp_port!:
 
 \begin{lstlisting}[label=lst:pgpool9,caption=Настройка команд PCP]
 pcp_port = 9898
@@ -115,7 +105,6 @@ backend_weight2 = 1
 
 
 \section{Настройка репликации}
-\label{sec:pgpool-II-replica}
 
 Pgpool-II репликация включает копирование одних и тех же данных на множество узлов базы данных (синхронная репликация). Но данная репликация имеет тот недостаток, что она создаёт дополнительную нагрузку при выполнении всех транзакций, в которых обновляются какие-либо реплики (кроме того, могут возникать проблемы, связанные с доступностью данных).
 
@@ -184,27 +173,25 @@ for port in 5432 5433 5434; do
 
 \section{Параллельное выполнение запросов}
 
-Pgpool-II позволяет использовать распределением, партиционирование для таблиц. Данные из разных диапазонов сохраняются на двух или более узлах базы данных параллельным запросом. Более того, одни и те же данные на двух и более узлах базы данных могут быть воспроизведены с использованием распределения.
+Pgpool-II позволяет использовать распределение для таблиц. Данные из разных диапазонов сохраняются на двух или более узлах базы данных параллельным запросом. Более того, одни и те же данные на двух и более узлах базы данных могут быть воспроизведены с использованием распределения.
 
-Чтобы включить параллельные запросы в pgpool-II вы должны установить еще одну базу данных, называемую <<системной базой данных>> (<<System Database>>) (далее будем называться SystemDB). SystemDB хранит определяемые пользователем правила, определяющие какие данные будут сохраняться на каких узлах базы данных. Также SystemDB используется чтобы объединить результаты возвращенные узлами базы данных посредством dblink.
+Чтобы включить параллельные запросы в pgpool-II вы должны установить еще одну базу данных, называемую <<системной базой данных>> (<<System Database>>) (далее будет называться SystemDB). SystemDB хранит определяемые пользователем правила, определяющие какие данные будут сохраняться на каких узлах базы данных. Также SystemDB используется чтобы объединить результаты возвращенные узлами базы данных посредством dblink.
 
-\subsection{Настройка параллельного запроса}
+\subsection{Настройка}
 
-Чтобы включить функцию выполнения параллельных запросов установите для параметра \lstinline!parallel_mode! значение \lstinline!true! в файле \lstinline!pgpool.conf!.
+Чтобы включить функцию выполнения параллельных запросов требуется установить для параметра \lstinline!parallel_mode! значение \lstinline!true! в файле \lstinline!pgpool.conf!:
 
 \begin{lstlisting}[label=lst:pgpool22,caption=Настройка параллельного запроса]
 parallel_mode = true
 \end{lstlisting}
 
-Установка параметра \lstinline!parallel_mode! равным \lstinline!true! не запустит параллельные запросы автоматически. Для этого pgpool-II нужна SystemDB и правила определяющие как распределять данные по узлам базы данных.
-
-Также SystemDB использует dblink для создания соединений с pgpool-II. Таким образом, нужно установить значение параметра \lstinline!listen_addresses! таким образом чтобы pgpool-II принимал эти соединения.
+Установка параметра \lstinline!parallel_mode! равным \lstinline!true! не запустит параллельные запросы автоматически. Для этого pgpool-II нужна SystemDB и правила определяющие как распределять данные по узлам базы данных. Также SystemDB использует dblink для создания соединений с pgpool-II. Таким образом, нужно установить значение параметра \lstinline!listen_addresses! таким образом чтобы pgpool-II принимал эти соединения:
 
 \begin{lstlisting}[label=lst:pgpool23,caption=Настройка параллельного запроса]
 listen_addresses = '*'
 \end{lstlisting}
 
-Нужно обратить внимание, что репликация не реализована для таблиц, которые распределяются посредством параллельных запросов и, в то же время, репликация может быть успешно осуществлена. Поэтому:
+Нужно обратить внимание, что репликация не реализована для таблиц, которые распределяются посредством параллельных запросов. Поэтому:
 
 \begin{lstlisting}[label=lst:pgpool24,caption=Настройка параллельного запроса]
 replication_mode = true
@@ -240,23 +227,25 @@ $ createuser -p 5432 pgpool
 $ createdb -p 5432 -O pgpool pgpool
 \end{lstlisting}
 
+
 \subsubsection{Установка dblink}
 
-Далее мы должны установить dblink в базу данных <<pgpool>>. dblink~--- один из инструментов включенных в каталог contrib исходного кода PostgreSQL. После того как dblink был установлен в вашей системе мы добавим функции dblink в базу данных <<pgpool>>.
+Далее требуется установить dblink в базу данных <<pgpool>>. Dblink~--- один из инструментов включенных в каталог contrib исходного кода PostgreSQL. После того как dblink был установлен в вашей системе мы добавим функции dblink в базу данных <<pgpool>>.
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool29,caption=Установка dblink]
 $ psql -c "CREATE EXTENSION dblink;" -p 5432 pgpool
 \end{lstlisting}
 
+
 \subsubsection{Создание таблицы dist\_def}
 
-Следующим шагом мы создадим таблицу с именем \lstinline!dist_def!, в которой будут храниться правила распределения данных. Поскольку pgpool-II уже был установлен, файл с именем \lstinline!system_db.sql! должен быть установлен в \lstinline!/usr/local/share/system_db.sql! (имейте в виду, что на вашей системе каталог установки может быть другой). Файл \lstinline!system_db.sql! содержит директивы для создания специальных таблиц, включая и таблицу \lstinline!dist_def!. Выполнняем следующую команду для создания таблицы \lstinline!dist_def!:
+Следующим шагом мы создадим таблицу с именем \lstinline!dist_def!, в которой будут храниться правила распределения данных. Поскольку pgpool-II уже был установлен, файл с именем \lstinline!system_db.sql! должен быть установлен в \lstinline!/usr/local/share/system_db.sql! (имейте в виду, что на вашей системе каталог установки может быть другой). Файл \lstinline!system_db.sql! содержит директивы для создания специальных таблиц, включая и таблицу \lstinline!dist_def!. Выполним следующую команду для создания таблицы \lstinline!dist_def!:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool30,caption=Создание таблицы dist\_def]
 $ psql -f /usr/local/share/system_db.sql -p 5432 -U pgpool pgpool
 \end{lstlisting}
 
-Все таблицы в файле \lstinline!system_db.sql!, включая \lstinline!dist_def!, создаются в схеме \lstinline!pgpool_catalog!. Если вы установили параметр \lstinline!system_db_schema! на использование другой схемы, вам нужно, соответственно, отредактировать файл \lstinline!system_db.sql!. Описание таблицы \lstinline!dist_def! выглядит так как показано ниже. Имя таблицы не должно измениться:
+Все таблицы в файле \lstinline!system_db.sql!, включая \lstinline!dist_def!, создаются в схеме \lstinline!pgpool_catalog!. Если вы установили параметр \lstinline!system_db_schema! на использование другой схемы, вам нужно, соответственно, отредактировать файл \lstinline!system_db.sql!. Описание таблицы \lstinline!dist_def! выглядит так как показано ниже:
 
 \begin{lstlisting}[language=SQL,label=lst:pgpool31,caption=Создание таблицы dist\_def]
 CREATE TABLE pgpool_catalog.dist_def (
@@ -285,7 +274,7 @@ CREATE TABLE pgpool_catalog.dist_def (
 
 \subsubsection{Создание таблицы replicate\_def}
 
-В случае если указана таблица, для которой производится репликация в выражение SQL, использующее зарегистрированную в \lstinline!dist_def! таблицу путем объединения таблиц, информация о таблице, для которой необходимо производить репликацию, предварительно регистрируется в таблице с именем \lstinline!replicate_def!. Таблица \lstinline!replicate_def! будет создана при обработке файла \lstinline!system_db.sql! во время создания таблицы \lstinline!dist_def!. Таблица \lstinline!replicate_def! описана так как показано ниже:
+В случае если указана таблица, для которой производится репликация в выражение SQL, использующее зарегистрированную в \lstinline!dist_def! таблицу путем объединения таблиц, информация о таблице, для которой необходимо производить репликацию, предварительно регистрируется в таблице с именем \lstinline!replicate_def!. Таблица \lstinline!replicate_def! будет создана при обработке файла \lstinline!system_db.sql!. Таблица \lstinline!replicate_def! описана так как показано ниже:
 
 \begin{lstlisting}[language=SQL,label=lst:pgpool31:1,caption=Создание таблицы replicate\_def]
 CREATE TABLE pgpool_catalog.replicate_def (
@@ -300,7 +289,6 @@ CREATE TABLE pgpool_catalog.replicate_def (
 
 
 \subsection{Установка правил распределения данных}
-\label{sec:pgpool-II-raspr-data}
 
 В данном примере будут определены правила распределения данных, созданных программой pgbench, на три узла базы данных. Тестовые данные будут созданы командой \lstinline!pgbench -i -s 3! (т.е. масштабный коэффициент равен 3). Для этого раздела мы создадим новую базу данных с именем \lstinline!bench_parallel!. В каталоге sample исходного кода pgpool-II вы можете найти файл \lstinline!dist_def_pgbench.sql!. Будем использоваться этот файл с примером для создания правил распределения для pgbench. Выполним следующую команду в каталоге с распакованным исходным кодом pgpool-II:
 
@@ -336,6 +324,7 @@ RETURNS integer AS $$
 $$ LANGUAGE sql;
 \end{lstlisting}
 
+
 \subsection{Установка правил репликации}
 
 Правило репликации~--- это то что определяет какие таблицы должны быть использованы для выполнения репликации. Здесь это сделано при помощи pgbench с зарегистрированными таблицами \lstinline!branches! и \lstinline!tellers!. Как результат, стало возможно создание таблицы \lstinline!accounts! и выполнение запросов, использующих таблицы \lstinline!branches! и \lstinline!tellers!:
@@ -358,11 +347,12 @@ INSERT INTO pgpool_catalog.replicate_def VALUES (
 );
 \end{lstlisting}
 
-Подготовленный файл \lstinline!replicate_def_pgbench.sql! находится в каталоге sample. Команда psql запускается с указанием пути к исходному коду, определяющему правила репликации, как показано ниже:
+Подготовленный файл \lstinline!replicate_def_pgbench.sql! находится в каталоге sample:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool36,caption=Установка правил репликации]
 $ psql -f sample/replicate_def_pgbench.sql -p 5432 pgpool
 \end{lstlisting}
+
 
 \subsection{Проверка параллельного запроса}
 
@@ -372,7 +362,7 @@ $ psql -f sample/replicate_def_pgbench.sql -p 5432 pgpool
 $ createdb -p 9999 bench_parallel
 \end{lstlisting}
 
-Затем запустим pgbench с параметрами \lstinline!-i -s 3!. Параметр \lstinline!-i! инициализирует базу данных предопределенными таблицами и данными. Параметр \lstinline!-s! указывает масштабный коэффициент для инициализации.
+Затем запустим pgbench с параметрами \lstinline!-i -s 3!:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool38,caption=Проверка параллельного запроса]
 $ pgbench -i -s 3 -p 9999 bench_parallel
@@ -414,9 +404,10 @@ for port in 5432 5433 5434i 9999; do
 
 В Master/Slave режиме \lstinline!replication_mode! должен быть установлен \lstinline!false!, а \lstinline!master_slave_mode!~--- \lstinline!true!.
 
+
 \subsection{Streaming Replication (Потоковая репликация)}
 
-В master-slave режиме с потоковой репликацией, если мастер или слейв упал, возможно использовать отказоустоичивый функционал внутри pgpool-II. Автоматически отключив упавший нод PostgreSQL, pgpool-II переключится на следующий слейв как на новый мастер (при падении мастера), или останется работать на мастере (при падении слейва). В потоковой репликации, когда слейв становится мастером, требуется создать триггер файл (который указан в \lstinline!recovery.conf!, параметр \lstinline!trigger_file!), чтобы PostgreSQL перешел из режима восстановления в нормальный. Для этого можно создать небольшой скрипт:
+В master-slave режиме с потоковой репликацией, если мастер или слейв упал, возможно использовать отказоустоичивый функционал внутри pgpool-II. Автоматически отключив упавший инстанс PostgreSQL, pgpool-II переключится на следующий слейв как на новый мастер (при падении мастера), или останется работать на мастере (при падении слейва). В потоковой репликации, когда слейв становится мастером, требуется создать триггер файл (который указан в \lstinline!recovery.conf!, параметр \lstinline!trigger_file!), чтобы PostgreSQL перешел из режима восстановления в нормальный. Для этого можно создать небольшой скрипт:
 
 \begin{lstlisting}[label=lst:pgpool40,caption=Скрипт выполняется при падении нода PostgreSQL]
 #! /bin/sh
@@ -444,15 +435,13 @@ fi
 exit 0;
 \end{lstlisting}
 
-Работает скрипт просто: если падает слейв~--- скрипт ничего не выполняет, при падении мастера~--- создает триггер файл на новом мастере. Сохраним этот файл под именем \lstinline!failover\_stream.sh! и в \lstinline!pgpool.conf! добавим:
+Работает скрипт просто: если падает слейв~--- скрипт ничего не выполняет, при падении мастера~--- создает триггер файл на новом мастере. Сохраним этот файл под именем \lstinline!failover\_stream.sh! и добавим в \lstinline!pgpool.conf!:
 
 \begin{lstlisting}[label=lst:pgpool41,caption=Что выполнять при падении нода]
 failover_command = '/path_to_script/failover_stream.sh %d %H /tmp/trigger_file'
 \end{lstlisting}
 
-где \lstinline!/tmp/trigger_file!~--- триггер файл, указаный в конфиге \lstinline!recovery.conf!.
-
-Теперь, если мастер СУБД упадет, слейв будет переключен из режима восстановления в обычный и сможет принимать запросы на запись.
+где \lstinline!/tmp/trigger_file!~--- триггер файл, указаный в конфиге \lstinline!recovery.conf!. Теперь, если мастер СУБД упадет, слейв будет переключен из режима восстановления в обычный и сможет принимать запросы на запись.
 
 
 
@@ -467,7 +456,7 @@ Pgpool-II в режиме репликации может синхронизир
   \item CHECKPOINT;
   \item Второй этап восстановления;
   \item Запуск postmaster (выполнить \lstinline!pgpool_remote_start!);
-  \item Восстанавливаем нод СУБД;
+  \item Восстанавливаем инстанс СУБД;
 \end{itemize}
 
 Для работы онлайн восстановления потребуется указать следующие параметры:
@@ -491,20 +480,9 @@ Pgpool-II в режиме репликации может синхронизир
 Для настройки онлайн восстановления потребуется:
 
 \begin{itemize}
-
-  \item Установить \lstinline!recovery_user!. Обычно это <<postgres>>.
-
-\begin{lstlisting}[label=lst:pgpool42,caption=recovery\_user]
-recovery_user = 'postgres'
-\end{lstlisting}
-
-  \item Установить \lstinline!recovery_password! для \lstinline!recovery_user! для подключения к СУБД.
-
-\begin{lstlisting}[label=lst:pgpool43,caption=recovery\_password]
-recovery_password = 'some_password'
-\end{lstlisting}
-
-  \item Настроить \lstinline!recovery_1st_stage_command!. Для этого создадим скрипт \lstinline!basebackup.sh! и положим его в папку с данными мастера (\lstinline!$PGDATA!), установив ему права на выполнение. Содержание скрипта:
+  \item Установить \lstinline!recovery_user!. Обычно это <<postgres>>;
+  \item Установить \lstinline!recovery_password! для \lstinline!recovery_user! для подключения к СУБД;
+  \item Настроить \lstinline!recovery_1st_stage_command!. Для этого можно создать скрипт \lstinline!basebackup.sh! и положим его в папку с данными мастера (\lstinline!$PGDATA!), установив ему права на выполнение:
 
 \begin{lstlisting}[label=lst:pgpool44,caption=basebackup.sh]
 #! /bin/sh
@@ -526,17 +504,15 @@ ssh -T localhost mv $destdir/recovery.done $destdir/recovery.conf
 psql -c "SELECT pg_stop_backup()" postgres
 \end{lstlisting}
 
-При восстановления слейва, скрипт запускает бэкап мастера и через rsync передает данные с мастера на слейв. Для этого необходимо настроить SSH так, чтобы \lstinline!recovery_user! мог заходить с мастера на слейв без пароля.
-
-Далее добавим скрипт на выполнение для первого этапа онлайн востановления:
+При восстановления слейва, скрипт запускает бэкап мастера и через rsync утилиту передает данные с мастера на слейв. Для этого необходимо настроить ssh так, чтобы \lstinline!recovery_user! мог заходить с мастера на слейв без пароля. Далее добавим скрипт на выполнение для первого этапа онлайн востановления:
 
 \begin{lstlisting}[label=lst:pgpool45,caption=recovery\_1st\_stage\_command]
 recovery_1st_stage_command = 'basebackup.sh'
 \end{lstlisting}
 
-  \item Оставляем \lstinline!recovery_2nd_stage_command! пустым. После успешного выполнения первого этапа онлайн восстановления, разницу в данных, что успели записатся во время работы скрипта basebackup.sh, слейв заберет через WAL файлы с мастера.
+  \item Оставляем \lstinline!recovery_2nd_stage_command! пустым. После успешного выполнения первого этапа онлайн восстановления, разницу в данных, что успели записатся во время работы скрипта \lstinline!basebackup.sh!, слейв инстанс заберет через WAL файлы с мастера;
 
-  \item Устанавливаем C и SQL функции для работы онлайн востановления на каждый нод СУБД.
+  \item Устанавливаем C и SQL функции для работы онлайн востановления на каждый инстанс СУБД:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool46,caption=Устанавливаем C и SQL функции]
 $ cd pgpool-II-x.x.x/sql/pgpool-recovery
