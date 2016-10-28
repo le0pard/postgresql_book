@@ -1,5 +1,4 @@
 Fix:
- * Postgres_XC to http://postgres-x2.github.io/
  * JSON/JSONB section
  * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
  * Bloat + pg_repack + pgcompact
