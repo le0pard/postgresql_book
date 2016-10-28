@@ -1,7 +1,7 @@
 \subsection{WAL-E}
-\textbf{Ссылка}: \href{https://github.com/wal-e/wal-e}{github.com/wal-e/wal-e}
 
-WAL-E предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием \lstinline!pg_start_backup! и \lstinline!pg_stop_backup!. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
+\href{https://github.com/wal-e/wal-e}{WAL-E} предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием \lstinline!pg_start_backup! и \lstinline!pg_stop_backup!. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
+
 
 \subsubsection{Установка}
 
@@ -15,17 +15,17 @@ $ aptitude install git-core python-dev python-setuptools python-pip build-essent
 Теперь установим WAL-E:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e2,caption=Установка WAL-E]
-$ pip install https://github.com/wal-e/wal-e/archive/v0.7a1.tar.gz
+$ pip install https://github.com/wal-e/wal-e/archive/v1.0.1.tar.gz
 \end{lstlisting}
 
 После успешной установки можно начать работать с WAL-E.
 
 \subsubsection{Настройка и работа}
 
-Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>> и <<Secret Access Key>> (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базы данных в S3:
+Как уже писалось, WAL-E сливает все данные в AWS S3, поэтому нам потребуются <<Access Key ID>>, <<Secret Access Key>> и <<AWS Region>> (эти данные можно найти в акаунте Amazon AWS). Команда для загрузки бэкапа всей базы данных в S3:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e3,caption=Загрузка бэкапа всей базы данных в S3]
-AWS_SECRET_ACCESS_KEY=... wal-e                     \
+AWS_REGION=... AWS_SECRET_ACCESS_KEY=... wal-e                     \
   -k AWS_ACCESS_KEY_ID                                \
   --s3-prefix=s3://some-bucket/directory/or/whatever  \
   backup-push /var/lib/postgresql/9.2/main
@@ -34,16 +34,17 @@ AWS_SECRET_ACCESS_KEY=... wal-e                     \
 Где \lstinline!s3-prefix!~--- URL, который содержит имя S3 бакета (bucket) и путь к папке, куда следует складывать резервные копии. Команда для загрузки WAL-логов на S3:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e4,caption=Загрузка WAL-логов на S3]
-AWS_SECRET_ACCESS_KEY=... wal-e                     \
+AWS_REGION=... AWS_SECRET_ACCESS_KEY=... wal-e                     \
   -k AWS_ACCESS_KEY_ID                                \
   --s3-prefix=s3://some-bucket/directory/or/whatever  \
   wal-push /var/lib/postgresql/9.2/main/pg_xlog/WAL_SEGMENT_LONG_HEX
 \end{lstlisting}
 
-Для управления этими переменными окружения можно использовать команду envdir (идет в поставке с daemontools). Для этого создадим envdir каталог:
+Для управления этими переменными окружения можно использовать команду \lstinline!envdir! (идет в поставке с \lstinline!daemontools!). Для этого создадим \lstinline!envdir! каталог:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e5,caption=WAL-E с envdir]
 $ mkdir -p /etc/wal-e.d/env
+$ echo "aws_region" > /etc/wal-e.d/env/AWS_REGION
 $ echo "secret-key" > /etc/wal-e.d/env/AWS_SECRET_ACCESS_KEY
 $ echo "access-key" > /etc/wal-e.d/env/AWS_ACCESS_KEY_ID
 $ echo 's3://some-bucket/directory/or/whatever' > /etc/wal-e.d/env/WALE_S3_PREFIX
@@ -57,7 +58,7 @@ $ envdir /etc/wal-e.d/env wal-e backup-push ...
 $ envdir /etc/wal-e.d/env wal-e wal-push ...
 \end{lstlisting}
 
-Теперь настроим PostgreSQL для сбрасывания WAL-логов в S3 c помощью WAL-E. Отредактируем postgresql.conf:
+Теперь настроим PostgreSQL для сбрасывания WAL-логов в S3 c помощью WAL-E. Отредактируем \lstinline!postgresql.conf!:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e7,caption=Настройка PostgreSQL]
 wal_level = hot_standby # или archive, если PostgreSQL < 9.0
@@ -69,34 +70,32 @@ archive_timeout = 60
 Лучше указать полный путь к WAL-E (можно узнать командой \lstinline!which wal-e!), поскольку PostgreSQL может его не найти. После этого нужно перегрузить PostgreSQL. В логах базы вы должны увидеть что-то подобное:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e8,caption=Логи PostgreSQL]
-2012-11-07 14:52:19 UTC LOG:  database system was shut down at 2012-11-07 14:51:40 UTC
-2012-11-07 14:52:19 UTC LOG:  database system is ready to accept connections
-2012-11-07 14:52:19 UTC LOG:  autovacuum launcher started
-2012-11-07T14:52:19.784+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
+2016-11-07 14:52:19 UTC LOG:  database system was shut down at 2016-11-07 14:51:40 UTC
+2016-11-07 14:52:19 UTC LOG:  database system is ready to accept connections
+2016-11-07 14:52:19 UTC LOG:  autovacuum launcher started
+2016-11-07T14:52:19.784+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading "pg_xlog/000000010000000000000001" to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000001.lzo".
-2012-11-07 14:52:19 UTC LOG:  incomplete startup packet
-2012-11-07T14:52:28.234+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+2016-11-07 14:52:19 UTC LOG:  incomplete startup packet
+2016-11-07T14:52:28.234+00 pid=7653 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
         DETAIL: Archiving to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000001.lzo" complete at 21583.3KiB/s.
-2012-11-07T14:52:28.341+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
+2016-11-07T14:52:28.341+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading "pg_xlog/000000010000000000000002.00000020.backup" to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.00000020.backup.lzo".
-2012-11-07T14:52:34.027+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+2016-11-07T14:52:34.027+00 pid=7697 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
         DETAIL: Archiving to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.00000020.backup.lzo" complete at 00KiB/s.
-2012-11-07T14:52:34.187+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
+2016-11-07T14:52:34.187+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: begin archiving a file
         DETAIL: Uploading "pg_xlog/000000010000000000000002" to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo".
-2012-11-07T14:52:40.232+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
+2016-11-07T14:52:40.232+00 pid=7711 wal_e.worker.s3_worker INFO     MSG: completed archiving to a file
         DETAIL: Archiving to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo" complete at 2466.67KiB/s.
 \end{lstlisting}
 
-Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её.
-
-Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:
+Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её. Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e9,caption=Загрузка бэкапа всей базы данных в S3]
 $ envdir /etc/wal-e.d/env wal-e backup-push /var/lib/postgresql/9.2/main
-2012-11-07T14:49:26.174+00 pid=7493 wal_e.operator.s3_operator INFO     MSG: start upload postgres version metadata
+2016-11-07T14:49:26.174+00 pid=7493 wal_e.operator.s3_operator INFO     MSG: start upload postgres version metadata
         DETAIL: Uploading to s3://cleverdb-pg-backups/pg/basebackups_005/base_000000010000000000000006_00000032/extended_version.txt.
-2012-11-07T14:49:32.783+00 pid=7493 wal_e.operator.s3_operator INFO     MSG: postgres version metadata upload complete
-2012-11-07T14:49:32.859+00 pid=7493 wal_e.worker.s3_worker INFO     MSG: beginning volume compression
+2016-11-07T14:49:32.783+00 pid=7493 wal_e.operator.s3_operator INFO     MSG: postgres version metadata upload complete
+2016-11-07T14:49:32.859+00 pid=7493 wal_e.worker.s3_worker INFO     MSG: beginning volume compression
         DETAIL: Building volume 0.
 ...
 HINT:  Check that your archive_command is executing properly.  pg_stop_backup can be canceled safely, but the database backup will not be usable without all the WAL segments.
@@ -121,7 +120,7 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
   \label{fig:wal-e3}
 \end{figure}
 
-Данный бэкап лучше делать раз в сутки (например, добавить в crontab). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через \href{http://en.wikipedia.org/wiki/Lzop}{lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтение с жесткого диска бэкапы отправляются через pv утилиту (опцией \lstinline!cluster-read-rate-limit! можно ограничить скорость чтения, если это требуется).
+Данный бэкап лучше делать раз в сутки (например, добавить в \lstinline!crontab!). На рис~\ref{fig:wal-e1}-\ref{fig:wal-e3} видно как хранятся бэкапы на S3. Все бэкапы сжаты через \href{http://en.wikipedia.org/wiki/Lzop}{lzop}. Данный алгоритм сжимает хуже чем gzip, но скорость сжатия намного быстрее (приблизительно 25 Мб/сек используя 5\% ЦПУ). Чтобы уменьшить нагрузку на чтение с жесткого диска бэкапы отправляются через \lstinline!pv! утилиту (опцией \lstinline!cluster-read-rate-limit! можно ограничить скорость чтения, если это требуется).
 
 Теперь перейдем к восстановлению данных. Для восстановления базы из резервной копии используется \lstinline!backup-fetch! команда:
 
@@ -140,11 +139,11 @@ $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some
 \begin{lstlisting}[language=Bash,label=lst:wal-e12,caption=Список резервных копий]
 $ envdir /etc/wal-e.d/env wal-e backup-list
 name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
-base_000000010000000000000008_00000032	2012-11-07T14:00:07.000Z		000000010000000000000008	00000032
+base_000000010000000000000008_00000032	2016-11-07T14:00:07.000Z		000000010000000000000008	00000032
 base_00000001000000000000000C_00000032	2012-11-08T15:00:08.000Z		00000001000000000000000C	00000032
 \end{lstlisting}
 
-После завершения работы с основной резервной копией для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния). Для этого используется recovery.conf:
+После завершения работы с основной резервной копией для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния). Для этого используется \lstinline!recovery.conf!:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e13,caption=recovery.conf]
 restore_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch "%f" "%p"'
@@ -167,4 +166,4 @@ $ envdir /etc/wal-e.d/env wal-e delete --confirm retain 20
 
 \subsubsection{Заключение}
 
-WAL-E помогает автоматизировать сбор резервных копий с PostgreSQL и хранить их в достаточно дешевом и надежном хранилище~--- Amazon S3.
+WAL-E помогает автоматизировать сбор резервных копий с PostgreSQL и хранить их в достаточно дешевом и надежном хранилище~--- Amazon S3 или Windows Azure.

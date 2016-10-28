@@ -1,7 +1,6 @@
 \subsection{Barman}
-\textbf{Ссылка}: \href{http://www.pgbarman.org/}{www.pgbarman.org}
 
-Barman, как и WAL-E, позволяет создать систему для бэкапа и восстановления PostgreSQL на основе непрерывного резервного копирования. Barman использует для хранения бэкапов отдельный сервер, который может собирать бэкапы как с одного, так и с нескольких PostgreSQL баз данных.
+\href{http://www.pgbarman.org/}{Barman}, как и WAL-E, позволяет создать систему для бэкапа и восстановления PostgreSQL на основе непрерывного резервного копирования. Barman использует для хранения бэкапов отдельный сервер, который может собирать бэкапы как с одного, так и с нескольких PostgreSQL баз данных.
 
 \subsubsection{Установка и настройка}
 
@@ -23,8 +22,8 @@ $ aptitude install python-dev python-argh python-psycopg2 python-dateutil rsync 
 Далее нужно установить barman:
 
 \begin{lstlisting}[language=Bash,label=lst:barman3,caption=Установка barman]
-$ tar -xzf barman-1.3.2.tar.gz
-$ cd barman-1.3.2/
+$ tar -xzf barman-2.0.tar.gz
+$ cd barman-2.0/
 $ ./setup.py build
 $ sudo ./setup.py install
 \end{lstlisting}
@@ -62,7 +61,7 @@ $ sudo mkdir -p /srv/barman
 $ sudo chown barman:barman /srv/barman
 \end{lstlisting}
 
-Для настройки barman создадим /etc/barman.conf:
+Для настройки barman создадим \lstinline!/etc/barman.conf!:
 
 \begin{lstlisting}[label=lst:barman8,caption=barman.conf]
 [barman]
@@ -136,7 +135,7 @@ archive_mode = on
 archive_command = 'rsync -a %p barman@brhost:INCOMING_WALS_DIRECTORY/%f'
 \end{lstlisting}
 
-где \lstinline!INCOMING_WALS_DIRECTORY!~--- директория для складывания WAL-логов. Её можно узнать из вывода команды \lstinline!barman show-server main!(листинг~\ref{lst:barman9},  указано \lstinline!/srv/barman/main/incoming!). После изменения настроек нужно перегрузить PostgreSQL. Теперь проверим статус на сервере бэкапов:
+где \lstinline!INCOMING_WALS_DIRECTORY!~--- директория для складывания WAL-логов. Её можно узнать из вывода команды \lstinline!barman show-server main!(листинг~\ref{lst:barman9}, указано \lstinline!/srv/barman/main/incoming!). После изменения настроек нужно перегрузить PostgreSQL. Теперь проверим статус на сервере бэкапов:
 
 \begin{lstlisting}[language=Bash,label=lst:barman11,caption=Проверка]
 $ barman check main
@@ -149,7 +148,8 @@ Server main:
 	compression settings: OK
 \end{lstlisting}
 
-Все готово. Для добавления нового сервера процедуру потребуется повторить, а в barman.conf добавить новый сервер.
+Все готово. Для добавления нового сервера процедуру потребуется повторить, а в \lstinline!barman.conf! добавить новый сервер.
+
 
 \subsubsection{Создание бэкапов}
 
@@ -173,9 +173,7 @@ Backup end at xlog location: 0/30000D8 (000000010000000000000003, 000000D8)
 Backup completed
 \end{lstlisting}
 
-Такую задачу лучше выполнять раз в сутки (добавить в cron).
-
-Посмотреть список бэкапов для указаной базы:
+Такую задачу лучше выполнять раз в сутки (добавить в cron). Посмотреть список бэкапов для указаной базы:
 
 \begin{lstlisting}[language=Bash,label=lst:barman14,caption=Список бэкапов]
 $ barman list-backup main
@@ -230,7 +228,7 @@ Processing xlog segments for main
 	000000010000000000000006
 \end{lstlisting}
 
-Эту команду требуется добавлять в cron. Частота выполнения данной команды зависит от того, как много WAL-логов накапливается (чем больше файлов - тем дольше она выполняется). Barman может сжимать WAL-логи через gzip, bzip2 или другой компрессор данных (команды для сжатия и распаковки задаются через \lstinline!custom_compression_filter! и \lstinline!custom_decompression_filter! соответственно). Также можно активировать компрессию данных при передачи по сети через опцию \lstinline!network_compression! (по умолчанию отключена). Через опции \lstinline!bandwidth_limit! (по умолчанию 0, ограничений нет) и \lstinline!tablespace_bandwidth_limit! возможно ограничить использования сетевого канала.
+Эту команду требуется добавлять в \lstinline!crontab!. Частота выполнения данной команды зависит от того, как много WAL-логов накапливается (чем больше файлов - тем дольше она выполняется). Barman может сжимать WAL-логи через gzip, bzip2 или другой компрессор данных (команды для сжатия и распаковки задаются через \lstinline!custom_compression_filter! и \lstinline!custom_decompression_filter! соответственно). Также можно активировать компрессию данных при передачи по сети через опцию \lstinline!network_compression! (по умолчанию отключена). Через опции \lstinline!bandwidth_limit! (по умолчанию 0, ограничений нет) и \lstinline!tablespace_bandwidth_limit! возможно ограничить использования сетевого канала.
 
 Для восстановления базы из бэкапа используется команда \lstinline!recover!:
 
@@ -258,6 +256,7 @@ options as they might interfere with your current recovery attempt:
 \end{lstlisting}
 
 Barman может восстановить базу из резервной копии на удаленном сервере через SSH (для этого есть опция \lstinline!remote-ssh-command!). Также barman может восстановить базу используя \href{http://en.wikipedia.org/wiki/Point-in-time\_recovery}{PITR}: для этого используются опции \lstinline!target-time! (указывается время) или \lstinline!target-xid! (id транзакции).
+
 
 \subsubsection{Заключение}
 

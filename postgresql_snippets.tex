@@ -1,17 +1,17 @@
-\chapter{Советы по разным вопросам (Performance Snippets)}
+\chapter{Полезные мелочи}
 
 \begin{epigraphs}
 \qitem{Быстро найти правильный ответ на трудный вопрос~--- ни с чем не сравнимое удовольствие.}{Макс Фрай. Обжора-Хохотун}
-\qitem{-- Вопрос риторический.
-
--- Нет, но он таким кажется, потому что у тебя нет ответа.}{Доктор Хаус (House M.D.), сезон 1 серия 1}
 \end{epigraphs}
 
 \section{Введение}
 
 Иногда возникают очень интересные проблемы по работе с PostgreSQL, которые при нахождении ответа поражают своей лаконичностью, красотой и простым исполнением (а может и не простым). В данной главе я решил собрать интересные методы решения разных проблем, с которыми сталкиваются люди при работе с PostgreSQL. Я не являюсь огромным специалистом по данной теме, поэтому многие решения мне помогали находить люди из PostgreSQL комьюнити, а иногда хватало и поиска в интернете.
 
-\section{Советы}
+
+
+\section{Мелочи}
+
 
 \subsection{Размер объектов в базе данных}
 
@@ -33,6 +33,7 @@
  public.branches        | 8192 bytes
 \end{lstlisting}
 
+
 \subsection{Размер самых больших таблиц}
 
 Данный запрос показывает размер самых больших таблиц в базе данных.
@@ -50,6 +51,7 @@
  public.products                | 29 MB
  public.visits                  | 25 MB
 \end{lstlisting}
+
 
 \subsection{<<Средний>> count}
 
@@ -77,29 +79,7 @@ ANALYZE foo;
 (1 row)
 \end{lstlisting}
 
-\subsection{Узнать значение по умолчанию у поля в таблице}
 
-Данный метод позволяет узнать значение по умолчанию у поля в таблице (заданное через DEFAULT).
-
-\lstinputlisting[language=SQL,label=lst:snippets6,title=snippets/default\_value.sql]{example_code/snippets/default_value.sql}
-
-Пример:
-
-\begin{lstlisting}[language=SQL,label=lst:snippets7,caption=Узнать значение по умолчанию у поля в таблице. Пример]
-# SELECT ret_def('schema','table','column');
-
-SELECT ret_def('public','image_files','id');
-                 ret_def
------------------------------------------
- nextval('image_files_id_seq'::regclass)
-(1 row)
-
-SELECT ret_def('public','schema_migrations','version');
- ret_def
----------
-
-(1 row)
-\end{lstlisting}
 
 \subsection{Случайное число из диапазона}
 
@@ -122,6 +102,8 @@ SELECT random(1,10)::int, random(1,10);
       7 | 1.37060070643201
 (1 row)
 \end{lstlisting}
+
+
 
 \subsection{Алгоритм Луна}
 
@@ -150,9 +132,11 @@ Select luhn_verify(49927398714);
 
 \end{lstlisting}
 
+
+
 \subsection{Выборка и сортировка по данному набору данных}
 
-Выбор данных по определенному набору данных можно сделать с помощью обыкновенного IN. Но как сделать подобную выборку и отсортировать данные в том же порядке, в котором передан набор данных. Например:
+Выбор данных по определенному набору данных можно сделать с помощью обыкновенного \lstinline!IN!. Но как сделать подобную выборку и отсортировать данные в том же порядке, в котором передан набор данных? Например:
 
 Дан набор: (2,6,4,10,25,7,9). Нужно получить найденные данные в таком же порядке т.е. 2 2 2 6 6 4 4
 
@@ -166,19 +150,25 @@ Select luhn_verify(49927398714);
 
 \lstinline!foo.catalog_id!~--- поле, по которому ищем набор данных (замена \lstinline!foo.catalog_id IN(3,2,6,1,4)!)
 
+
+
 \subsection{Quine~--- запрос который выводит сам себя}
 
 Куайн, квайн (англ. quine)~--- компьютерная программа (частный случай метапрограммирования), которая выдаёт на выходе точную копию своего исходного текста.
 
 \lstinputlisting[language=SQL,label=lst:snippets13,title=snippets/quine.sql]{example_code/snippets/quine.sql}
 
+
+
 \subsection{Ускоряем LIKE}
 
 Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым \lstinline!LIKE 'some\%'!, где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице (например таблица тегов) такой запрос будет работать очень медленно.
 
-Для ускорения запроса типа <<LIKE 'bla\%'>> можно использовать \lstinline!text_pattern_ops! (или \lstinline!varchar_pattern_ops! если у поле varchar).
+Для ускорения запроса типа \lstinline!LIKE 'bla\%'! можно использовать \lstinline!text_pattern_ops! (или \lstinline!varchar_pattern_ops! если у поле varchar).
 
 \lstinputlisting[language=SQL,label=lst:snippets14,title=snippets/speed\_like.sql]{example_code/snippets/speed_like.sql}
+
+
 
 \subsection{Поиск дубликатов индексов}
 
@@ -186,9 +176,13 @@ Select luhn_verify(49927398714);
 
 \lstinputlisting[language=SQL,label=lst:snippets15,title=snippets/duplicate\_indexes.sql]{example_code/snippets/duplicate_indexes.sql}
 
+
+
 \subsection{Размер и статистика использования индексов}
 
 \lstinputlisting[language=SQL,label=lst:snippets16,title=snippets/indexes\_statustic.sql]{example_code/snippets/indexes_statustic.sql}
+
+
 
 \subsection{Размер распухания (bloat) таблиц и индексов в базе данных}
 \label{sec:snippets-bloating}
