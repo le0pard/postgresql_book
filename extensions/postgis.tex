@@ -1,3 +1,83 @@
 \section{PostGIS}
 
 \href{http://www.postgis.org/}{PostGIS} добавляет поддержку для географических объектов в PostgreSQL. По сути PostGIS позволяет использовать PostgreSQL в качестве бэкэнда пространственной базы данных для геоинформационных систем (ГИС), так же, как ESRI SDE или пространственного расширения Oracle. PostGIS соответствует OpenGIS <<Простые особенности. Спецификация для SQL>> и был сертифицирован.
+
+\subsection{Установка и использование}
+
+Для начала инициализируем расширение в базе данных:
+
+\begin{lstlisting}[language=SQL,label=lst:postgisinit,caption=Инициализация postgis]
+# CREATE EXTENSION postgis;
+\end{lstlisting}
+
+При создании пространственной базы данных автоматически создаются таблица метаданных \lstinline!spatial_ref_sys! и представления \lstinline!geometry_columns!, \lstinline!geography_columns!, \lstinline!raster_columns! и \lstinline!raster_overviews!. Они создаются в соответствии со спецификацией <<Open Geospatial Consortium Simple Features for SQL specification>>, выпущенной \href{http://www.opengeospatial.org/}{OGC} и описывающей стандартные типы объектов ГИС, функции для манипуляции ими и набор таблиц метаданных. Таблица \lstinline!spatial_ref_sys! содержит числовые идентификаторы и текстовые описания систем координат, используемых в пространственной базе данных. Одним из полей этой таблицы является поле \lstinline!SRID!~--- уникальный идентификатор, однозначно определяющий систему координат. \lstinline!SRID! представляет из себя числовой код, которому соответствует некоторая система координат. Например, распространенный код EPSG 4326 соответствует географической системе координат WGS84. Более подробную информацию по таблицами метаданных можно найти в руководстве по \href{http://postgis.net/docs/manual-2.3/using_postgis_dbmanagement.html#spatial_ref_sys}{PostGIS}.
+
+Теперь, имея пространственную базу данных, можно создать несколько пространственных таблиц. Для начала создадим обычную таблицу базы данных, чтобы хранить данные о городе. Эта таблица будет содержвать три поля: числовой идентификатор, название города и колонка геометрии, содержащую данные о местоположении городов:
+
+\begin{lstlisting}[language=SQL,label=lst:postgiscreatecities,caption=Создание таблицы cities]
+# CREATE TABLE cities ( id int4 primary key, name varchar(50), the_geom geometry(POINT,4326) );
+\end{lstlisting}
+
+\lstinline!the_geom! поле указывает PostGIS, какой тип геометрии имеет каждый из объектов (точки, линии, полигоны и т.п.), какая размерность (т.к. возможны и 3-4 измерения~--- \lstinline!POINTZ!, \lstinline!POINTM!, \lstinline!POINTZM!) и какая система координат. Для данных по городам мы будем использовать систему координат EPSG:4326. Чтобы добавить данные геометрии в соответствующую колонку, используется функция PostGIS \lstinline!ST_GeomFromText!, чтобы сконвертировать координаты и идентификатор референсной системы из текстового формата:
+
+\begin{lstlisting}[language=SQL,label=lst:postgisinsertcities,caption=Заполнение таблицы cities]
+# INSERT INTO cities (id, the_geom, name) VALUES (1,ST_GeomFromText('POINT(-0.1257 51.508)',4326),'London, England');
+# INSERT INTO cities (id, the_geom, name) VALUES (2,ST_GeomFromText('POINT(-81.233 42.983)',4326),'London, Ontario');
+# INSERT INTO cities (id, the_geom, name) VALUES (3,ST_GeomFromText('POINT(27.91162491 -33.01529)',4326),'East London,SA');
+\end{lstlisting}
+
+Все самые обычные операторы SQL могут быть использованы для выбора данных из таблицы PostGIS:
+
+\begin{lstlisting}[language=SQL,label=lst:postgisselectcities,caption=SELECT cities]
+# SELECT * FROM cities;
+ id |      name       |                      the_geom
+----+-----------------+----------------------------------------------------
+  1 | London, England | 0101000020E6100000BBB88D06F016C0BF1B2FDD2406C14940
+  2 | London, Ontario | 0101000020E6100000F4FDD478E94E54C0E7FBA9F1D27D4540
+  3 | East London,SA  | 0101000020E610000040AB064060E93B4059FAD005F58140C0
+(3 rows)
+\end{lstlisting}
+
+Это возвращает нам бессмысленные значения координат в шестнадцатеричной системе. Если вы хотите увидеть вашу геометрию в текстовом формате WKT, используйте функцию \lstinline!ST_AsText(the_geom)! или \lstinline!ST_AsEwkt(the_geom)!. Вы также можете использовать функции \lstinline!ST_X(the_geom)!, \lstinline!ST_Y(the_geom)!, чтобы получить числовые значения координат:
+
+\begin{lstlisting}[language=SQL,label=lst:postgisselectcities2,caption=SELECT cities]
+# SELECT id, ST_AsText(the_geom), ST_AsEwkt(the_geom), ST_X(the_geom), ST_Y(the_geom) FROM cities;
+ id |          st_astext           |               st_asewkt                |    st_x     |   st_y
+----+------------------------------+----------------------------------------+-------------+-----------
+  1 | POINT(-0.1257 51.508)        | SRID=4326;POINT(-0.1257 51.508)        |     -0.1257 |    51.508
+  2 | POINT(-81.233 42.983)        | SRID=4326;POINT(-81.233 42.983)        |     -81.233 |    42.983
+  3 | POINT(27.91162491 -33.01529) | SRID=4326;POINT(27.91162491 -33.01529) | 27.91162491 | -33.01529
+(3 rows)
+\end{lstlisting}
+
+Большинство таких функций начинаются с ST (пространственный тип) и описаны в документации PostGIS. Теперь ответим на практический вопрос: на каком расстоянии в метрах друг от другах находятся три города с названием Лондон, учитывая сферичность земли?
+
+\begin{lstlisting}[language=SQL,label=lst:postgisselectcities3,caption=Расстояние до Лондона]
+# SELECT p1.name,p2.name,ST_Distance_Sphere(p1.the_geom,p2.the_geom) FROM cities AS p1, cities AS p2 WHERE p1.id > p2.id;
+      name       |      name       | st_distance_sphere
+-----------------+-----------------+--------------------
+ London, Ontario | London, England |   5875787.03777356
+ East London,SA  | London, England |   9789680.59961472
+ East London,SA  | London, Ontario |   13892208.6782928
+(3 rows)
+\end{lstlisting}
+
+Этот запрос возвращает расстояние в метрах между каждой парой городов. Обратите внимание как часть \lstinline!WHERE! предотвращает нас от получения расстояния от города до самого себя (расстояние всегда будет равно нулю) и расстояния в обратном порядке (расстояние от Лондона, Англия до Лондона, Онтарио будет таким же как от Лондона, Онтарио до Лондона, Англия). Также можем рассчитать расстояния на сфере, используя различные функции и указывая называния сфероида, параметры главных полуосей и коэффициента обратного сжатия:
+
+\begin{lstlisting}[language=SQL,label=lst:postgisselectcities4,caption=Расстояние до Лондона]
+# SELECT p1.name,p2.name,ST_Distance_Spheroid(
+#         p1.the_geom,p2.the_geom, 'SPHEROID["GRS_1980",6378137,298.257222]'
+#         )
+#        FROM cities AS p1, cities AS p2 WHERE p1.id > p2.id;
+      name       |      name       | st_distance_spheroid
+-----------------+-----------------+----------------------
+ London, Ontario | London, England |     5892413.63999153
+ East London,SA  | London, England |     9756842.65715046
+ East London,SA  | London, Ontario |     13884149.4143795
+(3 rows)
+\end{lstlisting}
+
+
+\subsection{Заключение}
+
+В данной главе мы рассмотрели как начать работать с PostGIS. Более подробно о использовании расширания можно ознакомиться через \href{http://postgis.net/documentation/}{официальную документацию}.
