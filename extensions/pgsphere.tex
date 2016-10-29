@@ -1,3 +1,62 @@
 \section{pgSphere}
 
-\href{http://pgsphere.projects.pgfoundry.org/}{pgSphere} обеспечивает PostgreSQL сферическими типами данных, а также функциями и операторами для работы с ними. Используется для работы с географическими (может использоваться вместо PostGIS) или астрономическими типами данных.
+\href{http://pgsphere.github.io/}{pgSphere} обеспечивает PostgreSQL сферическими типами данных, а также функциями и операторами для работы с ними. Используется для работы с географическими (может использоваться вместо PostGIS) или астрономическими типами данных.
+
+\subsection{Установка и использование}
+
+Для начала инициализируем расширение в базе данных:
+
+\begin{lstlisting}[language=SQL,label=lst:pgsphereinit,caption=Инициализация pgSphere]
+# CREATE EXTENSION pg_sphere;
+\end{lstlisting}
+
+После этого можем проверить, что расширение функционирует:
+
+\begin{lstlisting}[language=SQL,label=lst:pgsphereex1,caption=Проверка pgSphere]
+# SELECT spoly '{ (270d,-10d), (270d,30d), (290d,10d) } ';
+                                                          spoly
+-------------------------------------------------------------------------------------------------------------------------
+ {(4.71238898038469 , -0.174532925199433),(4.71238898038469 , 0.523598775598299),(5.06145483078356 , 0.174532925199433)}
+(1 row)
+\end{lstlisting}
+
+И работу индексов:
+
+\begin{lstlisting}[language=SQL,label=lst:pgsphereex2,caption=Проверка pgSphere]
+# CREATE TABLE test (
+#   pos spoint NOT NULL
+# );
+CREATE TABLE
+# CREATE INDEX test_pos_idx ON test USING GIST (pos);
+CREATE INDEX
+# INSERT INTO test(pos) VALUES ('( 10.1d, -90d)'), ('( 10d 12m 11.3s, -13d 14m)');
+INSERT 0 2
+# VACUUM ANALYZE test;
+VACUUM
+# SELECT set_sphere_output('DEG');
+ set_sphere_output
+-------------------
+ SET DEG
+(1 row)
+
+# SELECT * FROM test;
+                   pos
+------------------------------------------
+ (10.1d , -90d)
+ (10.2031388888889d , -13.2333333333333d)
+(2 rows)
+# SET enable_seqscan = OFF;
+SET
+# EXPLAIN SELECT * FROM test WHERE pos = spoint '(10.1d,-90d)';
+                                QUERY PLAN
+---------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=4.16..9.50 rows=2 width=16)
+   Recheck Cond: (pos = '(10.1d , -90d)'::spoint)
+   ->  Bitmap Index Scan on test_pos_idx  (cost=0.00..4.16 rows=2 width=0)
+         Index Cond: (pos = '(10.1d , -90d)'::spoint)
+(4 rows)
+\end{lstlisting}
+
+\subsection{Заключение}
+
+Более подробно о использовании расширения можно ознакомиться через \href{http://pgsphere.projects.pgfoundry.org/}{официальную документацию}.
