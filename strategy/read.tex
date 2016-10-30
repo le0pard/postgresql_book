@@ -14,7 +14,7 @@
     \item Пулы соединений;
     \item Интеллектуальная балансировка нагрузки~-- проверка задержки репликации между мастером и слейвом (сам проверяет \lstinline!pg_current_xlog_location! и \lstinline!pg_last_xlog_receive_location!);
     \item Добавление слейвов СУБД без остановки pgpool-II;
-    \item Простота в настройке и обслуживании.
+    \item Простота в настройке и обслуживании;
   \end{itemize}
 
   \item \textbf{PgPool-II v.3 + PostgreSQL с Slony/Londiste/Bucardo}~--- аналогично предыдущему решению, но с использованием Slony/Londiste/Bucardo. Основные преимущества:
@@ -24,7 +24,7 @@
     \item Пулы соединений;
     \item Интеллектуальная балансировка нагрузки~-- проверка задержки репликации между мастером и слейвом;
     \item Добавление слейв СУБД без остановки pgpool-II;
-    \item Можно использовать Postgresql ниже 9 версии.
+    \item Можно использовать Postgresql ниже 9 версии;
   \end{itemize}
 
   \item \textbf{Postgres-X2}~--- подробнее можно прочитать в <<\ref{sec:postgres-x2}~\nameref{sec:postgres-x2}>> главе.

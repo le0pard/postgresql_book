@@ -8,7 +8,6 @@
 У WAL-E есть пару зависимостей: lzop, psql, pv (в старых версиях используется mbuffer), python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0, azure). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
-# PostgreSQL уже установлен
 $ aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
 \end{lstlisting}
 
@@ -140,7 +139,7 @@ $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some
 $ envdir /etc/wal-e.d/env wal-e backup-list
 name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
 base_000000010000000000000008_00000032	2016-11-07T14:00:07.000Z		000000010000000000000008	00000032
-base_00000001000000000000000C_00000032	2012-11-08T15:00:08.000Z		00000001000000000000000C	00000032
+base_00000001000000000000000C_00000032	2016-11-08T15:00:08.000Z		00000001000000000000000C	00000032
 \end{lstlisting}
 
 После завершения работы с основной резервной копией для полного восстановления нужно считать WAL-логи (чтобы данные обновились до последнего состояния). Для этого используется \lstinline!recovery.conf!:
