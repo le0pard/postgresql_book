@@ -4,7 +4,7 @@
 
 Процедура очистки, autovacuum или \lstinline!VACUUM!, может уменьшить размер таблицы убрав полностью пустые страницы, но только при условии что они находятся в самом конце таблицы. Чтобы максимально уменьшить таблицу в PostgreSQL есть \lstinline!VACUUM FULL! или \lstinline!CLUSTER!, но оба эти способа требуют <<exclusively locks>> на таблицу (то есть в это время с таблицы нельзя ни читать, ни писать), что далеко не всегда является подходящим решением.
 
-Для решение подобных проблем существует расширение \href{http://reorg.github.io/pg\_repack/}{pg\_repack}. Это расширение позволяет сделать \lstinline!VACUUM FULL! или \lstinline!CLUSTER! команды без блокировки таблицы. Для чистки таблицы pg\_repack создает точную её копию в \lstinline!repack! схеме базы данных (ваша база по умолчанию работает в \lstinline!public! схеме) и сортирует строки в этой таблице. После переноса данных и чиски мусора, утилита меняет схему у таблиц. Для чистки индексов утилита создает новые индексы с другими именами, а по выполнению работы меняет их на первоначальные. Для выполнения всех этих работ потребуется дополнительное место на диске (например, если у вас 100 ГБ данных, и из них 40 ГБ - распухание таблиц или индексов, то вам потребуется 100 ГБ + (100 ГБ - 40 ГБ) = 160 ГБ на диске минимум). Для проверки <<распухания>> таблиц и индексов в вашей базе можно воспользоватся SQL запросом из раздела <<\ref{sec:snippets-bloating}~\nameref{sec:snippets-bloating}>>.
+Для решение подобных проблем существует утилита \href{http://reorg.github.io/pg\_repack/}{pg\_repack}. Эта утилита позволяет сделать \lstinline!VACUUM FULL! или \lstinline!CLUSTER! команды без блокировки таблицы. Для чистки таблицы pg\_repack создает точную её копию в \lstinline!repack! схеме базы данных (ваша база по умолчанию работает в \lstinline!public! схеме) и сортирует строки в этой таблице. После переноса данных и чиски мусора, утилита меняет схему у таблиц. Для чистки индексов утилита создает новые индексы с другими именами, а по выполнению работы меняет их на первоначальные. Для выполнения всех этих работ потребуется дополнительное место на диске (например, если у вас 100 ГБ данных, и из них 40 ГБ - распухание таблиц или индексов, то вам потребуется 100 ГБ + (100 ГБ - 40 ГБ) = 160 ГБ на диске минимум). Для проверки <<распухания>> таблиц и индексов в вашей базе можно воспользоватся SQL запросом из раздела <<\ref{sec:snippets-bloating}~\nameref{sec:snippets-bloating}>>.
 
 Существует ряд ограничений в работе pg\_repack:
 
@@ -35,6 +35,245 @@ $ pg_repack --no-order --table foo --table bar test
 $ pg_repack -d test --table foo --only-indexes --tablespace tbs
 \end{lstlisting}
 
+
+\subsection{Pgcompact}
+
+Существует еще одно решение для борьбы с раздуванием таблиц. При обновлении записи с помощью \lstinline!UPDATE!, если в таблице есть свободное место, то новая версия пойдет именно в свободное место, без выделения новых страниц. Предпочтение отдается свободному месту ближе к началу таблицы. Если обновлять таблицу с помощью <<fake updates>>(\lstinline!some_column = some_column!) с последней страницы, в какой-то момент, все записи с последней страницы перейдут в свободное место в предшествующих страницах таблицы. Таким образом, после нескольких таких операций, последние страницы окажутся пустыми и обычный неблокирующий \lstinline!VACUUM! сможет отрезать их от таблицы, тем самым уменьшив размер. В итоге, с помощью такой техники можно максимально сжать таблицу, при этом не вызывая критичных блокировок, а значит без помех для других сессий и нормальной работы базы. Для автоматизации этой процедуры существует утилита \href{https://github.com/grayhemp/pgtoolkit}{pgcompactor}.
+
+Основные характеристики утилиты:
+
+\begin{itemize}
+  \item не требует никаких зависимостей кроме Perl >=5.8.8, можно просто скопировать pgcompactor на сервер и работать с ним;
+  \item работает через адаптеры \lstinline!DBD::Pg!, \lstinline!DBD::PgPP! или даже через стандартную утилиту psql, если первых двух на сервере нет;
+  \item обработка как отдельных таблиц, так и всех таблиц внутри схемы, базы или всего кластера;
+  \item возможность исключения баз, схем или таблиц из обработки;
+  \item анализ эффекта раздувания и обработка только тех таблиц, у которых он присутствует, для более точных расчетов рекомендуется установить расширение \href{https://www.postgresql.org/docs/current/static/pgstattuple.html}{pgstattuple};
+  \item анализ и перестроение индексов с эффектом раздувания;
+  \item анализ и перестроение уникальных ограничений (unique constraints) и первичных ключей (primary keys) с эффектом раздувания;
+  \item инкрементальное использование, т.е. можно остановить процесс сжатия без ущерба чему-либо;
+  \item динамическая подстройка под текущую нагрузку базы данных, чтобы не влиять на производительность пользовательских запросов (с возможностью регулировки при запуске);
+  \item рекомендации администраторам, сопровождаемые готовым DDL, для перестроения объектов базы, которые не могут быть перестроены в автоматическом режиме;
+\end{itemize}
+
+Рассмотрим пример использования данной утилиты. Для начала создадим таблицу:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor1,caption=Создаем test таблицу]
+# create table test (
+    id int4,
+    int_1 int4,
+    int_2 int4,
+    int_3 int4,
+    ts_1 timestamptz,
+    ts_2 timestamptz,
+    ts_3 timestamptz,
+    text_1 text,
+    text_2 text,
+    text_3 text
+);
+\end{lstlisting}
+
+После этого заполним её данными:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor2,caption=Заполняем данными test таблицу]
+# insert into test
+select
+    i,
+    cast(random() * 10000000 as int4),
+    cast(random()*10000000 as int4),
+    cast(random()*10000000 as int4),
+    now() - '2 years'::interval * random(),
+    now() - '2 years'::interval * random(),
+    now() - '2 years'::interval * random(),
+    repeat('text_1 ', cast(10 + random() * 100 as int4)),
+    repeat('text_2 ', cast(10 + random() * 100 as int4)),
+    repeat('text_2 ', cast(10 + random() * 100 as int4))
+from generate_series(1, 1000000) i;
+\end{lstlisting}
+
+И добавим индексы:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor3,caption=Индексы для test]
+# alter table test add primary key (id);
+ALTER TABLE
+
+# create unique index i1 on test (int_1, int_2);
+CREATE INDEX
+
+# create index i2 on test (int_2);
+CREATE INDEX
+
+# create index i3 on test (int_3, ts_1);
+CREATE INDEX
+
+# create index i4 on test (ts_2);
+CREATE INDEX
+
+# create index i5 on test (ts_3);
+CREATE INDEX
+
+# create index i6 on test (text_1);
+CREATE INDEX
+\end{lstlisting}
+
+В результате получам test таблицу как показано на~\ref{lst:pgcompactor4}:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor4,caption=Таблица test]
+# \d test
+              Table "public.test"
+ Column |           Type           | Modifiers
+--------+--------------------------+-----------
+ id     | integer                  | not null
+ int_1  | integer                  |
+ int_2  | integer                  |
+ int_3  | integer                  |
+ ts_1   | timestamp with time zone |
+ ts_2   | timestamp with time zone |
+ ts_3   | timestamp with time zone |
+ text_1 | text                     |
+ text_2 | text                     |
+ text_3 | text                     |
+Indexes:
+    "test_pkey" PRIMARY KEY, btree (id)
+    "i1" UNIQUE, btree (int_1, int_2)
+    "i2" btree (int_2)
+    "i3" btree (int_3, ts_1)
+    "i4" btree (ts_2)
+    "i5" btree (ts_3)
+    "i6" btree (text_1)
+
+\end{lstlisting}
+
+Размер таблицы и индексов:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor5,caption=Размер таблицы и индексов]
+# SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+    AND nspname !~ '^pg_toast'
+  ORDER BY pg_total_relation_size(C.oid) DESC
+  LIMIT 20;
+     relation     | total_size
+------------------+------------
+ public.test      | 1705 MB
+ public.i6        | 242 MB
+ public.i3        | 30 MB
+ public.i1        | 21 MB
+ public.i2        | 21 MB
+ public.i4        | 21 MB
+ public.i5        | 21 MB
+ public.test_pkey | 21 MB
+(8 rows)
+\end{lstlisting}
+
+Теперь давайте создадим распухание таблицы. Для этого удалим 95\% записей в ней:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor6,caption=Удаляем 95\% записей]
+# DELETE FROM test WHERE random() < 0.95;
+DELETE 950150
+\end{lstlisting}
+
+Далее сделаем \lstinline!VACUUM! и проверим размер заново:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor7,caption=Размер таблицы и индексов]
+# VACUUM;
+VACUUM
+# SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+    AND nspname !~ '^pg_toast'
+  ORDER BY pg_total_relation_size(C.oid) DESC
+  LIMIT 20;
+     relation     | total_size
+------------------+------------
+ public.test      | 1705 MB
+ public.i6        | 242 MB
+ public.i3        | 30 MB
+ public.i1        | 21 MB
+ public.i2        | 21 MB
+ public.i4        | 21 MB
+ public.i5        | 21 MB
+ public.test_pkey | 21 MB
+(8 rows)
+\end{lstlisting}
+
+Как видно из результата, размер не изменился. Теперь попробуем убрать через pgcompact распухание таблицы и индексов (для этого дополнительно добавим в базу данных расширение pgstattuple):
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor8,caption=Запуск pgcompact]
+# CREATE EXTENSION pgstattuple;
+# \q
+
+$ git clone https://github.com/grayhemp/pgtoolkit.git
+$ cd pgtoolkit
+$ time ./bin/pgcompact -v info -d analytics_prod --reindex 2>&1 | tee pgcompact.output
+Sun Oct 30 11:01:18 2016 INFO Database connection method: psql.
+Sun Oct 30 11:01:18 2016 dev INFO Created environment.
+Sun Oct 30 11:01:18 2016 dev INFO Statictics calculation method: pgstattuple.
+Sun Oct 30 11:02:03 2016 dev, public.test INFO Vacuum initial: 169689 pages left, duration 45.129 seconds.
+Sun Oct 30 11:02:13 2016 dev, public.test INFO Bloat statistics with pgstattuple: duration 9.764 seconds.
+Sun Oct 30 11:02:13 2016 dev, public.test NOTICE Statistics: 169689 pages (218233 pages including toasts and indexes), approximately 94.62% (160557 pages) can be compacted reducing the size by 1254 MB.
+Sun Oct 30 11:02:13 2016 dev, public.test INFO Update by column: id.
+Sun Oct 30 11:02:13 2016 dev, public.test INFO Set pages/round: 10.
+Sun Oct 30 11:02:13 2016 dev, public.test INFO Set pages/vacuum: 3394.
+Sun Oct 30 11:04:56 2016 dev, public.test INFO Progress: 0%, 260 pages completed.
+Sun Oct 30 11:05:45 2016 dev, public.test INFO Cleaning in average: 85.8 pages/second (0.117 seconds per 10 pages).
+Sun Oct 30 11:05:48 2016 dev, public.test INFO Vacuum routine: 166285 pages left, duration 2.705 seconds.
+Sun Oct 30 11:05:48 2016 dev, public.test INFO Set pages/vacuum: 3326.
+Sun Oct 30 11:05:57 2016 dev, public.test INFO Progress: 2%, 4304 pages completed.
+Sun Oct 30 11:06:19 2016 dev, public.test INFO Cleaning in average: 841.6 pages/second (0.012 seconds per 10 pages).
+Sun Oct 30 11:06:23 2016 dev, public.test INFO Vacuum routine: 162942 pages left, duration 4.264 seconds.
+Sun Oct 30 11:06:23 2016 dev, public.test INFO Set pages/vacuum: 3260.
+Sun Oct 30 11:06:49 2016 dev, public.test INFO Cleaning in average: 818.1 pages/second (0.012 seconds per 10 pages).
+Sun Oct 30 11:06:49 2016 dev, public.test INFO Vacuum routine: 159681 pages left, duration 0.325 seconds.
+Sun Oct 30 11:06:49 2016 dev, public.test INFO Set pages/vacuum: 3194.
+Sun Oct 30 11:06:57 2016 dev, public.test INFO Progress: 6%, 10958 pages completed.
+Sun Oct 30 11:07:23 2016 dev, public.test INFO Cleaning in average: 694.8 pages/second (0.014 seconds per 10 pages).
+Sun Oct 30 11:07:24 2016 dev, public.test INFO Vacuum routine: 156478 pages left, duration 1.362 seconds.
+Sun Oct 30 11:07:24 2016 dev, public.test INFO Set pages/vacuum: 3130.
+...
+Sun Oct 30 11:49:02 2016 dev NOTICE Processing complete.
+Sun Oct 30 11:49:02 2016 dev NOTICE Processing results: size reduced by 1256 MB (1256 MB including toasts and indexes) in total.
+Sun Oct 30 11:49:02 2016 NOTICE Processing complete: 0 retries from 10.
+Sun Oct 30 11:49:02 2016 NOTICE Processing results: size reduced by 1256 MB (1256 MB including toasts and indexes) in total, 1256 MB (1256 MB) dev.
+Sun Oct 30 11:49:02 2016 dev INFO Dropped environment.
+
+real	47m44.831s
+user	0m37.692s
+sys	0m16.336s
+\end{lstlisting}
+
+После данной процедуры проверим размер таблицы и индексов в базе:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcompactor9,caption=Размер таблицы и индексов]
+# VACUUM;
+VACUUM
+# SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+    AND nspname !~ '^pg_toast'
+  ORDER BY pg_total_relation_size(C.oid) DESC
+  LIMIT 20;
+     relation     | total_size
+------------------+------------
+ public.test      | 449 MB
+ public.i6        | 12 MB
+ public.i3        | 1544 kB
+ public.i1        | 1112 kB
+ public.i2        | 1112 kB
+ public.test_pkey | 1112 kB
+ public.i4        | 1112 kB
+ public.i5        | 1112 kB
+(8 rows)
+\end{lstlisting}
+
+Как видно в результате размер таблицы сократился до 449 МБ (было 1705 МБ). Индексы тоже стали меньше (например, \lstinline!i6! был 242 МБ, а стал 12 МБ). Операция занял 47 минут и обрабатывала в среднем 600 страниц с секунду (4.69 МБ в секунду). Можно ускорить выполнение этой операции через \lstinline!--delay-ratio! параметр (задержка между раундами выполнения, по умолчанию 2 секунды) и \lstinline!--max-pages-per-round! параметр (количество страниц, что будет обработано за один раунд, по умолчанию 10). Более подробно по параметрам pgcompact можно ознакомится через команду \lstinline!pgcompact --man!.
+
+
 \subsection{Заключение}
 
-Pg\_repack~--- расширение, которое может помочь в борьбе с <<table bloat>> в PostgreSQL <<на лету>>.
+Pg\_repack и pgcompact~--- утилиты, которые могут помочь в борьбе с распуханием таблиц в PostgreSQL <<на лету>>.
