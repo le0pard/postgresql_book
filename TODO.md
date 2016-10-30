@@ -1,7 +1,6 @@
 Fix:
  * JSON/JSONB section
  * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
- * Bloat + pg_repack + pgcompact
 
 Add:
 
