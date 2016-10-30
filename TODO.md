@@ -22,3 +22,5 @@ Add:
  * https://github.com/citusdata/pg_cron
  * https://github.com/ankane/pgslice
  * https://www.citusdata.com/blog/2016/10/12/count-performance/
+ * http://big-elephants.com/2015-10/writing-postgres-extensions-part-i/
+ * http://postgresql.ru.net/manual/extend-pgxs.html
