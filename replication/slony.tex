@@ -24,7 +24,7 @@ $ sudo aptitude install slony1-2-bin
   \item \lstinline!customers!~--- база данных;
   \item \lstinline!master_host!~--- хост master базы;
   \item \lstinline!slave_host!~--- хост slave базы;
-  \item \lstinline!customers_rep!~--- имя кластера.
+  \item \lstinline!customers_rep!~--- имя кластера;
 \end{itemize}
 
 \subsubsection{Подготовка master базы}
@@ -370,10 +370,10 @@ port=5432 user=slony_user password=slony_user_pass'
 %
 \end{lstlisting}
 
-Это означает что в служебной таблице \lstinline!_<имя кластера>.sl_path;!, например \lstinline!_customers_rep.sl_path! на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, id нового узла 4, пара (1,4) в \lstinline!sl_path! отсутствует. Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос:
+Это означает что в служебной таблице \lstinline!_<имя кластера>.sl_path!, например \lstinline!_customers_rep.sl_path! на уже имеющихся узлах отсутствует информация о новом узле. В данном случае, id нового узла 4, пара (1,4) в \lstinline!sl_path! отсутствует. Чтобы это устранить, нужно выполнить на каждом из имеющихся узлов приблизительно следующий запрос:
 
 \begin{lstlisting}[label=lst:slony18,caption=Устранение неисправностей]
-slony_user@masterhost$ psql -d customers -h _every_one_of_slaves -U slony
+$ psql -d customers -h _every_one_of_slaves -U slony
 customers=# insert into _customers_rep.sl_path
 values ('1','4','dbname=customers host=mainhost.com
 port=5432 user=slony_user password=slony_user_password,'10');
