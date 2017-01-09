@@ -1,6 +1,6 @@
 \section{Cstore\_fdw}
 
-\href{https://citusdata.github.io/cstore\_fdw/}{Cstore\_fdw} расширение реализует модель хранения данных на базе \href{https://en.wikipedia.org/wiki/Column-oriented\_DBMS}{семейства столбцов} (column-oriented systems) для PostgreSQL. Такое хранение данных   обеспечивает заметные преимущества для аналитических задач (\href{https://ru.wikipedia.org/wiki/OLAP}{OLAP}, \href{https://en.wikipedia.org/wiki/Data\_warehouse}{data warehouse}), поскольку требуется считывать меньше данных с диска (благодаря формату хранения и компресии). Расширение использует \href{https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC#LanguageManualORC-ORCFileFormat}{Optimized Row Columnar} (ORC) формат для размещения данных на диске, который имеет следующие преимущества:
+\href{https://citusdata.github.io/cstore\_fdw/}{Cstore\_fdw} расширение реализует модель хранения данных на базе \href{https://en.wikipedia.org/wiki/Column-oriented\_DBMS}{семейства столбцов} (column-oriented systems) для PostgreSQL (колоночное хранение данных). Такое хранение данных обеспечивает заметные преимущества для аналитических задач (\href{https://ru.wikipedia.org/wiki/OLAP}{OLAP}, \href{https://en.wikipedia.org/wiki/Data\_warehouse}{data warehouse}), поскольку требуется считывать меньше данных с диска (благодаря формату хранения и компресии). Расширение использует \href{https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC#LanguageManualORC-ORCFileFormat}{Optimized Row Columnar (ORC)} формат для размещения данных на диске, который имеет следующие преимущества:
 
 \begin{itemize}
   \item Уменьшение (сжатие) размера данных в памяти и на диске в 2-4 раза. Можно добавить в расширение другой кодек для сжатия (алгоритм Лемпеля-Зива, LZ присутствует в расширении);
@@ -8,3 +8,122 @@
   \item Хранение минимального/максимального значений для групп полей (skip index, индекс с пропусками), что помогает пропустить не требуемые данные на диске при выборке;
 \end{itemize}
 
+
+\subsection{Установка и использование}
+
+Для работы cstore\_fdw требуется \href{https://github.com/protobuf-c/protobuf-c}{protobuf-c} для сериализации и десериализации данных. Далее требуется добавить в \lstinline!postgresql.conf! расширение:
+
+\begin{lstlisting}[language=Bash,label=lst:cstore1,caption=Cstore\_fdw]
+shared_preload_libraries = 'cstore_fdw'
+\end{lstlisting}
+
+И активировать его для базы:
+
+\begin{lstlisting}[language=SQL,label=lst:cstore2,caption=Cstore\_fdw]
+# CREATE EXTENSION cstore_fdw;
+\end{lstlisting}
+
+Для загрузки данных в cstore таблицы существует два варианта:
+
+\begin{itemize}
+  \item Использование команды \lstinline!COPY! для загрузки или добаления данных из файлов или STDIN;
+  \item Использование конструкции \lstinline!INSERT INTO cstore_table SELECT ...! для загрузки или добаления данных из другой таблицы;
+\end{itemize}
+
+Cstore таблицы не поддерживают \lstinline!INSERT! (кроме выше упомянутого \lstinline!INSERT INTO ... SELECT!), \lstinline!UPDATE! или \lstinline!DELETE! команды.
+
+Для примера загрузим тестовые данные:
+
+\begin{lstlisting}[language=Bash,label=lst:cstore3,caption=Cstore\_fdw]
+$ wget http://examples.citusdata.com/customer_reviews_1998.csv.gz
+$ wget http://examples.citusdata.com/customer_reviews_1999.csv.gz
+
+$ gzip -d customer_reviews_1998.csv.gz
+$ gzip -d customer_reviews_1999.csv.gz
+\end{lstlisting}
+
+Далее загрузим эти данные в cstore таблицу (расширение уже активировано для PostgreSQL):
+
+\begin{lstlisting}[language=SQL,label=lst:cstore4,caption=Cstore таблицы]
+-- create server object
+CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
+
+-- create foreign table
+CREATE FOREIGN TABLE customer_reviews
+(
+    customer_id TEXT,
+    review_date DATE,
+    review_rating INTEGER,
+    review_votes INTEGER,
+    review_helpful_votes INTEGER,
+    product_id CHAR(10),
+    product_title TEXT,
+    product_sales_rank BIGINT,
+    product_group TEXT,
+    product_category TEXT,
+    product_subcategory TEXT,
+    similar_product_ids CHAR(10)[]
+)
+SERVER cstore_server
+OPTIONS(compression 'pglz');
+
+COPY customer_reviews FROM '/tmp/customer_reviews_1998.csv' WITH CSV;
+COPY customer_reviews FROM '/tmp/customer_reviews_1999.csv' WITH CSV;
+
+ANALYZE customer_reviews;
+\end{lstlisting}
+
+После этого можно проверить как работает расширение:
+
+\begin{lstlisting}[language=SQL,label=lst:cstore5,caption=Cstore запросы]
+-- Find all reviews a particular customer made on the Dune series in 1998.
+# SELECT
+    customer_id, review_date, review_rating, product_id, product_title
+FROM
+    customer_reviews
+WHERE
+    customer_id ='A27T7HVDXA3K2A' AND
+    product_title LIKE '%Dune%' AND
+    review_date >= '1998-01-01' AND
+    review_date <= '1998-12-31';
+  customer_id   | review_date | review_rating | product_id |                 product_title
+----------------+-------------+---------------+------------+-----------------------------------------------
+ A27T7HVDXA3K2A | 1998-04-10  |             5 | 0399128964 | Dune (Dune Chronicles (Econo-Clad Hardcover))
+ A27T7HVDXA3K2A | 1998-04-10  |             5 | 044100590X | Dune
+ A27T7HVDXA3K2A | 1998-04-10  |             5 | 0441172717 | Dune (Dune Chronicles, Book 1)
+ A27T7HVDXA3K2A | 1998-04-10  |             5 | 0881036366 | Dune (Dune Chronicles (Econo-Clad Hardcover))
+ A27T7HVDXA3K2A | 1998-04-10  |             5 | 1559949570 | Dune Audio Collection
+(5 rows)
+
+Time: 238.626 ms
+
+-- Do we have a correlation between a book's title's length and its review ratings?
+# SELECT
+    width_bucket(length(product_title), 1, 50, 5) title_length_bucket,
+    round(avg(review_rating), 2) AS review_average,
+    count(*)
+FROM
+   customer_reviews
+WHERE
+    product_group = 'Book'
+GROUP BY
+    title_length_bucket
+ORDER BY
+    title_length_bucket;
+ title_length_bucket | review_average | count
+---------------------+----------------+--------
+                   1 |           4.26 | 139034
+                   2 |           4.24 | 411318
+                   3 |           4.34 | 245671
+                   4 |           4.32 | 167361
+                   5 |           4.30 | 118422
+                   6 |           4.40 | 116412
+(6 rows)
+
+Time: 1285.059 ms
+\end{lstlisting}
+
+
+\subsection{Заключение}
+
+Более подробно о использовании расширения можно ознакомиться через \href{https://citusdata.github.io/cstore_fdw/}{официальную документацию}.
