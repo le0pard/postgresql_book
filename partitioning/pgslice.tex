@@ -1,0 +1,171 @@
+\section{Pgslice}
+
+\href{https://github.com/ankane/pgslice}{Pgslice}~--- утилита для создания и управления партициями в PostgreSQL. Утилита разбивает на <<куски>> как новую, так и существующию таблицу с данными c нулевым временем простоя (<<zero downtime>>).
+
+Утилита написана на \href{https://www.ruby-lang.org}{Ruby}, поэтому потребуется сначала установить его. После этого устанавливаем pgslice через rubygems (многие ruby разработчики используют \href{http://bundler.io/}{bundler} для лучшего управления зависимостями, но в этой главе это не рассматривается):
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice1,caption=Установка]
+$ gem install pgslice
+\end{lstlisting}
+
+Создадим и заполним таблицу тестовыми данными:
+
+\begin{lstlisting}[language=SQL,label=lst:pgslice2,caption=Данные]
+# CREATE TABLE users (
+    id             serial primary key,
+    username       text not null unique,
+    password       text,
+    created_on     timestamptz not null,
+    last_logged_on timestamptz not null
+);
+
+# INSERT INTO users (username, password, created_on, last_logged_on)
+  SELECT
+      md5(random()::text),
+      md5(random()::text),
+      now() + '1 month'::interval * random(),
+      now() + '1 month'::interval * random()
+  FROM
+      generate_series(1, 10000);
+\end{lstlisting}
+
+Настройки подключения к базе задаются через \lstinline!PGSLICE_URL! переменную окружения:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice3,caption=PGSLICE\_URL]
+$ export PGSLICE_URL=postgres://username:password@localhost/mydatabase
+\end{lstlisting}
+
+Через команду \lstinline!pgslice prep <table> <column> <period>! создадим таблицу \lstinline!<table>_intermediate! (\lstinline!users_intermediate! в примере) с соответствующим триггером для разбиения данных, где \lstinline!<table>! - это название таблицы (\lstinline!users! в примере), \lstinline!<column>! - поле, по которому будут создаваться партиции, а \lstinline!<period>! - период данных в партициях (может быть \lstinline!day! или \lstinline!month!).
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice4,caption=Pgslice prep]
+$ pgslice prep users created_on month
+BEGIN;
+
+CREATE TABLE users_intermediate (LIKE users INCLUDING ALL);
+
+CREATE FUNCTION users_insert_trigger()
+    RETURNS trigger AS $$
+    BEGIN
+        RAISE EXCEPTION 'Create partitions first.';
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER users_insert_trigger
+    BEFORE INSERT ON users_intermediate
+    FOR EACH ROW EXECUTE PROCEDURE users_insert_trigger();
+
+COMMENT ON TRIGGER users_insert_trigger ON users_intermediate is 'column:created_on,period:month,cast:timestamptz';
+
+COMMIT;
+\end{lstlisting}
+
+Теперь можно добавить партиции:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice5,caption=Pgslice add\_partitions]
+$ pgslice add_partitions users --intermediate --past 3 --future 3
+BEGIN;
+
+CREATE TABLE users_201611
+    (CHECK (created_on >= '2016-11-01 00:00:00 UTC'::timestamptz AND created_on < '2016-12-01 00:00:00 UTC'::timestamptz))
+    INHERITS (users_intermediate);
+
+ALTER TABLE users_201611 ADD PRIMARY KEY (id);
+
+...
+
+CREATE OR REPLACE FUNCTION users_insert_trigger()
+    RETURNS trigger AS $$
+    BEGIN
+        IF (NEW.created_on >= '2017-02-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-03-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201702 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2017-03-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-04-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201703 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2017-04-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-05-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201704 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2017-05-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-06-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201705 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2017-01-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-02-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201701 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2016-12-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2017-01-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201612 VALUES (NEW.*);
+        ELSIF (NEW.created_on >= '2016-11-01 00:00:00 UTC'::timestamptz AND NEW.created_on < '2016-12-01 00:00:00 UTC'::timestamptz) THEN
+            INSERT INTO users_201611 VALUES (NEW.*);
+        ELSE
+            RAISE EXCEPTION 'Date out of range. Ensure partitions are created.';
+        END IF;
+        RETURN NULL;
+    END;
+    $$ LANGUAGE plpgsql;
+
+COMMIT;
+\end{lstlisting}
+
+Через \lstinline!--past! и \lstinline!--future! опции указывается количество партицей. Далее можно переместить данные в партиции:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice6,caption=Pgslice fill]
+$ pgslice fill users
+/* 1 of 1 */
+INSERT INTO users_intermediate ("id", "username", "password", "created_on", "last_logged_on")
+    SELECT "id", "username", "password", "created_on", "last_logged_on" FROM users
+    WHERE id > 0 AND id <= 10000 AND created_on >= '2016-11-01 00:00:00 UTC'::timestamptz AND created_on < '2017-06-01 00:00:00 UTC'::timestamptz
+\end{lstlisting}
+
+Через \lstinline!--batch-size! и \lstinline!--sleep! опции можно управлять скоростью переноса данных.
+
+После этого можно переключится на новую таблицу с партициями:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice7,caption=Pgslice swap]
+$ pgslice swap users
+BEGIN;
+
+SET LOCAL lock_timeout = '5s';
+
+ALTER TABLE users RENAME TO users_retired;
+
+ALTER TABLE users_intermediate RENAME TO users;
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+COMMIT;
+\end{lstlisting}
+
+Если требуется, то можно перенести часть данных, что накопилась между переключением таблиц:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice8,caption=Pgslice fill]
+$ pgslice fill users --swapped
+\end{lstlisting}
+
+В результате таблица \lstinline!users! будет работать через партиции:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice_sample1,caption=Результат]
+$ psql -c "EXPLAIN SELECT * FROM users"
+                               QUERY PLAN
+------------------------------------------------------------------------
+ Append  (cost=0.00..330.00 rows=13601 width=86)
+   ->  Seq Scan on users  (cost=0.00..0.00 rows=1 width=84)
+   ->  Seq Scan on users_201611  (cost=0.00..17.20 rows=720 width=84)
+   ->  Seq Scan on users_201612  (cost=0.00..17.20 rows=720 width=84)
+   ->  Seq Scan on users_201701  (cost=0.00..17.20 rows=720 width=84)
+   ->  Seq Scan on users_201702  (cost=0.00..166.48 rows=6848 width=86)
+   ->  Seq Scan on users_201703  (cost=0.00..77.52 rows=3152 width=86)
+   ->  Seq Scan on users_201704  (cost=0.00..17.20 rows=720 width=84)
+   ->  Seq Scan on users_201705  (cost=0.00..17.20 rows=720 width=84)
+(9 rows)
+\end{lstlisting}
+
+Старая таблица теперь будет называться \lstinline!<table>_retired! (\lstinline!users_retired! в примере). Её можно оставить или удалить из базы.
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice9,caption=Удаление старой таблицы]
+$ pg_dump -c -Fc -t users_retired $PGSLICE_URL > users_retired.dump
+$ psql -c "DROP users_retired" $PGSLICE_URL
+\end{lstlisting}
+
+Далее только требуется следить за количеством партиций. Для этого команду \lstinline!pgslice add_partitions! можно добавить в cron:
+
+\begin{lstlisting}[language=Bash,label=lst:pgslice10,caption=Cron]
+# day
+0 0 * * * pgslice add_partitions <table> --future 3 --url ...
+
+# month
+0 0 1 * * pgslice add_partitions <table> --future 3 --url ...
+\end{lstlisting}

@@ -10,8 +10,6 @@ Add:
  * http://pgloader.io/
  * https://github.com/cyga/www_fdw
  * http://www.sai.msu.su/~megera/wiki/wildspeed
- * https://github.com/citusdata/pg_shard
- * http://www.postgres-xl.org/
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://www.repmgr.org/
  * http://jinchengli.me/post/postgres-query-opt/
@@ -19,7 +17,6 @@ Add:
  * https://edwardsamuel.wordpress.com/2016/05/24/set-up-scheduled-postgresql-backup-to-aws-s3-using-wal-e/
  * https://github.com/michaelpq/pg_arman
  * https://github.com/citusdata/pg_cron
- * https://github.com/ankane/pgslice
  * https://www.citusdata.com/blog/2016/10/12/count-performance/
  * https://habrahabr.ru/company/etagi/blog/314000/
  * https://www.citusdata.com/blog/2016/11/04/autovacuum-not-the-enemy/
