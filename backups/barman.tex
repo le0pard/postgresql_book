@@ -13,7 +13,7 @@ $ ssh barman@brhost
 $ ssh postgres@pghost
 \end{lstlisting}
 
-Далее нужно установить на сервере для бэкапов barman. Сам barman написан на python и имеет пару зависимостей: python 2.6+, rsync >= 3.0.4 и python библиотеки (argh, psycopg2, python-dateutil < 2.0 (для python 3.0 не нужен), distribute). На Ubuntu все зависимости можно поставить одной командой:
+Далее нужно установить на сервере для бэкапов barman. Сам barman написан на python и имеет пару зависимостей: python 2.6+, \lstinline!rsync! и python библиотеки (\lstinline!argh!, \lstinline!psycopg2!, \lstinline!python-dateutil!, \lstinline!distribute!). На Ubuntu все зависимости можно поставить одной командой:
 
 \begin{lstlisting}[language=Bash,label=lst:barman2,caption=Установка зависимостей barman]
 $ aptitude install python-dev python-argh python-psycopg2 python-dateutil rsync python-setuptools
@@ -22,8 +22,8 @@ $ aptitude install python-dev python-argh python-psycopg2 python-dateutil rsync 
 Далее нужно установить barman:
 
 \begin{lstlisting}[language=Bash,label=lst:barman3,caption=Установка barman]
-$ tar -xzf barman-2.0.tar.gz
-$ cd barman-2.0/
+$ tar -xzf barman-2.1.tar.gz
+$ cd barman-2.1/
 $ ./setup.py build
 $ sudo ./setup.py install
 \end{lstlisting}

@@ -5,7 +5,7 @@
 
 \subsubsection{Установка}
 
-У WAL-E есть пару зависимостей: lzop, psql, pv (в старых версиях используется mbuffer), python 2.6+ и несколько python библиотек (gevent >= 0.13, boto >= 2.0, azure). Также для удобства настроек переменных среды устанавливается daemontools. На Ubuntu это можно все поставить одной командой:
+У WAL-E есть пару зависимостей: \lstinline!lzop!, \lstinline!psql!, \lstinline!pv! (в старых версиях используется \lstinline!mbuffer!), python 3.4+ и несколько python библиотек (\lstinline!gevent!, \lstinline!boto!, \lstinline!azure!). Также для удобства настроек переменных среды устанавливается \lstinline!daemontools!. На Ubuntu это можно все поставить одной командой:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
 $ aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
@@ -14,7 +14,7 @@ $ aptitude install git-core python-dev python-setuptools python-pip build-essent
 Теперь установим WAL-E:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e2,caption=Установка WAL-E]
-$ pip install https://github.com/wal-e/wal-e/archive/v1.0.1.tar.gz
+$ pip install https://github.com/wal-e/wal-e/archive/v1.0.3.tar.gz
 \end{lstlisting}
 
 После успешной установки можно начать работать с WAL-E.
