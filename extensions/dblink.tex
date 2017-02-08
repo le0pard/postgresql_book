@@ -1,3 +1,129 @@
 \section{Dblink}
 
 \href{https://www.postgresql.org/docs/current/static/dblink.html}{Dblink}~-- расширение, которое позволяет выполнять запросы к удаленным базам данных непосредственно из SQL, не прибегая к помощи внешних скриптов.
+
+\subsection{Установка и использование}
+
+Для начала инициализируем расширение в базе данных:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink1,caption=Инициализация dblink]
+# CREATE EXTENSION dblink;
+\end{lstlisting}
+
+Для создания подключения к другой базе данных нужно использовать \lstinline!dblink_connect! функцию, где первым параметром указывается имя подключения, а вторым - опции подключения к базе:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink2,caption=Подключение через dblink]
+# SELECT dblink_connect('slave_db', 'host=slave.example.com port=5432 dbname=exampledb user=admin password=password');
+ dblink_connect
+----------------
+ OK
+(1 row)
+\end{lstlisting}
+
+При успешном выполнении команды будет выведен ответ <<OK>>. Теперь можно попробовать считать данные из таблиц через \lstinline!dblink! функцию:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink3,caption=SELECT]
+# SELECT *
+FROM dblink('slave_db', 'SELECT id, username FROM users LIMIT 3')
+AS dblink_users(id integer, username text);
+
+ id |             username
+----+----------------------------------
+  1 | 64ec7083d7facb7c5d97684e7f415b65
+  2 | 404c3b639a920b5ba814fc01353368f2
+  3 | 153041f992e3eab6891f0e8da9d11f23
+(3 rows)
+\end{lstlisting}
+
+По завершению работы с сервером, подключение требуется закрыть через функцию \lstinline!dblink_disconnect!:
+
+\begin{lstlisting}[language=SQL,label=lst:dblinkclose1,caption=dblink\_disconnect]
+# SELECT dblink_disconnect('slave_db');
+ dblink_disconnect
+-------------------
+ OK
+(1 row)
+\end{lstlisting}
+
+
+\subsection{Курсоры}
+
+Dblink поддерживает \href{https://www.postgresql.org/docs/current/static/plpgsql-cursors.html}{курсоры}~--- инкапсулирующие запросы, которые позволяют получать результат запроса по нескольку строк за раз. Одна из причин использования курсоров заключается в том, чтобы избежать переполнения памяти, когда результат содержит большое количество строк.
+
+Для открытия курсора используется функция \lstinline!dblink_open!, где первый параметр - название подключения, второй - название для курсора, а третий - сам запрос:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink4,caption=dblink\_open]
+# SELECT dblink_open('slave_db', 'users', 'SELECT id, username FROM users');
+ dblink_open
+-------------
+ OK
+(1 row)
+\end{lstlisting}
+
+Для получения данных из курсора требуется использовать \lstinline!dblink_fetch!, где первый параметр - название подключения, второй - название для курсора, а третий - требуемое количество записей из курсора:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink5,caption=dblink\_fetch]
+# SELECT id, username FROM dblink_fetch('slave_db', 'users', 2)
+AS (id integer, username text);
+ id |             username
+----+----------------------------------
+  1 | 64ec7083d7facb7c5d97684e7f415b65
+  2 | 404c3b639a920b5ba814fc01353368f2
+(2 rows)
+
+# SELECT id, username FROM dblink_fetch('slave_db', 'users', 2)
+AS (id integer, username text);
+ id |             username
+----+----------------------------------
+  3 | 153041f992e3eab6891f0e8da9d11f23
+  4 | 318c33458b4840f90d87ee4ea8737515
+(2 rows)
+
+# SELECT id, username FROM dblink_fetch('slave_db', 'users', 2)
+AS (id integer, username text);
+ id |             username
+----+----------------------------------
+  6 | 5b795b0e73b00220843f82c4d0f81f37
+  8 | c2673ee986c23f62aaeb669c32261402
+(2 rows)
+\end{lstlisting}
+
+После работы с курсором его нужно обязательно закрыть через \lstinline!dblink_close! функцию:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink6,caption=dblink\_close]
+# SELECT dblink_close('slave_db', 'users');
+ dblink_close
+--------------
+ OK
+(1 row)
+\end{lstlisting}
+
+
+\subsection{Асинхронные запросы}
+
+Последним вариантом для выполнения запросов в dblink является асинхронный запрос. При его использовании результаты не будут возвращены до полного выполнения результата запроса. Для создания асинхронного запроса используется \lstinline!dblink_send_query! функция:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink7,caption=dblink\_send\_query]
+# SELECT * FROM dblink_send_query('slave_db', 'SELECT id, username FROM users') AS users;
+ users
+-------
+    1
+(1 row)
+\end{lstlisting}
+
+Результат получается через \lstinline!dblink_get_result! функцию:
+
+\begin{lstlisting}[language=SQL,label=lst:dblink8,caption=dblink\_get\_result]
+# SELECT id, username FROM dblink_get_result('slave_db')
+AS (id integer, username text);
+ id   |             username
+------+----------------------------------
+    1 | 64ec7083d7facb7c5d97684e7f415b65
+    2 | 404c3b639a920b5ba814fc01353368f2
+    3 | 153041f992e3eab6891f0e8da9d11f23
+    4 | 318c33458b4840f90d87ee4ea8737515
+    6 | 5b795b0e73b00220843f82c4d0f81f37
+    8 | c2673ee986c23f62aaeb669c32261402
+    9 | c53f14040fef954cd6e73b9aa2e31d0e
+   10 | 2dbe27fd96cdb39f01ce115cf3c2a517
+\end{lstlisting}
