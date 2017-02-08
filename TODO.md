@@ -4,7 +4,6 @@ Fix:
 
 Add:
 
- * https://www.compose.com/articles/cross-database-querying-in-compose-postgresql/
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
  * https://research.neustar.biz/2013/02/04/open-source-release-postgresql-hll/
  * http://pgloader.io/
