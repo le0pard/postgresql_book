@@ -14,7 +14,6 @@ Add:
  * http://jinchengli.me/post/postgres-query-opt/
  * https://habrahabr.ru/company/postgrespro/blog/282770/
  * https://github.com/michaelpq/pg_arman
- * https://github.com/citusdata/pg_cron
  * https://www.citusdata.com/blog/2016/10/12/count-performance/
  * https://habrahabr.ru/company/etagi/blog/314000/
  * https://www.citusdata.com/blog/2016/11/04/autovacuum-not-the-enemy/

@@ -19,3 +19,40 @@ shared_preload_libraries = 'pg_cron'
 По умолчанию \lstinline!pg_cron! ожидает, что все таблицы с метаданными будут находится в \lstinline!postgres! базе данных. Данное поведение можно изменить и указать через параметр \lstinline!cron.database_name! в \lstinline!postgresql.conf! другую базу данных, где \lstinline!pg_cron! будет хранить свои данные.
 
 Внутри \lstinline!pg_cron! использует libpq библиотеку, поэтому потребуется разрешить подключения с \lstinline!localhost! без пароля (\lstinline!trust! в \lstinline!pg_hba.conf!) или же создать \href{https://www.postgresql.org/docs/current/static/libpq-pgpass.html}{.pgpass} файл для настройки подключения к базе.
+
+Для создания cron задач используется функция \lstinline!cron.schedule!:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcron3,caption=Cron.schedule]
+-- Delete old data on Saturday at 3:30am (GMT)
+SELECT cron.schedule('30 3 * * 6', $$DELETE FROM events WHERE event_time < now() - interval '1 week'$$);
+ schedule
+----------
+       42
+\end{lstlisting}
+
+Для удаления созданых задач используется \lstinline!cron.unschedule!:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcron4,caption=Cron.unschedule]
+ -- Vacuum every day at 10:00am (GMT)
+ SELECT cron.schedule('0 10 * * *', 'VACUUM');
+  schedule
+ ----------
+        43
+
+-- Stop scheduling a job
+SELECT cron.unschedule(43);
+ unschedule
+------------
+          t
+\end{lstlisting}
+
+В целях безопасности cron задачи выполняются в базе данных, в которой \lstinline!cron.schedule! функция была вызвана с правами доступа текущего пользователя.
+
+Поскольку \lstinline!pg_cron! использует libpq библиотеку, это позволят запускать cron задачи на других базах данных (даже на других серверах). С помощью суперпользователя возможно модифицировать \lstinline!cron.job! таблицу и добавить в нее параметры подключения к другой базе через \lstinline!nodename! и \lstinline!nodeport! поля:
+
+\begin{lstlisting}[language=SQL,label=lst:pgcron5,caption=Cron.job]
+INSERT INTO cron.job (schedule, command, nodename, nodeport, database, username)
+ VALUES ('0 4 * * *', 'VACUUM', 'worker-node-1', 5432, 'postgres', 'marco');
+\end{lstlisting}
+
+В таком случае нужно будет создать \href{https://www.postgresql.org/docs/current/static/libpq-pgpass.html}{.pgpass} файл для настройки подключения к базе на другом сервере.
