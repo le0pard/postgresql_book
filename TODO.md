@@ -1,7 +1,3 @@
-Fix:
- * JSON/JSONB section
- * Analytic section (rank, mode, cube, grouping sets, tablespace, etc)
-
 Add:
 
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
