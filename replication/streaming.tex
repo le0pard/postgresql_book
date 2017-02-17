@@ -421,6 +421,18 @@ pg_ctl -D /path/to/node1/data -m immediate stop
 (3 rows)
 \end{lstlisting}
 
+В таблицу \lstinline!repl_events! будут добавлены записи того, что произошло с каждым сервером во время failover:
+
+\begin{lstlisting}[language=SQL,label=lst:repmgr9,caption=Результат после failover]
+# SELECT node_id, event, successful, details from repmgr_test.repl_events where event_timestamp>='2016-01-06 18:30';
+ node_id |          event           | successful |                         details
+---------+--------------------------+------------+----------------------------------------------------------
+       2 | standby_promote          | t          | node 2 was successfully promoted to master
+       2 | repmgrd_failover_promote | t          | node 2 promoted to master; old master 1 marked as failed
+       3 | repmgrd_failover_follow  | t          | node 3 now following new upstream node 2
+(3 rows)
+\end{lstlisting}
+
 \subsubsection{Заключение}
 
 Более подробно по функционалу, его настройках и ограничениях доступно в \href{https://github.com/2ndQuadrant/repmgr/blob/master/README.md}{официальном репозитории}.
