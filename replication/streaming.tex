@@ -341,4 +341,84 @@ Repmgr состоит из двух утилит:
   \end{itemize}
 \end{itemize}
 
+\subsubsection{Пример использования: автоматическое переключение слейва в мастер}
+
+Для использования failover потребуется добаить \lstinline!repmgr_funcs! в \lstinline!postgresql.conf!:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr1,caption=repmgr\_funcs]
+shared_preload_libraries = 'repmgr_funcs'
+\end{lstlisting}
+
+И добавить настройки в \lstinline!repmgr.conf!:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr2,caption=repmgr.conf]
+failover=automatic
+promote_command='repmgr standby promote -f /etc/repmgr.conf --log-to-file'
+follow_command='repmgr standby follow -f /etc/repmgr.conf --log-to-file'
+\end{lstlisting}
+
+Для демонстрации автоматического failover, настроен кластер с тремя узлами репликации (один мастер и два слейв сервера), так что таблица \lstinline!repl_nodes! выглядит следующим образом:
+
+\begin{lstlisting}[language=SQL,label=lst:repmgr3,caption=repl\_nodes]
+# SELECT id, type, upstream_node_id, priority, active FROM repmgr_test.repl_nodes ORDER BY id;
+ id |  type   | upstream_node_id | priority | active
+----+---------+------------------+----------+--------
+  1 | master  |                  |      100 | t
+  2 | standby |                1 |      100 | t
+  3 | standby |                1 |      100 | t
+(3 rows)
+\end{lstlisting}
+
+После запуска \lstinline!repmgrd! демона на каждом сервере в режиме ожидания, убеждаемся что он мониторит кластер:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr4,caption=logs]
+[2016-01-05 13:15:40] [INFO] checking cluster configuration with schema 'repmgr_test'
+[2016-01-05 13:15:40] [INFO] checking node 2 in cluster 'test'
+[2016-01-05 13:15:40] [INFO] reloading configuration file and updating repmgr tables
+[2016-01-05 13:15:40] [INFO] starting continuous standby node monitoring
+\end{lstlisting}
+
+Теперь остановим мастер базу:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr5,caption=Остановка текущего мастера]
+pg_ctl -D /path/to/node1/data -m immediate stop
+\end{lstlisting}
+
+\lstinline!repmgrd! автоматически замечает падение мастера и переключает один из слейвов в мастер:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr6,caption=Переключение слейва в мастер]
+[2016-01-06 18:32:58] [WARNING] connection to upstream has been lost, trying to recover... 15 seconds before failover decision
+[2016-01-06 18:33:03] [WARNING] connection to upstream has been lost, trying to recover... 10 seconds before failover decision
+[2016-01-06 18:33:08] [WARNING] connection to upstream has been lost, trying to recover... 5 seconds before failover decision
+...
+[2016-01-06 18:33:18] [NOTICE] this node is the best candidate to be the new master, promoting...
+...
+[2016-01-06 18:33:20] [NOTICE] STANDBY PROMOTE successful
+\end{lstlisting}
+
+Также переключает оставшийся слейв на новый мастер:
+
+\begin{lstlisting}[language=Bash,label=lst:repmgr7,caption=Переключение слейва на новый мастер]
+[2016-01-06 18:32:58] [WARNING] connection to upstream has been lost, trying to recover... 15 seconds before failover decision
+[2016-01-06 18:33:03] [WARNING] connection to upstream has been lost, trying to recover... 10 seconds before failover decision
+[2016-01-06 18:33:08] [WARNING] connection to upstream has been lost, trying to recover... 5 seconds before failover decision
+...
+[2016-01-06 18:33:23] [NOTICE] node 2 is the best candidate for new master, attempting to follow...
+[2016-01-06 18:33:23] [INFO] changing standby's master
+...
+[2016-01-06 18:33:25] [NOTICE] node 3 now following new upstream node 2
+\end{lstlisting}
+
+Таблица \lstinline!repl_nodes! будет обновлена, чтобы отразить новую ситуацию~--- старый мастер \lstinline!node1! помечен как неактивный, и слейв \lstinline!node3! теперь работает от нового мастера \lstinline!node2!:
+
+\begin{lstlisting}[language=SQL,label=lst:repmgr8,caption=Результат после failover]
+# SELECT id, type, upstream_node_id, priority, active from repl_nodes ORDER BY id;
+ id |  type   | upstream_node_id | priority | active
+----+---------+------------------+----------+--------
+  1 | master  |                  |      100 | f
+  2 | master  |                  |      100 | t
+  3 | standby |                2 |      100 | t
+(3 rows)
+\end{lstlisting}
+
 Более подробно по функционалу, его настройках и ограничениях доступно в \href{https://github.com/2ndQuadrant/repmgr/blob/master/README.md}{официальном репозитории}.
