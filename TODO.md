@@ -6,7 +6,6 @@ Add:
  * https://github.com/cyga/www_fdw
  * http://www.sai.msu.su/~megera/wiki/wildspeed
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
- * http://www.repmgr.org/
  * http://jinchengli.me/post/postgres-query-opt/
  * https://habrahabr.ru/company/postgrespro/blog/282770/
  * https://github.com/michaelpq/pg_arman
