@@ -12,3 +12,5 @@ Add:
  * https://www.citusdata.com/blog/2016/11/04/autovacuum-not-the-enemy/
  * http://big-elephants.com/2015-10/writing-postgres-extensions-part-i/
  * http://postgresql.ru.net/manual/extend-pgxs.html
+ * https://patroni.readthedocs.io/en/latest/
+ * https://habrahabr.ru/post/322036/
