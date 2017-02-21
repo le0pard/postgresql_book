@@ -94,7 +94,7 @@ FROM daily_uniques
 WINDOW two_days AS (ORDER BY date ASC ROWS 1 PRECEDING);
 \end{lstlisting}
 
-Это всего пара примеров типов запросов, которые будут возвращать результат в течении милисекунд благодаря \lstinline!hll!, но потребует либо полностью отдельные предварительно созданные агрегирующие таблицы или \lstinline!self join/generate_series! фокусы в \lstinline!COUNT DISTINCT! мире.
+Это всего пара примеров типов запросов, которые будут возвращать результат в течении миллисекунд благодаря \lstinline!hll!, но потребует либо полностью отдельные предварительно созданные агрегирующие таблицы или \lstinline!self join/generate_series! фокусы в \lstinline!COUNT DISTINCT! мире.
 
 \subsection{Заключение}
 
