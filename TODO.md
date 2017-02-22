@@ -1,8 +1,7 @@
 Add:
 
+ * http://strom.kaigai.gr.jp/
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
- * http://pgloader.io/
- * https://github.com/cyga/www_fdw
  * http://www.sai.msu.su/~megera/wiki/wildspeed
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://jinchengli.me/post/postgres-query-opt/
@@ -14,3 +13,5 @@ Add:
  * http://postgresql.ru.net/manual/extend-pgxs.html
  * https://patroni.readthedocs.io/en/latest/
  * https://habrahabr.ru/post/322036/
+ * https://github.com/sorintlab/stolon
+ * https://github.com/zombodb/zombodb
