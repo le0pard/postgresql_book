@@ -159,16 +159,6 @@ Select luhn_verify(49927398714);
 
 
 
-\subsection{Ускоряем LIKE}
-
-Автокомплит~--- очень популярная фишка в web системах. Реализуется это простым \lstinline!LIKE 'some\%'!, где <<some>>~--- то, что пользователь успел ввести. Проблема в том, что и в огромной таблице (например таблица тегов) такой запрос будет работать очень медленно.
-
-Для ускорения запроса типа \lstinline!LIKE 'bla\%'! можно использовать \lstinline!text_pattern_ops! (или \lstinline!varchar_pattern_ops! если у поле varchar).
-
-\lstinputlisting[language=SQL,label=lst:snippets14,title=snippets/speed\_like.sql]{example_code/snippets/speed_like.sql}
-
-
-
 \subsection{Поиск дубликатов индексов}
 
 Запрос находит индексы, созданные на одинаковый набор столбцов (такие индексы эквивалентны, а значит бесполезны).
