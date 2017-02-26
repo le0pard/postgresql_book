@@ -2,7 +2,6 @@ Add:
 
  * http://strom.kaigai.gr.jp/
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
- * http://www.sai.msu.su/~megera/wiki/wildspeed
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://jinchengli.me/post/postgres-query-opt/
  * https://habrahabr.ru/company/postgrespro/blog/282770/
