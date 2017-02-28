@@ -1,6 +1,5 @@
 Add:
 
- * http://strom.kaigai.gr.jp/
  * http://madusudanan.com/blog/understanding-postgres-caching-in-depth
  * https://www.compose.io/articles/postgresql-bloat-origins-monitoring-and-managing/
  * http://jinchengli.me/post/postgres-query-opt/

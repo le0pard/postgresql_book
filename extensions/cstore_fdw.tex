@@ -11,7 +11,7 @@
 
 \subsection{Установка и использование}
 
-Для работы cstore\_fdw требуется \href{https://github.com/protobuf-c/protobuf-c}{protobuf-c} для сериализации и десериализации данных. Далее требуется добавить в \lstinline!postgresql.conf! расширение:
+Для работы \lstinline!cstore_fdw! требуется \href{https://github.com/protobuf-c/protobuf-c}{protobuf-c} для сериализации и десериализации данных. Далее требуется добавить в \lstinline!postgresql.conf! расширение:
 
 \begin{lstlisting}[language=Bash,label=lst:cstore1,caption=Cstore\_fdw]
 shared_preload_libraries = 'cstore_fdw'
