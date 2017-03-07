@@ -11,4 +11,3 @@ Add:
  * https://patroni.readthedocs.io/en/latest/
  * https://habrahabr.ru/post/322036/
  * https://github.com/sorintlab/stolon
- * https://github.com/zombodb/zombodb
