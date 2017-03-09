@@ -1,3 +1,15 @@
 \subsection{Patroni}
 
-\href{https://github.com/zalando/patroni}{Patroni}~--- это демон на Python, позволяющий автоматически обслуживать кластеры PostgreSQL с потоковой репликацией, и автоматическим переключением ролей. Поддержания актуальности кластера и выборов мастера используются распределенные \href{https://en.wikipedia.org/wiki/Distributed_control_system}{DCS} хранилища (поддерживаются \href{https://zookeeper.apache.org/}{Zookeeper}, \href{https://coreos.com/etcd}{Etcd}, \href{https://www.consul.io/}{Consul}). Таким образом кластер легко интегрируется практически в любую систему, всегда можно выяснить кто в данный момент мастер, и статус всех серверов запросами в DCS, или напрямую к Patroni через HTTP запросы.
+\href{https://github.com/zalando/patroni}{Patroni}~--- это демон на Python, позволяющий автоматически обслуживать кластеры PostgreSQL с потоковой репликацией.
+
+Особенности:
+
+\begin{itemize}
+  \item Использует потоковую PostgreSQL репликацию (асинхронная и синхронная репликация);
+  \item Интеграция с \href{https://kubernetes.io/}{Kubernetes};
+  \item Поддержания актуальности кластера и выборов мастера используются распределенные \href{https://en.wikipedia.org/wiki/Distributed_control_system}{DCS} хранилища (поддерживаются \href{https://zookeeper.apache.org/}{Zookeeper}, \href{https://coreos.com/etcd}{Etcd} или \href{https://www.consul.io/}{Consul});
+  \item Автоматическое <<service discovery>> и динамическая реконфигурация кластера;
+  \item Состояние кластера можно получить как запросами в DCS, так и напрямую к Patroni через HTTP запросы;
+\end{itemize}
+
+Информация по настройке и использованию Patroni находится в \href{https://patroni.readthedocs.io/en/latest/}{официальной документации} проекта.
