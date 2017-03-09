@@ -1,5 +1,5 @@
-//= require ./vendors/modernizr
 //= require jquery
 //= require fastclick
+//= require ./vendors/retina_tag
 
-//= require ./g_analytic
+//= require ./analytics
