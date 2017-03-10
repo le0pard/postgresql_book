@@ -1,19 +1,16 @@
 $site-neat-grid: (columns: 12, gutter: 20px, media: 800px)
 
-
 body
   background: #f1e5d7
 
-h5
-  font-weight: bold
-
 .header
-  @include grid-container
-  .book-title
-    @include grid-column
-    @include grid-media($site-neat-grid)
-      @include grid-column(6)
-      @include grid-push(3)
+  .header-block
+    @include grid-container
+    .book-title
+      @include grid-column
+      @include grid-media($site-neat-grid)
+        @include grid-column(6)
+        @include grid-push(3)
 
 .main-block
   @include grid-container
@@ -23,9 +20,18 @@ h5
       @include grid-column(6)
       @include grid-push(3)
 
-.reviews-block
-  @include grid-container
-  
+.reviews
+  .reviews-title-block
+    @include grid-container
+    .reviews-title
+      @include grid-column
+  .reviews-grid-block
+    @include grid-container
+    .reviews-column
+      @include grid-column
+      @include grid-media($site-neat-grid)
+        @include grid-column(6)
+
 
 .footer
   @include grid-container
