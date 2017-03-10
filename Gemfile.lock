@@ -117,6 +117,8 @@ GEM
     rack (2.0.1)
     rails-assets-fastclick (1.0.6)
     rails-assets-jquery (3.1.1)
+    rails-assets-neat (2.0.0)
+    rails-assets-normalize-scss (3.0.3)
     rake (12.0.0)
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
@@ -158,7 +160,10 @@ DEPENDENCIES
   oj
   rails-assets-fastclick (= 1.0.6)!
   rails-assets-jquery (= 3.1.1)!
+  rails-assets-neat (= 2.0.0)!
+  rails-assets-normalize-scss (= 3.0.3)!
   rake
+  sass (>= 3.4.23)
   therubyracer
 
 BUNDLED WITH

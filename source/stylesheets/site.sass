@@ -1,84 +1,44 @@
+$site-neat-grid: (columns: 12, gutter: 20px, media: 800px)
+
+
 body
   background: #f1e5d7
 
 h5
   font-weight: bold
 
-.small-font-size
-  font-size: 0.9rem
-  a
-    font-size: 0.9rem
-
-.top-block
-  background: #664932
-  height: 380px
+.header
+  @include grid-container
+  .book-title
+    @include grid-column
+    @include grid-media($site-neat-grid)
+      @include grid-column(6)
+      @include grid-push(3)
 
 .main-block
-  margin-top: -260px
+  @include grid-container
+  .main-block-row
+    @include grid-column
+    @include grid-media($site-neat-grid)
+      @include grid-column(6)
+      @include grid-push(3)
 
-.lead-text
-  margin-bottom: 40px
-  p
-    color: #f0d4b3
-    font-size: 1em
+.reviews-block
+  @include grid-container
+  
 
-.lead-text-mobile
-  color: #000
-  margin-bottom: 40px
-
-.book-title
-  text-align: left
-  h1, h2
-    color: #fff
-  h2
-    font-size: 24px
-    font-weight: normal
-.mbs
-  margin-bottom: 5px
-
-ul
-  list-style: none
-  li
-    margin-bottom: 5px
-
-.buttons-block
-  margin-bottom: 20px
-
-.button
-  font-weight: normal
-  background: image-url('button.png') 0 -53px
-  border: 1px solid #611609
-  border-radius: 5px
-  &:hover
-    background-position: 0 0
-
-.poster-box
-  margin-bottom: 30px
-
-.poster
-  display: block
-  margin: 0 auto
-  text-align: center
-  box-shadow: 0 10px 10px rgba(0,0,0,.3)
-
-.download-button
-  width: 100%
-
-.reviews-title
-  text-align: center
-
-@media (max-width: 767px)
-  .book-title h1
-    font-size: 36px
-
-@media (max-width: 480px)
-  .book-title
-    h1
-      font-size: 26px
-    h2
-      font-size: 20px
-  .button.large
-    font-size: 12px
+.footer
+  @include grid-container
+  .footer-row
+    @include grid-column
+    .footer-sections
+      @include grid-container
+      .footer-contact-links
+        @include grid-column(4)
+      .footer-share-links
+        @include grid-column(4)
+      .footer-copyright
+        @include grid-column(4)
 
 
 #_atssh
