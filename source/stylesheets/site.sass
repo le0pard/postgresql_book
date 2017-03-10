@@ -1,7 +1,16 @@
 $site-neat-grid: (columns: 12, gutter: 20px, media: 800px)
 
 body
+  // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
+  font-size: 1rem
   background: #f1e5d7
+
+.container
+  @include grid-container
+  margin: 0 auto
+  max-width: 88rem
+  position: relative
 
 .header
   .header-block
