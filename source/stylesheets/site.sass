@@ -1,10 +1,24 @@
-$site-neat-grid: (columns: 12, gutter: 20px, media: 800px)
+@mixin centered
+  margin-left: auto
+  margin-right: auto
+  float: none
+
+$m850-grid: (columns: 12, gutter: 20px, media: 850px)
 
 body
   // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
-  font-size: 1rem
+  font-size: calc(14px + 7 * ( (100vw - 420px) / 860))
   background: #f1e5d7
+
+@media screen and (max-width: 420px)
+  body
+    font-size: 14px
+
+@media screen and (min-width: 1280px)
+  body
+    font-size: 21px
+
 
 .container
   @include grid-container
@@ -12,49 +26,80 @@ body
   max-width: 88rem
   position: relative
 
-.header
-  .header-block
-    @include grid-container
-    .book-title
-      @include grid-column
-      @include grid-media($site-neat-grid)
-        @include grid-column(6)
-        @include grid-push(3)
 
-.main-block
+.header-row
   @include grid-container
-  .main-block-row
+  .book-column
     @include grid-column
-    @include grid-media($site-neat-grid)
+    @include grid-media($m850-grid)
       @include grid-column(6)
       @include grid-push(3)
+    @include centered
 
-.reviews
-  .reviews-title-block
-    @include grid-container
-    .reviews-title
-      @include grid-column
-  .reviews-grid-block
-    @include grid-container
-    .reviews-column
-      @include grid-column
-      @include grid-media($site-neat-grid)
-        @include grid-column(6)
 
+.main-row
+  @include grid-container
+  .poster-column
+    @include grid-column
+    @include grid-media($m850-grid)
+      @include grid-column(6)
+    img
+      width: 400px
+      height: 566px
+  .book-column
+    @include grid-column
+    @include grid-media($m850-grid)
+      @include grid-column(6)
+
+
+.reviews-row
+  @include grid-container
+  .reviews-title
+    @include grid-column(2)
+    @include centered
+  .reviews-column
+    @include grid-column
+    @include grid-media($m850-grid)
+      @include grid-column(4)
+    twitterwidget
+      @include centered
+
+@media screen and (max-width: 1000px)
+  .reviews-on-large
+    display: none
 
 .footer
-  @include grid-container
+  @include grid-column
   .footer-row
-    @include grid-column
-    .footer-sections
-      @include grid-container
-      .footer-contact-links
+    @include grid-container
+    .footer-contact-links
+      @include grid-column(6)
+      @include grid-media($m850-grid)
         @include grid-column(4)
-      .footer-share-links
+    .footer-share-links
+      display: none
+      @include grid-media($m850-grid)
+        display: block
         @include grid-column(4)
-      .footer-copyright
+    .footer-copyright
+      @include grid-column(6)
+      @include grid-media($m850-grid)
         @include grid-column(4)
 
+
+
+.inline-list
+  margin: 0 auto 1.0625rem auto
+  margin-left: -1.375rem
+  margin-right: 0
+  padding: 0
+  list-style: none
+  overflow: hidden
+  li
+    list-style: none
+    float: left
+    margin-left: 1.375rem
+    display: block
 
 #_atssh
   display: none
