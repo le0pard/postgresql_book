@@ -46,6 +46,13 @@ body
     img
       width: 400px
       height: 566px
+      margin-left: auto
+      margin-right: auto
+      display: block
+      @include grid-media($m850-grid)
+        margin-left: 0
+        margin-right: 0
+        float: right
   .book-column
     @include grid-column
     @include grid-media($m850-grid)
