@@ -9,33 +9,18 @@ body
   // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
   font-size: calc(14px + 7 * ( (100vw - 420px) / 860))
-  background: #f1e5d7
+  background: #FFF
 
-@media screen and (max-width: 420px)
-  body
-    font-size: 14px
 
-@media screen and (min-width: 1280px)
-  body
-    font-size: 21px
-
+.header-screen
+  background: #B5E3F5
+  padding: 50px 0
 
 .container
   @include grid-container
   margin: 0 auto
-  max-width: 88rem
+  max-width: 80rem
   position: relative
-
-
-.header-row
-  @include grid-container
-  .book-column
-    @include grid-column
-    @include grid-media($m850-grid)
-      @include grid-column(6)
-      @include grid-push(3)
-    @include centered
-
 
 .main-row
   @include grid-container
@@ -44,8 +29,6 @@ body
     @include grid-media($m850-grid)
       @include grid-column(6)
     img
-      width: 400px
-      height: 566px
       margin-left: auto
       margin-right: auto
       display: block
@@ -57,13 +40,71 @@ body
     @include grid-column
     @include grid-media($m850-grid)
       @include grid-column(6)
+    .title-column
+      @include grid-container
+      .title-row
+        @include grid-column
+        h1
+          color: #325260
+          margin: 2rem 0 0 0
+          font-size: calc(1.8rem + 0.7 * ( (100vw - 420px) / 860))
+          text-align: center
+          @include grid-media($m850-grid)
+            text-align: left
+        h2
+          color: #395F6F
+          margin: 0
+          font-size: calc(1.5rem + 0.4 * ( (100vw - 420px) / 860))
+          text-align: center
+          @include grid-media($m850-grid)
+            text-align: left
+
+    .lead-column
+      @include grid-container
+      .lead-row
+        @include grid-column
+        p
+          color: #3d4244
+          font-size: calc(0.9rem + 0.2 * ( (100vw - 420px) / 860))
+          line-height: 1.4
+          margin: 2rem 2rem 2rem 0
+          text-rendering: optimizeLegibility
+
+    .buttons-column
+      @include grid-container
+      .buttons-row
+        @include grid-column
+        @include grid-media($m850-grid)
+          @include grid-column(6)
+        .button
+          background: #FFF
+          color: #008cc1
+          cursor: pointer
+          display: inline-block
+          padding: 1rem 0
+          width: 100%
+          border: 1px solid #FFF
+          border-radius: 5px
+          position: relative
+          text-decoration: none
+          text-align: center
+          margin-bottom: 1rem
+          &:hover
+            border: 1px solid #008cc1
+            background: #008cc1
+            color: #FFF
+
 
 
 .reviews-row
   @include grid-container
+  margin-bottom: 2rem
   .reviews-title
     @include grid-column(2)
     @include centered
+    h3
+      font-size: calc(1.4rem + 0.2 * ( (100vw - 420px) / 860))
+      text-align: center
   .reviews-column
     @include grid-column
     @include grid-media($m850-grid)
@@ -71,42 +112,113 @@ body
     twitterwidget
       @include centered
 
+
+.footer-screen
+  background: #545457
+
+.footer-column
+  @include grid-container
+  .footer-contact-links
+    @include grid-column(6)
+    @include grid-media($m850-grid)
+      @include grid-column(4)
+    ul
+      list-style: none
+      overflow: hidden
+      font-size: 1rem
+      li
+        margin: 0 1rem
+        list-style: none
+        float: left
+        display: block
+        a
+          color: #FFF
+          &:hover
+            color: #b5e3f5
+            text-decoration: none
+  .footer-share-links
+    display: none
+    @include grid-media($m850-grid)
+      display: block
+      @include grid-column(4)
+    div.addthis_toolbox
+      height: 35px
+      margin-top: 15px
+  .footer-copyright
+    @include grid-column(6)
+    @include grid-media($m850-grid)
+      @include grid-column(4)
+    font-size: 1rem
+    color: #FFF
+    margin: 15px 0 10px 0
+    .right-author
+      float: right
+      margin-left: 20px
+    .right-license
+      float: right
+
+
+// Images begin
+@media screen and (min-width: 420px)
+  .main-row
+    .poster-column
+      img
+        width: 400px
+        height: 566px
+
+@media screen and (max-width: 420px)
+  .main-row
+    .poster-column
+      img
+        max-height: 100%
+        max-width: 100%
+// Images end
+
+// Responsive font size begin
+@media screen and (max-width: 420px)
+  body
+    font-size: 14px
+  .main-row
+    .book-column
+      .title-column
+        .title-row
+          h1
+            font-size: 1.8rem
+          h2
+            font-size: 1.1rem
+      .lead-column
+        .lead-row
+          p
+            font-size: 0.9rem
+  .reviews-row
+    .reviews-title
+      h3
+        font-size: 1.4rem
+
+@media screen and (min-width: 1280px)
+  body
+    font-size: 21px
+  .main-row
+    .book-column
+      .title-column
+        .title-row
+          h1
+            font-size: 2.5rem
+          h2
+            font-size: 1.5rem
+      .lead-column
+        .lead-row
+          p
+            font-size: 1.1rem
+  .reviews-row
+    .reviews-title
+      h3
+        font-size: 1.6rem
+// Responsive font size end
+// Utils
 @media screen and (max-width: 1000px)
   .reviews-on-large
     display: none
-
-.footer
-  @include grid-column
-  .footer-row
-    @include grid-container
-    .footer-contact-links
-      @include grid-column(6)
-      @include grid-media($m850-grid)
-        @include grid-column(4)
-    .footer-share-links
-      display: none
-      @include grid-media($m850-grid)
-        display: block
-        @include grid-column(4)
-    .footer-copyright
-      @include grid-column(6)
-      @include grid-media($m850-grid)
-        @include grid-column(4)
-
-
-
-.inline-list
-  margin: 0 auto 1.0625rem auto
-  margin-left: -1.375rem
-  margin-right: 0
-  padding: 0
-  list-style: none
-  overflow: hidden
-  li
-    list-style: none
-    float: left
-    margin-left: 1.375rem
-    display: block
 
 #_atssh
   display: none

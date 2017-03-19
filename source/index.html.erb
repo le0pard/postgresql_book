@@ -7,43 +7,43 @@ title: 'Работа с PostgreSQL: настройка и масштабиров
 
 
 <!-- Header Content -->
-<header class="container">
-  <div class="header-row">
-    <div class="book-column">
-      <h1>Работа с PostgreSQL</h1>
-      <h2>настройка и масштабирование</h2>
-    </div>
-  </div>
-</header>
-
-<div class="container">
-  <div class="main-row">
-    <div class="poster-column">
-      <%= image_tag 'cover.png', class: 'poster', alt: 'Работа с PostgreSQL: настройка и масштабирование', title: 'Работа с PostgreSQL: настройка и масштабирование',  data: {
-        hidpi:  {src: asset_path(:images, "cover.png")},
-        lowdpi: {src: asset_path(:images, "cover.png")}
-      } %>
-    </div>
-
-    <div class="book-column">
-
-      <div class="lead-text">
-        <p>
-          Перед вами справочное пособие по настройке и масштабированию PostgreSQL. В книге исследуются вопросы по настройке производительности PostgreSQL, репликации и кластеризации. Изобилие реальных примеров позволит как начинающим, так и опытным разработчикам быстро разобраться с особенностями масштабирования PostgreSQL для своих приложений.
-        </p>
+<div class="header-screen">
+  <div class="container">
+    <div class="main-row">
+      <div class="poster-column">
+        <%= image_tag 'cover.jpg', class: 'poster', alt: 'Работа с PostgreSQL: настройка и масштабирование', title: 'Работа с PostgreSQL: настройка и масштабирование',  data: {
+          hidpi:  {src: asset_path(:images, "cover@2x.jpg")},
+          lowdpi: {src: asset_path(:images, "cover.jpg")}
+        } %>
       </div>
 
-      <div class="buttons-block">
-        <div class="row">
-          <div class="large-6 small-6 columns">
-            <a id="downloadLink" href="https://github.com/le0pard/postgresql_book/releases/download/v5.0.0/postgresql-v500.zip" class="button download-button">PDF/ePub/Mobi</a>
-          </div>
-          <div class="large-6 small-6 columns">
-            <a id="readLink" href="/html" class="button download-button">Читать HTML</a>
+      <div class="book-column">
+
+        <div class="title-column">
+          <div class="title-row">
+            <h1>Работа с POSTGRESQL</h1>
+            <h2>настройка и масштабирование</h2>
           </div>
         </div>
-      </div>
 
+        <div class="lead-column">
+          <div class="lead-row">
+            <p>
+              Перед вами справочное пособие по настройке и масштабированию PostgreSQL. В книге исследуются вопросы по настройке производительности PostgreSQL, репликации и кластеризации. Изобилие реальных примеров позволит как начинающим, так и опытным разработчикам быстро разобраться с особенностями масштабирования PostgreSQL для своих приложений.
+            </p>
+          </div>
+        </div>
+
+        <div class="buttons-column">
+          <div class="buttons-row">
+            <a id="downloadLink" href="https://github.com/le0pard/postgresql_book/releases/download/v5.0.0/postgresql-v500.zip" class="button download-button">PDF/ePub/Mobi</a>
+          </div>
+          <div class="buttons-row">
+            <a id="readLink" href="/html" class="button read-button">Читать HTML</a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
@@ -84,39 +84,39 @@ title: 'Работа с PostgreSQL: настройка и масштабиров
 </div>
 
 <!-- Footer -->
+<footer class="footer-screen">
+  <div class="container">
+    <div class="footer-column">
+      <div class="footer-row">
 
-<footer class="container">
-  <div class="footer">
-    <hr />
-    <div class="footer-row">
-
-      <div class="footer-contact-links">
-        <ul class="inline-list">
-          <li><a href="https://twitter.com/leopard_me">Twitter</a></li>
-          <li><a href="http://leopard.in.ua/">Блог</a></li>
-          <li><a href="https://github.com/le0pard/postgresql_book">Книга на Github</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-share-links">
-        <!-- AddThis Button BEGIN -->
-        <div class="addthis_toolbox addthis_default_style ">
-          <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-          <a class="addthis_button_tweet"></a>
-          <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+        <div class="footer-contact-links">
+          <ul>
+            <li><a href="https://twitter.com/leopard_me">Twitter</a></li>
+            <li><a href="http://leopard.in.ua/">Блог</a></li>
+            <li><a href="https://github.com/le0pard/postgresql_book">Github</a></li>
+          </ul>
         </div>
-        <!-- AddThis Button END -->
-      </div>
 
-      <div class="footer-copyright">
-        <div class="right mbs">&copy; Alexey Vasiliev aka leopard</div>
-        <div class="right">
-          <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
-            <img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/4.0/80x15.png" />
-          </a>
+        <div class="footer-share-links">
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style ">
+            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+            <a class="addthis_button_tweet"></a>
+            <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+          </div>
+          <!-- AddThis Button END -->
         </div>
-      </div>
 
+        <div class="footer-copyright">
+          <div class="right-author">&copy; Alexey Vasiliev aka leopard</div>
+          <div class="right-license">
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/4.0/80x15.png" />
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </footer>
