@@ -10,7 +10,7 @@ helpers do
     "postgresql, postgres, book, free, книга, бесплатно, настройка, масштабирование, шардинг, репликация, слон, open source"
   end
   def default_description_helper
-    "Cправочное пособие по настройке и масштабированию PostgreSQL. В книге исследуются вопросы по настройке производительности PostgreSQL, репликации и кластеризации"
+    "Cправочное пособие по настройке и масштабированию PostgreSQL"
   end
 end
 
