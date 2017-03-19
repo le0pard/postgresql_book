@@ -2,7 +2,7 @@
 
 ## Генерация HTML
 
-    pandoc -s -S --toc --latexmathml --highlight-style pygments -t html5 -s postgresql.tex -o index.html
+    pandoc -s -S -c pandoc.css --toc --latexmathml --highlight-style pygments -t html5 -s postgresql.tex -o postgresql.html
 
 ## Генерация Epub
 
