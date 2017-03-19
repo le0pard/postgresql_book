@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+/* TEAM */
+  Developer and Author: Alexey Vasiliev
+  Contact: leopard_ne[at]inbox.ru
+  Twitter: @leopard_me
+
+  Web designer: Anna Rotar
+  Twitter: @Ste4any
+
+/* SITE */
+  Language: Russian
+  Standards: HTML5, CSS3
+  Doctype: HTML5
+  Components: jQuery
+  Source: https://github.com/le0pard/postgresql_book
