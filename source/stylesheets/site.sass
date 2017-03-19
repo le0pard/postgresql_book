@@ -47,16 +47,17 @@ body
         @include grid-column
         h1
           color: #325260
-          margin: 2rem 0 0 0
-          font-size: calc(1.8rem + 0.7 * ( (100vw - 420px) / 860))
+          margin: 2rem 0 0.6rem 0
+          font-size: calc(2rem + 1.4 * ( (100vw - 420px) / 860))
           text-align: center
           @include grid-media($m850-grid)
             text-align: left
         h2
           color: #395F6F
           margin: 0
-          font-size: calc(1.5rem + 0.4 * ( (100vw - 420px) / 860))
+          font-size: calc(1.4rem + 0.6 * ( (100vw - 420px) / 860))
           text-align: center
+          font-weight: normal
           @include grid-media($m850-grid)
             text-align: left
 
@@ -68,10 +69,10 @@ body
           color: #3d4244
           font-size: calc(0.9rem + 0.2 * ( (100vw - 420px) / 860))
           line-height: 1.4
-          margin: 2rem 0
+          margin: 1rem 0 2rem 0
           text-rendering: optimizeLegibility
           @include grid-media($m850-grid)
-            margin: 2rem 2rem 2rem 0
+            margin: 1rem 1rem 2rem 0
 
     .buttons-column
       @include grid-container
@@ -87,7 +88,7 @@ body
           padding: 1rem 0
           width: 100%
           border: 1px solid #FFF
-          border-radius: 5px
+          border-radius: 30px
           position: relative
           text-decoration: none
           text-align: center
@@ -98,17 +99,24 @@ body
             color: #FFF
 
 
-
-.reviews-row
-  @include grid-container
-  margin-bottom: 2rem
-  .reviews-title
-    @include grid-column(4)
-    @include centered
-    h3
-      font-size: calc(1.4rem + 0.2 * ( (100vw - 420px) / 860))
-      text-align: center
-      letter-spacing: 1px
+.reviews-block
+  margin-top: 3rem
+  .reviews-row-title
+    @include grid-container
+    margin-bottom: 0.6rem
+    .reviews-title
+      @include grid-column(4)
+      @include centered
+      h3
+        font-size: calc(1.4rem + 0.6 * ( (100vw - 420px) / 860))
+        text-align: center
+        letter-spacing: 1px
+        margin: 0
+  .reviews-row
+    @include grid-container
+  .reviews-row-last
+    @include grid-container
+    margin-bottom: 3rem
   .reviews-column
     @include grid-column
     @include grid-media($m850-grid)
@@ -187,17 +195,18 @@ body
       .title-column
         .title-row
           h1
-            font-size: 1.8rem
+            font-size: 2rem
           h2
-            font-size: 1.1rem
+            font-size: 1.4rem
       .lead-column
         .lead-row
           p
             font-size: 0.9rem
-  .reviews-row
-    .reviews-title
-      h3
-        font-size: 1.4rem
+  .reviews-block
+    .reviews-row-title
+      .reviews-title
+        h3
+          font-size: 1.4rem
 
 @media screen and (min-width: 1280px)
   body
@@ -207,17 +216,18 @@ body
       .title-column
         .title-row
           h1
-            font-size: 2.5rem
+            font-size: 3.4rem
           h2
-            font-size: 1.5rem
+            font-size: 2rem
       .lead-column
         .lead-row
           p
             font-size: 1.1rem
-  .reviews-row
-    .reviews-title
-      h3
-        font-size: 1.6rem
+  .reviews-block
+    .reviews-row-title
+      .reviews-title
+        h3
+          font-size: 2rem
 // Responsive font size end
 // Utils
 @media screen and (max-width: 850px)
