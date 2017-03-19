@@ -98,6 +98,7 @@
 }
 
 \makeatletter
+
 \gdef\lst@SkipOrPrintLabel{%
     \ifnum\lst@skipnumbers=\z@
         \global\advance\lst@skipnumbers-\lst@stepnumber\relax
@@ -112,6 +113,7 @@
         \fi
     \fi
     \global\advance\lst@skipnumbers\@ne}%
+
 \def\lst@maketitle#1{
    \vskip\abovecaptionskip
    \colorbox{titlebox}{
@@ -120,6 +122,7 @@
        \color{download}\ttfamily\href{http://postgresql.leopard.in.ua/example_code/#1}{Скачать}
        \color{title}\sffamily\bfseries#1}
    \vskip\belowcaptionskip}
+
 \def\lst@makecaption#1#2{
   \vskip\abovecaptionskip
   \colorbox{titlebox}{
@@ -128,6 +131,7 @@
       \color{code_title}\ttfamily#1
       \color{title}\sffamily\bfseries#2}
   \vskip\belowcaptionskip}
+
 \makeatother
 
 \let\olditemize=\itemize

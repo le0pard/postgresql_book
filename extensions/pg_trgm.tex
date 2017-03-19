@@ -1,0 +1,71 @@
+\section{Pg\_trgm}
+
+\href{https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%82%D0%BE%D0%B4%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5}{Автодополнение}~--- функция в программах, предусматривающих интерактивный ввод текста по дополнению текста по введённой его части. Реализуется это простым \lstinline!LIKE 'some%'! запросом в базу, где <<some>>~--- то, что пользователь успел ввести в поле ввода. Проблема в том, что в огромной таблице такой запрос будет работать очень медленно. Для ускорения запроса типа \lstinline!LIKE 'bla%'! можно использовать \lstinline!text_pattern_ops! для \lstinline!text! поля или \lstinline!varchar_pattern_ops! для \lstinline!varchar! поля класс операторов в определении индекса (данные типы индексов не будут работать для стандартных операторов \lstinline!<!, \lstinline!<=!, \lstinline!=>!, \lstinline!>! и для работы с ними придется создать обычный btree индекс).
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm1,caption=text\_pattern\_ops]
+# create table tags (
+#  tag    text primary key,
+#  name      text not null,
+#  shortname text,
+#  status    char default 'S',
+#
+#  check( status in ('S', 'R') )
+# );
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "tags_pkey" for table "tags"
+CREATE TABLE
+
+# CREATE INDEX i_tag ON tags USING btree(lower(tag) text_pattern_ops);
+CREATE INDEX
+
+# EXPLAIN ANALYZE select * from tags where lower(tag) LIKE lower('0146%');
+                                                      QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on tags  (cost=5.49..97.75 rows=121 width=26) (actual time=0.025..0.025 rows=1 loops=1)
+   Filter: (lower(tag) ~~ '0146%'::text)
+   ->  Bitmap Index Scan on i_tag (cost=0.00..5.46 rows=120 width=0) (actual time=0.016..0.016 rows=1 loops=1)
+         Index Cond: ((lower(tag) ~>=~ '0146'::text) AND (lower(tag) ~<~ '0147'::text))
+ Total runtime: 0.050 ms
+(5 rows)
+\end{lstlisting}
+
+Для более сложных вариантов поиска, таких как \lstinline!LIKE '%some%'! или \lstinline!LIKE 'so%me%'! такой индекс не будет работать, но эту проблему можно решить через расширение.
+
+\href{https://www.postgresql.org/docs/current/static/pgtrgm.html}{Pg\_trgm}~--- PostgreSQL расширение, которое предоставляет функции и операторы для определения схожести алфавитно-цифровых строк на основе триграмм, а также классы операторов индексов, поддерживающие быстрый поиск схожих строк. Триграмма~--- это группа трёх последовательных символов, взятых из строки. Можно измерить схожесть двух строк, подсчитав число триграмм, которые есть в обеих. Эта простая идея оказывается очень эффективной для измерения схожести слов на многих естественных языках. Модуль \lstinline!pg_trgm! предоставляет классы операторов индексов GiST и GIN, позволяющие создавать индекс по текстовым колонкам для очень быстрого поиска по критерию схожести. Эти типы индексов поддерживают \lstinline!%! и \lstinline!<->! операторы схожести и дополнительно поддерживают поиск на основе триграмм для запросов с \lstinline!LIKE!, \lstinline!ILIKE!, \lstinline!~! и \lstinline!~*! (эти индексы не поддерживают простые операторы сравнения и равенства, так что может понадобиться и обычный btree индекс).
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm2,caption=pg\_trgm]
+# CREATE TABLE test_trgm (t text);
+# CREATE INDEX trgm_idx ON test_trgm USING gist (t gist_trgm_ops);
+-- or
+# CREATE INDEX trgm_idx ON test_trgm USING gin (t gin_trgm_ops);
+\end{lstlisting}
+
+После создания GIST или GIN индекса по колонке \lstinline!t! можно осуществлять поиск по схожести. Пример запроса:
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm3,caption=pg\_trgm]
+SELECT t, similarity(t, 'word') AS sml
+  FROM test_trgm
+  WHERE t % 'word'
+  ORDER BY sml DESC, t;
+\end{lstlisting}
+
+Он выдаст все значения в текстовой колонке, которые достаточно схожи со словом \lstinline!word!, в порядке сортировки от наиболее к наименее схожим. Другой вариант предыдущего запроса (может быть довольно эффективно выполнен с применением индексов GiST, а не GIN):
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm4,caption=pg\_trgm]
+SELECT t, t <-> 'word' AS dist
+  FROM test_trgm
+  ORDER BY dist LIMIT 10;
+\end{lstlisting}
+
+Начиная с PostgreSQL 9.1, эти типы индексов также поддерживают поиск с операторами \lstinline!LIKE! и \lstinline!ILIKE!, например:
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm5,caption=pg\_trgm]
+SELECT * FROM test_trgm WHERE t LIKE '%foo%bar';
+\end{lstlisting}
+
+Начиная с PostgreSQL 9.3, индексы этих типов также поддерживают поиск по регулярным выражениям (операторы \lstinline!~! и \lstinline!~*!), например:
+
+\begin{lstlisting}[language=SQL,label=lst:pgtrgm6,caption=pg\_trgm]
+SELECT * FROM test_trgm WHERE t ~ '(foo|bar)';
+\end{lstlisting}
+
+Относительно поиска по регулярному выражению или с \lstinline!LIKE!, нужно принимать в расчет, что при отсутствии триграмм в искомом шаблоне поиск сводится к полному сканирования индекса. Выбор между индексами GiST и GIN зависит от относительных характеристик производительности GiST и GIN, которые здесь не рассматриваются. Как правило, индекс GIN быстрее индекса GiST при поиске, но строится или обновляется он медленнее; поэтому GIN лучше подходит для статических, а GiST для часто изменяемых данных.

@@ -11,11 +11,14 @@
 \setcounter{page}{1}
 \pagestyle{myindex}
 \chapterstyle{ell}
-\setcounter{tocdepth}{2} % subsections and above
+
+\setcounter{tocdepth}{1} % sections and above
+\setlength\cftsectionnumwidth{3em}
 \tableofcontents
 
 \input{postgresql_introduction}
 \input{postgresql_performance}
+\input{postgresql_indexes}
 \input{postgresql_partitioning}
 \input{postgresql_replication}
 \input{postgresql_clustering}
@@ -25,7 +28,8 @@
 \input{postgresql_extensions}
 \input{postgresql_backup}
 \input{postgresql_strategy}
-\input{postgresql_snippets}
+\input{postgresql_utils}
+\input{postgresql_tips}
 \input{bibliography}
 
 \end{document}

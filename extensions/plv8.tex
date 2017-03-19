@@ -1,11 +1,14 @@
 \section{PLV8}
-\textbf{Лицензия}: Open Source
 
-\textbf{Ссылка}: \href{http://code.google.com/p/plv8js/}{code.google.com/p/plv8js}
+\href{https://github.com/plv8/plv8}{PLV8} является расширением, которое предоставляет PostgreSQL процедурный язык с движком V8 JavaScript. С помощью этого расширения можно писать в PostgreSQL JavaScript функции, которые можно вызывать из SQL.
 
-PLV8 является расширением, которое предоставляет PostgreSQL процедурный язык с движком V8 JavaScript. С помощью этого расширения можно писать в PostgreSQL JavaScript функции, которые можно вызывать из SQL.
+\subsection{Установка и использование}
 
-\subsection{Скорость работы}
+Для начала инициализируем расширение в базе данных:
+
+\begin{lstlisting}[language=SQL,label=lst:plv8jsinit,caption=Инициализация plv8]
+# CREATE extension plv8;
+\end{lstlisting}
 
 \href{http://en.wikipedia.org/wiki/V8\_(JavaScript\_engine)}{V8} компилирует JavaScript код непосредственно в машинный код и с помощью этого достигается высокая скорость работы. Для примера расмотрим расчет числа Фибоначчи. Вот функция написана на plpgsql:
 
@@ -24,7 +27,7 @@ $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 Замерим скорость её работы:
 
 \begin{lstlisting}[label=lst:plv8js2,caption=Скорость расчета числа Фибоначчи на plpgsql]
-SELECT n, psqlfib(n) FROM generate_series(0,30,5) as n;
+# SELECT n, psqlfib(n) FROM generate_series(0,25,5) as n;
  n  | psqlfib
 ----+---------
   0 |       0
@@ -33,10 +36,9 @@ SELECT n, psqlfib(n) FROM generate_series(0,30,5) as n;
  15 |     610
  20 |    6765
  25 |   75025
- 30 |  832040
-(7 rows)
+(6 rows)
 
-Time: 16003,257 ms
+Time: 2520.386 ms
 \end{lstlisting}
 
 Теперь сделаем то же самое, но с использованием PLV8:
@@ -56,26 +58,25 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;
 Замерим скорость работы:
 
 \begin{lstlisting}[label=lst:plv8js4,caption=Скорость расчета числа Фибоначчи на plv8]
-SELECT n, fib(n) FROM generate_series(0,30,5) as n;
+# SELECT n, fib(n) FROM generate_series(0,25,5) as n;
  n  |  fib
-----+--------
-  0 |      0
-  5 |      5
- 10 |     55
- 15 |    610
- 20 |   6765
- 25 |  75025
- 30 | 832040
-(7 rows)
+----+-------
+  0 |     0
+  5 |     5
+ 10 |    55
+ 15 |   610
+ 20 |  6765
+ 25 | 75025
+(6 rows)
 
-Time: 59,254 ms
+Time: 5.200 ms
 \end{lstlisting}
 
-Как видим PLV8 приблизительно в 270 (16003.257/59.254) раз быстрее plpgsql. Можно ускорить работу расчета чисел Фибоначи на PLV8 за счет кеширования:
+Как видим PLV8 приблизительно в 484 (2520.386/5.200) раз быстрее plpgsql. Можно ускорить работу расчета чисел Фибоначи на PLV8 за счет кеширования:
 
 \begin{lstlisting}[label=lst:plv8js5,caption=Фибоначчи на plv8]
 CREATE OR REPLACE FUNCTION
-fib1(n int) RETURNS int as $$
+fibcache(n int) RETURNS int as $$
   var memo = {0: 0, 1: 1};
   function fib(n) {
     if(!(n in memo))
@@ -89,33 +90,32 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;
 Замерим скорость работы:
 
 \begin{lstlisting}[label=lst:plv8js6,caption=Скорость расчета числа Фибоначчи на plv8]
-SELECT n, fib1(n) FROM generate_series(0,30,5) as n;
- n  |  fib1
-----+--------
-  0 |      0
-  5 |      5
- 10 |     55
- 15 |    610
- 20 |   6765
- 25 |  75025
- 30 | 832040
-(7 rows)
+# SELECT n, fibcache(n) FROM generate_series(0,25,5) as n;
+ n  | fibcache
+----+----------
+  0 |        0
+  5 |        5
+ 10 |       55
+ 15 |      610
+ 20 |     6765
+ 25 |    75025
+(6 rows)
 
-Time: 0,766 ms
+Time: 1.202 ms
 \end{lstlisting}
 
-Теперь расчет на PLV8 приблизительно в несколько раз быстрее, чем на plpgsql.
+Естественно эти измерения не имеют ничего общего с реальным миром (не нужно каждый день считать числа фибоначи в базе данных), но позволяет понять, как V8 может помочь ускорить функции, которые занимаются вычислением чего-либо в базе.
 
-\subsection{Использование}
+\subsection{NoSQL}
 
-Одним из полезных применений PLV8 может быть создание на базе PostgreSQL документоориентированного хранилища. Для хранения неструктурированных данных можно использовать hstore, но у него есть свои недостатки:
+Одним из полезных применений PLV8 может быть создание на базе PostgreSQL документоориентированного хранилища. Для хранения неструктурированных данных можно использовать hstore (<<\ref{sec:hstore-extension}~\nameref{sec:hstore-extension}>>), но у него есть свои недостатки:
 
 \begin{itemize}
-\item нет вложенности
-\item все данные (ключ и значение по ключу) это строка
+  \item нет вложенности;
+  \item все данные (ключ и значение по ключу) это строка;
 \end{itemize}
 
-Для хранения данных многие документоориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и т.д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON. Такой тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и DOMAIN:
+Для хранения данных многие документоориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и т.д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON, а с версии 9.4~--- JSONB. JSON тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и \lstinline!DOMAIN!:
 
 \begin{lstlisting}[label=lst:plv8js7,caption=Создание типа JSON]
 CREATE OR REPLACE FUNCTION
@@ -132,9 +132,10 @@ CREATE DOMAIN json AS TEXT
 CHECK(valid_json(VALUE));
 \end{lstlisting}
 
-Функция <<valid\_json>> используется для проверки JSON данных. Пример использования:
+Функция \lstinline!valid_json! используется для проверки JSON данных. Пример использования:
 
 \begin{lstlisting}[label=lst:plv8js8,caption=Проверка JSON]
+$ CREATE TABLE members ( id SERIAL, profile json );
 $ INSERT INTO members
 VALUES('not good json');
 ERROR:  value for domain json
@@ -142,7 +143,7 @@ violates check constraint "json_check"
 $ INSERT INTO members
 VALUES('{"good": "json", "is": true}');
 INSERT 0 1
-$ select * from members;
+$ SELECT * FROM members;
 	    profile
 ------------------------------
   {"good": "json", "is": true}
@@ -162,7 +163,7 @@ $ SELECT count(*) FROM members;
 Time: 201.109 ms
 \end{lstlisting}
 
-В <<profile>> поле мы записали приблизительно такую структуру JSON:
+В \lstinline!profile! поле мы записали приблизительно такую структуру JSON:
 
 \begin{lstlisting}[label=lst:plv8js10,caption=JSON структура]
 {                                  +
@@ -193,7 +194,7 @@ RETURNS numeric AS $$
 $$ LANGUAGE plv8 IMMUTABLE STRICT;
 \end{lstlisting}
 
-Теперь мы можем произвести поиск по таблице, фильтруя по значениям ключей <<age>>, <<siblings>> или другим числовым полям:
+Теперь мы можем произвести поиск по таблице, фильтруя по значениям ключей \lstinline!age!, \lstinline!siblings! или другим числовым полям:
 
 \begin{lstlisting}[label=lst:plv8js12,caption=Поиск по данным JSON]
 $ SELECT * FROM members WHERE get_numeric(profile, 'age') = 36;
@@ -220,7 +221,7 @@ $ SELECT count(*) from members where  get_numeric(profile, 'age') = 26 and get_n
 Time: 106.492 ms
 \end{lstlisting}
 
-Получилось отличное документоориентированное хранилище из PostgreSQL.
+Получилось отличное документоориентированное хранилище из PostgreSQL. Если используется PostgreSQL 9.4 или новее, то можно использовать JSONB тип, у которого уже есть возможность создавать индексы на требуемые ключи в JSON структуре.
 
 PLV8 позволяет использовать некоторые JavaScript библиотеки внутри PostgreSQL. Вот пример рендера \href{http://mustache.github.com/}{Mustache} темплейтов:
 
@@ -245,8 +246,8 @@ $ SELECT mustache(
 Time: 0.837 ms
 \end{lstlisting}
 
-Этот пример показывает как можно использовать PLV8. В действительности рендерить Mustache в PostgreSQL не лучшая идея.
+Этот пример показывает какие возможности предоставляет PLV8 в PostgreSQL. В действительности рендерить Mustache темплейты в PostgreSQL не лучшая идея.
 
 \subsection{Заключение}
 
-PLV8 расширение предоставляет PostgreSQL процедурный язык с движком V8 JavaScript, с помощью которого можно работать с JavaScript билиотеками, индексировать JSON данные и использовать его как более быстрый язык.
+PLV8 расширение предоставляет PostgreSQL процедурный язык с движком V8 JavaScript, с помощью которого можно работать с JavaScript билиотеками, индексировать JSON данные и использовать его как более быстрый язык для вычислений внутри базы.

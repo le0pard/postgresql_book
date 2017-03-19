@@ -1,0 +1,93 @@
+\section{Prefix}
+
+\href{http://pgfoundry.org/projects/prefix}{Prefix} реализует поиск текста по префиксу (\lstinline!prefix @> text!). Prefix используется в приложениях телефонии, где маршрутизация вызовов и расходы зависят от вызывающего/вызываемого префикса телефонного номера оператора.
+
+\subsection{Установка и использование}
+
+Для начала инициализируем расширение в базе данных:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprefixinit,caption=Инициализация prefix]
+# CREATE EXTENSION prefix;
+\end{lstlisting}
+
+После этого можем проверить, что расширение функционирует:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprefixexample1,caption=Проверка prefix]
+# select '123'::prefix_range @> '123456';
+ ?column?
+----------
+ t
+(1 row)
+
+# select a, b, a | b as union, a & b as intersect
+  from  (select a::prefix_range, b::prefix_range
+           from (values('123', '123'),
+                       ('123', '124'),
+                       ('123', '123[4-5]'),
+                       ('123[4-5]', '123[2-7]'),
+                       ('123', '[2-3]')) as t(a, b)
+        ) as x;
+
+    a     |    b     |  union   | intersect
+----------+----------+----------+-----------
+ 123      | 123      | 123      | 123
+ 123      | 124      | 12[3-4]  |
+ 123      | 123[4-5] | 123      | 123[4-5]
+ 123[4-5] | 123[2-7] | 123[2-7] | 123[4-5]
+ 123      | [2-3]    | [1-3]    |
+(5 rows)
+\end{lstlisting}
+
+В примере~\ref{lst:pgprefixexample2} производится поиск мобильного оператора по номеру телефона:
+
+\begin{lstlisting}[language=SQL,label=lst:pgprefixexample2,caption=Проверка prefix]
+$ wget https://github.com/dimitri/prefix/raw/master/prefixes.fr.csv
+$ psql
+
+# create table prefixes (
+       prefix    prefix_range primary key,
+       name      text not null,
+       shortname text,
+       status    char default 'S',
+
+       check( status in ('S', 'R') )
+);
+CREATE TABLE
+# comment on column prefixes.status is 'S:   - R: reserved';
+COMMENT
+# \copy prefixes from 'prefixes.fr.csv' with delimiter ';' csv quote '"'
+COPY 11966
+# create index idx_prefix on prefixes using gist(prefix);
+CREATE INDEX
+# select * from prefixes limit 10;
+ prefix |                            name                            | shortname | status
+--------+------------------------------------------------------------+-----------+--------
+ 010001 | COLT TELECOMMUNICATIONS FRANCE                             | COLT      | S
+ 010002 | EQUANT France                                              | EQFR      | S
+ 010003 | NUMERICABLE                                                | NURC      | S
+ 010004 | PROSODIE                                                   | PROS      | S
+ 010005 | INTERNATIONAL TELECOMMUNICATION NETWORK France (Vivaction) | ITNF      | S
+ 010006 | SOCIETE FRANCAISE DU RADIOTELEPHONE                        | SFR       | S
+ 010007 | SOCIETE FRANCAISE DU RADIOTELEPHONE                        | SFR       | S
+ 010008 | BJT PARTNERS                                               | BJTP      | S
+ 010009 | LONG PHONE                                                 | LGPH      | S
+ 010010 | IPNOTIC TELECOM                                            | TLNW      | S
+(10 rows)
+
+# select * from prefixes where prefix @> '0146640123';
+ prefix |      name      | shortname | status
+--------+----------------+-----------+--------
+ 0146   | FRANCE TELECOM | FRTE      | S
+(1 row)
+
+# select * from prefixes where prefix @> '0100091234';
+ prefix |    name    | shortname | status
+--------+------------+-----------+--------
+ 010009 | LONG PHONE | LGPH      | S
+(1 row)
+\end{lstlisting}
+
+
+\subsection{Заключение}
+
+Более подробно о использовании расширения можно ознакомиться через \href{https://github.com/dimitri/prefix/blob/master/README.md}{официальную документацию}.

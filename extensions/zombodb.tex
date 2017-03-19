@@ -1,0 +1,109 @@
+\section{ZomboDB}
+
+\href{https://github.com/zombodb/zombodb}{ZomboDB}~--- PostgreSQL расширение, которое позволяет использовать \href{https://en.wikipedia.org/wiki/Elasticsearch}{Elasticsearch} индексы внутри базы (используется \href{https://www.postgresql.org/docs/current/static/indexam.html}{интерфейс для методов доступа индекса}). ZomboDB индекс для PostgreSQL ничем не отличается от стандартного btree индекса. Таким образом, стандартные команды SQL полностью поддерживаются, включая \lstinline!SELECT!, \lstinline!BEGIN!, \lstinline!COMMIT!, \lstinline!ABORT!, \lstinline!INSERT!, \lstinline!UPDATE!, \lstinline!DELETE!, \lstinline!COPY! и \lstinline!VACUUM! и данные индексы являются MVCC-безопасными.
+
+На низком уровне ZomboDB индексы взаимодействуют с Elasticsearch сервером через HTTP запросы и автоматически синхронизируются в процессе изменения данных в PostgreSQL базе.
+
+\subsection{Установка и использование}
+
+ZomboDB состоит из двух частей: PostgreSQL расширения (написан на C и SQL/PLPGSQL) и Elasticsearch плагина (написан на Java).
+
+После установки требуется добавить в \lstinline!postgresql.conf! zombodb библиотеку:
+
+\begin{lstlisting}[language=Bash,label=lst:zombodb1,caption=Zombodb]
+local_preload_libraries = 'zombodb.so'
+\end{lstlisting}
+
+И после перегрузки PostgreSQL активировать его для базы данных:
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb2,caption=Zombodb]
+CREATE EXTENSION zombodb;
+\end{lstlisting}
+
+После этого требуется установить Elasticsearch плагин на все ноды сервера и изменить конфигурацию в \lstinline!elasticsearch.yml!:
+
+\begin{lstlisting}[language=Bash,label=lst:zombodb3,caption=Elasticsearch]
+threadpool.bulk.queue_size: 1024
+threadpool.bulk.size: 12
+
+http.compression: true
+
+http.max_content_length: 1024mb
+index.query.bool.max_clause_count: 1000000
+\end{lstlisting}
+
+Для примера создадим таблицу с продуктами и заполним её данными:
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb4,caption=Products table]
+# CREATE TABLE products (
+    id SERIAL8 NOT NULL PRIMARY KEY,
+    name text NOT NULL,
+    keywords varchar(64)[],
+    short_summary phrase,
+    long_description fulltext,
+    price bigint,
+    inventory_count integer,
+    discontinued boolean default false,
+    availability_date date
+);
+
+# COPY products FROM PROGRAM 'curl https://raw.githubusercontent.com/zombodb/zombodb/master/TUTORIAL-data.dmp';
+\end{lstlisting}
+
+\lstinline!zdb(record)! zombodb функция конвертирует запись в JSON формат (обертка поверх \lstinline!row_to_json(record)!):
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb5,caption=Zdb]
+# SELECT zdb(products) FROM products WHERE id = 1;
+                    zdb
+-------------------------------------------------
+{"id":1,"name":"Magical Widget","keywords":["magical","widget","round"],"short_summary":"A widget that is quite magical","long_description":"Magical Widgets come from the land of Magicville and are capable of things you can't imagine","price":9900,"inventory_count":42,"discontinued":false,"availability_date":"2015-08-31"}
+\end{lstlisting}
+
+\lstinline!zdb(regclass, tid)! zombodb функция, которая используется для статического определения ссылок на таблицу/индекс в контексте последовательного сканирования. Благодаря этим двум функциям можно создать zombodb индекс для \lstinline!products! таблицы:
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb6,caption=Zdb]
+# CREATE INDEX idx_zdb_products
+           ON products
+        USING zombodb(zdb('products', products.ctid), zdb(products))
+         WITH (url='http://localhost:9200/');
+\end{lstlisting}
+
+Теперь можно проверить работу индекса:
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb7,caption=Index usage]
+# SELECT id, name, short_summary FROM products WHERE zdb('products', products.ctid) ==> 'sports or box';
+ id |   name   |         short_summary
+----+----------+--------------------------------
+  2 | Baseball | It's a baseball
+  4 | Box      | Just an empty box made of wood
+(2 rows)
+# EXPLAIN SELECT * FROM products WHERE zdb('products', ctid) ==> 'sports or box';
+                                    QUERY PLAN
+-----------------------------------------------------------------------------------
+ Index Scan using idx_zdb_products on products  (cost=0.00..4.02 rows=2 width=153)
+   Index Cond: (zdb('products'::regclass, ctid) ==> 'sports or box'::text)
+(2 rows)
+\end{lstlisting}
+
+ZomboDB содержит набор функций для агрегационных запросов. Например, если нужно выбрать уникальный набор ключевых слов для всех продуктов в \lstinline!keywords! поле вместе с их количеством, то можно воспользоваться \lstinline!zdb_tally! функцией:
+
+\begin{lstlisting}[language=SQL,label=lst:zombodb8,caption=Zdb\_tally]
+# SELECT * FROM zdb_tally('products', 'keywords', '^.*', '', 5000, 'term');
+         term          | count
+-----------------------+-------
+ alexander graham bell |     1
+ baseball              |     1
+ box                   |     1
+ communication         |     1
+ magical               |     1
+ negative space        |     1
+ primitive             |     1
+ round                 |     2
+ sports                |     1
+ square                |     1
+ widget                |     1
+ wooden                |     1
+(12 rows)
+\end{lstlisting}
+
+Более подробно про использование ZomboDB возможно ознакомиться в \href{https://github.com/zombodb/zombodb#quick-links}{официальной документации}.

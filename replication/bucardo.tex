@@ -1,12 +1,10 @@
 \section{Bucardo}
 
-\subsection{Введение}
-
-Bucardo~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl. Система очень гибкая, поддерживает несколько видов синхронизации и обработки конфликтов.
+\href{https://bucardo.org/wiki/Bucardo}{Bucardo}~--- асинхронная master-master или master-slave репликация PostgreSQL, которая написана на Perl. Система очень гибкая, поддерживает несколько видов синхронизации и обработки конфликтов.
 
 \subsection{Установка}
 
-Установку будет проводиться на Ubuntu Server. Сначала нам нужно установить DBIx::Safe Perl модуль.
+Установка будет проводиться на Debian сервере. Сначала нужно установить \lstinline!DBIx::Safe Perl! модуль.
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo1,caption=Установка]
 $ apt-get install libdbix-safe-perl
@@ -26,18 +24,18 @@ $ sudo make install
 Теперь ставим сам Bucardo. \href{http://bucardo.org/wiki/Bucardo#Obtaining_Bucardo}{Скачиваем} его и инсталлируем:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo3,caption=Установка]
-$ wget http://bucardo.org/downloads/Bucardo-5.0.0.tar.gz
-$ tar xvfz Bucardo-5.0.0.tar.gz
-$ cd Bucardo-5.0.0
+$ wget http://bucardo.org/downloads/Bucardo-5.4.1.tar.gz
+$ tar xvfz Bucardo-5.4.1.tar.gz
+$ cd Bucardo-5.4.1
 $ perl Makefile.PL
 $ make
 $ sudo make install
 \end{lstlisting}
 
-Для работы Bucardo потребуется установить поддержку pl/perl языка PostgreSQL.
+Для работы Bucardo потребуется установить поддержку pl/perl языка в PostgreSQL.
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo4,caption=Установка]
-$ sudo aptitude install postgresql-plperl-9.3
+$ sudo aptitude install postgresql-plperl-9.5
 \end{lstlisting}
 
 и дополнительные пакеты для Perl (DBI, DBD::Pg, Test::Simple, boolean):
@@ -46,19 +44,19 @@ $ sudo aptitude install postgresql-plperl-9.3
 $ sudo aptitude install libdbd-pg-perl libboolean-perl
 \end{lstlisting}
 
-Можем приступать к настройке.
+Теперь можем приступать к настройке репликации.
 
 \subsection{Настройка}
 
 \subsubsection{Инициализация Bucardo}
 
-Запускаем установку командой:
+Запускаем установку Bucardo:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo5,caption=Инициализация Bucardo]
 $ bucardo install
 \end{lstlisting}
 
-Bucardo покажет настройки подключения к PostgreSQL, которые можно будет изменить:
+Во время установки будут показаны настройки подключения к PostgreSQL, которые можно будет изменить:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo6,caption=Инициализация Bucardo]
 This will install the bucardo database into an existing Postgres cluster.
@@ -76,10 +74,10 @@ Current connection settings:
 5. PID directory: /var/run/bucardo
 \end{lstlisting}
 
-Когда вы измените требуемые настройки и подтвердите установку, Bucardo создаст пользователя bucardo и базу данных bucardo.
+После подтверждения настроек, Bucardo создаст пользователя \lstinline!bucardo! и базу данных \lstinline!bucardo!.
 Данный пользователь должен иметь право логиниться через Unix socket, поэтому лучше заранее дать ему такие права в \lstinline!pg_hda.conf!.
 
-После успешной установки мы можем проверить конфигурацию через команду \lstinline!bucardo show all!:
+После успешной установки можно проверить конфигурацию через команду \lstinline!bucardo show all!:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo-status1,caption=Инициализация Bucardo]
 $ bucardo show all
@@ -99,15 +97,14 @@ default_email_to          = nobody@example.com
 
 \subsubsection{Настройка баз данных}
 
-Теперь нам нужно настроить базы данных, с которыми будет работать Bucardo. Пусть у нас будет \lstinline!master_db! и \lstinline!slave_db!. Реплицировать будем \lstinline!simple_database! базу. Сначала настроим мастер:
+Теперь нужно настроить базы данных, с которыми будет работать Bucardo. Обозначим базы как \lstinline!master_db! и \lstinline!slave_db!. Реплицировать будем \lstinline!simple_database! базу. Сначала настроим мастер базу:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo7,caption=Настройка баз данных]
 $ bucardo add db master_db dbname=simple_database host=master_host
 Added database "master_db"
 \end{lstlisting}
 
-Данной командой мы указали базу данных и дали ей имя \lstinline!master_db! (для того, что в реальной жизни \lstinline!master_db! и \lstinline!slave_db!
-имеют одинаковое название базы \lstinline!simple_database! и их нужно отличать в Bucardo).
+Данной командой указали базу данных и дали ей имя \lstinline!master_db! (для того, что в реальной жизни \lstinline!master_db! и \lstinline!slave_db! имеют одинаковое название базы \lstinline!simple_database! и их нужно отличать в Bucardo).
 
 Дальше добавляем \lstinline!slave_db!:
 
@@ -117,7 +114,7 @@ $ bucardo add db slave_db dbname=simple_database port=5432 host=slave_host
 
 \subsubsection{Настройка репликации}
 
-Теперь нам нужно настроить синхронизацию между этими базами данных. Делается это командой \lstinline!sync!:
+Теперь требуется настроить синхронизацию между этими базами данных. Делается это командой \lstinline!sync!:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo9,caption=Настройка репликации]
 $ bucardo add sync delta dbs=master_db:source,slave_db:target conflict_strategy=bucardo_latest tables=all
@@ -130,7 +127,7 @@ Created a new dbgroup named "delta"
   Added table "public.pgbench_tellers"
 \end{lstlisting}
 
-Данной командой мы установим Bucardo триггеры в PostgreSQL для master-slave репликации. Значения параметров:
+Данная команда устанавливает Bucardo триггеры в PostgreSQL для master-slave репликации. Значения параметров:
 
 \begin{itemize}
   \item \lstinline!dbs!~--- список баз данных, которые следует синхронизировать. Значение \lstinline!source! или \lstinline!target! указывает, что это master или slave база данных соответственно (их может быть больше одной);
@@ -149,7 +146,7 @@ Created a new dbgroup named "delta"
   \item \lstinline!tables!~--- таблици, которые требуется синхронизировать. Через <<all>> указываем все;
 \end{itemize}
 
-Для master-master репликации:
+Для master-master репликации требуется выполнить:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo10,caption=Настройка репликации]
 $ bucardo add sync delta dbs=master_db:source,slave_db:source conflict_strategy=bucardo_latest tables=all
@@ -161,7 +158,7 @@ $ bucardo add sync delta dbs=master_db:source,slave_db:source conflict_strategy=
 $ bucardo add sync delta dbs=master_db1:source,master_db2:source,slave_db1:target,slave_db2:target conflict_strategy=bucardo_latest tables=all
 \end{lstlisting}
 
-Проверка состояния репликации:
+Для проверки состояния репликации:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo-master-slave2,caption=Проверка состояния репликации]
 $ bucardo status
@@ -216,7 +213,7 @@ $ bucardo reload_config
 
 \subsection{Репликация в другие типы баз данных}
 
-Начиная с версии 5.0 Bucardo поддерживает репликацию в другие источники данных: drizzle, mongo, mysql, oracle, redis и sqlite (тип базы задается при использовании команды \lstinline!bucardo add db! через ключ <<type>>, который по умолчанию postgres). Давайте рассмотрим пример с redis. Для начала потребуется установить redis адаптер для Perl (для других баз устанавливаются соответствующие):
+Начиная с версии 5.0 Bucardo поддерживает репликацию в другие источники данных: drizzle, mongo, mysql, oracle, redis и sqlite (тип базы задается при использовании команды \lstinline!bucardo add db! через ключ <<type>>, который по умолчанию postgres). Давайте рассмотрим пример с redis базой. Для начала потребуется установить redis адаптер для Perl (для других баз устанавливаются соответствующие):
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo-redis1,caption=Установка redis]
 $ aptitude install libredis-perl
@@ -295,3 +292,4 @@ PID of Bucardo MCP: 4655
  pg_to_redis_sync | Good   | 14:59:40   | 8m 14s | 646/2546  | 14:59:39  | 8m 15s
 \end{lstlisting}
 
+Теперь данные из redis могут использоваться для приложения в виде быстрого кэш хранилища.

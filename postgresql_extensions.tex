@@ -1,7 +1,7 @@
 \chapter{Расширения}
 
 \begin{epigraphs}
-\qitem{Гибкость ума может заменить красоту.}{Стендаль}
+\qitem{Гибкость ума может заменить красоту}{Стендаль}
 \end{epigraphs}
 
 \section{Введение}
@@ -20,51 +20,19 @@
 \input{extensions/ltree}
 \input{extensions/postpic}
 \input{extensions/fuzzystrmatch}
-
-\section{Tsearch2}
-\textbf{Лицензия}: Open Source
-
-Tsearch2~-- расширение для полнотекстового поиска. Встроен в PostgreSQL начиная с версии 8.3.
-
-\section{OpenFTS}
-\textbf{Лицензия}: Open Source
-
-\textbf{Ссылка}: \href{http://openfts.sourceforge.net/}{openfts.sourceforge.net}
-
-OpenFTS (Open Source Full Text Search engine) является продвинутой PostgreSQL поисковой системой, которая обеспечивает онлайн индексирования данных и актуальность данных для поиска по базе. Тесная интеграция с базой данных позволяет использовать метаданные, чтобы ограничить результаты поиска.
-
-\section{PL/Proxy}
-\textbf{Лицензия}: Open Source
-
-\textbf{Ссылка}: \href{http://pgfoundry.org/projects/plproxy/}{pgfoundry.org/projects/plproxy}
-
-PL/Proxy представляет собой прокси-язык для удаленного вызова процедур и партицирования данных между разными базами. Подробнее можно почитать в \Sref{sec:plproxy} главе.
-
-\section{Texcaller}
-\textbf{Лицензия}: Open Source
-
-\textbf{Ссылка}: \href{http://www.profv.de/texcaller/}{www.profv.de/texcaller}
-
-Texcaller~--- это удобный интерфейс для командной строки TeX, который обрабатывает все виды ошибок. Он написан в простом C, довольно портативный, и не имеет внешних зависимостей, кроме TeX. Неверный TeX документ обрабатывается путем простого возвращения NULL, а не прерывается с ошибкой. В случае неудачи, а также в случае успеха, дополнительная обработка информации осуществляется через NOTICEs.
-
-\section{Pgmemcache}
-\textbf{Лицензия}: Open Source
-
-\textbf{Ссылка}: \href{http://pgfoundry.org/projects/pgmemcache/}{pgfoundry.org/projects/pgmemcache}
-
-Pgmemcache~--- это PostgreSQL API библиотека на основе libmemcached для взаимодействия с memcached. С помощью данной библиотеки PostgreSQL может записывать, считывать, искать и удалять данные из memcached. Подробнее можно почитать в <<\ref{sec:pgmemcache}~\nameref{sec:pgmemcache}>> главе.
-
-\section{Prefix}
-\textbf{Лицензия}: Open Source
-
-\textbf{Ссылка}: \href{http://pgfoundry.org/projects/prefix}{pgfoundry.org/projects/prefix}
-
-Prefix реализует поиск текста по префиксу (\lstinline!prefix @> text!). Prefix используется в приложениях телефонии, где маршрутизация вызовов и расходы зависят от вызывающего/вызываемого префикса телефонного номера оператора.
-
-\section{Dblink}
-\textbf{Лицензия}: Open Source
-
-Dblink~-- расширение, которое позволяет выполнять запросы к удаленным базам данных непосредственно из SQL, не прибегая к помощи внешних скриптов.
+\input{extensions/pg_trgm}
+\input{extensions/cstore_fdw}
+\input{extensions/hll}
+\input{extensions/tsearch2}
+\input{extensions/pl_proxy}
+\input{extensions/texcaller}
+\input{extensions/pgmemcache}
+\input{extensions/prefix}
+\input{extensions/dblink}
+\input{extensions/postgres_fdw}
+\input{extensions/pg_cron}
+\input{extensions/pgstrom}
+\input{extensions/zombodb}
 
 \section{Заключение}
 

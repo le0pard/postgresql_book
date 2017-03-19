@@ -1,35 +1,33 @@
 \section{Потоковая репликация (Streaming Replication)}
 
-\subsection{Введение}
-
-Потоковая репликация (Streaming Replication, SR) дает возможность непрерывно отправлять и применять wall xlog записи на резервные сервера для создания точной копии текущего. Данная функциональность появилась у PostgreSQL начиная с 9 версии (репликация из коробки!). Этот тип репликации простой, надежный и, вероятней всего, будет использоваться в качестве стандартной репликации в большинстве высоконагруженных приложений, что используют PostgreSQL.
+\href{https://wiki.postgresql.org/wiki/Streaming_Replication}{Потоковая репликация (Streaming Replication, SR)} дает возможность непрерывно отправлять и применять WAL (Write-Ahead Log) записи на резервные сервера для создания точной копии текущего. Данная функциональность появилась у PostgreSQL начиная с 9 версии. Этот тип репликации простой, надежный и, вероятней всего, будет использоваться в качестве стандартной репликации в большинстве высоконагруженных приложений, что используют PostgreSQL.
 
 Отличительными особенностями решения являются:
 
 \begin{itemize}
   \item репликация всего инстанса PostgreSQL;
-  \item асинхронный механизм репликации;
+  \item асинхронный или синхронный механизмы репликации;
   \item простота установки;
-  \item мастер база данных может обслуживать огромное количество слейвов из-за минимальной нагрузки.
+  \item мастер база данных может обслуживать огромное количество слейвов из-за минимальной нагрузки;
 \end{itemize}
 
 К недостаткам можно отнести:
 
 \begin{itemize}
-  \item невозможность реплицировать только определенную базу данных из всех на PostgreSQL инстансе.
+  \item невозможность реплицировать только определенную базу данных из всех на PostgreSQL инстансе;
 \end{itemize}
 
 \subsection{Установка}
 
-Для начала нам потребуется PostgreSQL не ниже 9 версии. В момент написания этой главы была доступна 9.3 версия. Все работы, как полагается, будут проводится на Linux.
+Для начала нам потребуется PostgreSQL не ниже 9 версии. Все работы, как полагается, будут проводится на Linux.
 
 \subsection{Настройка}
 
-Для начала обозначим мастер сервер как masterdb(192.168.0.10) и слейв как slavedb(192.168.0.20).
+Обозначим мастер сервер как \lstinline!masterdb(192.168.0.10)! и слейв как \lstinline!slavedb(192.168.0.20)!.
 
 \subsubsection{Предварительная настройка}
 
-Для начала позволим определенному пользователю без пароля ходить по ssh. Пусть это будет postgres юзер. Если же нет, то создаем набором команд:
+Для начала позволим определенному пользователю без пароля ходить по ssh. Пусть это будет \lstinline!postgres! юзер. Если же нет, то создаем набором команд:
 
 \begin{lstlisting}[label=lst:streaming1,caption=Создаем пользователя userssh]
 $ sudo groupadd userssh
@@ -37,7 +35,7 @@ $ sudo useradd -m -g userssh -d /home/userssh -s /bin/bash \
 -c "user ssh allow" userssh
 \end{lstlisting}
 
-Дальше выполняем команды от имени пользователя (в данном случае postgres):
+Дальше выполняем команды от имени пользователя (в данном случае \lstinline!postgres!):
 
 \begin{lstlisting}[label=lst:streaming2,caption=Логинимся под пользователем postgres]
 $ su postgres
@@ -62,21 +60,21 @@ The key fingerprint is:
 $ cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
 \end{lstlisting}
 
-Этого должно быть более чем достаточно. Проверить работоспособность соединения можно просто написав:
+Проверить работоспособность соединения можно просто написав:
 
 \begin{lstlisting}[label=lst:streaming5,caption=Пробуем зайти на ssh без пароля]
 $ ssh localhost
 \end{lstlisting}
 
-Не забываем предварительно инициализировать sshd:
+Не забываем предварительно инициализировать \lstinline!sshd!:
 
 \begin{lstlisting}[label=lst:streaming6,caption=Запуск sshd]
 $ $/etc/init.d/sshd start
 \end{lstlisting}
 
-После успешно проделаной операции скопируйте <<\$HOME/.ssh>> на slavedb. Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
+После успешно проделаной операции скопируйте \lstinline!$HOME/.ssh! на \lstinline!slavedb!. Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
 
-Также отредактируем pg\_hba.conf на мастере и слейве, разрешив им друг к другу доступ без пароля(trust) (тут добавляется роль replication):
+Также отредактируем \lstinline!pg_hba.conf! на мастере и слейве, разрешив им друг к другу доступ без пароля (тут добавляется роль r\lstinline!eplication!):
 
 \begin{lstlisting}[label=lst:streaming7,caption=Мастер pg\_hba.conf]
 host  replication  all  192.168.0.20/32  trust
@@ -90,7 +88,7 @@ host  replication  all  192.168.0.10/32  trust
 
 \subsubsection{Настройка мастера}
 
-Для начала настроим masterdb. Установим параметры в postgresql.conf для репликации:
+Для начала настроим masterdb. Установим параметры в \lstinline!postgresql.conf! для репликации:
 
 \begin{lstlisting}[label=lst:streaming9,caption=Настройка мастера]
 # To enable read-only queries on a standby server, wal_level must be set to
@@ -123,10 +121,10 @@ archive_command = 'cp %p /path_to/archive/%f'
   \item \lstinline!wal_level = hot_standby!~--- сервер начнет писать в WAL логи так же как и при режиме <<archive>>, добавляя информацию, необходимую для восстановления транзакции (можно также поставить \lstinline!archive!, но тогда сервер не может быть слейвом при необходимости);
   \item \lstinline!max_wal_senders = 5!~--- максимальное количество слейвов;
   \item \lstinline!wal_keep_segments = 32!~--- минимальное количество файлов c WAL сегментами в \lstinline!pg_xlog! директории;
-  \item \lstinline!archive_mode = on!~--- позволяем сохранять WAL сегменты в указанное переменной \lstinline!archive_command! хранилище. В данном случае в директорию <</path/to/archive/>>.
+  \item \lstinline!archive_mode = on!~--- позволяем сохранять WAL сегменты в указанное переменной \lstinline!archive_command! хранилище. В данном случае в директорию \lstinline!/path/to/archive/!;
 \end{itemize}
 
-По умолчанию репликация асинхронная. В версии 9.1 добавили параметр \lstinline!synchronous_standby_names!, который включает синхронную репликацию. В данные параметр передается \lstinline!application_name!, который используется на слейвах в recovery.conf:
+По умолчанию репликация асинхронная. В версии 9.1 добавили параметр \lstinline!synchronous_standby_names!, который включает синхронную репликацию. В данные параметр передается \lstinline!application_name!, который используется на слейвах в \lstinline!recovery.conf!:
 
 \begin{lstlisting}[label=lst:streaming91,caption=recovery.conf для синхронной репликации на слейве]
 restore_command = 'cp /mnt/server/archivedir/%f %p'               # e.g. 'cp /mnt/server/archivedir/%f %p'
@@ -135,14 +133,14 @@ primary_conninfo = 'host=masterdb port=59121 user=replication password=replicati
 trigger_file = '/tmp/trig_f_newcluster'
 \end{lstlisting}
 
-После изменения параметров перегружаем PostgreSQL сервер. Теперь перейдем к slavedb.
+После изменения параметров перегружаем PostgreSQL сервер. Теперь перейдем к \lstinline!slavedb!.
 
 \subsubsection{Настройка слейва}
 \label{subsec:streaming-slave-settings}
 
-Для начала нам потребуется создать на slavedb точную копию masterdb. Перенесем данные с помощью <<Онлайн бекапа>>.
+Для начала нам потребуется создать на \lstinline!slavedb! точную копию \lstinline!masterdb!. Перенесем данные с помощью <<Онлайн бекапа>>.
 
-Для начала зайдем на masterdb сервер. Выполним в консоли:
+Переместимся на \lstinline!masterdb! сервер и выполним в консоли:
 
 \begin{lstlisting}[label=lst:streaming10,caption=Выполняем на мастере]
 $ psql -c "SELECT pg_start_backup('label', true)"
@@ -159,9 +157,9 @@ $ rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid
 где
 
 \begin{itemize}
-  \item \lstinline!master_db_datadir!~--- директория с postgresql данными на masterdb
-  \item \lstinline!slave_db_datadir!~--- директория с postgresql данными на slavedb
-  \item \lstinline!slavedb_host!~--- хост slavedb(в нашем случае - 192.168.1.20)
+  \item \lstinline!master_db_datadir!~--- директория с postgresql данными на masterdb;
+  \item \lstinline!slave_db_datadir!~--- директория с postgresql данными на slavedb;
+  \item \lstinline!slavedb_host!~--- хост slavedb(в нашем случае - 192.168.1.20);
 \end{itemize}
 
 После копирования данных с мастера на слейв, остановим онлайн бекап. Выполняем на мастере:
@@ -170,13 +168,13 @@ $ rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid
 $ psql -c "SELECT pg_stop_backup()"
 \end{lstlisting}
 
-Для версии PostgreSQL 9.1+ можно воспользоватся командой \lstinline!pg_basebackup! (копирует базу на slavedb подобным образом):
+Для версии PostgreSQL 9.1+ можно воспользоватся командой \lstinline!pg_basebackup! (копирует базу на \lstinline!slavedb! подобным образом):
 
 \begin{lstlisting}[label=lst:streaming122,caption=Выполняем на слейве]
 $ pg_basebackup -R -D /srv/pgsql/standby --host=192.168.0.10 --port=5432
 \end{lstlisting}
 
-Устанавливаем такие же данные в конфиге postgresql.conf, что и у мастера (чтобы при падении мастера слейв мог его заменить). Так же установим дополнительный параметр:
+Устанавливаем такие же данные в конфиге \lstinline!postgresql.conf!, что и у мастера (чтобы при падении мастера слейв мог его заменить). Так же установим дополнительный параметр:
 
 \begin{lstlisting}[label=lst:streaming13,caption=Конфиг слейва]
 hot_standby = on
@@ -184,7 +182,7 @@ hot_standby = on
 
 Внимание! Если на мастере поставили \lstinline!wal_level = archive!, тогда параметр оставляем по умолчанию (\lstinline!hot_standby = off!).
 
-Далее на slavedb в директории с данными PostgreSQL создадим файл recovery.conf с таким содержимым:
+Далее на \lstinline!slavedb! в директории с данными PostgreSQL создадим файл \lstinline!recovery.conf! с таким содержимым:
 
 \begin{lstlisting}[label=lst:streaming14,caption=Конфиг recovery.conf]
 # Specifies whether to start the server as a standby. In streaming replication,
@@ -212,15 +210,15 @@ restore_command = 'scp masterdb_host:/path_to/archive/%f "%p"'
 \begin{itemize}
   \item \lstinline!standby_mode='on'!~--- указываем серверу работать в режиме слейв;
   \item \lstinline!primary_conninfo!~--- настройки соединения слейва с мастером;
-  \item \lstinline!trigger_file!~--- указываем триггер-файл, при наличии которого будет остановлена репликация;
-  \item \lstinline!restore_command!~--- команда, которой будут восстанавливаться WAL логи. В нашем случае через scp копируем с masterdb (\lstinline!masterdb_host! - хост masterdb).
+  \item \lstinline!trigger_file!~--- указываем триггер файл, при наличии которого будет остановлена репликация;
+  \item \lstinline!restore_command!~--- команда, которой будут восстанавливаться WAL логи. В нашем случае через scp копируем с masterdb (\lstinline!masterdb_host! - хост masterdb);
 \end{itemize}
 
-Теперь мы можем запустить PostgreSQL на slavedb.
+Теперь можем запустить PostgreSQL на \lstinline!slavedb!.
 
 \subsubsection{Тестирование репликации}
 
-Теперь мы можем посмотреть отставание слейвов от мастера с помощью таких команд:
+В результате можем посмотреть отставание слейвов от мастера с помощью таких команд:
 
 \begin{lstlisting}[label=lst:streaming15,caption=Тестирование репликации]
 $ psql -c "SELECT pg_current_xlog_location()" -h192.168.0.10 (masterdb)
@@ -263,7 +261,7 @@ $ psql -c "select pg_last_xlog_replay_location()" -h192.168.0.20 (slavedb)
   16384 | marc      |                0 |          0 |              1 |               0 |              0
 \end{lstlisting}
 
-Еще проверить работу репликации можно с помощью утилиты ps:
+Еще проверить работу репликации можно с помощью утилиты \lstinline!ps!:
 
 \begin{lstlisting}[label=lst:streaming16,caption=Тестирование репликации]
 [masterdb] $ ps -ef | grep sender
@@ -273,7 +271,7 @@ postgres  6879  6831  0 10:31 ?        00:00:00 postgres: wal sender process pos
 postgres  6878  6872  1 10:31 ?        00:00:01 postgres: wal receiver process   streaming 0/2000000
 \end{lstlisting}
 
-Теперь проверим реприкацию. Выполним на мастере:
+Давайте проверим реприкацию и выполним на мастере:
 
 \begin{lstlisting}[language=SQL,label=lst:streaming17,caption=Выполняем на мастере]
 $ psql test_db
@@ -285,7 +283,7 @@ INSERT 0 1
 test_db=#
 \end{lstlisting}
 
-Теперь проверим на слейве:
+Теперь проверим на слейве результат:
 
 \begin{lstlisting}[language=SQL,label=lst:streaming18,caption=Выполняем на слейве]
 $ psql test_db
@@ -296,21 +294,21 @@ test_db=# select * from test3;
 (1 row)
 \end{lstlisting}
 
-Как видим, таблица с данными успешно скопирована с мастера на слейв.
+Как видим, таблица с данными успешно скопирована с мастера на слейв. Более подробно по настройке данной репликации можно почитать из \href{https://wiki.postgresql.org/wiki/Streaming_Replication}{официальной wiki}.
 
 \subsection{Общие задачи}
 
 \subsubsection{Переключение на слейв при падении мастера}
 
-Достаточно создать триггер-файл (\lstinline!trigger_file!) на слейве, который становится мастером.
+Достаточно создать триггер файл (\lstinline!trigger_file!) на слейве, который перестанет читать данные с мастера.
 
 \subsubsection{Остановка репликации на слейве}
 
-Создать триггер-файл (\lstinline!trigger_file!) на слейве. Также с версии 9.1 добавили команды \lstinline!pg_xlog_replay_pause()! и \lstinline!pg_xlog_replay_resume()! для остановки и возобновления репликации.
+Создать триггер файл (\lstinline!trigger_file!) на слейве. Также с версии 9.1 добавили функции \lstinline!pg_xlog_replay_pause()! и \lstinline!pg_xlog_replay_resume()! для остановки и возобновления репликации.
 
 \subsubsection{Перезапуск репликации после сбоя}
 
-Повторяем операции из раздела <<Настройка слейва>>. Хочется заметить, что мастер при этом не нуждается в остановке при выполнении данной задачи.
+Повторяем операции из раздела <<\nameref{subsec:streaming-slave-settings}>>. Хочется заметить, что мастер при этом не нуждается в остановке при выполнении данной задачи.
 
 \subsubsection{Перезапуск репликации после сбоя слейва}
 
@@ -319,3 +317,8 @@ test_db=# select * from test3;
 \subsubsection{Повторно синхронизировать репликации на слейве}
 
 Это может потребоваться, например, после длительного отключения от мастера. Для этого останавливаем PostgreSQL на слейве и повторяем операции из раздела <<\nameref{subsec:streaming-slave-settings}>>.
+
+
+\input{replication/streaming/repmgr}
+\input{replication/streaming/patroni}
+\input{replication/streaming/stolon}

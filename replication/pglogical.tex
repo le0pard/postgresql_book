@@ -1,0 +1,127 @@
+\section{Pglogical}
+\label{sec:pglogical}
+
+\href{https://2ndquadrant.com/en/resources/pglogical/}{Pglogical}~--- это расширение для PostgreSQL, которое использует логическое декодирование через publish/subscribe модель. Данное расширение базируется на BDR проекте (\ref{sec:bdr}~\nameref{sec:bdr}). Расширение работает только начиная с версии PostgreSQL 9.4 и выше (из-за логического декодирования). Для разных вариаций обнаружения и разрешения конфликтов требуется версия 9.5 и выше.
+
+Используются следующие термины для описания pglogical:
+
+\begin{itemize}
+  \item Nodes(ноды, узлы)~--- экземпляры баз данных PostgreSQL;
+  \item Provider и subscriber~--- роли узлов. Provider выполняют выдачу данных и изменений для subscriber-ов;
+  \item Replication set (набор для репликации)~--- колекция таблиц и последовательностей для репликации;
+\end{itemize}
+
+Сценарии использования pglogical:
+
+\begin{itemize}
+  \item Обновление между версиями PostgreSQL (например c 9.4 на 9.5);
+  \item Полная репликация базы данных;
+  \item Выборочная репликация таблиц;
+  \item Сбор данных с нескольких баз данных в одну;
+\end{itemize}
+
+Архитектурные детали:
+
+\begin{itemize}
+  \item Pglogical работает на уровне каждой базы данных, а не весь сервер;
+  \item Provider (publisher) может <<кормить>> несколько subscriber-ов без дополнительных накладных расходов записи на диск;
+  \item Один subscriber может объединить изменения из нескольких provider-ов и использовать систему обнаружения и разрешения конфликтов между изменениями;
+  \item Каскадная репликация осуществляется в виде переадресации изменений;
+\end{itemize}
+
+
+\subsection{Установка и настройка}
+
+
+Установить pglogical можно по \href{https://2ndquadrant.com/en/resources/pglogical/pglogical-installation-instructions/}{данной документации}. Далее требуется настроить логический декодинг в PostgreSQL:
+
+\begin{lstlisting}[label=lst:pglogical1,caption=postgresql.conf]
+wal_level = 'logical'
+max_worker_processes = 10   # one per database needed on provider node
+                            # one per node needed on subscriber node
+max_replication_slots = 10  # one per node needed on provider node
+max_wal_senders = 10        # one per node needed on provider node
+shared_preload_libraries = 'pglogical'
+\end{lstlisting}
+
+Если используется PostgreSQL 9.5+ и требуется механизмы разрешения конфликтов, то требуется добавить дополнительные опции:
+
+\begin{lstlisting}[label=lst:pglogical2,caption=postgresql.conf]
+track_commit_timestamp = on # needed for last/first update wins conflict resolution
+                            # property available in PostgreSQL 9.5+
+\end{lstlisting}
+
+В \lstinline!pg_hba.conf! нужно разрешить replication соеденения с локального хоста для пользователя с привилегией репликации. После перезапуска базы нужно активировать расширение на всех нодах:
+
+\begin{lstlisting}[label=lst:pglogical3,language=SQL,caption=Активируем расширение]
+CREATE EXTENSION pglogical;
+\end{lstlisting}
+
+Далее на master (мастер) создаем provider (процесс, который будет выдавать изменения для subscriber-ов) ноду:
+
+\begin{lstlisting}[label=lst:pglogical4,language=SQL,caption=Создаем provider]
+SELECT pglogical.create_node(
+    node_name := 'provider1',
+    dsn := 'host=providerhost port=5432 dbname=db'
+);
+\end{lstlisting}
+
+И добавляем все таблицы в \lstinline!public! схеме:
+
+\begin{lstlisting}[label=lst:pglogical5,language=SQL,caption=Добавляем в replication set все таблицы в public схеме]
+SELECT pglogical.replication_set_add_all_tables('default', ARRAY['public']);
+\end{lstlisting}
+
+Далее переходим на slave (слейв) и создаем subscriber ноду:
+
+\begin{lstlisting}[label=lst:pglogical6,language=SQL,caption=Создаем subscriber]
+SELECT pglogical.create_node(
+    node_name := 'subscriber1',
+    dsn := 'host=thishost port=5432 dbname=db'
+);
+\end{lstlisting}
+
+После этого создаем <<подписку>> на provider ноду, которая начнет синхронизацию и репликацию в фоне:
+
+\begin{lstlisting}[label=lst:pglogical7,language=SQL,caption=Активируем subscriber]
+SELECT pglogical.create_subscription(
+    subscription_name := 'subscription1',
+    provider_dsn := 'host=providerhost port=5432 dbname=db'
+);
+\end{lstlisting}
+
+Если все проделано верно, subscriber через определенный интервал времени subscriber нода должна получить точную копию всех таблиц в \lstinline!public! схеме с master хоста.
+
+
+\subsection{Разрешение конфликтов}
+
+
+Если используется схема, где subscriber нода подписана на данные из нескольких provider-ов, или же на subscriber дополнительно производятся локальные изменения данных, могут возникать конфликты для новых изменений. В pglogical встроен механизм для обнаружения и разрешения конфликтов. Настройка данного механизма происходит через  \lstinline!pglogical.conflict_resolution! ключ. Поддерживаются следующие значения:
+
+\begin{itemize}
+  \item \lstinline!error! - репликация остановится на ошибке, если обнаруживается конфликт и потребуется ручное действие для его разрешения;
+  \item \lstinline!apply_remote! - всегда применить изменения, который конфликтуют с локальными данными. Значение по умолчанию;
+  \item \lstinline!keep_local! - сохранить локальную версию данных и игнорировать конфликтующие изменения, которые исходят от provider-а;
+  \item \lstinline!last_update_wins! - версия данных с самым новым коммитом (newest commit timestamp) будет сохранена;
+  \item \lstinline!first_update_wins! - версия данных с самым старым коммитом (oldest commit timestamp) будет сохранена;
+\end{itemize}
+
+Когда опция \lstinline!track_commit_timestamp! отключена, единственное допустимое значение для \lstinline!pglogical.conflict_resolution! может быть \lstinline!apply_remote!. Поскольку \lstinline!track_commit_timestamp! не доступен в PostgreSQL 9.4, данная опция установлена по умолчанию в \lstinline!apply_remote!.
+
+
+
+\subsection{Ограничения и недостатки}
+
+\begin{itemize}
+  \item Для работы требуется суперпользователь;
+  \item \lstinline!UNLOGGED! и \lstinline!TEMPORARY! таблицы не реплицируются;
+  \item Для каждой базы данных нужно настроить отдельный provider и subscriber;
+  \item Требуется primary key или \href{http://www.postgresql.org/docs/current/static/sql-altertable.html#SQL-CREATETABLE-REPLICA-IDENTITY}{replica identity} для репликации;
+  \item Разрешен только один уникальный индекс/ограничение/основной ключ на таблицу (из-за возможных конфликтов). Возможно использовать больше, но только в случае если subscriber читает только с одного provider и не производится локальных изменений данных на нем;
+  \item Автоматическая репликация DDL не поддерживается. У pglogical есть команда \lstinline!pglogical.replicate_ddl_command! для запуска DDL на provider и subscriber;
+  \item Ограничения на foreign ключи не выполняются на subscriber-рах;
+  \item При использовании \lstinline!TRUNCATE ... CASCADE! будет выполнен \lstinline!CASCADE! только на provider;
+  \item Последовательности реплицируются периодически, а не в режиме реального времени;
+\end{itemize}
+
+
