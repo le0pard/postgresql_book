@@ -32,6 +32,7 @@ body
       margin-left: auto
       margin-right: auto
       display: block
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
       @include grid-media($m850-grid)
         margin-left: 0
         margin-right: 0
@@ -67,8 +68,10 @@ body
           color: #3d4244
           font-size: calc(0.9rem + 0.2 * ( (100vw - 420px) / 860))
           line-height: 1.4
-          margin: 2rem 2rem 2rem 0
+          margin: 2rem 0
           text-rendering: optimizeLegibility
+          @include grid-media($m850-grid)
+            margin: 2rem 2rem 2rem 0
 
     .buttons-column
       @include grid-container
@@ -100,11 +103,12 @@ body
   @include grid-container
   margin-bottom: 2rem
   .reviews-title
-    @include grid-column(2)
+    @include grid-column(4)
     @include centered
     h3
       font-size: calc(1.4rem + 0.2 * ( (100vw - 420px) / 860))
       text-align: center
+      letter-spacing: 1px
   .reviews-column
     @include grid-column
     @include grid-media($m850-grid)
@@ -216,7 +220,7 @@ body
         font-size: 1.6rem
 // Responsive font size end
 // Utils
-@media screen and (max-width: 1000px)
+@media screen and (max-width: 850px)
   .reviews-on-large
     display: none
 
