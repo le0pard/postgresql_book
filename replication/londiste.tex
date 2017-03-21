@@ -254,7 +254,7 @@ master-node      False            dbname=l3simple host=master-host
 slave1-node      False            dbname=l3simple host=slave1-host
 \end{lstlisting}
 
-Но репликация еще не запущенна: требуется добавить таблици в очередь, которые мы хотим реплицировать. Для этого используем команду \lstinline!add-table!:
+Но репликация еще не запущенна: требуется добавить таблицы в очередь, которые мы хотим реплицировать. Для этого используем команду \lstinline!add-table!:
 
 \begin{lstlisting}[label=lst:londiste-replica13,caption=Добавляем таблицы]
 $ londiste3 /etc/skytools/master-londiste.ini add-table --all
@@ -298,7 +298,7 @@ master-node (root)
   \item z - количество таблиц в состоянии ignored (table not replicated locally), у master должно быть 0, а у slave базах это количество таблиц, которые не добавлены для репликации с мастера (т.е. master отдает на репликацию эту таблицу, но slave их просто не забирает).
 \end{itemize}
 
-Через небольшой интервал времени все таблици должны синхронизироватся:
+Через небольшой интервал времени все таблицы должны синхронизироватся:
 
 \begin{lstlisting}[label=lst:londiste-replica16,caption=Статус кластера]
 $ londiste3 /etc/skytools/master-londiste.ini status
@@ -394,7 +394,7 @@ INFO Node "slave2-node" initialized for queue "replika" with type "branch"
 INFO Done
 \end{lstlisting}
 
-Далее добавляем все таблици и последовательности:
+Далее добавляем все таблицы и последовательности:
 
 \begin{lstlisting}[label=lst:londiste-cascade3,caption=Инициализируем slave2]
 $ londiste3 /etc/skytools/slave2-londiste.ini add-table --all
