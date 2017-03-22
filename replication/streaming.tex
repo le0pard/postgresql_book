@@ -74,7 +74,7 @@ $ $/etc/init.d/sshd start
 
 После успешно проделаной операции скопируйте \lstinline!$HOME/.ssh! на \lstinline!slavedb!. Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
 
-Также отредактируем \lstinline!pg_hba.conf! на мастере и слейве, разрешив им друг к другу доступ без пароля (тут добавляется роль r\lstinline!eplication!):
+Также отредактируем \lstinline!pg_hba.conf! на мастере и слейве, разрешив им друг к другу доступ без пароля (тут добавляется роль \lstinline!replication!):
 
 \begin{lstlisting}[label=lst:streaming7,caption=Мастер pg\_hba.conf]
 host  replication  all  192.168.0.20/32  trust
