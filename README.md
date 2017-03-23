@@ -1,8 +1,12 @@
 # Работа с PostgreSQL: настройка и масштабирование [postgresql.leopard.in.ua](http://postgresql.leopard.in.ua/)
 
+## Готовые pdf, epub, html5
+
+[Последнии сборки](https://github.com/le0pard/postgresql_book/releases)
+
 ## Генерация HTML
 
-    pandoc -s -S -c pandoc.css --toc --latexmathml --highlight-style pygments -t html5 -s postgresql.tex -o postgresql.html
+    pandoc -s -S -c pandoc.css --toc --latexmathml --listings --highlight-style pygments -t html5 -s postgresql.tex -o postgresql.html
 
 ## Генерация Epub
 
