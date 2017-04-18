@@ -138,7 +138,7 @@ trigger_file = '/tmp/trig_f_newcluster'
 \subsubsection{Настройка слейва}
 \label{subsec:streaming-slave-settings}
 
-Для начала нам потребуется создать на \lstinline!slavedb! точную копию \lstinline!masterdb!. Перенесем данные с помощью <<Онлайн бекапа>>.
+Для начала нам потребуется создать на \lstinline!slavedb! точную копию \lstinline!masterdb!. Перенесем данные с помощью <<Онлайн бэкапа>>.
 
 Переместимся на \lstinline!masterdb! сервер и выполним в консоли:
 
@@ -162,7 +162,7 @@ $ rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid
   \item \lstinline!slavedb_host!~--- хост slavedb(в нашем случае - 192.168.1.20);
 \end{itemize}
 
-После копирования данных с мастера на слейв, остановим онлайн бекап. Выполняем на мастере:
+После копирования данных с мастера на слейв, остановим онлайн бэкап. Выполняем на мастере:
 
 \begin{lstlisting}[label=lst:streaming12,caption=Выполняем на мастере]
 $ psql -c "SELECT pg_stop_backup()"
