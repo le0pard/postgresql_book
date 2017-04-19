@@ -1,6 +1,6 @@
 \section{ZomboDB}
 
-\href{https://github.com/zombodb/zombodb}{ZomboDB}~--- PostgreSQL расширение, которое позволяет использовать \href{https://en.wikipedia.org/wiki/Elasticsearch}{Elasticsearch} индексы внутри базы (используется \href{https://www.postgresql.org/docs/current/static/indexam.html}{интерфейс для методов доступа индекса}). ZomboDB индекс для PostgreSQL ничем не отличается от стандартного btree индекса. Таким образом, стандартные команды SQL полностью поддерживаются, включая \lstinline!SELECT!, \lstinline!BEGIN!, \lstinline!COMMIT!, \lstinline!ABORT!, \lstinline!INSERT!, \lstinline!UPDATE!, \lstinline!DELETE!, \lstinline!COPY! и \lstinline!VACUUM! и данные индексы являются MVCC-безопасными.
+\href{https://www.zombodb.com/}{ZomboDB}~--- PostgreSQL расширение, которое позволяет использовать \href{https://en.wikipedia.org/wiki/Elasticsearch}{Elasticsearch} индексы внутри базы (используется \href{https://www.postgresql.org/docs/current/static/indexam.html}{интерфейс для методов доступа индекса}). ZomboDB индекс для PostgreSQL ничем не отличается от стандартного btree индекса. Таким образом, стандартные команды SQL полностью поддерживаются, включая \lstinline!SELECT!, \lstinline!BEGIN!, \lstinline!COMMIT!, \lstinline!ABORT!, \lstinline!INSERT!, \lstinline!UPDATE!, \lstinline!DELETE!, \lstinline!COPY! и \lstinline!VACUUM! и данные индексы являются MVCC-безопасными.
 
 На низком уровне ZomboDB индексы взаимодействуют с Elasticsearch сервером через HTTP запросы и автоматически синхронизируются в процессе изменения данных в PostgreSQL базе.
 
