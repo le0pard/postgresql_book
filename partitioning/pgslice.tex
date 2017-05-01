@@ -100,7 +100,7 @@ CREATE OR REPLACE FUNCTION users_insert_trigger()
 COMMIT;
 \end{lstlisting}
 
-Через \lstinline!--past! и \lstinline!--future! опции указывается количество партицей. Далее можно переместить данные в партиции:
+Через \lstinline!--past! и \lstinline!--future! опции указывается количество партиций. Далее можно переместить данные в партиции:
 
 \begin{lstlisting}[language=Bash,label=lst:pgslice6,caption=Pgslice fill]
 $ pgslice fill users
@@ -112,7 +112,7 @@ INSERT INTO users_intermediate ("id", "username", "password", "created_on", "las
 
 Через \lstinline!--batch-size! и \lstinline!--sleep! опции можно управлять скоростью переноса данных.
 
-После этого можно переключится на новую таблицу с партициями:
+После этого можно переключиться на новую таблицу с партициями:
 
 \begin{lstlisting}[language=Bash,label=lst:pgslice7,caption=Pgslice swap]
 $ pgslice swap users
