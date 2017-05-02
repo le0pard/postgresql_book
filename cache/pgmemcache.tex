@@ -8,7 +8,7 @@
 
 \subsection{Установка}
 
-Поскольку Pgmemcache идет как модуль, то потребуется PostgreSQL с PGXS (если уже не установлен, поскольку в сборках для Linux присутствует PGXS). Также потребуется memcached и libmemcached библиотека версии не ниже 0.38. После скачивания и распаковки исходников, достаточно выполнить в консоли:
+Поскольку Pgmemcache идет как модуль, то потребуется PostgreSQL с PGXS (если уже не установлен, поскольку в сборках для Linux присутствует PGXS). Также потребуется memcached и libmemcached библиотека версии не ниже 0.38. После скачивания и распаковки исходников достаточно выполнить в консоли:
 
 \begin{lstlisting}[language=Bash,label=lst:pgcache1,caption=Установка из исходников]
 $ make
@@ -36,7 +36,7 @@ $ sudo make install
 pgmemcache.default_servers = '127.0.0.1, 192.168.0.20:11211' # подключили два сервера memcached
 \end{lstlisting}
 
-\item Также можем настроить работу самой библиотеки pgmemcache через \lstinline!pgmemcache.default_behavior!. Настройки соответствуют настрокам libmemcached. Например:
+\item Также можем настроить работу самой библиотеки pgmemcache через \lstinline!pgmemcache.default_behavior!. Настройки соответствуют настройкам libmemcached. Например:
 
 \begin{lstlisting}[label=lst:pgcache7,caption=Настройка pgmemcache]
 pgmemcache.default_behavior='BINARY_PROTOCOL:1'
@@ -49,7 +49,7 @@ pgmemcache.default_behavior='BINARY_PROTOCOL:1'
 
 \subsection{Проверка}
 
-После успешной установки и настройки pgmemcache, становится доступен список команд для работы с memcached серверами.
+После успешной установки и настройки pgmemcache становится доступен список команд для работы с memcached серверами.
 
 \begin{table}[h]
 \caption{Список команд pgmemcache}
@@ -149,7 +149,7 @@ memcache\_set(key::TEXT, value::TEXT, expire::INTERVAL)
 memcache\_set(key::TEXT, value::TEXT)
 
 &
-Создает ключ со значение. Если такой ключ существует~--- заменяет в нем значение на указаное.\\
+Создает ключ со значением. Если такой ключ существует~--- заменяет в нем значение на указаное.\\
 
 \hline
 
@@ -162,7 +162,7 @@ stats = memcache\_stats()
 \end{tabular}
 \end{table}
 
-Посмотрим работу в СУБД данных функций. Для начала получим информацию по memcached серверах:
+Посмотрим работу в СУБД данных функций. Для начала получим информацию о memcached серверах:
 
 \begin{lstlisting}[language=SQL,label=lst:pgcache8,caption=Проверка memcache\_stats]
 pgmemcache=# SELECT memcache_stats();
