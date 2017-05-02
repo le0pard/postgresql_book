@@ -4,7 +4,7 @@
 
 \subsubsection{Установка и настройка}
 
-Рассмотрим простом случай с одним экземпляром PostgreSQL (один сервер) и пусть его хост будет \lstinline!pghost!. Наша задача~--- автоматизировать сбор и хранение бэкапов этой базы на другом сервере (его хост будет \lstinline!brhost!). Для взаимодействия эти два сервера должны быть полностью открыты по SSH (доступ без пароля, по ключам). Для этого можно использовать \lstinline!authorized_keys! файл.
+Рассмотрим простой случай с одним экземпляром PostgreSQL (один сервер) и пусть его хост будет \lstinline!pghost!. Наша задача~--- автоматизировать сбор и хранение бэкапов этой базы на другом сервере (его хост будет \lstinline!brhost!). Для взаимодействия эти два сервера должны быть полностью открыты по SSH (доступ без пароля, по ключам). Для этого можно использовать \lstinline!authorized_keys! файл.
 
 \begin{lstlisting}[language=Bash,label=lst:barman1,caption=Проверка подключения по SSH]
 # Проверка подключения с сервера PostgreSQL (pghost)
@@ -86,7 +86,7 @@ ssh_command = ssh postgres@pghost
 conninfo = host=pghost user=postgres
 \end{lstlisting}
 
-Секция <<main>> (так мы назвали для barman наш PostgreSQL сервер) содержит настроки для подключения к PostgreSQL серверу и базе. Проверим настройки:
+Секция <<main>> (так мы назвали для barman наш PostgreSQL сервер) содержит настройки для подключения к PostgreSQL серверу и базе. Проверим настройки:
 
 \begin{lstlisting}[language=Bash,label=lst:barman9,caption=Проверка barman настроек]
 $ barman show-server main
@@ -255,7 +255,7 @@ options as they might interfere with your current recovery attempt:
     ident_file = '/etc/postgresql/9.3/main/pg_ident.conf'	# ident configuration file
 \end{lstlisting}
 
-Barman может восстановить базу из резервной копии на удаленном сервере через SSH (для этого есть опция \lstinline!remote-ssh-command!). Также barman может восстановить базу используя \href{http://en.wikipedia.org/wiki/Point-in-time\_recovery}{PITR}: для этого используются опции \lstinline!target-time! (указывается время) или \lstinline!target-xid! (id транзакции).
+Barman может восстановить базу из резервной копии на удаленном сервере через SSH (для этого есть опция \lstinline!remote-ssh-command!). Также barman может восстановить базу, используя \href{http://en.wikipedia.org/wiki/Point-in-time\_recovery}{PITR}: для этого используются опции \lstinline!target-time! (указывается время) или \lstinline!target-xid! (id транзакции).
 
 
 \subsubsection{Заключение}

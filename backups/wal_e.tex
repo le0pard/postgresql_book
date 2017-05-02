@@ -1,11 +1,11 @@
 \subsection{WAL-E}
 
-\href{https://github.com/wal-e/wal-e}{WAL-E} предназначенная для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием \lstinline!pg_start_backup! и \lstinline!pg_stop_backup!. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
+\href{https://github.com/wal-e/wal-e}{WAL-E} предназначена для непрерывной архивации PostgreSQL WAL-logs в Amazon S3 или Windows Azure (начиная с версии 0.7) и управления использованием \lstinline!pg_start_backup! и \lstinline!pg_stop_backup!. Утилита написана на Python и разработана в компании \href{http://www.heroku.com/}{Heroku}, где её активно используют.
 
 
 \subsubsection{Установка}
 
-У WAL-E есть пару зависимостей: \lstinline!lzop!, \lstinline!psql!, \lstinline!pv! (в старых версиях используется \lstinline!mbuffer!), python 3.4+ и несколько python библиотек (\lstinline!gevent!, \lstinline!boto!, \lstinline!azure!). Также для удобства настроек переменных среды устанавливается \lstinline!daemontools!. На Ubuntu это можно все поставить одной командой:
+У WAL-E есть пара зависимостей: \lstinline!lzop!, \lstinline!psql!, \lstinline!pv! (в старых версиях используется \lstinline!mbuffer!), python 3.4+ и несколько python библиотек (\lstinline!gevent!, \lstinline!boto!, \lstinline!azure!). Также для удобства настроек переменных среды устанавливается \lstinline!daemontools!. На Ubuntu это можно все поставить одной командой:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e1,caption=Установка зависимостей для WAL-E]
 $ aptitude install git-core python-dev python-setuptools python-pip build-essential libevent-dev lzop pv daemontools daemontools-run
@@ -87,7 +87,7 @@ archive_timeout = 60
         DETAIL: Archiving to "s3://cleverdb-pg-backups/pg/wal_005/000000010000000000000002.lzo" complete at 2466.67KiB/s.
 \end{lstlisting}
 
-Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её. Для того, чтобы бэкапить всю базу достаточно выполнить данную команду:
+Если ничего похожего в логах не видно, тогда нужно смотреть что за ошибка появляется и исправлять её. Для того, чтобы бэкапить всю базу, достаточно выполнить данную команду:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e9,caption=Загрузка бэкапа всей базы данных в S3]
 $ envdir /etc/wal-e.d/env wal-e backup-push /var/lib/postgresql/9.2/main
@@ -127,7 +127,7 @@ NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
 $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main LATEST"
 \end{lstlisting}
 
-Где \lstinline!LATEST! означает восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен). Для восстановления из более поздней резервной копии:
+Где \lstinline!LATEST! означает, что база восстановится из последнего актуального бэкапа (PostgreSQL в это время должен быть остановлен). Для восстановления из более поздней резервной копии:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e11,caption=Восстановление из поздней резервной копии]
 $ sudo -u postgres bash -c "envdir /etc/wal-e.d/env wal-e  --s3-prefix=s3://some-bucket/directory/or/whatever backup-fetch /var/lib/postgresql/9.2/main base_LONGWALNUMBER_POSITION_NUMBER"
@@ -153,9 +153,9 @@ restore_command = 'envdir /etc/wal-e.d/env /usr/local/bin/wal-e wal-fetch "%f" "
 Для удаления старых резервных копий (или вообще всех) используется команда \lstinline!delete!:
 
 \begin{lstlisting}[language=Bash,label=lst:wal-e14,caption=Удаление резервных копий]
-# удаления старых бэкапов старше base_00000004000002DF000000A6_03626144
+# удаление старых бэкапов старше base_00000004000002DF000000A6_03626144
 $ envdir /etc/wal-e.d/env wal-e delete --confirm before base_00000004000002DF000000A6_03626144
-# удаления всех бэкапов
+# удаление всех бэкапов
 $ envdir /etc/wal-e.d/env wal-e delete --confirm everything
 # удалить все старше последних 20 бэкапов
 $ envdir /etc/wal-e.d/env wal-e delete --confirm retain 20
