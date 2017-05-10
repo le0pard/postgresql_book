@@ -8,7 +8,7 @@
 \begin{itemize}
   \item Nodes(ноды, узлы)~--- экземпляры баз данных PostgreSQL;
   \item Provider и subscriber~--- роли узлов. Provider выполняют выдачу данных и изменений для subscriber-ов;
-  \item Replication set (набор для репликации)~--- колекция таблиц и последовательностей для репликации;
+  \item Replication set (набор для репликации)~--- коллекция таблиц и последовательностей для репликации;
 \end{itemize}
 
 Сценарии использования pglogical:
@@ -123,5 +123,3 @@ SELECT pglogical.create_subscription(
   \item При использовании \lstinline!TRUNCATE ... CASCADE! будет выполнен \lstinline!CASCADE! только на provider;
   \item Последовательности реплицируются периодически, а не в режиме реального времени;
 \end{itemize}
-
-
