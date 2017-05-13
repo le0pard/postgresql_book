@@ -218,13 +218,13 @@ pgfouine.php -file your/log/file.log > your-report.html
 pgfouine.php -file your/log/file.log -top 10 -format text
 \end{lstlisting}
 
-Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайта проекта \href{http://pgfouine.projects.pgfoundry.org/}{pgfouine.projects.pgfoundry.org}.
+Более подробно о возможностях, а также много полезных примеров, можно найти на официальном сайте проекта \href{http://pgfouine.projects.pgfoundry.org/}{pgfouine.projects.pgfoundry.org}.
 
 
 \subsubsection{pgBadger}
 
 
-\href{http://dalibo.github.io/pgbadger/}{pgBadger}~--- аналогичная утилита, что и pgFouine, но написанная на Perl. Еще одно большое преимущество проекта в том, что он более активно сейчас разрабатывается (на момент написания этого текста последний релиз pgFouine был в 24.02.2010, а последняя версия pgBadger~--- 22.02.2016). Установка pgBadger проста:
+\href{http://dalibo.github.io/pgbadger/}{pgBadger}~--- аналогичная утилита, что и pgFouine, но написанная на Perl. Еще одно большое преимущество проекта в том, что он более активно сейчас разрабатывается (на момент написания этого текста последний релиз pgFouine был в 24.02.2010, а последняя версия pgBadger~--- 24.01.2017). Установка pgBadger проста:
 
 \begin{lstlisting}[language=Bash,label=lst:sql_performance9,caption=Установка pgBadger]
 $ tar xzf pgbadger-2.x.tar.gz
@@ -260,7 +260,7 @@ $ ./pgbadger ~/pgsql/master/pg_log/postgresql-2012-08-30_132*
 [========================>] Parsed 982536 bytes of 982536 (100.00%)
 \end{lstlisting}
 
-В результате получится HTML файлы, которые содержат статистику по запросам к PostgreSQL. Более подробно о возможностях можно найти на официальном сайта проекта \href{http://dalibo.github.io/pgbadger/}{http://dalibo.github.io/pgbadger/}.
+В результате получится HTML файлы, которые содержат статистику по запросам к PostgreSQL. Более подробно о возможностях можно найти на официальном сайте проекта \href{http://dalibo.github.io/pgbadger/}{http://dalibo.github.io/pgbadger/}.
 
 \subsubsection{pg\_stat\_statements}
 
@@ -277,7 +277,7 @@ pg_stat_statements.track = all
 После внесения этих параметров PostgreSQL потребуется перегрузить. Параметры конфигурации pg\_stat\_statements:
 
 \begin{enumerate}
-  \item \lstinline!pg_stat_statements.max (integer)!>>~--- максимальное количество sql запросов, которые будет хранится расширением (удаляются записи с наименьшим количеством вызовов);
+  \item \lstinline!pg_stat_statements.max (integer)!>>~--- максимальное количество sql запросов, которое будет храниться расширением (удаляются записи с наименьшим количеством вызовов);
   \item \lstinline!pg_stat_statements.track (enum)!>>~--- какие SQL запросы требуется записывать. Возможные параметры: top (только запросы от приложения/клиента), all (все запросы, например в функциях) и none (отключить сбор статистики);
   \item \lstinline!pg_stat_statements.save (boolean)!>>~--- следует ли сохранять собранную статистику после остановки PostgreSQL. По умолчанию включено;
 \end{enumerate}
@@ -324,7 +324,7 @@ hit_percent |
 
 Для сброса статистики есть команда \lstinline!pg_stat_statements_reset!:
 
-\begin{lstlisting}[language=SQL,label=lst:sql_performance15,caption=Сброс статистика]
+\begin{lstlisting}[language=SQL,label=lst:sql_performance15,caption=Сброс статистики]
 # SELECT pg_stat_statements_reset();
 -[ RECORD 1 ]------------+-
 pg_stat_statements_reset |
