@@ -26,8 +26,8 @@ shared_preload_libraries = 'cstore_fdw'
 Для загрузки данных в cstore таблицы существует два варианта:
 
 \begin{itemize}
-  \item Использование команды \lstinline!COPY! для загрузки или добаления данных из файлов или STDIN;
-  \item Использование конструкции \lstinline!INSERT INTO cstore_table SELECT ...! для загрузки или добаления данных из другой таблицы;
+  \item Использование команды \lstinline!COPY! для загрузки или добавления данных из файлов или STDIN;
+  \item Использование конструкции \lstinline!INSERT INTO cstore_table SELECT ...! для загрузки или добавления данных из другой таблицы;
 \end{itemize}
 
 Cstore таблицы не поддерживают \lstinline!INSERT! (кроме выше упомянутого \lstinline!INSERT INTO ... SELECT!), \lstinline!UPDATE! или \lstinline!DELETE! команды.

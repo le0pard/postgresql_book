@@ -77,7 +77,7 @@ test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
 (1 row)
 \end{lstlisting}
 
-Функция \lstinline!metaphone!, как и soundex, построена на идее создания кода для строки: две строки, которые будут считатся похожими, будут иметь одинаковые коды. Последним параметром указывается максимальная длина \lstinline!metaphone! кода. Функция \lstinline!dmetaphone! вычисляет два <<как звучит>> кода для строки~--- <<первичный>> и <<альтернативный>>:
+Функция \lstinline!metaphone!, как и soundex, построена на идее создания кода для строки: две строки, которые будут считаться похожими, будут иметь одинаковые коды. Последним параметром указывается максимальная длина \lstinline!metaphone! кода. Функция \lstinline!dmetaphone! вычисляет два <<как звучит>> кода для строки~--- <<первичный>> и <<альтернативный>>:
 
 \begin{lstlisting}[language=SQL,label=lst:ext_fuzzystrmatch3,caption=metaphone]
 # SELECT metaphone('GUMBO', 4);

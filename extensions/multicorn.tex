@@ -1,11 +1,11 @@
 \section{Multicorn}
 
-\href{http://multicorn.org/}{Multicorn}~--- расширение для PostgreSQL версии 9.1 или выше, которое позволяет создавать собственные FDW (Foreign Data Wrapper) используя язык программирования \href{https://www.python.org/}{Python}. Foreign Data Wrapper позволяют подключится к другим источникам данных (другая база, файловая система, REST API, прочее) в PostgreSQL и были представленны с версии 9.1.
+\href{http://multicorn.org/}{Multicorn}~--- расширение для PostgreSQL версии 9.1 или выше, которое позволяет создавать собственные FDW (Foreign Data Wrapper), используя язык программирования \href{https://www.python.org/}{Python}. Foreign Data Wrapper позволяют подключиться к другим источникам данных (другая база, файловая система, REST API, прочее) в PostgreSQL и были представленны с версии 9.1.
 
 
 \subsection{Пример}
 
-Установка будет проводится на Ubuntu Linux. Для начала нужно установить требуемые зависимости:
+Установка будет проводиться на Ubuntu Linux. Для начала нужно установить требуемые зависимости:
 
 \begin{lstlisting}[language=Bash,label=lst:pgmulticorn1,caption=Multicorn]
 $ sudo aptitude install build-essential postgresql-server-dev-9.3 python-dev python-setuptools
@@ -102,7 +102,7 @@ CREATE FOREIGN TABLE
 
 \subsubsection{IMAP сервер}
 
-Multicorn может использоватся для получение писем по \href{https://ru.wikipedia.org/wiki/IMAP}{IMAP} протоколу. Для начала установим зависимости:
+Multicorn может использоваться для получения писем по \href{https://ru.wikipedia.org/wiki/IMAP}{IMAP} протоколу. Для начала установим зависимости:
 
 \begin{lstlisting}[language=Bash,label=lst:pgmulticorn-imap1,caption=Multicorn]
 $ sudo aptitude install python-pip
@@ -191,7 +191,7 @@ CREATE FOREIGN TABLE
   \item \lstinline!url (string)!~--- URL RSS ленты.
 \end{itemize}
 
-Кроме того, вы должны быть уверены, что PostgreSQL база данных использовать UTF-8 кодировку (в другой кодировке вы можете получить ошибки). Результат таблицы <<my\_rss>>:
+Кроме того, вы должны быть уверены, что PostgreSQL база данных использует UTF-8 кодировку (в другой кодировке вы можете получить ошибки). Результат таблицы <<my\_rss>>:
 
 \begin{lstlisting}[language=SQL,label=lst:pgmulticorn-rss3,caption=Multicorn]
 # SELECT "pubDate", title, link from my_rss ORDER BY "pubDate" DESC LIMIT 10;
@@ -266,7 +266,7 @@ sort_order |     common_name     |               formal_name               |    
 
 \subsubsection{Другие FDW}
 
-Multicorn также содержать FDW для LDAP и файловой системы. LDAP FDW может использоваться для доступа к серверам по \href{http://ru.wikipedia.org/wiki/LDAP}{LDAP протоколу}. FDW для файловой системы может быть использован для доступа к данным, хранящимся в различных файлах в файловой системе.
+Multicorn также содержит FDW для LDAP и файловой системы. LDAP FDW может использоваться для доступа к серверам по \href{http://ru.wikipedia.org/wiki/LDAP}{LDAP протоколу}. FDW для файловой системы может быть использован для доступа к данным, хранящимся в различных файлах в файловой системе.
 
 \subsubsection{Собственный FDW}
 
@@ -275,7 +275,7 @@ Multicorn предоставляет простой интерфейс для н
 
 \subsection{PostgreSQL 9.3+}
 
-В PostgreSQL 9.1 и 9.2 была представленна реализация FDW только на чтение, и начиная с версии 9.3 FDW может писать в внешнии источники данных. Сейчас Multicorn поддерживает запись данных в другие источники начиная с версии 1.0.0.
+В PostgreSQL 9.1 и 9.2 была представлена реализация FDW только на чтение. Начиная с версии 9.3, FDW может писать в внешние источники данных. Сейчас Multicorn поддерживает запись данных в другие источники, начиная с версии 1.0.0.
 
 \subsection{Заключение}
 
