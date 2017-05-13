@@ -6,7 +6,7 @@
 
 \begin{itemize}
   \item Реализация алгоритма Materialized Path (достаточно быстрый как на запись, так и на чтение);
-  \item Как правило данное решение будет быстрее, чем использовании CTE (Common Table Expressions) или рекурсивный функции (постоянно будут пересчитываться ветвления);
+  \item Как правило данное решение будет быстрее, чем использование CTE (Common Table Expressions) или рекурсивной функции (постоянно будут пересчитываться ветвления);
   \item Встроены механизмы поиска по дереву;
   \item Индексы;
 \end{itemize}
@@ -19,7 +19,7 @@
 # CREATE EXTENSION ltree;
 \end{lstlisting}
 
-Далее создадим таблицу коментариев, которые будут хранится как дерево:
+Далее создадим таблицу комментариев, которые будут храниться как дерево:
 
 \begin{lstlisting}[language=SQL,label=lst:pgltree2,caption=Ltree]
 CREATE TABLE comments (user_id integer, description text, path ltree);
@@ -51,7 +51,7 @@ INSERT INTO comments (user_id, description, path) VALUES ( 22, md5(random()::tex
 # CREATE INDEX path_comments_idx ON comments USING btree(path);
 \end{lstlisting}
 
-В данном примере я создаю таблицу \lstinline!comments! с полем \lstinline!path!, которые и будет содержать полный путь к этому коментарию в дереве (я использую 4 цифры и точку для делителя узлов дерева). Для начала найдем все коментарии, у который путь начинается с \lstinline!0001.0003!:
+В данном примере я создаю таблицу \lstinline!comments! с полем \lstinline!path!, которое и будет содержать полный путь к этому комментарию в дереве (я использую 4 цифры и точку для делителя узлов дерева). Для начала найдем все комментарии, у которых путь начинается с \lstinline!0001.0003!:
 
 \begin{lstlisting}[language=SQL,label=lst:pgltree4,caption=Ltree]
 # SELECT user_id, path FROM comments WHERE path <@ '0001.0003';

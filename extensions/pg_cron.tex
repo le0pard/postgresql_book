@@ -1,6 +1,6 @@
 \section{Pg\_cron}
 
-\href{https://github.com/citusdata/pg\_cron}{Pg\_cron}~--- cron-подобный планировщик задач для PostgreSQL 9.5 или выше, который работает как расширение к базе. Он может выполнять несколько задач параллельно, но одновременно может работать не более одного экземпляра задания (если при запуске задачи преведущий запуск будет еще выполняеться, то запуск будет отложен до выполнения текущей задачи).
+\href{https://github.com/citusdata/pg\_cron}{Pg\_cron}~--- cron-подобный планировщик задач для PostgreSQL 9.5 или выше, который работает как расширение к базе. Он может выполнять несколько задач параллельно, но одновременно может работать не более одного экземпляра задания (если при запуске задачи предыдущий запуск будет еще выполняться, то запуск будет отложен до выполнения текущей задачи).
 
 \subsection{Установка и использование}
 
@@ -16,7 +16,7 @@ shared_preload_libraries = 'pg_cron'
 # CREATE EXTENSION pg_cron;
 \end{lstlisting}
 
-По умолчанию \lstinline!pg_cron! ожидает, что все таблицы с метаданными будут находится в \lstinline!postgres! базе данных. Данное поведение можно изменить и указать через параметр \lstinline!cron.database_name! в \lstinline!postgresql.conf! другую базу данных, где \lstinline!pg_cron! будет хранить свои данные.
+По умолчанию \lstinline!pg_cron! ожидает, что все таблицы с метаданными будут находиться в \lstinline!postgres! базе данных. Данное поведение можно изменить и указать через параметр \lstinline!cron.database_name! в \lstinline!postgresql.conf! другую базу данных, где \lstinline!pg_cron! будет хранить свои данные.
 
 Внутри \lstinline!pg_cron! использует libpq библиотеку, поэтому потребуется разрешить подключения с \lstinline!localhost! без пароля (\lstinline!trust! в \lstinline!pg_hba.conf!) или же создать \href{https://www.postgresql.org/docs/current/static/libpq-pgpass.html}{.pgpass} файл для настройки подключения к базе.
 

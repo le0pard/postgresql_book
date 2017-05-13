@@ -72,7 +72,7 @@ $$ LANGUAGE plv8 IMMUTABLE STRICT;
 Time: 5.200 ms
 \end{lstlisting}
 
-Как видим PLV8 приблизительно в 484 (2520.386/5.200) раз быстрее plpgsql. Можно ускорить работу расчета чисел Фибоначи на PLV8 за счет кеширования:
+Как видим, PLV8 приблизительно в 484 (2520.386/5.200) раз быстрее plpgsql. Можно ускорить работу расчета чисел Фибоначи на PLV8 за счет кеширования:
 
 \begin{lstlisting}[label=lst:plv8js5,caption=Фибоначчи на plv8]
 CREATE OR REPLACE FUNCTION

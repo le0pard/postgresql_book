@@ -42,7 +42,7 @@ CREATE TABLE users_visits (
 );
 \end{lstlisting}
 
-Требуется получать очень быстро представление о том, сколько уникальных пользователей посещают сайт в день на админ панеле. Для этого создадим агрегатную таблицу:
+Требуется получать очень быстро представление о том, сколько уникальных пользователей посещают сайт в день на админ панели. Для этого создадим агрегатную таблицу:
 
 \begin{lstlisting}[language=SQL,label=lst:pghll3,caption=daily\_uniques]
 CREATE TABLE daily_uniques (
@@ -76,7 +76,7 @@ INSERT INTO daily_uniques(date, users)
 SELECT hll_cardinality(hll_union_agg(users)) FROM daily_uniques WHERE date >= '2017-02-20'::date AND date <= '2017-02-26'::date;
 \end{lstlisting}
 
-Или выбрать уникальных пользователей за каждый месяц в течении года?
+Или выбрать уникальных пользователей за каждый месяц в течение года?
 
 \begin{lstlisting}[language=SQL,label=lst:pghll6,caption=daily\_uniques за каждый месяц]
 SELECT EXTRACT(MONTH FROM date) AS month, hll_cardinality(hll_union_agg(users))
@@ -94,7 +94,7 @@ FROM daily_uniques
 WINDOW two_days AS (ORDER BY date ASC ROWS 1 PRECEDING);
 \end{lstlisting}
 
-Это всего пара примеров типов запросов, которые будут возвращать результат в течении миллисекунд благодаря \lstinline!hll!, но потребует либо полностью отдельные предварительно созданные агрегирующие таблицы или \lstinline!self join/generate_series! фокусы в \lstinline!COUNT DISTINCT! мире.
+Это всего пара примеров типов запросов, которые будут возвращать результат в течение миллисекунд благодаря \lstinline!hll!, но потребует либо полностью отдельные предварительно созданные агрегирующие таблицы или \lstinline!self join/generate_series! фокусы в \lstinline!COUNT DISTINCT! мире.
 
 \subsection{Заключение}
 
