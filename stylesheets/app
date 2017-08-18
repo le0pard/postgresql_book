@@ -122,8 +122,8 @@ Backtrace:
 /Users/leo/.rvm/gems/ruby-2.4.1/gems/thor-0.19.4/lib/thor.rb:369:in `dispatch'
 /Users/leo/.rvm/gems/ruby-2.4.1/gems/thor-0.19.4/lib/thor/base.rb:444:in `start'
 /Users/leo/.rvm/gems/ruby-2.4.1/gems/middleman-cli-4.2.1/bin/middleman:70:in `<top (required)>'
-/Users/leo/.rvm/gems/ruby-2.4.1/bin/middleman:22:in `load'
-/Users/leo/.rvm/gems/ruby-2.4.1/bin/middleman:22:in `<main>'
+/Users/leo/.rvm/gems/ruby-2.4.1/bin/middleman:23:in `load'
+/Users/leo/.rvm/gems/ruby-2.4.1/bin/middleman:23:in `<main>'
 /Users/leo/.rvm/gems/ruby-2.4.1/bin/ruby_executable_hooks:15:in `eval'
 /Users/leo/.rvm/gems/ruby-2.4.1/bin/ruby_executable_hooks:15:in `<main>'
 */
