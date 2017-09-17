@@ -47,8 +47,8 @@ configure :build do
   activate :minify_html
   # favicons
   activate :favicon_maker do |f|
-    f.template_dir  = File.join(root, 'source/images/favicons')
-    f.output_dir    = File.join(root, 'build/images/favicons')
+    f.template_dir  = 'source/images/favicons'
+    f.output_dir    = 'build/images/favicons'
     f.icons = {
       "favicon_base.png" => [
         { icon: "apple-icon-2048x2048.png", size: "2048x2048" },
