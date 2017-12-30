@@ -2,7 +2,7 @@
 
 ## Готовые pdf, epub, html5
 
-[Последнии сборки](https://github.com/le0pard/postgresql_book/releases)
+[Последние сборки](https://github.com/le0pard/postgresql_book/releases)
 
 ## Генерация HTML
 
