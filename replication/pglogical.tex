@@ -44,7 +44,7 @@ max_wal_senders = 10        # one per node needed on provider node
 shared_preload_libraries = 'pglogical'
 \end{lstlisting}
 
-Если используется PostgreSQL 9.5+ и требуется механизмы разрешения конфликтов, то требуется добавить дополнительные опции:
+Если используется PostgreSQL 9.5+ и требуются механизмы разрешения конфликтов, то требуется добавить дополнительные опции:
 
 \begin{lstlisting}[label=lst:pglogical2,caption=postgresql.conf]
 track_commit_timestamp = on # needed for last/first update wins conflict resolution
