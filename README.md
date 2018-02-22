@@ -1,6 +1,6 @@
 # Работа с PostgreSQL: настройка и масштабирование [postgresql.leopard.in.ua](http://postgresql.leopard.in.ua/)
 
-## Готовые pdf, epub, html5
+## Готовые pdf и html5
 
 [Последние сборки](https://github.com/le0pard/postgresql_book/releases)
 
