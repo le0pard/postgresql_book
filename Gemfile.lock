@@ -117,8 +117,8 @@ GEM
     public_suffix (3.0.2)
     rack (2.0.4)
     rails-assets-fastclick (1.0.6)
-    rails-assets-jquery (3.1.1)
-    rails-assets-neat (2.0.0)
+    rails-assets-jquery (3.3.1)
+    rails-assets-neat (2.1.0)
     rails-assets-normalize-scss (3.0.3)
     rake (12.3.0)
     rb-fsevent (0.10.2)
@@ -161,8 +161,8 @@ DEPENDENCIES
   oily_png (>= 1.1.2)
   oj
   rails-assets-fastclick (= 1.0.6)!
-  rails-assets-jquery (= 3.1.1)!
-  rails-assets-neat (= 2.0.0)!
+  rails-assets-jquery (= 3.3.1)!
+  rails-assets-neat (= 2.1.0)!
   rails-assets-normalize-scss (= 3.0.3)!
   rake
   sass (>= 3.4.23)
