@@ -48,7 +48,7 @@ SELECT cron.unschedule(43);
 
 В целях безопасности cron задачи выполняются в базе данных, в которой \lstinline!cron.schedule! функция была вызвана с правами доступа текущего пользователя.
 
-Поскольку \lstinline!pg_cron! использует libpq библиотеку, это позволят запускать cron задачи на других базах данных (даже на других серверах). С помощью суперпользователя возможно модифицировать \lstinline!cron.job! таблицу и добавить в нее параметры подключения к другой базе через \lstinline!nodename! и \lstinline!nodeport! поля:
+Поскольку \lstinline!pg_cron! использует libpq библиотеку, это позволяет запускать cron задачи на других базах данных (даже на других серверах). С помощью суперпользователя возможно модифицировать \lstinline!cron.job! таблицу и добавить в нее параметры подключения к другой базе через \lstinline!nodename! и \lstinline!nodeport! поля:
 
 \begin{lstlisting}[language=SQL,label=lst:pgcron5,caption=Cron.job]
 INSERT INTO cron.job (schedule, command, nodename, nodeport, database, username)
