@@ -18,7 +18,7 @@
 # CREATE TABLE cities ( id int4 primary key, name varchar(50), the_geom geometry(POINT,4326) );
 \end{lstlisting}
 
-\lstinline!the_geom! поле указывает PostGIS, какой тип геометрии имеет каждый из объектов (точки, линии, полигоны и т.п.), какая размерность (т.к. возможны и 3-4 измерения~--- \lstinline!POINTZ!, \lstinline!POINTM!, \lstinline!POINTZM!) и какая система координат. Для данных по городам мы будем использовать систему координат EPSG:4326. Чтобы добавить данные геометрии в соответствующую колонку, используется функция PostGIS \lstinline!ST_GeomFromText!, чтобы сконвертировать координаты и идентификатор референсной системы из текстового формата:
+\lstinline!the_geom! поле указывает PostGIS, какой тип геометрии имеет каждый из объектов (точки, линии, полигоны и~т.~п.), какая размерность (т.к. возможны и 3-4 измерения~--- \lstinline!POINTZ!, \lstinline!POINTM!, \lstinline!POINTZM!) и какая система координат. Для данных по городам мы будем использовать систему координат EPSG:4326. Чтобы добавить данные геометрии в соответствующую колонку, используется функция PostGIS \lstinline!ST_GeomFromText!, чтобы сконвертировать координаты и идентификатор референсной системы из текстового формата:
 
 \begin{lstlisting}[language=SQL,label=lst:postgisinsertcities,caption=Заполнение таблицы cities]
 # INSERT INTO cities (id, the_geom, name) VALUES (1,ST_GeomFromText('POINT(-0.1257 51.508)',4326),'London, England');
