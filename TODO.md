@@ -6,3 +6,15 @@ Fixes:
  * В главе "Бэкап и восстановление PostgreSQL" Нет про горячее резервное копирование. Например, про pg_basebackup.
  * Нет ничего про настройку autovacuum. Крайне важная тема. https://www.citusdata.com/blog/2016/11/04/autovacuum-not-the-enemy/
  * В главе про dblink можно сказать, что модуль позволяет эмулировать автономные транзакции.
+ * https://github.com/dhamaniasad/awesome-postgres
+
+ * https://www.timescale.com/
+ * https://www.pipelinedb.com/
+ * https://github.com/powa-team/pg_qualstats/
+ * https://github.com/rjuju/pg_track_settings
+ * https://github.com/powa-team/pg_stat_kcache/
+ * https://github.com/HypoPG/hypopg
+ * https://github.com/citusdata/pg_paxos/
+ * https://pgxn.org/dist/cyanaudit
+ * https://github.com/pgMemento/pgMemento
+ * https://pgtap.org/
