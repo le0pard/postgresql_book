@@ -8,6 +8,12 @@ Fixes:
  * В главе про dblink можно сказать, что модуль позволяет эмулировать автономные транзакции.
  * https://github.com/dhamaniasad/awesome-postgres
 
+ * https://www.postgresql.org/docs/10/ddl-partitioning.html
+ * https://blog.timescale.com/scaling-partitioning-data-postgresql-10-explained-cd48a712a9a1
+ * https://wiki.postgresql.org/wiki/Table_partitioning
+ * https://severalnines.com/blog/guide-partitioning-data-postgresql
+ * https://pgdash.io/blog/partition-postgres-11.html
+
  * https://www.timescale.com/
  * https://www.pipelinedb.com/
  * https://github.com/powa-team/pg_qualstats/
