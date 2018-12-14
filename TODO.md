@@ -13,6 +13,17 @@ Fixes:
  * https://wiki.postgresql.org/wiki/Table_partitioning
  * https://severalnines.com/blog/guide-partitioning-data-postgresql
  * https://pgdash.io/blog/partition-postgres-11.html
+ * https://blog.2ndquadrant.com/partitioning-improvements-pg11/
+
+ * https://www.postgresql.org/docs/10/parallel-query.html
+ * https://blog.programster.org/postgresql-parallel-queries
+ * https://blog.2ndquadrant.com/postgresql96-parallel-sequential-scan/
+
+ * https://blog.2ndquadrant.com/databases-vs-encryption/
+ * https://blog.2ndquadrant.com/partitioning-evolution-postgresql-11/
+ * https://blog.2ndquadrant.com/sequential-uuid-generators/
+
+ * https://blog.2ndquadrant.com/add-new-table-column-default-value-postgresql-11/
 
  * https://www.timescale.com/
  * https://www.pipelinedb.com/
