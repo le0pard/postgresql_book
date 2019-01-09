@@ -441,7 +441,7 @@ exit 0;
 failover_command = '/path_to_script/failover_stream.sh %d %H /tmp/trigger_file'
 \end{lstlisting}
 
-где \lstinline!/tmp/trigger_file!~--- триггер файл, указаный в конфиге \lstinline!recovery.conf!. Теперь, если мастер СУБД упадет, слейв будет переключен из режима восстановления в обычный и сможет принимать запросы на запись.
+где \lstinline!/tmp/trigger_file!~--- триггер файл, указанный в конфиге \lstinline!recovery.conf!. Теперь, если мастер СУБД упадет, слейв будет переключен из режима восстановления в обычный и сможет принимать запросы на запись.
 
 
 
@@ -512,7 +512,7 @@ recovery_1st_stage_command = 'basebackup.sh'
 
   \item Оставляем \lstinline!recovery_2nd_stage_command! пустым. После успешного выполнения первого этапа онлайн восстановления, разницу в данных, что успели записаться во время работы скрипта \lstinline!basebackup.sh!, слейв инстанс заберет через WAL файлы с мастера;
 
-  \item Устанавливаем C и SQL функции для работы онлайн востановления на каждый инстанс СУБД:
+  \item Устанавливаем C и SQL функции для работы онлайн восстановления на каждый инстанс СУБД:
 
 \begin{lstlisting}[language=Bash,label=lst:pgpool46,caption=Устанавливаем C и SQL функции]
 $ cd pgpool-II-x.x.x/sql/pgpool-recovery

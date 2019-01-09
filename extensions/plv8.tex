@@ -115,7 +115,7 @@ Time: 1.202 ms
   \item все данные (ключ и значение по ключу) это строка;
 \end{itemize}
 
-Для хранения данных многие документоориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и~т.~д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON, а с версии 9.4~--- JSONB. JSON тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и \lstinline!DOMAIN!:
+Для хранения данных многие документно-ориентированные базы данных используют JSON (MongoDB, CouchDB, Couchbase и~т.~д.). Для этого, начиная с PostgreSQL 9.2, добавлен тип данных JSON, а с версии 9.4~--- JSONB. JSON тип можно добавить для PostgreSQL 9.1 и ниже используя PLV8 и \lstinline!DOMAIN!:
 
 \begin{lstlisting}[label=lst:plv8js7,caption=Создание типа JSON]
 CREATE OR REPLACE FUNCTION
