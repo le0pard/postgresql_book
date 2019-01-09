@@ -41,9 +41,9 @@ $ sudo useradd -m -g userssh -d /home/userssh -s /bin/bash \
 $ su postgres
 \end{lstlisting}
 
-Генерим RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:
+Генерируем RSA-ключ для обеспечения аутентификации в условиях отсутствия возможности использовать пароль:
 
-\begin{lstlisting}[label=lst:streaming3,caption=Генерим RSA-ключ]
+\begin{lstlisting}[label=lst:streaming3,caption=Генерируем RSA-ключ]
 $ ssh-keygen -t rsa -P ""
 Generating public/private rsa key pair.
 Enter file in which to save the key (/var/lib/postgresql/.ssh/id_rsa):
@@ -72,7 +72,7 @@ $ ssh localhost
 $ $/etc/init.d/sshd start
 \end{lstlisting}
 
-После успешно проделаной операции скопируйте \lstinline!$HOME/.ssh! на \lstinline!slavedb!. Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
+После успешно проделанной операции скопируйте \lstinline!$HOME/.ssh! на \lstinline!slavedb!. Теперь мы должны иметь возможность без пароля заходить с мастера на слейв и со слейва на мастер через ssh.
 
 Также отредактируем \lstinline!pg_hba.conf! на мастере и слейве, разрешив им друг к другу доступ без пароля (тут добавляется роль \lstinline!replication!):
 
@@ -168,7 +168,7 @@ $ rsync -C -a --delete -e ssh --exclude postgresql.conf --exclude postmaster.pid
 $ psql -c "SELECT pg_stop_backup()"
 \end{lstlisting}
 
-Для версии PostgreSQL 9.1+ можно воспользоватся командой \lstinline!pg_basebackup! (копирует базу на \lstinline!slavedb! подобным образом):
+Для версии PostgreSQL 9.1+ можно воспользоваться командой \lstinline!pg_basebackup! (копирует базу на \lstinline!slavedb! подобным образом):
 
 \begin{lstlisting}[label=lst:streaming122,caption=Выполняем на слейве]
 $ pg_basebackup -R -D /srv/pgsql/standby --host=192.168.0.10 --port=5432
@@ -269,9 +269,9 @@ postgres  6879  6831  0 10:31 ?        00:00:00 postgres: wal sender process pos
 
 [slavedb] $ ps -ef | grep receiver
 postgres  6878  6872  1 10:31 ?        00:00:01 postgres: wal receiver process   streaming 0/2000000
-\end{lstlisting}
+\end{lstlisting}репликацию
 
-Давайте проверим реприкацию и выполним на мастере:
+Давайте проверим репликацию и выполним на мастере:
 
 \begin{lstlisting}[language=SQL,label=lst:streaming17,caption=Выполняем на мастере]
 $ psql test_db

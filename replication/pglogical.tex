@@ -51,7 +51,7 @@ track_commit_timestamp = on # needed for last/first update wins conflict resolut
                             # property available in PostgreSQL 9.5+
 \end{lstlisting}
 
-В \lstinline!pg_hba.conf! нужно разрешить replication соеденения с локального хоста для пользователя с привилегией репликации. После перезапуска базы нужно активировать расширение на всех нодах:
+В \lstinline!pg_hba.conf! нужно разрешить replication соединения с локального хоста для пользователя с привилегией репликации. После перезапуска базы нужно активировать расширение на всех нодах:
 
 \begin{lstlisting}[label=lst:pglogical3,language=SQL,caption=Активируем расширение]
 CREATE EXTENSION pglogical;

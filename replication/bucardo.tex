@@ -192,7 +192,7 @@ $ bucardo show all
 
 \subsubsection{Изменения значений конфигурации}
 
-\begin{lstlisting}[language=Bash,label=lst:bucardo14,caption=Изменения значений конфигурациии]
+\begin{lstlisting}[language=Bash,label=lst:bucardo14,caption=Изменения значений конфигурации]
 $ bucardo set name=value
 \end{lstlisting}
 
@@ -247,7 +247,7 @@ Added sync "pg_to_redis_sync"
   Added table "public.pgbench_tellers"
 \end{lstlisting}
 
-После перезапуска Bucardo данные с PostgreSQL таблиц начнуть реплицироватся в Redis:
+После перезапуска Bucardo данные с PostgreSQL таблиц начнут реплицироваться в Redis:
 
 \begin{lstlisting}[language=Bash,label=lst:bucardo-redis5,caption=Репликация в redis]
 $ pgbench -T 10 -c 5 simple_database

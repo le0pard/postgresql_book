@@ -383,7 +383,7 @@ port=5432 user=slony_user password=slony_user_password,'10');
 
 \subsubsection{Что делать если репликация со временем начинает тормозить}
 
-В процессе эксплуатации может наблюдатся как со временем растёт нагрузка на master-сервере, в списке активных бекендов~--- постоянные SELECT-ы со слейвов. В \lstinline!pg_stat_activity! видны примерно такие запросы:
+В процессе эксплуатации может наблюдаться как со временем растёт нагрузка на master-сервере, в списке активных бекендов~--- постоянные SELECT-ы со слейвов. В \lstinline!pg_stat_activity! видны примерно такие запросы:
 
 \begin{lstlisting}[label=lst:slony19,caption=Устранение неисправностей]
 select ev_origin, ev_seqno, ev_timestamp, ev_minxid, ev_maxxid, ev_xip,
