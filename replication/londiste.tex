@@ -25,7 +25,7 @@
 % sudo aptitude install skytools
 \end{lstlisting}
 
-В некоторых системнах пакет может содержатся версия 2.x, которая не поддерживает каскадную репликацию, отказоустойчивость(failover) и переключение между серверами (switchover). По этой причине она не будет расматриваться. Скачать самую последнюю версию пакета можно с \href{http://pgfoundry.org/projects/skytools}{официального сайта}. На момент написания главы последняя версия была 3.2. Начнем установку:
+В некоторых системах может содержаться пакет версии 2.x, который не поддерживает каскадную репликацию, отказоустойчивость(failover) и переключение между серверами (switchover). По этой причине он не будет рассматриваться. Скачать самую последнюю версию пакета можно с \href{http://pgfoundry.org/projects/skytools}{официального сайта}. На момент написания главы последняя версия была 3.2. Начнем установку:
 
 \begin{lstlisting}[label=lst:londiste2,caption=Установка]
 $ wget http://pgfoundry.org/frs/download.php/3622/skytools-3.2.tar.gz
@@ -133,7 +133,7 @@ INFO {standby: 1}
 INFO {standby: 1}
 \end{lstlisting}
 
-Если нужно перегрузить демон (например при изменении конфигурации), то можно воспользоватся параметром \lstinline!-r!:
+Если нужно перегрузить демон (например при изменении конфигурации), то можно воспользоваться параметром \lstinline!-r!:
 
 \begin{lstlisting}[label=lst:londiste-replica4,caption=Перегрузка демона]
 $ londiste3 /etc/skytools/master-londiste.ini -r
@@ -261,7 +261,7 @@ $ londiste3 /etc/skytools/master-londiste.ini add-table --all
 $ londiste3 /etc/skytools/slave1-londiste.ini add-table --all --create-full
 \end{lstlisting}
 
-В данном примере используется параметр \lstinline!--all!, который означает все таблицы, но вместо него вы можете перечислить список конкретных таблиц, если не хотите реплицировать все. Если имена таблиц отличаются на master и slave, то можно использовать \lstinline!--dest-table! параметр при добавлении таблиц на slave базе. Также, если вы не перенесли струкруру таблиц заранее с master на slave базы, то это можно сделать автоматически через \lstinline!--create! параметр (или \lstinline!--create-full!, если нужно перенести полностью всю схему таблицы).
+В данном примере используется параметр \lstinline!--all!, который означает все таблицы, но вместо него вы можете перечислить список конкретных таблиц, если не хотите реплицировать все. Если имена таблиц отличаются на master и slave, то можно использовать \lstinline!--dest-table! параметр при добавлении таблиц на slave базе. Также, если вы не перенесли структуру таблиц заранее с master на slave базы, то это можно сделать автоматически через \lstinline!--create! параметр (или \lstinline!--create-full!, если нужно перенести полностью всю схему таблицы).
 
 Подобным образом добавляем последовательности (\lstinline!sequences!) для репликации:
 
@@ -298,7 +298,7 @@ master-node (root)
   \item z - количество таблиц в состоянии ignored (table not replicated locally), у master должно быть 0, а у slave базах это количество таблиц, которые не добавлены для репликации с мастера (т.~е. master отдает на репликацию эту таблицу, но slave их просто не забирает).
 \end{itemize}
 
-Через небольшой интервал времени все таблицы должны синхронизироватся:
+Через небольшой интервал времени все таблицы должны синхронизироваться:
 
 \begin{lstlisting}[label=lst:londiste-replica16,caption=Статус кластера]
 $ londiste3 /etc/skytools/master-londiste.ini status
@@ -335,7 +335,7 @@ public.pgbench_history_hid_seq  True             33345
 
 \subsubsection{Проверка}
 
-Для проверки будем использовать \lstinline!pgbench! утилиту. Запустим добавление данных в таблицу и смотрим в логи одновлеменно:
+Для проверки будем использовать \lstinline!pgbench! утилиту. Запустим добавление данных в таблицу и смотрим в логи одновременно:
 
 \begin{lstlisting}[label=lst:londiste-check1,caption=Проверка]
 $ pgbench -T 10 -c 5 l3simple
@@ -466,7 +466,7 @@ master-node (root)
                                    Lag: 12s, Tick: 56
 \end{lstlisting}
 
-Также топологию можно менять с сторони репликатора через команду \lstinline!takeover!:
+Также топологию можно менять с стороны репликатора через команду \lstinline!takeover!:
 
 \begin{lstlisting}[label=lst:londiste-cascade8,caption=Изменяем топологию]
 $ londiste3 /etc/skytools/slave3-londiste.ini takeover slave4-node

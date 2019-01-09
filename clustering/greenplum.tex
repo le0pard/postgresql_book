@@ -137,7 +137,7 @@ on sq.num_field_2 = sq2.num_field_2;
 # На ETL-сервере:
 bash# for i in {1..1000}; do echo "$i,$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"; done > /tmp/work/gpfdist_home/test_table.csv
 
-# Теперь создаим внешнюю таблицу и прочитаем данные из файла
+# Теперь создадим внешнюю таблицу и прочитаем данные из файла
 # В Greenplum DB:
 db=# create external table ext_test_table
 db-# (id integer, rand varchar(8))
