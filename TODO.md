@@ -27,6 +27,8 @@ Fixes:
 
  * https://pgrouting.org/
 
+ * https://pgdash.io/blog/postgres-replication-gotchas.html
+
  * https://www.timescale.com/
  * https://www.pipelinedb.com/
  * https://github.com/powa-team/pg_qualstats/
