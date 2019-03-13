@@ -38,5 +38,7 @@ Fixes:
  * https://github.com/citusdata/pg_paxos/
  * https://pgxn.org/dist/cyanaudit
  * https://github.com/pgMemento/pgMemento
+ * https://github.com/postgrespro/aqo
+ * https://github.com/postgrespro/sr_plan
  * https://pgtap.org/
  * https://github.com/cockroachdb/cockroach
