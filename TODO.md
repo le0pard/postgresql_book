@@ -43,3 +43,5 @@ Fixes:
  * https://pgtap.org/
  * https://github.com/cockroachdb/cockroach
  * https://agroal.github.io/pgagroal/
+
+ * https://wiki.postgresql.org/wiki/Don%27t_Do_This
