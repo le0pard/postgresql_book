@@ -1,4 +1,4 @@
-name: Build website and Deploy
+name: Build and deploy website
 
 on:
   push:
