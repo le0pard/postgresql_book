@@ -5,16 +5,22 @@
 
 $m850-grid: (columns: 12, gutter: 20px, media: 850px)
 
-body
-  // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
-  font-size: calc(14px + 7 * ( (100vw - 420px) / 860))
-  background: #FFF
+html
+  font-family: system-ui
+  font-size: responsive 14px 21px
+  font-range: 420px 2100px
+  height: 100%
 
+body
+  background: #B5E3F5
+  height: 100%
+  display: flex
+  flex-direction: column
 
 .header-screen
   background: #B5E3F5
   padding: 50px 0
+  flex: 1 0 auto
 
 .container
   @include grid-container
@@ -99,34 +105,9 @@ body
             color: #FFF
 
 
-.reviews-block
-  margin-top: 3rem
-  .reviews-row-title
-    @include grid-container
-    margin-bottom: 0.6rem
-    .reviews-title
-      @include grid-column(4)
-      @include centered
-      h3
-        font-size: calc(1.4rem + 0.6 * ( (100vw - 420px) / 860))
-        text-align: center
-        letter-spacing: 1px
-        margin: 0
-  .reviews-row
-    @include grid-container
-  .reviews-row-last
-    @include grid-container
-    margin-bottom: 3rem
-  .reviews-column
-    @include grid-column
-    @include grid-media($m850-grid)
-      @include grid-column(4)
-    twitterwidget
-      @include centered
-
-
 .footer-screen
   background: #545457
+  flex-shrink: 0
 
 .footer-column
   @include grid-container
@@ -166,6 +147,7 @@ body
     .right-author
       float: right
       margin-left: 20px
+      font-size: 0.8rem
     .right-license
       float: right
 

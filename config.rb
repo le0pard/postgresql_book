@@ -2,75 +2,80 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
+require "lib/middleman_patches"
+
+# Layouts
+# https://middlemanapp.com/basics/layouts/
+
+# Per-page layout changes
+page '/*.xml', layout: false
+page '/*.json', layout: false
+page '/*.txt', layout: false
+page '/404.html', layout: false
+
 ###
 # Helpers
 ###
-helpers do
-  def default_keywords_helper
-    "postgresql, postgres, book, free, книга, бесплатно, настройка, масштабирование, шардинг, репликация, слон, open source"
-  end
-  def default_description_helper
-    "Cправочное пособие по настройке и масштабированию PostgreSQL"
-  end
-end
 
-set :css_dir, 'stylesheets'
-set :js_dir, 'javascripts'
-set :images_dir, 'images'
+require "lib/pgbook_helpers"
+helpers PgbookHelpers
+
+assets_dir = File.expand_path('.tmp/dist', __dir__)
+
+activate :external_pipeline,
+  name: :webpack,
+  command: build? ?
+    "yarn run assets:build" :
+    'yarn run assets:watch',
+  source: assets_dir,
+  latency: 2,
+  ignore_exit_code: true
+
+# With alternative layout
+# page '/path/to/file.html', layout: 'other_layout'
+
 set :markdown_engine, :kramdown
 set :markdown, filter_html: false, fenced_code_blocks: true, smartypants: true
 set :encoding, "utf-8"
 
-activate :sprockets do |c|
-  c.expose_middleman_helpers = true
-end
+# Proxy pages
+# https://middlemanapp.com/advanced/dynamic-pages/
 
-if defined?(RailsAssets)
-  RailsAssets.load_paths.each do |path|
-    sprockets.append_path path
-  end
-end
+# proxy(
+#   '/this-page-has-no-template.html',
+#   '/template-file.html',
+#   locals: {
+#     which_fake_page: 'Rendering a fake page with a local variable'
+#   },
+# )
 
-activate :autoprefixer do |config|
-  config.browsers = ['last 2 versions']
-end
+# Helpers
+# Methods defined in the helpers block are available in templates
+# https://middlemanapp.com/basics/helper-methods/
+
+# helpers do
+#   def some_helper
+#     'Helping'
+#   end
+# end
 
 # Build-specific configuration
+# https://middlemanapp.com/advanced/configuration/#environment-specific-settings
+
+# configure :build do
+#   activate :minify_css
+#   activate :minify_javascript
+# end
+
+set :images_dir, 'images'
+
 configure :build do
-  # For example, change the Compass output style for deployment
-  activate :minify_css
-  # Minify Javascript on build
-  activate :minify_javascript
-  # assets hash
-  activate :asset_hash, ignore: [/^html\//]
-  # min html
+    # min html
   activate :minify_html
-  # favicons
-  activate :favicon_maker do |f|
-    f.template_dir  = 'source/images/favicons'
-    f.output_dir    = 'build/images/favicons'
-    f.icons = {
-      "favicon_base.png" => [
-        { icon: "apple-icon-2048x2048.png", size: "2048x2048" },
-        { icon: "apple-touch-icon-152x152-precomposed.png", size: "152x152" },
-        { icon: "apple-touch-icon-144x144-precomposed.png", size: "144x144" },
-        { icon: "apple-touch-icon-120x120-precomposed.png", size: "120x120" },
-        { icon: "apple-touch-icon-114x114-precomposed.png", size: "114x114" },
-        { icon: "apple-touch-icon-76x76-precomposed.png", size: "76x76" },
-        { icon: "apple-touch-icon-72x72-precomposed.png", size: "72x72" },
-        { icon: "apple-touch-icon-60x60-precomposed.png", size: "60x60" },
-        { icon: "apple-touch-icon-57x57-precomposed.png", size: "57x57" },
-        { icon: "apple-touch-icon-precomposed.png", size: "57x57" },
-        { icon: "apple-touch-icon.png", size: "57x57" },
-        { icon: "favicon.png", size: "16x16" },
-        { icon: "favicon.ico", size: "64x64,32x32,24x24,16x16" }
-      ]
-    }
-  end
+  # gzip
+  activate :gzip, exts: %w(.css .htm .html .js .svg .xhtml)
 end
-# deploy
-activate :deploy do |deploy|
-  deploy.deploy_method = :git
-  deploy.branch = "gh-pages"
-  deploy.clean = true
+
+after_build do
+  system('yarn run critical')
 end
