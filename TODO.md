@@ -28,6 +28,8 @@ Fixes:
  * https://pgrouting.org/
 
  * https://pgdash.io/blog/postgres-replication-gotchas.html
+ * https://github.com/postgrespro/zson
+ * https://cloudblogs.microsoft.com/opensource/2019/05/06/introducing-pg_auto_failover-postgresql-open-source-extension-automated-failover-high-availability/
 
  * https://www.timescale.com/
  * https://www.pipelinedb.com/
@@ -38,7 +40,6 @@ Fixes:
  * https://github.com/citusdata/pg_paxos/
  * https://pgxn.org/dist/cyanaudit
  * https://github.com/pgMemento/pgMemento
- * https://github.com/postgrespro/aqo
- * https://github.com/postgrespro/sr_plan
  * https://pgtap.org/
  * https://github.com/cockroachdb/cockroach
+ * https://agroal.github.io/pgagroal/
