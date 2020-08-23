@@ -1,6 +1,10 @@
 name: Build and deploy LaTeX book
+
 on:
-- push
+  push:
+    branches:
+      - master
+      - 'v*'
 
 jobs:
   build:
