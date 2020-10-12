@@ -9,7 +9,7 @@
   },
   "scripts": {
     "critical": "gulp critical",
-    "assets:watch": "webpack --watch -d --color",
+    "assets:watch": "webpack --watch --color",
     "assets:build": "gulp cleanup:assets && NODE_ENV=production webpack --bail"
   },
   "dependencies": {
