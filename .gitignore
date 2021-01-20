@@ -283,13 +283,7 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
-
-
 postgresql.pdf
 .DS_Store
 postgresql.synctex.gz
 /latex/*
-
-# Vagrant
-.vagrant
-Vagrantfile
